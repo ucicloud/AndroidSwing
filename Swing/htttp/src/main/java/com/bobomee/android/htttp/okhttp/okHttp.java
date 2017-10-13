@@ -32,11 +32,11 @@ public enum okHttp {
                 .addInterceptor(interceptor)
 
                 //设置Cache目录
-                .cache(CacheUtil.getCache())
+                /*.cache(CacheUtil.getCache())
 
                 //设置缓存
                 .addInterceptor(cacheInterceptor)
-                .addNetworkInterceptor(cacheInterceptor)
+                .addNetworkInterceptor(cacheInterceptor)*/
 
                 //失败重连
                 .retryOnConnectionFailure(true)

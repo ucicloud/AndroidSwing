@@ -31,7 +31,7 @@ public enum Retrofit2Client {
                 .addConverterFactory(GsonConverterFactory.create())
 
         //error 转换器
-        .addCallAdapterFactory(RxErrorHandlingCallAdapterFactory.create())
+//        .addCallAdapterFactory(RxErrorHandlingCallAdapterFactory.create())
         ;
 
 

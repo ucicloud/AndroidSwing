@@ -10,10 +10,10 @@ import retrofit2.http.POST;
 
 public interface UserApi {
 
-    String BASE_URL = "https://api.github.com/";
+    String BASE_URL = "http://dev.childrenlab.com/";
 
 
-    @POST("/v1/user/login")
+    @POST("v1/user/login")
     Call<LoginSuccessRep> login(@Body LoginEntity loginEntity);
 
 }

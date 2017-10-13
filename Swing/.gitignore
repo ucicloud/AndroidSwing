@@ -8,7 +8,7 @@
 /captures
 .externalNativeBuild
 
-.idea
+.idea/
 
 bin/
 gen/
