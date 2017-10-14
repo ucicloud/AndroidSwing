@@ -1,0 +1,374 @@
+<resources>
+    <string name="app_name">Swing</string>
+
+    <!-- ActivityMain -->
+    <string name="activity_main_synchronize">"與資料庫同步"</string>
+    <string name="activity_main_wait">"請稍候&#8230;"</string>
+
+    <!-- Title bar -->
+    <string name="title_boot">"啟動"</string>
+    <string name="title_calendar">"日曆"</string>
+    <string name="title_dashboard">"活動記錄"</string>
+    <string name="title_photo">像片</string>
+    <string name="title_profile">個人資訊</string>
+    <string name="title_option">選項</string>
+    <string name="title_password">密碼</string>
+    <string name="title_request_from">接收到的請求</string>
+    <string name="title_request_to">發出請求</string>
+    <string name="title_search_device">尋找裝置</string>
+    <string name="title_sync">同步</string>
+
+    <!-- FragmentCalendarAlarm -->
+    <string name="calendar_alarm_agenda">"項目"</string>
+    <string name="calendar_alarm_clock">"鬧鈴"</string>
+    <string name="calendar_alarm_morning">"晨間"</string>
+    <string name="calendar_alarm_bed">"就寢"</string>
+    <string name="calendar_alarm_activities">"活動"</string>
+
+    <!-- FragmentCalendarEvent -->
+    <string name="calendar_event_creator">"建立者"</string>
+    <string name="calendar_event_assign">"指派"</string>
+    <string name="calendar_event_event">事件選擇</string>
+    <string name="calendar_event_start">"開始時間"</string>
+    <string name="calendar_event_end">"結束時間"</string>
+    <string name="calendar_event_color">"顏色標籤"</string>
+    <string name="calendar_event_repeat">"重覆"</string>
+    <string name="calendar_event_description">"詳細描述"</string>
+    <string name="calendar_event_todo_list">"待辦事項列表"</string>
+    <string name="calendar_event_save">"存檔"</string>
+    <string name="calendar_event_advance">"進階"</string>
+    <string name="calendar_event_please_select_event">請選擇事件</string>
+
+    <!-- FragmentCalendarMain -->
+    <string name="calendar_main_today_schedule">"今日行程"</string>
+    <string name="calendar_main_monthly_schedule">"月份行事曆"</string>
+    <string name="calendar_main_no_incoming_event">"無事件"</string>
+
+    <!-- FragmentCalendarTodo -->
+    <string name="calendar_todo_save">"存檔"</string>
+    <string name="calendar_todo_processing">"處理中"</string>
+    <string name="calendar_todo_wait">"請稍候&#8230;"</string>
+
+    <!-- FragmentDashboardChart -->
+    <string name="dashboard_chart_indoor">"室內"</string>
+    <string name="dashboard_chart_outdoor">"室外"</string>
+    <string name="dashboard_chart_today">"今日"</string>
+    <string name="dashboard_chart_this_week">"本周"</string>
+    <string name="dashboard_chart_this_month">"本月"</string>
+    <string name="dashboard_chart_this_year">"今年"</string>
+    <string name="dashboard_chart_message_below">"別放棄!\n你能做到的!"</string>
+    <string name="dashboard_chart_message_almost">"再多試試!\n你快完成了!"</string>
+    <string name="dashboard_chart_message_excellent">"哇! \n你完成目標了!"</string>
+    <string name="dashboard_chart_steps">腳步</string>
+
+    <!-- FragmentDashboardMain -->
+    <string name="dashboard_main_message">"立刻同步?"</string>
+    <string name="dashboard_main_yes">"是, 請同步"</string>
+    <string name="dashboard_main_dashboard">"否, 開啟活動記錄"</string>
+    <string name="dashboard_main_another">"同步其它的手錶"</string>
+    <string name="dashboard_main_no_device">"未綁定任何裝置!"</string>
+
+    <!-- FragmentDashboardEmotion -->
+    <string name="dashboard_emotion_hello">"你今天如何?"</string>
+    <string name="dashboard_emotion_excellent">"棒極了!"</string>
+    <string name="dashboard_emotion_almost">"快完成了!"</string>
+    <string name="dashboard_emotion_below">"再多加油!"</string>
+
+    <!-- FragmentDashboardProgress -->
+    <string name="dashboard_progress_searching">"尋找裝置!"</string>
+    <string name="dashboard_progress_found">"尋獲你的裝置!"</string>
+    <string name="dashboard_progress_sync_now">"立即同步"</string>
+    <string name="dashboard_progress_syncing">"同步中"</string>
+    <string name="dashboard_progress_completed">"同步完成"</string>
+    <string name="dashboard_progress_dashboard">"開啟活動記錄"</string>
+    <string name="dashboard_progress_not_found">"無法找到裝置!"</string>
+    <string name="dashboard_progress_again">"重試"</string>
+    <string name="dashboard_progress_last">"使用最後的記錄"</string>
+    <string name="dashboard_progress_server_not_reach">"Can't Reach Server!"</string>
+
+    <!-- FragmentDashboardRequest -->
+    <string name="dashboard_request_request">"發出請求"</string>
+    <string name="dashboard_request_profile">"編輯個人資訊"</string>
+    <string name="dashboard_request_process">"處理中"</string>
+    <string name="dashboard_request_waiting">"請稍候&#8230;"</string>
+    <string name="dashboard_request_pending">"請求中.\n等候回應"</string>
+    <string name="dashboard_request_no_data">"你尚無任何資料"</string>
+    <string name="dashboard_request_owner">"%s的手錶"</string>
+
+    <!-- FragmentDashboardWatch -->
+    <string name="dashboard_watch_message">"選擇同步的手錶"</string>
+
+    <!-- FragmentDevice -->
+    <string name="device_battery">"電池"</string>
+    <string name="device_searching">"尋找中&#8230;"</string>
+    <string name="device_not_found">"未發現"</string>
+    <string name="device_no_watch">"你並未擁有手錶"</string>
+    <string name="device_owner">"%s的手錶"</string>
+
+    <!-- FragmentPhotoClip -->
+    <string name="photo_clip_cancel">"取消"</string>
+    <string name="photo_clip_take_photo">"使用相片"</string>
+
+    <!-- FragmentProfileAdded -->
+    <string name="profile_added_added">"完成新增"</string>
+    <string name="profile_added_successfully">"我們己經加入你的\nSwing Watch."</string>
+    <string name="profile_added_profile">"設定你的個人資訊"</string>
+
+    <!-- FragmentProfileEditor -->
+    <string name="profile_editor_first_name">"名"</string>
+    <string name="profile_editor_last_name">"姓"</string>
+    <string name="profile_editor_phone">"電話號碼"</string>
+    <string name="profile_editor_mail_address">"電子信箱"</string>
+    <string name="profile_editor_address1">"地址 1"</string>
+    <string name="profile_editor_address2">"地址 2"</string>
+    <string name="profile_editor_city">"居住地"</string>
+    <string name="profile_editor_zip">"郵遞區號"</string>
+    <string name="profile_editor_processing">"處理中"</string>
+    <string name="profile_editor_wait">"請稍候&#8230;"</string>
+    <string name="profile_editor_avatar_failed">"更新頭像失敗"</string>
+
+    <!-- FragmentProfileKid -->
+    <string name="profile_kid_name">"姓名"</string>
+    <string name="profile_kid_remove">"移除"</string>
+    <string name="profile_kid_processing">"處理中"</string>
+    <string name="profile_kid_wait">"請稍候&#8230;"</string>
+    <string name="profile_kid_name_not_blank">姓名欄不可為空白</string>
+
+    <!-- FragmentProfileMain -->
+    <string name="profile_main_hosting">"我的裝置"</string>
+    <string name="profile_main_shared">"與我分享的裝置"</string>
+    <string name="profile_main_request_to">"我所請求的裝置"</string>
+    <string name="profile_main_request_from">"你有%d個請求"</string>
+
+    <!-- FragmentProfileOption -->
+    <string name="profile_option_account">"帳號"</string>
+    <string name="profile_option_kid">"編輯小孩資訊"</string>
+    <string name="profile_option_password">"密碼變更"</string>
+    <string name="profile_option_logout">"登出"</string>
+    <string name="profile_option_about">"關於"</string>
+    <string name="profile_option_contact_us">"與我們連絡"</string>
+    <string name="profile_option_privacy_policy">"隱私政策"</string>
+    <string name="profile_option_manual">用戶手冊</string>
+    <string name="profile_option_version">"版本資訊"</string>
+
+    <!-- FragmentProfilePassword -->
+    <string name="profile_password_current">"現在密碼"</string>
+    <string name="profile_password_new">"新密碼"</string>
+    <string name="profile_password_again">"請再次輸入新密碼!"</string>
+    <string name="profile_reset_password_confirmation">確定要更新密碼?</string>
+    <string name="profile_reset_password_note">更新密碼的郵件已經寄到您的信箱%s，更新密碼的連結會在24小時後失效</string>
+
+    <!-- FragmentProfileRegistered -->
+    <string name="profile_registered_registered">"這支手錶\n已經被註冊了"</string>
+    <string name="profile_registered_request_access">"發出請求"</string>
+    <string name="profile_registered_contact_us">"與我們連絡"</string>
+    <string name="profile_registered_processing">"處理中"</string>
+    <string name="profile_registered_wait">"請稍候&#8230;"</string>
+
+    <!-- FragmentProfileRequestFrom -->
+    <string name="profile_request_from_processing">"處理中"</string>
+    <string name="profile_request_from_wait">"請稍候&#8230;"</string>
+    <string name="profile_request_from_count">"你有%d個請求"</string>
+
+    <!-- FragmentProfileRequestTo -->
+    <string name="profile_request_to_mail">"用戶電子信箱"</string>
+    <string name="profile_request_to_others">"你所發出的請求"</string>
+    <string name="profile_request_to_send">"發送"</string>
+    <string name="profile_request_to_cancel">"取消"</string>
+    <string name="profile_request_to_processing">"處理中"</string>
+    <string name="profile_request_to_wait">"請稍候&#8230;"</string>
+
+    <!-- FragmentProfileSearch -->
+    <string name="profile_search_searching">"尋找中"</string>
+    <string name="profile_search_mac_failed">"找尋MAC位置失敗"</string>
+
+    <!-- FragmentProfileSelect -->
+    <string name="profile_select_watch">"請選擇\n你的 Swing Watch"</string>
+
+    <!-- FragmentProfileSelect -->
+    <string name="profile_share_save">"存檔"</string>
+    <string name="profile_share_who">"請選擇 Swing Watch\n向 %s 分享"</string>
+
+    <!-- FragmentProfileSorry -->
+    <string name="profile_sorry_sorry">"抱歉!"</string>
+    <string name="profile_sorry_message">"我們無法找到 swing watch.\n請檢查手錶的電量."</string>
+    <string name="profile_sorry_again">"再次尋找"</string>
+    <string name="profile_sorry_others">"發出請求"</string>
+    <string name="profile_sorry_contact_us">"與我們連絡"</string>
+
+    <!-- FragmentSignupAccount -->
+    <string name="signup_account_mail">"電子信箱"</string>
+    <string name="signup_account_password">"密碼"</string>
+    <string name="signup_account_login_failed">"登入失敗"</string>
+    <string name="signup_account_processing">"處理中"</string>
+    <string name="signup_account_wait">"請稍候&#8230;"</string>
+
+    <!-- FragmentSignupLanguage -->
+    <string name="signup_language_message">"請選擇語言"</string>
+    <string name="signup_language_select">"確認"</string>
+
+    <!-- FragmentSignupLogin -->
+    <string name="signup_login_login">"登入 / 註冊"</string>
+    <string name="signup">註冊</string>
+    <string name="signup_login_or">"或"</string>
+    <string name="signup_login_facebook">"以Facebook帳號登入"</string>
+    <string name="signup_login_google">"以Google帳號登入"</string>
+
+    <!-- FragmentSignupProfile -->
+    <string name="signup_profile_first_name">"名"</string>
+    <string name="signup_profile_last_name">"姓"</string>
+    <string name="signup_profile_phone_number">"電話號碼"</string>
+    <string name="signup_profile_zip_code">"郵遞區號"</string>
+    <string name="signup_profile_processing">"處理中"</string>
+    <string name="signup_profile_wait">"請稍候&#8230;"</string>
+    <string name="signup_profile_login_failed">"登入失敗"</string>
+    <string name="signup_profile_update_failed">"更新失敗"</string>
+    <string name="signup_profile_avatar_failed">"更新頭像失敗"</string>
+
+    <!-- FragmentWatchAdded -->
+    <string name="watch_added_added">"完成新增"</string>
+    <string name="watch_added_message">"手錶註冊成功."</string>
+    <string name="watch_added_profile">"設定個人資訊"</string>
+
+    <!-- FragmentWatchFinish -->
+    <string name="watch_finish_dashboard">"開啟活動記錄"</string>
+    <string name="watch_finish_another">"新增其它手錶"</string>
+
+    <!-- FragmentWatchHave -->
+    <string name="watch_have_have">"你是否有\nSWING WATCH?"</string>
+    <string name="watch_have_yes">"是"</string>
+    <string name="watch_have_no">"否"</string>
+
+    <!-- FragmentWatchOwner -->
+    <string name="watch_owner_message">"註冊手錶"</string>
+    <string name="watch_owner_search">"立即尋找"</string>
+    <string name="watch_owner_or">"或"</string>
+    <string name="watch_owner_others">"發出請求"</string>
+    <string name="watch_owner_add_now">"立即新增"</string>
+
+    <!-- FragmentWatchProfile -->
+    <string name="watch_profile_name">"小孩名字"</string>
+    <string name="watch_profile_processing">"處理中"</string>
+    <string name="watch_profile_wait">"請稍候&#8230;"</string>
+
+    <!-- FragmentWatchPurchase -->
+    <string name="watch_purchase_message">"你是否\n想要購買Swing Watch?"</string>
+    <string name="watch_purchase_yes">"是的"</string>
+    <string name="watch_purchase_others">"發出請求"</string>
+
+    <!-- FragmentWatchRegistered -->
+    <string name="watch_registered_message">"這支手錶\n已經被註冊了"</string>
+    <string name="watch_registered_request_access">"發出請求"</string>
+    <string name="watch_registered_contact_us">"與我們連絡"</string>
+    <string name="watch_registered_processing">"處理中"</string>
+    <string name="watch_registered_wait">"請稍候&#8230;"</string>
+
+    <!-- FragmentWatchRequest -->
+    <string name="watch_request_message">"發出請求"</string>
+    <string name="watch_request_processing">"處理中"</string>
+    <string name="watch_request_wait">"請稍候&#8230;"</string>
+    <string name="watch_request_add">"新增"</string>
+
+    <!-- FragmentWatchSearch -->
+    <string name="watch_search_searching">"尋找中"</string>
+    <string name="watch_search_failed">"找尋MAC位置失敗"</string>
+
+    <!-- FragmentWatchSelect -->
+    <string name="watch_select_message">"請選擇你的\nSwing Watch"</string>
+    <string name="watch_select_dashboard">"開啟活動記錄"</string>
+
+    <!-- FragmentWatchSorry -->
+    <string name="watch_sorry_sorry">"抱歉!"</string>
+    <string name="watch_sorry_message">"我們無法找到 swing watch.\n請檢查手錶的電量."</string>
+    <string name="watch_sorry_again">"再次尋找"</string>
+    <string name="watch_sorry_others">"發出請求"</string>
+    <string name="watch_sorry_contact_us">"與我們連絡"</string>
+
+    <!-- Events name -->
+    <string name="event_alarm_app">"提示事件 (僅於手機提示)"</string>
+    <string name="event_alarm_good_morning">"早安"</string>
+    <string name="event_alarm_make_bed">"整理床舖"</string>
+    <string name="event_alarm_get_dress">"穿衣"</string>
+    <string name="event_alarm_eat_breakfast">"吃早餐"</string>
+    <string name="event_alarm_brush_teeth">"刷牙"</string>
+    <string name="event_alarm_get_ready_for_school">"準備上學"</string>
+    <string name="event_alarm_put_on_pajamas">"穿上睡衣"</string>
+    <string name="event_alarm_story_time">"故事時間"</string>
+    <string name="event_alarm_good_night">"晚安"</string>
+    <string name="event_alarm_collect_toys">"收拾玩具"</string>
+    <string name="event_alarm_set_table">"整理桌面"</string>
+    <string name="event_alarm_feed_pet">"餵寵物"</string>
+    <string name="event_alarm_water_plants">"澆花"</string>
+    <string name="event_alarm_clean_table">"清理桌面"</string>
+    <string name="event_alarm_clean_bedroom">"整理臥室"</string>
+    <string name="event_alarm_homework_time">"作業時間"</string>
+    <string name="event_alarm_take_a_nap">"點心時間"</string>
+    <string name="event_alarm_outdoor_play_time">"戶外活動時間"</string>
+    <string name="event_alarm_fun_time">"遊戲時間"</string>
+    <string name="event_alarm_exercise">"運動"</string>
+    <string name="event_alarm_practice_music">"音樂練習"</string>
+    <string name="event_alarm_drawing_time">"畫畫時間"</string>
+    <string name="event_alarm_reading_time">"閱讀時間"</string>
+    <string name="event_alarm_take_a_bath">"洗澡"</string>
+    <string name="event_alarm_family_time">"家庭時間"</string>
+    <string name="event_alarm_lunch_time">"午餐時間"</string>
+    <string name="event_alarm_dinner_time">"晚餐時間"</string>
+    <string name="event_alarm_afternoon_snack_time">"下午點心時間"</string>
+    <string name="event_alarm_review_the_backpack">"檢查書包"</string>
+
+    <!-- Events Repeat -->
+    <string name="event_repeat_monthly">"每月"</string>
+    <string name="event_repeat_weekly">"每周"</string>
+    <string name="event_repeat_daily">"每日"</string>
+    <string name="event_repeat_never">"從不"</string>
+    <string name="profile_request_to_users">用戶</string>
+    <string name="event_notification_title">您有一個行程: </string>
+
+    <!-- API Error -->
+    <string name="error_api_unknown">Unknown Error</string>
+    <string name="error_api_user_login_400">Bad Request. Login Failed</string>
+    <string name="error_api_user_is_token_valid_403">Bad request. The Token is Invalid</string>
+    <string name="error_api_user_register_400">Bad Request. Missing Some Parameters</string>
+    <string name="error_api_user_register_409">Conflict. The Email is Already Registered</string>
+    <string name="error_api_user_is_email_available_to_register_409">Conflict. The Email is Already Registered</string>
+    <string name="error_api_user_update_profile_400">Bad Request. Missing Some Parameters</string>
+    <string name="error_api_user_retrieve_user_profile_400">Bad request. The Token is Invalid</string>
+    <string name="error_api_user_find_by_email_400">Bad Request. The Email Parameter is Missing</string>
+    <string name="error_api_user_find_by_email_404">Not Found. Can\'t Find User by the Email</string>
+    <string name="error_api_user_avatar_upload_400">Bad Request. Missing Some Parameters</string>
+    <string name="error_api_user_avatar_upload_kid_400">Bad Request. Missing Some Parameters</string>
+    <string name="error_api_kid_add_400">Bad Request. Missing Some Parameters</string>
+    <string name="error_api_kid_add_409">Conflict. The MAC ID is Already Registered</string>
+    <string name="error_api_kid_update_400">Bad Request. Missing Some Parameters</string>
+    <string name="error_api_kid_delete_400">Bad Request. Missing Some Parameters</string>
+    <string name="error_api_kid_list_403">User is not Signed In</string>
+    <string name="error_api_kid_who_registered_mac_id_404">User not Found; MAC ID is not Registered by Anyone</string>
+    <string name="error_api_kid_who_registered_mac_id_400">Bad Request. Missing Some Parameters</string>
+    <string name="error_api_activity_update_raw_data_400">Bad Request. Missing Some Parameters</string>
+    <string name="error_api_activity_update_raw_data_404">Conflict. The Data is Already Exist</string>
+    <string name="error_api_activity_retrieve_data_400">Bad Request. Missing some parameters, or the Type is Wrong</string>
+    <string name="error_api_activity_retrieve_data_by_time_400">Bad Request. Missing some parameters, or the Type is Wrong</string>
+    <string name="error_api_event_add_400">Bad Request. Missing some parameters, or the Type is Wrong</string>
+    <string name="error_api_event_add_403">Forbidden. The User Doesn\'t Have Permission to Add Event</string>
+    <string name="error_api_event_update_400">Bad Request. Missing some parameters, or the Type is Wrong</string>
+    <string name="error_api_event_update_403">Forbidden. The user Doesn\'t Have Permission to Update</string>
+    <string name="error_api_event_delete_400">Bad Request. Missing some parameters, or the Type is Wrong</string>
+    <string name="error_api_event_delete_403">Forbidden. The User Doesn\'t Have Permission to Delete</string>
+    <string name="error_api_event_todo_done_400">Bad Request. Missing some parameters, or the Type is Wrong</string>
+    <string name="error_subhost_add_400">Bad Request. Missing some parameters, or the Type is Wrong</string>
+    <string name="error_subhost_add_409">Conflict. The Request is Already Existed</string>
+    <string name="error_subhost_accept_400">Bad Request. Missing Some Parameters, or the type is wrong. Or the logged in user doesn\'t have permission</string>
+    <string name="error_subhost_deny_400">Bad Request. Missing some parameters, or the Type is Wrong</string>
+    <string name="error_subhost_remove_kid_400">Bad Request. Missing some parameters, or the Type is Wrong</string>
+    <string name="error_subhost_remove_kid_403">Forbidden. The User Doesn\'t Have Permission</string>
+    <string name="signup_profile_next">下一步</string>
+    <string name="signup_profile_done">完成</string>
+    <string name="dashboard_add_watch">加我的手錶</string>
+    <string name="calendar_month_sync">立即同步</string>
+    <string name="dialog_sync_content">編輯事件後請重新同步手錶</string>
+    <string name="dialog_sync_header">Sync Data</string>
+    <string name="dialog_sync_skip_button">Skip</string>
+    <string name="dialog_sync_sync_button">同步</string>
+
+</resources>
+

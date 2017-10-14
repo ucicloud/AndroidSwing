@@ -1,0 +1,373 @@
+<resources>
+    <string name="app_name">Swing</string>
+
+    <!-- ActivityMain -->
+    <string name="activity_main_synchronize">接続</string>
+    <string name="activity_main_wait">暫くお待ちください&#8230;</string>
+
+    <!-- Title bar -->
+    <string name="title_boot">設定しなおしてください</string>
+    <string name="title_calendar">カレンダー</string>
+    <string name="title_dashboard">運動記録</string>
+    <string name="title_photo">写真</string>
+    <string name="title_profile">個人資料	</string>
+    <string name="title_option">オープション</string>
+    <string name="title_password">パスワード</string>
+    <string name="title_request_from">からリクエストが来ました</string>
+    <string name="title_request_to">リクエストを送信する</string>
+    <string name="title_search_device">検索する</string>
+    <string name="title_sync">接続</string>
+
+    <!-- FragmentCalendarAlarm -->
+    <string name="calendar_alarm_agenda">予定表</string>
+    <string name="calendar_alarm_clock">目覚まし時計</string>
+    <string name="calendar_alarm_morning">毎朝の日課</string>
+    <string name="calendar_alarm_bed">毎晩の日課</string>
+    <string name="calendar_alarm_activities">每日の日課</string>
+
+    <!-- FragmentCalendarEvent -->
+    <string name="calendar_event_creator">クリエーター</string>
+    <string name="calendar_event_assign">指名</string>
+    <string name="calendar_event_event">イベントを選ぶ</string>
+    <string name="calendar_event_start">開始時間</string>
+    <string name="calendar_event_end">終了時間</string>
+    <string name="calendar_event_color">カラーラベル</string>
+    <string name="calendar_event_repeat">繰り返す	</string>
+    <string name="calendar_event_description">説明</string>
+    <string name="calendar_event_todo_list">リストを作る</string>
+    <string name="calendar_event_save">セーブ（保存）</string>
+    <string name="calendar_event_advance">前へ進む</string>
+    <string name="calendar_event_please_select_event">イベントを選ぶ</string>
+
+    <!-- FragmentCalendarMain -->
+    <string name="calendar_main_today_schedule">今日の予定</string>
+    <string name="calendar_main_monthly_schedule">今月の予定</string>
+    <string name="calendar_main_no_incoming_event">イベントは\nありません</string>
+
+    <!-- FragmentCalendarTodo -->
+    <string name="calendar_todo_save">セーブ（保存）</string>
+    <string name="calendar_todo_processing">処理中です</string>
+    <string name="calendar_todo_wait">暫くお待ちください&#8230;</string>
+
+    <!-- FragmentDashboardChart -->
+    <string name="dashboard_chart_indoor">室内</string>
+    <string name="dashboard_chart_outdoor">室外</string>
+    <string name="dashboard_chart_today">今日/本日</string>
+    <string name="dashboard_chart_this_week">今週</string>
+    <string name="dashboard_chart_this_month">今月</string>
+    <string name="dashboard_chart_this_year">今年</string>
+    <string name="dashboard_chart_message_below">あきらめないでください\n貴方ならできます！</string>
+    <string name="dashboard_chart_message_almost">あと少しです。頑張ってください</string>
+    <string name="dashboard_chart_message_excellent">おめでとうございます！目標を達成しました。</string>
+    <string name="dashboard_chart_steps">歩数</string>
+
+    <!-- FragmentDashboardMain -->
+    <string name="dashboard_main_message">データを接続しますか？</string>
+    <string name="dashboard_main_yes">はい</string>
+    <string name="dashboard_main_dashboard">いいえ\nイベント・レコードを開きます</string>
+    <string name="dashboard_main_another">他の時計を接続する</string>
+    <string name="dashboard_main_no_device">に接続する時計を選ぶ</string>
+
+    <!-- FragmentDashboardEmotion -->
+    <string name="dashboard_emotion_hello">ご機嫌はいかがですか?</string>
+    <string name="dashboard_emotion_excellent">目標を達成しました</string>
+    <string name="dashboard_emotion_almost">もうすぐ目標達成です</string>
+    <string name="dashboard_emotion_below">平均以下です</string>
+
+    <!-- FragmentDashboardProgress -->
+    <string name="dashboard_progress_searching">貴方の時計を\n検索しています</string>
+    <string name="dashboard_progress_found">貴方の時計\n見つけました。</string>
+    <string name="dashboard_progress_sync_now">接続を始めます</string>
+    <string name="dashboard_progress_syncing">接続ています</string>
+    <string name="dashboard_progress_completed">接続しました</string>
+    <string name="dashboard_progress_dashboard">イベント・レコードを開きます</string>
+    <string name="dashboard_progress_not_found">あなたの時計が\n見つかりません</string>
+    <string name="dashboard_progress_again">もう一度試してみてください</string>
+    <string name="dashboard_progress_last">前回の接続したデータに移動する</string>
+    <string name="dashboard_progress_server_not_reach">サーバーに接続できません</string>
+
+    <!-- FragmentDashboardRequest -->
+    <string name="dashboard_request_request">時計へのアクセスをリクエストします</string>
+    <string name="dashboard_add_watch">時計を追加する</string>
+    <string name="dashboard_request_profile">個人情報	</string>
+    <string name="dashboard_request_process">処理中です</string>
+    <string name="dashboard_request_waiting">暫くお待ちください&#8230;</string>
+    <string name="dashboard_request_pending">リクエストを保留\n返答を待っています</string>
+    <string name="dashboard_request_no_data">データがまだありません	</string>
+    <string name="dashboard_request_owner">%sの時計</string>
+
+    <!-- FragmentDashboardWatch -->
+    <string name="dashboard_watch_message">貴方の時計を\nスイングウッォチを\n選択してください</string>
+
+    <!-- FragmentDevice -->
+    <string name="device_battery">電池</string>
+    <string name="device_searching">検索中&#8230;</string>
+    <string name="device_not_found">見つかりません</string>
+    <string name="device_no_watch">デバイスに接続していません</string>
+    <string name="device_owner">%sの時計</string>
+
+    <!-- FragmentPhotoClip -->
+    <string name="photo_clip_cancel">キャンセルする</string>
+    <string name="photo_clip_take_photo">Use Photo</string>
+
+    <!-- FragmentProfileAdded -->
+    <string name="profile_added_added">追加</string>
+    <string name="profile_added_successfully">貴方のスイングウォッチを追加しました</string>
+    <string name="profile_added_profile">貴方の基本情報を設定してください</string>
+
+    <!-- FragmentProfileEditor -->
+    <string name="profile_editor_first_name">名前（名）</string>
+    <string name="profile_editor_last_name">苗字（姓）</string>
+    <string name="profile_editor_phone">電話番号</string>
+    <string name="profile_editor_mail_address">メールアドレス</string>
+    <string name="profile_editor_address1">Address 1</string>
+    <string name="profile_editor_address2">Address 2</string>
+    <string name="profile_editor_city">市</string>
+    <string name="profile_editor_zip">郵便番号</string>
+    <string name="profile_editor_processing">処理中です</string>
+    <string name="profile_editor_wait">暫くお待ちください&#8230;</string>
+    <string name="profile_editor_avatar_failed">アップデートに失敗しました</string>
+
+    <!-- FragmentProfileKid -->
+    <string name="profile_kid_name">名前</string>
+    <string name="profile_kid_remove">削除する</string>
+    <string name="profile_kid_processing">処理中です</string>
+    <string name="profile_kid_wait">暫くお待ちください&#8230;</string>
+    <string name="profile_kid_name_not_blank">Kid Name is Blank</string>
+
+    <!-- FragmentProfileMain -->
+    <string name="profile_main_hosting">私の時計</string>
+    <string name="profile_main_shared">わたしと共有する時計	</string>
+    <string name="profile_main_request_to">リクエストを送りました</string>
+    <string name="profile_main_request_from">You\'ve Received %d Request From</string>
+
+    <!-- FragmentProfileOption -->
+    <string name="profile_option_account">アカウント</string>
+    <string name="profile_option_kid">お子さんのプロフィールを編集する</string>
+    <string name="profile_option_password">パスワードをリセット</string>
+    <string name="profile_option_logout">ログアウト</string>
+    <string name="profile_option_about">概要</string>
+    <string name="profile_option_contact_us">お問い合わせ</string>
+    <string name="profile_option_privacy_policy">個人情報保護政策</string>
+    <string name="profile_option_manual">説明書</string>
+    <string name="profile_option_version">バージョン（版）</string>
+
+    <!-- FragmentProfilePassword -->
+    <string name="profile_password_current">現在のパスワード</string>
+    <string name="profile_password_new">新しいパスワード</string>
+    <string name="profile_password_again">もう一度新しいパスワードを入力してください</string>
+    <string name="profile_reset_password_confirmation">パスワードをリセットしますか?</string>
+    <string name="profile_reset_password_note">"ご登録のメールアドレス“%s”宛にパスワード変更用のURLをお送りします。URLの有効期間は24時間ですので、お早めに変更して下さい。"</string>
+
+    <!-- FragmentProfileRegistered -->
+    <string name="profile_registered_registered">この時計は既に登録済です</string>
+    <string name="profile_registered_request_access">時計へのアクセスをリクエストします</string>
+    <string name="profile_registered_contact_us">ゲストのまま続けますか？	</string>
+    <string name="profile_registered_processing">処理中です</string>
+    <string name="profile_registered_wait">暫くお待ちください&#8230;</string>
+
+    <!-- FragmentProfileRequestFrom -->
+    <string name="profile_request_from_processing">処理中です</string>
+    <string name="profile_request_from_wait">暫くお待ちください</string>
+    <string name="profile_request_from_count">%dと共有するために時計を選択してください</string>
+
+    <!-- FragmentProfileRequestTo -->
+    <string name="profile_request_to_mail">ユーザーの電子メールを検索する</string>
+    <string name="profile_request_to_users">ユーザー</string>
+    <string name="profile_request_to_others">他の時計へアクセスする	</string>
+    <string name="profile_request_to_send">送信</string>
+    <string name="profile_request_to_cancel">キャンセルする</string>
+    <string name="profile_request_to_processing">処理中です</string>
+    <string name="profile_request_to_wait">暫くお待ちください&#8230;</string>
+
+    <!-- FragmentProfileSearch -->
+    <string name="profile_search_searching">検索中</string>
+    <string name="profile_search_mac_failed">ＭＡＣの検索に失敗しました</string>
+
+    <!-- FragmentProfileSelect -->
+    <string name="profile_select_watch">貴方の時計をスイングウッォチを選択してください</string>
+
+    <!-- FragmentProfileSelect -->
+    <string name="profile_share_save">セーブ（保存）</string>
+    <string name="profile_share_who">%sのリクエストが来ています</string>
+
+    <!-- FragmentProfileSorry -->
+    <string name="profile_sorry_sorry">すみません	</string>
+    <string name="profile_sorry_message">貴方のスイングウォッチが見つかりません。\n時計の電池の充電状態を確認してください</string>
+    <string name="profile_sorry_again">もう一度検索	</string>
+    <string name="profile_sorry_others">時計へのアクセスをリクエストします</string>
+    <string name="profile_sorry_contact_us">お問い合わせ</string>
+
+    <!-- FragmentSignupAccount -->
+    <string name="signup_account_mail">電子メール	</string>
+    <string name="signup_account_password">パスワード	</string>
+    <string name="signup_account_login_failed">ログインに失敗しました</string>
+    <string name="signup_account_processing">処理中です</string>
+    <string name="signup_account_wait">暫くお待ちください&#8230;</string>
+
+    <!-- FragmentSignupLanguage -->
+    <string name="signup_language_message">使用する言語を選んでください</string>
+    <string name="signup_language_select">選択</string>
+
+    <!-- FragmentSignupLogin -->
+    <string name="signup_login_login">サインアップ / ログイン</string>
+    <string name="signup">サインアップ</string>
+    <string name="signup_login_or">或いは</string>
+    <string name="signup_login_facebook">フエイスブックでログイン</string>
+    <string name="signup_login_google">グーグルでログイン</string>
+
+    <!-- FragmentSignupProfile -->
+    <string name="signup_profile_first_name">名前（名）</string>
+    <string name="signup_profile_last_name">苗字（姓）</string>
+    <string name="signup_profile_phone_number">電話番号</string>
+    <string name="signup_profile_zip_code">郵便番号</string>
+    <string name="signup_profile_processing">処理中です</string>
+    <string name="signup_profile_wait">暫くお待ちください&#8230;</string>
+    <string name="signup_profile_login_failed">ログインに失敗しました</string>
+    <string name="signup_profile_update_failed">アップデートに失敗しました</string>
+    <string name="signup_profile_avatar_failed">アップデートに失敗しました</string>
+    <string name="signup_profile_next">次へ</string>
+    <string name="signup_profile_done">完了しました</string>
+
+    <!-- FragmentWatchAdded -->
+    <string name="watch_added_added">追加</string>
+    <string name="watch_added_message">貴方のスイングウォッチを追加しました</string>
+    <string name="watch_added_profile">貴方の基本情報を設定してください</string>
+
+    <!-- FragmentWatchFinish -->
+    <string name="watch_finish_dashboard">イベント・レコードを開きます</string>
+    <string name="watch_finish_another">他の時計を追加する</string>
+
+    <!-- FragmentWatchHave -->
+    <string name="watch_have_have">貴方はスイングウォッチを持っていますか？</string>
+    <string name="watch_have_yes">はい</string>
+    <string name="watch_have_no">いいえ</string>
+
+    <!-- FragmentWatchOwner -->
+    <string name="watch_owner_message">貴方の時計を登録します</string>
+    <string name="watch_owner_search">検索する</string>
+    <string name="watch_owner_or">或いは</string>
+    <string name="watch_owner_others">時計へのアクセスをリクエストします。</string>
+    <string name="watch_owner_add_now">今すぐ追加する</string>
+
+    <!-- FragmentWatchProfile -->
+    <string name="watch_profile_name">お子さんの名前	</string>
+    <string name="watch_profile_processing">処理中です</string>
+    <string name="watch_profile_wait">暫くお待ちください&#8230;</string>
+
+    <!-- FragmentWatchPurchase -->
+    <string name="watch_purchase_message">購入しますか?</string>
+    <string name="watch_purchase_yes">はい</string>
+    <string name="watch_purchase_others">他の時計へアクセスする</string>
+
+    <!-- FragmentWatchRegistered -->
+    <string name="watch_registered_message">この時計は既に登録済です。</string>
+    <string name="watch_registered_request_access">アクセスをリクエストしますか？</string>
+    <string name="watch_registered_contact_us">お問い合わせ</string>
+    <string name="watch_registered_processing">処理中です</string>
+    <string name="watch_registered_wait">暫くお待ちください&#8230;</string>
+
+    <!-- FragmentWatchRequest -->
+    <string name="watch_request_message">時計へのアクセスをリクエストします。</string>
+    <string name="watch_request_processing">処理中です</string>
+    <string name="watch_request_wait">暫くお待ちください</string>
+    <string name="watch_request_add">追加</string>
+
+    <!-- FragmentWatchSearch -->
+    <string name="watch_search_searching">検索中	</string>
+    <string name="watch_search_failed">ＭＡＣの検索に失敗しました</string>
+
+    <!-- FragmentWatchSelect -->
+    <string name="watch_select_message">貴方の時計をスイングウッォチを選択してください</string>
+    <string name="watch_select_dashboard">イベント・レコードを開きます</string>
+
+    <!-- FragmentWatchSorry -->
+    <string name="watch_sorry_sorry">すみません</string>
+    <string name="watch_sorry_message">貴方のスイングウォッチが見つかりません。時計の電池の充電状態を確認してください</string>
+    <string name="watch_sorry_again">もう一度検索	</string>
+    <string name="watch_sorry_others">他の時計へアクセスする	</string>
+    <string name="watch_sorry_contact_us">お問い合わせ</string>
+
+    <!-- Events name -->
+    <string name="event_alarm_app">アジェンダ・リマインダ（アプリケーションのみ）</string>
+    <string name="event_alarm_good_morning">おはよう</string>
+    <string name="event_alarm_make_bed">ベッドを整えましょう</string>
+    <string name="event_alarm_get_dress">服を着ましょう</string>
+    <string name="event_alarm_eat_breakfast">朝ごはんを食べましょう</string>
+    <string name="event_alarm_brush_teeth">歯を磨きましょう</string>
+    <string name="event_alarm_get_ready_for_school">学校に行く準備をしましょう</string>
+    <string name="event_alarm_put_on_pajamas">パジャマを着る</string>
+    <string name="event_alarm_story_time">就寝時のお伽話</string>
+    <string name="event_alarm_good_night">おやすみなさい</string>
+    <string name="event_alarm_collect_toys">おもちゃを片付けましょう</string>
+    <string name="event_alarm_set_table">テーブルをセットする</string>
+    <string name="event_alarm_feed_pet">ペットに餌をやりましょう</string>
+    <string name="event_alarm_water_plants">植木に水をやります</string>
+    <string name="event_alarm_clean_table">テーブルを整理する</string>
+    <string name="event_alarm_clean_bedroom">部屋を片付けましょう</string>
+    <string name="event_alarm_homework_time">宿題の時間です</string>
+    <string name="event_alarm_take_a_nap">お昼寝の時間です</string>
+    <string name="event_alarm_outdoor_play_time">外で遊びましょう</string>
+    <string name="event_alarm_fun_time">遊びの時間です</string>
+    <string name="event_alarm_exercise">スポーツの時間です</string>
+    <string name="event_alarm_practice_music">音楽の時間です</string>
+    <string name="event_alarm_drawing_time">お絵かきの時間です</string>
+    <string name="event_alarm_reading_time">読書の時間です</string>
+    <string name="event_alarm_take_a_bath">お風呂の時間です</string>
+    <string name="event_alarm_family_time">家族の時間です</string>
+    <string name="event_alarm_lunch_time">お昼ご飯の時間です</string>
+    <string name="event_alarm_dinner_time">夕食の時間です</string>
+    <string name="event_alarm_afternoon_snack_time">おやつの時間です</string>
+    <string name="event_alarm_review_the_backpack">明日の準備をしましょう</string>
+
+    <!-- Events Repeat -->
+    <string name="event_repeat_monthly">毎月</string>
+    <string name="event_repeat_weekly">每週</string>
+    <string name="event_repeat_daily">每日</string>
+    <string name="event_repeat_never">今回だけ</string>
+    <string name="event_notification_title">あなたにはイベントがあります: </string>
+
+    <!-- API Error -->
+    <string name="error_api_unknown">原因不明のエラーが発生しました</string>
+    <string name="error_api_user_login_400">リクエストエラー　ログインに失敗しました</string>
+    <string name="error_api_user_is_token_valid_403">リクエストエラー　通信障害です</string>
+    <string name="error_api_user_register_400">パラメータエラーです</string>
+    <string name="error_api_user_register_409">コンフリクト。メールアドレスは既に登録済みです</string>
+    <string name="error_api_user_is_email_available_to_register_409">コンフリクト。メールアドレスは既に登録済みです</string>
+    <string name="error_api_user_update_profile_400">パラメータエラーです</string>
+    <string name="error_api_user_retrieve_user_profile_400">リクエストエラー　通信障害です</string>
+    <string name="error_api_user_find_by_email_400">パラメータエラーです</string>
+    <string name="error_api_user_find_by_email_404">電子メールでユーザーを見つけることができません</string>
+    <string name="error_api_user_avatar_upload_400">パラメータエラーです</string>
+    <string name="error_api_user_avatar_upload_kid_400">パラメータエラーです</string>
+    <string name="error_api_kid_add_400">パラメータエラーです</string>
+    <string name="error_api_kid_add_409">コンフリクト。ＭＡＣのＩＤはすでに登録済みです</string>
+    <string name="error_api_kid_update_400">パラメータエラーです</string>
+    <string name="error_api_kid_delete_400">パラメータエラーです</string>
+    <string name="error_api_kid_list_403">ユーザーがログインしていません</string>
+    <string name="error_api_kid_who_registered_mac_id_404">ユーザーを検索できません。ＭＡＣのＩＤが未登録です</string>
+    <string name="error_api_kid_who_registered_mac_id_400">パラメータエラーです</string>
+    <string name="error_api_activity_update_raw_data_400">パラメータエラーです</string>
+    <string name="error_api_activity_update_raw_data_404">コンフリクト。データーはすでに存在しています</string>
+    <string name="error_api_activity_retrieve_data_400">パラメータエラーかタイプミスです</string>
+    <string name="error_api_activity_retrieve_data_by_time_400">パラメータエラーかタイプミスです</string>
+    <string name="error_api_event_add_400">パラメータエラーかタイプミスです。</string>
+    <string name="error_api_event_add_403">禁止行為です。ユーザーはイベントを追加することができません。</string>
+    <string name="error_api_event_update_400">パラメータエラーかタイプミスです</string>
+    <string name="error_api_event_update_403">禁止行為です。ユーザーがデータをアップロードすることは許可されていません。</string>
+    <string name="error_api_event_delete_400">パラメータエラーかタイプミスです</string>
+    <string name="error_api_event_delete_403">禁止行為です。ユーザーはコマンドを削除できません。</string>
+    <string name="error_api_event_todo_done_400">パラメータエラーかタイプミスです</string>
+    <string name="error_subhost_add_400">パラメータエラー、入力エラー又はユーザーがサインすることが出来ません</string>
+    <string name="error_subhost_add_409">コンフリクト。リクエストが既に存在しています。</string>
+    <string name="error_subhost_accept_400">パラメータエラー、入力エラー又はユーザーがサインすることが出来ません</string>
+    <string name="error_subhost_deny_400">パラメータエラーかタイプミスです</string>
+    <string name="error_subhost_remove_kid_400">パラメータエラーかタイプミスです</string>
+    <string name="error_subhost_remove_kid_403">ユーザーが許可されていません</string>
+    <string name="calendar_month_sync">接続を始めます</string>
+    <string name="dialog_sync_content">イベントを編集すると、時計のシンクロをして下さい。</string>
+    <string name="dialog_sync_header">Sync Data</string>
+    <string name="dialog_sync_skip_button">Skip</string>
+    <string name="dialog_sync_sync_button">接続</string>
+
+</resources>

@@ -1,0 +1,374 @@
+<resources>
+    <string name="app_name">Swing</string>
+
+    <!-- ActivityMain -->
+    <string name="activity_main_synchronize">Синхронизация</string>
+    <string name="activity_main_wait">Пожалуйста, подождите&#8230;</string>
+
+    <!-- Title bar -->
+    <string name="title_boot">Boot</string>
+    <string name="title_calendar">Календарь</string>
+    <string name="title_dashboard">Начало</string>
+    <string name="title_photo">фотографию</string>
+    <string name="title_profile">профиль</string>
+    <string name="title_option">Опции</string>
+    <string name="title_password">Пароль</string>
+    <string name="title_request_from">Запрос от</string>
+    <string name="title_request_to">Отправить запрос</string>
+    <string name="title_search_device">Идет поиск часов</string>
+    <string name="title_sync">Синхронизация</string>
+
+    <!-- FragmentCalendarAlarm -->
+    <string name="calendar_alarm_agenda">Записная книжка</string>
+    <string name="calendar_alarm_clock">Будильник</string>
+    <string name="calendar_alarm_morning">Утренний распорядок</string>
+    <string name="calendar_alarm_bed">Распорядок перед отходом ко сну</string>
+    <string name="calendar_alarm_activities">Занятие</string>
+
+    <!-- FragmentCalendarEvent -->
+    <string name="calendar_event_creator">Автор</string>
+    <string name="calendar_event_assign">Назначить в</string>
+    <string name="calendar_event_event">Выбрать событие</string>
+    <string name="calendar_event_start">Начинается</string>
+    <string name="calendar_event_end">Заканчивается</string>
+    <string name="calendar_event_color">Цветная этикетка</string>
+    <string name="calendar_event_repeat">Повторить</string>
+    <string name="calendar_event_description">Описание</string>
+    <string name="calendar_event_todo_list">Список задач</string>
+    <string name="calendar_event_save">Сохранить</string>
+    <string name="calendar_event_advance">Продвинутый уровень</string>
+    <string name="calendar_event_please_select_event">пожалуйста Выбрать событие</string>
+
+    <!-- FragmentCalendarMain -->
+    <string name="calendar_main_today_schedule">Календарь на сегодня</string>
+    <string name="calendar_main_monthly_schedule">Календарь на месяц</string>
+    <string name="calendar_main_no_incoming_event">Нет событий</string>
+
+    <!-- FragmentCalendarTodo -->
+    <string name="calendar_todo_save">Сохранить</string>
+    <string name="calendar_todo_processing">Идет обработка</string>
+    <string name="calendar_todo_wait">Пожалуйста, подождите&#8230;</string>
+
+    <!-- FragmentDashboardChart -->
+    <string name="dashboard_chart_indoor">Внутри</string>
+    <string name="dashboard_chart_outdoor">Снаружи</string>
+    <string name="dashboard_chart_today">Сегодня</string>
+    <string name="dashboard_chart_this_week">Эта неделя</string>
+    <string name="dashboard_chart_this_month">Этот месяц</string>
+    <string name="dashboard_chart_this_year">Этот год</string>
+    <string name="dashboard_chart_message_below">Не сдавайся! Ты можешь сделать это!</string>
+    <string name="dashboard_chart_message_almost">Еще раз! Ты почти у цели!</string>
+    <string name="dashboard_chart_message_excellent">Браво! У тебя получилось!</string>
+    <string name="dashboard_chart_steps">Шаги</string>
+
+    <!-- FragmentDashboardMain -->
+    <string name="dashboard_main_message">Провести синхронизацию сейчас?</string>
+    <string name="dashboard_main_yes">Да, пожалуйста</string>
+    <string name="dashboard_main_dashboard">Нет, вернуться к началу</string>
+    <string name="dashboard_main_another">Синхронизировать другие часы</string>
+    <string name="dashboard_main_no_device">Часы еще не связаны с устройством</string>
+
+    <!-- FragmentDashboardEmotion -->
+    <string name="dashboard_emotion_hello">Как дела у тебя\nсегодня?</string>
+    <string name="dashboard_emotion_excellent">Замечательно!</string>
+    <string name="dashboard_emotion_almost">Почти на среднем уровне</string>
+    <string name="dashboard_emotion_below">Ниже среднего</string>
+
+    <!-- FragmentDashboardProgress -->
+    <string name="dashboard_progress_searching">Идет\nпоиск\nчасов</string>
+    <string name="dashboard_progress_found">Часы найдены </string>
+    <string name="dashboard_progress_sync_now">Синхронизировать\nсейчас</string>
+    <string name="dashboard_progress_syncing">Идет синхронизация</string>
+    <string name="dashboard_progress_completed">Синхронизация\nзавершена</string>
+    <string name="dashboard_progress_dashboard">Вернуться к началу</string>
+    <string name="dashboard_progress_not_found">Часы не\nнайдены</string>
+    <string name="dashboard_progress_again">Попытайся еще раз</string>
+    <string name="dashboard_progress_last">Вернуться к последней синхронизации</string>
+    <string name="dashboard_progress_server_not_reach">Сервер не найден</string>
+
+    <!-- FragmentDashboardRequest -->
+    <string name="dashboard_request_request">Разрешить доступ</string>
+    <string name="dashboard_request_profile">Перейти к профилю</string>
+    <string name="dashboard_request_process">Идет обработка</string>
+    <string name="dashboard_request_waiting">Пожалуйста, подождите&#8230;</string>
+    <string name="dashboard_request_pending">Невыполненный запрос.\nВ ожидании ответов</string>
+    <string name="dashboard_request_no_data">У тебя пока\nнет записей</string>
+    <string name="dashboard_request_owner">Часы %s</string>
+
+    <!-- FragmentDashboardWatch -->
+    <string name="dashboard_watch_message">Пожалуйста,\nвыбери часы</string>
+
+    <!-- FragmentDevice -->
+    <string name="device_battery">Батарея</string>
+    <string name="device_searching">Идет поиск&#8230;</string>
+    <string name="device_not_found">Не найдены</string>
+    <string name="device_no_watch">Часы еще не связаны с устройством</string>
+    <string name="device_owner">Часы %s</string>
+
+    <!-- FragmentPhotoClip -->
+    <string name="photo_clip_cancel">Отменить</string>
+    <string name="photo_clip_take_photo">Сделать фотографию</string>
+
+    <!-- FragmentProfileAdded -->
+    <string name="profile_added_added">Готово!</string>
+    <string name="profile_added_successfully">Мы добавили\nтвои часы</string>
+    <string name="profile_added_profile">Дополнить профиль</string>
+
+    <!-- FragmentProfileEditor -->
+    <string name="profile_editor_first_name">Имя</string>
+    <string name="profile_editor_last_name">Фамилия</string>
+    <string name="profile_editor_phone">Номер телефона</string>
+    <string name="profile_editor_mail_address">Электронная почта</string>
+    <string name="profile_editor_address1">Адрес 1</string>
+    <string name="profile_editor_address2">Адрес 2</string>
+    <string name="profile_editor_city">Город</string>
+    <string name="profile_editor_zip">Почтовый индекс</string>
+    <string name="profile_editor_processing">Идет обработка</string>
+    <string name="profile_editor_wait">Пожалуйста, подождите</string>
+    <string name="profile_editor_avatar_failed">Сбой при обновлении</string>
+
+    <!-- FragmentProfileKid -->
+    <string name="profile_kid_name">Имя</string>
+    <string name="profile_kid_remove">Удалить</string>
+    <string name="profile_kid_processing">Идет обработка</string>
+    <string name="profile_kid_wait">Пожалуйста, подождите&#8230;</string>
+    <string name="profile_kid_name_not_blank">Профиль - пустое имя</string>
+
+    <!-- FragmentProfileMain -->
+    <string name="profile_main_hosting">Мои часы</string>
+    <string name="profile_main_shared">Часы предоставлены мне</string>
+    <string name="profile_main_request_to">Ты отправил запрос</string>
+    <string name="profile_main_request_from">Получен %d запрос от</string>
+
+    <!-- FragmentProfileOption -->
+    <string name="profile_option_account">Аккаунт</string>
+    <string name="profile_option_kid">Редактировать профиль ребенка</string>
+    <string name="profile_option_password">Сброс пароля</string>
+    <string name="profile_option_logout">Завершить сеанс</string>
+    <string name="profile_option_about">О</string>
+    <string name="profile_option_contact_us">Свяжись с нами</string>
+    <string name="profile_option_privacy_policy">Политика конфиденциальности</string>
+    <string name="profile_option_manual">Руководство пользователя</string>
+    <string name="profile_option_version">Версия</string>
+
+    <!-- FragmentProfilePassword -->
+    <string name="profile_password_current">Текущий пароль</string>
+    <string name="profile_password_new">Новый пароль</string>
+    <string name="profile_password_again">Подтвердить пароль</string>
+    <string name="profile_reset_password_confirmation">Вы хотите сбросить пароль?</string>
+    <string name="profile_reset_password_note">Please check your email at %s for the link to reset your password. This link will expire in 24 hours.</string>
+
+    <!-- FragmentProfileRegistered -->
+    <string name="profile_registered_registered">Эти часы\nзарегистрированы</string>
+    <string name="profile_registered_request_access">Разрешить доступ</string>
+    <string name="profile_registered_contact_us">Свяжись с нами</string>
+    <string name="profile_registered_processing">Идет обработка</string>
+    <string name="profile_registered_wait">Пожалуйста, подождите&#8230;</string>
+
+    <!-- FragmentProfileRequestFrom -->
+    <string name="profile_request_from_processing">Идет обработка</string>
+    <string name="profile_request_from_wait">Пожалуйста, подождите</string>
+    <string name="profile_request_from_count">Имеется %d запросов</string>
+
+    <!-- FragmentProfileRequestTo -->
+    <string name="profile_request_to_mail">Искать почту пользователя</string>
+    <string name="profile_request_to_users">Пользователь</string>
+    <string name="profile_request_to_others">Разрешить доступ другим</string>
+    <string name="profile_request_to_send">Отправлен</string>
+    <string name="profile_request_to_cancel">Отменить</string>
+    <string name="profile_request_to_processing">Идет обработка</string>
+    <string name="profile_request_to_wait">Пожалуйста, подождите&#8230;</string>
+
+    <!-- FragmentProfileSearch -->
+    <string name="profile_search_searching">Идет поиск</string>
+    <string name="profile_search_mac_failed">Сбой при поиске MAC</string>
+
+    <!-- FragmentProfileSelect -->
+    <string name="profile_select_watch">Пожалуйста,\nвыбери часы</string>
+
+    <!-- FragmentProfileSelect -->
+    <string name="profile_share_save">Сохранить</string>
+    <string name="profile_share_who">Выбери часы, которые ты хочешь\nиспользовать совместно с %s</string>
+
+    <!-- FragmentProfileSorry -->
+    <string name="profile_sorry_sorry">Как жаль!</string>
+    <string name="profile_sorry_message">Нам не удалось найти твои часы.\nПожалуйста, убедись в том, что они загружены</string>
+    <string name="profile_sorry_again">Повторить поиск</string>
+    <string name="profile_sorry_others">Разрешить доступ другим</string>
+    <string name="profile_sorry_contact_us">Свяжись с нами</string>
+
+    <!-- FragmentSignupAccount -->
+    <string name="signup_account_mail">Электронная почта</string>
+    <string name="signup_account_password">Пароль</string>
+    <string name="signup_account_login_failed">Сбой начала сеанса</string>
+    <string name="signup_account_processing">Идет обработка</string>
+    <string name="signup_account_wait">Пожалуйста, подождите&#8230;</string>
+
+    <!-- FragmentSignupLanguage -->
+    <string name="signup_language_message">Пожалуйста,\nвыбери язык</string>
+    <string name="signup_language_select">Выбрать</string>
+
+    <!-- FragmentSignupLogin -->
+    <string name="signup_login_login">Начать сеанс</string>
+    <string name="signup">Начать</string>
+    <string name="signup_login_or">или</string>
+    <string name="signup_login_facebook">Начать через Facebook</string>
+    <string name="signup_login_google">Начать через Google</string>
+
+    <!-- FragmentSignupProfile -->
+    <string name="signup_profile_first_name">Имя</string>
+    <string name="signup_profile_last_name">Фамилия</string>
+    <string name="signup_profile_phone_number">Номер телефона</string>
+    <string name="signup_profile_zip_code">Почтовый индекс</string>
+    <string name="signup_profile_processing">Идет обработка</string>
+    <string name="signup_profile_wait">Пожалуйста, подождите&#8230;</string>
+    <string name="signup_profile_login_failed">Сбой начала сеанса</string>
+    <string name="signup_profile_update_failed">Сбой при обновлении</string>
+    <string name="signup_profile_avatar_failed">Сбой при обновлении</string>
+
+    <!-- FragmentWatchAdded -->
+    <string name="watch_added_added">Готово!</string>
+    <string name="watch_added_message">Мы добавили\nтвои часы</string>
+    <string name="watch_added_profile">Дополнить профиль</string>
+
+    <!-- FragmentWatchFinish -->
+    <string name="watch_finish_dashboard">Вернуться к началу</string>
+    <string name="watch_finish_another">Добавить другие часы</string>
+
+    <!-- FragmentWatchHave -->
+    <string name="watch_have_have">У тебя\nесть часы?</string>
+    <string name="watch_have_yes">Да</string>
+    <string name="watch_have_no">Нет</string>
+
+    <!-- FragmentWatchOwner -->
+    <string name="watch_owner_message">Зарегистрировать часы</string>
+    <string name="watch_owner_search">Искать сейчас</string>
+    <string name="watch_owner_or">или</string>
+    <string name="watch_owner_others">Запросить доступ к часам</string>
+    <string name="watch_owner_add_now">Добавить сейчас</string>
+
+    <!-- FragmentWatchProfile -->
+    <string name="watch_profile_name">Имя ребенка</string>
+    <string name="watch_profile_processing">Идет обработка</string>
+    <string name="watch_profile_wait">Пожалуйста, подождите</string>
+
+    <!-- FragmentWatchPurchase -->
+    <string name="watch_purchase_message">Ты хочешь\nкупить их?</string>
+    <string name="watch_purchase_yes">Да, пожалуйста</string>
+    <string name="watch_purchase_others">Разрешить доступ другим</string>
+
+    <!-- FragmentWatchRegistered -->
+    <string name="watch_registered_message">Эти часы\nзарегистрированы</string>
+    <string name="watch_registered_request_access">Разрешить доступ</string>
+    <string name="watch_registered_contact_us">Свяжись с нами</string>
+    <string name="watch_registered_processing">Идет обработка</string>
+    <string name="watch_registered_wait">Пожалуйста, подождите&#8230;</string>
+
+    <!-- FragmentWatchRequest -->
+    <string name="watch_request_message">Запросить\nдоступ к часам</string>
+    <string name="watch_request_processing">Идет обработка</string>
+    <string name="watch_request_wait">Пожалуйста, подождите</string>
+    <string name="watch_request_add">Добавить</string>
+
+    <!-- FragmentWatchSearch -->
+    <string name="watch_search_searching">Идет поиск</string>
+    <string name="watch_search_failed">Сбой при поиске MAC</string>
+
+    <!-- FragmentWatchSelect -->
+    <string name="watch_select_message">Пожалуйста,\nвыбери часы</string>
+    <string name="watch_select_dashboard">Вернуться к началу</string>
+
+    <!-- FragmentWatchSorry -->
+    <string name="watch_sorry_sorry">Как жаль!</string>
+    <string name="watch_sorry_message">Нам не удалось найти твои часы.\nПожалуйста, убедись в том, что они загружены</string>
+    <string name="watch_sorry_again">Повторить поиск</string>
+    <string name="watch_sorry_others">Разрешить доступ другим</string>
+    <string name="watch_sorry_contact_us">Свяжись с нами</string>
+
+    <!-- Events name -->
+    <string name="event_alarm_app">Напоминания (только для приложения)</string>
+    <string name="event_alarm_good_morning">Доброе утро!</string>
+    <string name="event_alarm_make_bed">Застелить постель</string>
+    <string name="event_alarm_get_dress">Одеться</string>
+    <string name="event_alarm_eat_breakfast">Время завтракать</string>
+    <string name="event_alarm_brush_teeth">Чистить зубы</string>
+    <string name="event_alarm_get_ready_for_school">Подготовка к школе</string>
+    <string name="event_alarm_put_on_pajamas">Надеть пижаму</string>
+    <string name="event_alarm_story_time">Почитать книгу</string>
+    <string name="event_alarm_good_night">Спокойной ночи!</string>
+    <string name="event_alarm_collect_toys">Убрать игрушки</string>
+    <string name="event_alarm_set_table">Накрыть на стол</string>
+    <string name="event_alarm_feed_pet">Покормить домашних животных</string>
+    <string name="event_alarm_water_plants">Полить цветы</string>
+    <string name="event_alarm_clean_table">Убрать со стола</string>
+    <string name="event_alarm_clean_bedroom">Навести порядок в комнате</string>
+    <string name="event_alarm_homework_time">Сделать уроки</string>
+    <string name="event_alarm_take_a_nap">Отдохнуть в тихий час</string>
+    <string name="event_alarm_outdoor_play_time">Поиграть</string>
+    <string name="event_alarm_fun_time">Время для развлечений</string>
+    <string name="event_alarm_exercise">Время для занятий спортом</string>
+    <string name="event_alarm_practice_music">Время для занятий музыкой</string>
+    <string name="event_alarm_drawing_time">Время для рисования</string>
+    <string name="event_alarm_reading_time">Время для чтения</string>
+    <string name="event_alarm_take_a_bath">Время принять ванну</string>
+    <string name="event_alarm_family_time">Отдых всей семьей</string>
+    <string name="event_alarm_lunch_time">Время обедать</string>
+    <string name="event_alarm_dinner_time">Время ужинать</string>
+    <string name="event_alarm_afternoon_snack_time">Время полдничать</string>
+    <string name="event_alarm_review_the_backpack">Подготовить рюкзак</string>
+
+    <!-- Events Repeat -->
+    <string name="event_repeat_monthly">Ежемесячно</string>
+    <string name="event_repeat_weekly">Еженедельно</string>
+    <string name="event_repeat_daily">Ежедневно</string>
+    <string name="event_repeat_never">Никогда</string>
+    <string name="event_notification_title">у вас есть событие: </string>
+
+    <!-- API Error -->
+    <string name="error_api_unknown">Неизвестная ошибка</string>
+    <string name="error_api_user_login_400">Неверный запрос. Сбой начала сеанса</string>
+    <string name="error_api_user_is_token_valid_403">Неверный запрос. Введена неверная информация</string>
+    <string name="error_api_user_register_400">Неверный запрос. Отсутствуют некоторые параметры</string>
+    <string name="error_api_user_register_409">Конфликт. Почтовый адрес уже зарегистрирован</string>
+    <string name="error_api_user_is_email_available_to_register_409">Конфликт. Почтовый адрес уже зарегистрирован</string>
+    <string name="error_api_user_update_profile_400">Неверный запрос. Отсутствуют некоторые параметры</string>
+    <string name="error_api_user_retrieve_user_profile_400">Неверный запрос. Введена неверная информация</string>
+    <string name="error_api_user_find_by_email_400">Неверный запрос. Отсутствует параметр «Электронная почта»</string>
+    <string name="error_api_user_find_by_email_404">Не найден. Невозможно найти пользователя по почтовому адресу</string>
+    <string name="error_api_user_avatar_upload_400">Неверный запрос. Отсутствуют некоторые параметры</string>
+    <string name="error_api_user_avatar_upload_kid_400">Неверный запрос. Отсутствуют некоторые параметры</string>
+    <string name="error_api_kid_add_400">Неверный запрос. Отсутствуют некоторые параметры</string>
+    <string name="error_api_kid_add_409">Конфликт. Идентификатор MAC уже зарегистрирован</string>
+    <string name="error_api_kid_update_400">Неверный запрос. Отсутствуют некоторые параметры</string>
+    <string name="error_api_kid_delete_400">Неверный запрос. Отсутствуют некоторые параметры</string>
+    <string name="error_api_kid_list_403">Пользователь не зарегистрирован</string>
+    <string name="error_api_kid_who_registered_mac_id_404">Пользователь не найден; идентификатор MAC не  зарегистрирован</string>
+    <string name="error_api_kid_who_registered_mac_id_400">Неверный запрос. Отсутствуют некоторые параметры</string>
+    <string name="error_api_activity_update_raw_data_400">Неверный запрос. Отсутствуют некоторые параметры</string>
+    <string name="error_api_activity_update_raw_data_404">Конфликт. Данные уже существуют</string>
+    <string name="error_api_activity_retrieve_data_400">Неверный запрос. Отсутствуют некоторые параметры, или тип является неверным</string>
+    <string name="error_api_activity_retrieve_data_by_time_400">Неверный запрос. Отсутствуют некоторые параметры, или тип является неверным</string>
+    <string name="error_api_event_add_400">Неверный запрос. Отсутствуют некоторые параметры, или тип является неверным</string>
+    <string name="error_api_event_add_403">Отсутствует разрешение. У пользователя нет разрешения на добавление событий</string>
+    <string name="error_api_event_update_400">Неверный запрос. Отсутствуют некоторые параметры, или тип является неверным</string>
+    <string name="error_api_event_update_403">Отсутствует разрешение. У пользователя нет разрешения на обновление</string>
+    <string name="error_api_event_delete_400">Неверный запрос. Отсутствуют некоторые параметры, или тип является неверным</string>
+    <string name="error_api_event_delete_403">Отсутствует разрешение. У пользователя нет разрешения на удаление</string>
+    <string name="error_api_event_todo_done_400">Неверный запрос. Отсутствуют некоторые параметры, или тип является неверным</string>
+    <string name="error_subhost_add_400">Неверный запрос. Отсутствуют некоторые параметры, или тип является неверным</string>
+    <string name="error_subhost_add_409">Конфликт. Запрос уже существует</string>
+    <string name="error_subhost_accept_400">Неверный запрос. Отсутствуют некоторые параметры, или тип является неверным. Либо у подключенного пользователя нет разрешения</string>
+    <string name="error_subhost_deny_400">Неверный запрос. Отсутствуют некоторые параметры, или тип является неверным</string>
+    <string name="error_subhost_remove_kid_400">Неверный запрос. Отсутствуют некоторые параметры, или тип является неверным</string>
+    <string name="error_subhost_remove_kid_403">Отсутствует разрешение. У пользователя нет разрешения</string>
+    <string name="signup_profile_done">сделанный</string>
+    <string name="signup_profile_next">следующий</string>
+    <string name="dashboard_add_watch">Добавить часы</string>
+    <string name="calendar_month_sync">Синхронизировать сейчас</string>
+    <string name="dialog_sync_content">Синхронизация после редактирования события</string>
+    <string name="dialog_sync_header">Sync Data</string>
+    <string name="dialog_sync_skip_button">Skip</string>
+    <string name="dialog_sync_sync_button">Синхронизация</string>
+
+
+</resources>

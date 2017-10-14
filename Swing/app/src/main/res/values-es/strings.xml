@@ -1,0 +1,373 @@
+<resources>
+    <string name="app_name">Swing</string>
+
+    <!-- ActivityMain -->
+    <string name="activity_main_synchronize">Sincronizar</string>
+    <string name="activity_main_wait">Por favor, espera&#8230;</string>
+
+    <!-- Title bar -->
+    <string name="title_boot">Boot</string>
+    <string name="title_calendar">Calendario</string>
+    <string name="title_dashboard">Inicio</string>
+    <string name="title_photo">Foto</string>
+    <string name="title_profile">Perfil</string>
+    <string name="title_option">Opciones</string>
+    <string name="title_password">Contraseña</string>
+    <string name="title_request_from">Petición de</string>
+    <string name="title_request_to">Enviar petición a</string>
+    <string name="title_search_device">Buscando tu reloj</string>
+    <string name="title_sync">Sincronizar</string>
+
+    <!-- FragmentCalendarAlarm -->
+    <string name="calendar_alarm_agenda">Agenda</string>
+    <string name="calendar_alarm_clock">Despertador</string>
+    <string name="calendar_alarm_morning">Rutinas de la mañana</string>
+    <string name="calendar_alarm_bed">Rutinas antes de dormir</string>
+    <string name="calendar_alarm_activities">Actividad</string>
+
+    <!-- FragmentCalendarEvent -->
+    <string name="calendar_event_creator">Autor/a</string>
+    <string name="calendar_event_assign">Asignar a</string>
+    <string name="calendar_event_event">Seleccionar evento</string>
+    <string name="calendar_event_start">Empieza</string>
+    <string name="calendar_event_end">Termina</string>
+    <string name="calendar_event_color">Etiqueta de color</string>
+    <string name="calendar_event_repeat">Repetir</string>
+    <string name="calendar_event_description">Descripción</string>
+    <string name="calendar_event_todo_list">Lista de tareas</string>
+    <string name="calendar_event_save">Guardar</string>
+    <string name="calendar_event_advance">Avanzado</string>
+    <string name="calendar_event_please_select_event">Por favor Seleccionar evento</string>
+
+    <!-- FragmentCalendarMain -->
+    <string name="calendar_main_today_schedule">Agenda de hoy</string>
+    <string name="calendar_main_monthly_schedule">Agenda mensual</string>
+    <string name="calendar_main_no_incoming_event">Sin evento</string>
+
+    <!-- FragmentCalendarTodo -->
+    <string name="calendar_todo_save">Guardar</string>
+    <string name="calendar_todo_processing">Procesando</string>
+    <string name="calendar_todo_wait">Por favor, espera&#8230;</string>
+
+    <!-- FragmentDashboardChart -->
+    <string name="dashboard_chart_indoor">Interior</string>
+    <string name="dashboard_chart_outdoor">Exterior</string>
+    <string name="dashboard_chart_today">Hoy</string>
+    <string name="dashboard_chart_this_week">Esta semana</string>
+    <string name="dashboard_chart_this_month">Este mes</string>
+    <string name="dashboard_chart_this_year">Este año</string>
+    <string name="dashboard_chart_message_below">¡No te rindas! ¡Tu puedes!</string>
+    <string name="dashboard_chart_message_almost">¡Otra vez! ¡Casi lo tienes!</string>
+    <string name="dashboard_chart_message_excellent">¡Bravo! ¡Lo has conseguido!</string>
+    <string name="dashboard_chart_steps">Pasos</string>
+
+    <!-- FragmentDashboardMain -->
+    <string name="dashboard_main_message">¿Quieres sincronizar ahora?</string>
+    <string name="dashboard_main_yes">Sí, por favor</string>
+    <string name="dashboard_main_dashboard">No, volver al inicio</string>
+    <string name="dashboard_main_another">Sincronizar otro reloj</string>
+    <string name="dashboard_main_no_device">No has enlazado el reloj todavía</string>
+
+    <!-- FragmentDashboardEmotion -->
+    <string name="dashboard_emotion_hello">¿Cómo estás\nhoy?</string>
+    <string name="dashboard_emotion_excellent">¡Excelente!</string>
+    <string name="dashboard_emotion_almost">Casi en la media</string>
+    <string name="dashboard_emotion_below">Por debajo de la media</string>
+
+    <!-- FragmentDashboardProgress -->
+    <string name="dashboard_progress_searching">Buscando\ntu\nreloj</string>
+    <string name="dashboard_progress_found">Relojencontrado </string>
+    <string name="dashboard_progress_sync_now">Sincronizar\nahora</string>
+    <string name="dashboard_progress_syncing">Sincronizando</string>
+    <string name="dashboard_progress_completed">Sincronización\nfinalizada</string>
+    <string name="dashboard_progress_dashboard">Volver al inicio</string>
+    <string name="dashboard_progress_not_found">Reloj no\nencontrado</string>
+    <string name="dashboard_progress_again">Inténtalo de nuevo</string>
+    <string name="dashboard_progress_last">Volver a la última sincronización</string>
+    <string name="dashboard_progress_server_not_reach">Servidor no encontrado</string>
+
+    <!-- FragmentDashboardRequest -->
+    <string name="dashboard_request_request">Permitir acceso</string>
+    <string name="dashboard_request_profile">Ir al perfil</string>
+    <string name="dashboard_request_process">Procesando</string>
+    <string name="dashboard_request_waiting">Por favor, espera&#8230;</string>
+    <string name="dashboard_request_pending">Petición pendiente.\nEsperando respuestas</string>
+    <string name="dashboard_request_no_data">No tienes ningún\nregistro todavía</string>
+    <string name="dashboard_request_owner">Reloj de %s</string>
+
+    <!-- FragmentDashboardWatch -->
+    <string name="dashboard_watch_message">Por favor selecciona\ntu reloj</string>
+
+    <!-- FragmentDevice -->
+    <string name="device_battery">Batería</string>
+    <string name="device_searching">Buscando&#8230;</string>
+    <string name="device_not_found">No encontrado</string>
+    <string name="device_no_watch">No has enlazado el reloj todavía</string>
+    <string name="device_owner">Reloj de %s</string>
+
+    <!-- FragmentPhotoClip -->
+    <string name="photo_clip_cancel">Cancelar</string>
+    <string name="photo_clip_take_photo">Usar foto</string>
+
+    <!-- FragmentProfileAdded -->
+    <string name="profile_added_added">¡Completado!</string>
+    <string name="profile_added_successfully">Hemos añadido\ntu reloj</string>
+    <string name="profile_added_profile">Completar perfil</string>
+
+    <!-- FragmentProfileEditor -->
+    <string name="profile_editor_first_name">Nombre</string>
+    <string name="profile_editor_last_name">Apellido</string>
+    <string name="profile_editor_phone">Número de teléfono</string>
+    <string name="profile_editor_mail_address">Correo electrónico</string>
+    <string name="profile_editor_address1">Dirección 1</string>
+    <string name="profile_editor_address2">Dirección 2</string>
+    <string name="profile_editor_city">Ciudad</string>
+    <string name="profile_editor_zip">Codigo postal</string>
+    <string name="profile_editor_processing">Procesando</string>
+    <string name="profile_editor_wait">Por favor, espera</string>
+    <string name="profile_editor_avatar_failed">Fallo en la actualización</string>
+
+    <!-- FragmentProfileKid -->
+    <string name="profile_kid_name">Nombre</string>
+    <string name="profile_kid_remove">Eliminar</string>
+    <string name="profile_kid_processing">Procesando</string>
+    <string name="profile_kid_wait">Por favor, espera&#8230;</string>
+    <string name="profile_kid_name_not_blank">el nombre está en blanco</string>
+
+    <!-- FragmentProfileMain -->
+    <string name="profile_main_hosting">Mis relojes</string>
+    <string name="profile_main_shared">Reloj compartido conmigo</string>
+    <string name="profile_main_request_to">Has enviado petición a</string>
+    <string name="profile_main_request_from">Has recibido %d petición de</string>
+
+    <!-- FragmentProfileOption -->
+    <string name="profile_option_account">Cuenta</string>
+    <string name="profile_option_kid">Editar perfil del niño</string>
+    <string name="profile_option_password">Restablecer la contraseña</string>
+    <string name="profile_option_logout">Cerrar sesión</string>
+    <string name="profile_option_about">Acerca de</string>
+    <string name="profile_option_contact_us">Contacta con nosotros</string>
+    <string name="profile_option_privacy_policy">Política de privacidad</string>
+    <string name="profile_option_manual">Manual de usuario</string>
+    <string name="profile_option_version">Versión</string>
+
+    <!-- FragmentProfilePassword -->
+    <string name="profile_password_current">Contraseña actual</string>
+    <string name="profile_password_new">Nueva contraseña</string>
+    <string name="profile_password_again">Confirmar contraseña</string>
+    <string name="profile_reset_password_confirmation">¿Desea restablecer la contraseña?</string>
+    <string name="profile_reset_password_note">Please check your email at %s for the link to reset your password. This link will expire in 24 hours.</string>
+
+    <!-- FragmentProfileRegistered -->
+    <string name="profile_registered_registered">Este reloj ha\nsido registrado</string>
+    <string name="profile_registered_request_access">Permitir acceso</string>
+    <string name="profile_registered_contact_us">Contacta con nosotros</string>
+    <string name="profile_registered_processing">Procesando</string>
+    <string name="profile_registered_wait">Por favor, espera&#8230;</string>
+
+    <!-- FragmentProfileRequestFrom -->
+    <string name="profile_request_from_processing">Procesando</string>
+    <string name="profile_request_from_wait">Por favor, espera</string>
+    <string name="profile_request_from_count">Tienes %d peticiones</string>
+
+    <!-- FragmentProfileRequestTo -->
+    <string name="profile_request_to_mail">Buscar correo del usuario</string>
+    <string name="profile_request_to_users">Usuario</string>
+    <string name="profile_request_to_others">Permitir acceso a otros</string>
+    <string name="profile_request_to_send">Enviado</string>
+    <string name="profile_request_to_cancel">Cancelar</string>
+    <string name="profile_request_to_processing">Procesando</string>
+    <string name="profile_request_to_wait">Por favor, espera&#8230;</string>
+
+    <!-- FragmentProfileSearch -->
+    <string name="profile_search_searching">Buscando</string>
+    <string name="profile_search_mac_failed">Busqueda de MAC fallida</string>
+
+    <!-- FragmentProfileSelect -->
+    <string name="profile_select_watch">Por favor selecciona\ntu reloj</string>
+
+    <!-- FragmentProfileSelect -->
+    <string name="profile_share_save">Guardar</string>
+    <string name="profile_share_who">Selecciona el reloj que\nquieres compartir con %s</string>
+
+    <!-- FragmentProfileSorry -->
+    <string name="profile_sorry_sorry">¡Lo sentimos!</string>
+    <string name="profile_sorry_message">No podemos encontrar tu reloj.  Por favor,\nasegúrate de que está cargado</string>
+    <string name="profile_sorry_again">Buscar de nuevo</string>
+    <string name="profile_sorry_others">Permitir acceso a otros</string>
+    <string name="profile_sorry_contact_us">Contacta con nosotros</string>
+
+    <!-- FragmentSignupAccount -->
+    <string name="signup_account_mail">Correo electrónico</string>
+    <string name="signup_account_password">Contraseña</string>
+    <string name="signup_account_login_failed">Fallo en el inicio de sesión</string>
+    <string name="signup_account_processing">Procesando</string>
+    <string name="signup_account_wait">Por favor, espera&#8230;</string>
+
+    <!-- FragmentSignupLanguage -->
+    <string name="signup_language_message">Por favor, selecciona\ntu idioma</string>
+    <string name="signup_language_select">Seleccionar</string>
+
+    <!-- FragmentSignupLogin -->
+    <string name="signup_login_login">Iniciar sesión</string>
+    <string name="signup">Iniciar</string>
+    <string name="signup_login_or">o</string>
+    <string name="signup_login_facebook">Iniciar con Facebook</string>
+    <string name="signup_login_google">Iniciar con Google</string>
+
+    <!-- FragmentSignupProfile -->
+    <string name="signup_profile_first_name">Nombre</string>
+    <string name="signup_profile_last_name">Apellido</string>
+    <string name="signup_profile_phone_number">Número de teléfono</string>
+    <string name="signup_profile_zip_code">Código Postal</string>
+    <string name="signup_profile_processing">Procesando</string>
+    <string name="signup_profile_wait">Por favor, espera&#8230;</string>
+    <string name="signup_profile_login_failed">Fallo en el inicio de sesión</string>
+    <string name="signup_profile_update_failed">Fallo en la actualización</string>
+    <string name="signup_profile_avatar_failed">Fallo en la actualización</string>
+
+    <!-- FragmentWatchAdded -->
+    <string name="watch_added_added">¡Completado!</string>
+    <string name="watch_added_message">Hemos añadido\ntu reloj</string>
+    <string name="watch_added_profile">Completar perfil</string>
+
+    <!-- FragmentWatchFinish -->
+    <string name="watch_finish_dashboard">Volver al inicio</string>
+    <string name="watch_finish_another">Añadir otro reloj</string>
+
+    <!-- FragmentWatchHave -->
+    <string name="watch_have_have">¿Tienes\nun reloj?</string>
+    <string name="watch_have_yes">Sí</string>
+    <string name="watch_have_no">No</string>
+
+    <!-- FragmentWatchOwner -->
+    <string name="watch_owner_message">Registra tu reloj</string>
+    <string name="watch_owner_search">Buscar ahora</string>
+    <string name="watch_owner_or">o</string>
+    <string name="watch_owner_others">Pedir acceso al reloj</string>
+    <string name="watch_owner_add_now">Añadir ahora</string>
+
+    <!-- FragmentWatchProfile -->
+    <string name="watch_profile_name">Nombre del niño</string>
+    <string name="watch_profile_processing">Procesando</string>
+    <string name="watch_profile_wait">Por favor, espera</string>
+
+    <!-- FragmentWatchPurchase -->
+    <string name="watch_purchase_message">¿Quieres\ncomprar uno?</string>
+    <string name="watch_purchase_yes">Sí, por favor</string>
+    <string name="watch_purchase_others">Permitir acceso a otros</string>
+
+    <!-- FragmentWatchRegistered -->
+    <string name="watch_registered_message">Este reloj ha\nsido registrado</string>
+    <string name="watch_registered_request_access">Permitir acceso</string>
+    <string name="watch_registered_contact_us">Contacta con nosotros</string>
+    <string name="watch_registered_processing">Procesando</string>
+    <string name="watch_registered_wait">Por favor, espera&#8230;</string>
+
+    <!-- FragmentWatchRequest -->
+    <string name="watch_request_message">Pedir acceso\nal reloj</string>
+    <string name="watch_request_processing">Procesando</string>
+    <string name="watch_request_wait">Por favor, espera</string>
+    <string name="watch_request_add">Añadir</string>
+
+    <!-- FragmentWatchSearch -->
+    <string name="watch_search_searching">Buscando</string>
+    <string name="watch_search_failed">Busqueda de MAC fallida</string>
+
+    <!-- FragmentWatchSelect -->
+    <string name="watch_select_message">Por favor\nselecciona tu reloj</string>
+    <string name="watch_select_dashboard">Volver al inicio</string>
+
+    <!-- FragmentWatchSorry -->
+    <string name="watch_sorry_sorry">¡Lo sentimos!</string>
+    <string name="watch_sorry_message">No podemos encontrar tu reloj.\nPor favor, asegúrate de que está cargado</string>
+    <string name="watch_sorry_again">Buscar de nuevo</string>
+    <string name="watch_sorry_others">Permitir acceso a otros</string>
+    <string name="watch_sorry_contact_us">Contacta con nosotros</string>
+
+    <!-- Events name -->
+    <string name="event_alarm_app">Recordatorios (solamente para la aplicación)</string>
+    <string name="event_alarm_good_morning">Buenos dias</string>
+    <string name="event_alarm_make_bed">Hacer la cama</string>
+    <string name="event_alarm_get_dress">Vestirse</string>
+    <string name="event_alarm_eat_breakfast">Hora de desayunar</string>
+    <string name="event_alarm_brush_teeth">Lavarse los dientes</string>
+    <string name="event_alarm_get_ready_for_school">Prepararse para el colegio</string>
+    <string name="event_alarm_put_on_pajamas">Ponerse el pijama</string>
+    <string name="event_alarm_story_time">Leer cuento</string>
+    <string name="event_alarm_good_night">Buenas noches</string>
+    <string name="event_alarm_collect_toys">Recoger los juguetes</string>
+    <string name="event_alarm_set_table">Poner la mesa </string>
+    <string name="event_alarm_feed_pet">Dar de comer a la mascota</string>
+    <string name="event_alarm_water_plants">Regar las plantas</string>
+    <string name="event_alarm_clean_table">Limpiar la mesa</string>
+    <string name="event_alarm_clean_bedroom">Ordenar la habitación </string>
+    <string name="event_alarm_homework_time">Hacer deberes</string>
+    <string name="event_alarm_take_a_nap">Dormir la siesta</string>
+    <string name="event_alarm_outdoor_play_time">Hora de Jugar</string>
+    <string name="event_alarm_fun_time">Hora de Diversión </string>
+    <string name="event_alarm_exercise">Hora de hacer deporte</string>
+    <string name="event_alarm_practice_music">Practicar música </string>
+    <string name="event_alarm_drawing_time">Hora de Pintar</string>
+    <string name="event_alarm_reading_time">Hora de Leer</string>
+    <string name="event_alarm_take_a_bath">Hora del baño</string>
+    <string name="event_alarm_family_time">Juegos en familia</string>
+    <string name="event_alarm_lunch_time">Hora de almorzar</string>
+    <string name="event_alarm_dinner_time">Hora de cenar</string>
+    <string name="event_alarm_afternoon_snack_time">Hora de la merienda</string>
+    <string name="event_alarm_review_the_backpack">Revisar la mochila</string>
+
+    <!-- Events Repeat -->
+    <string name="event_repeat_monthly">Mensualmente</string>
+    <string name="event_repeat_weekly">Semanalmente</string>
+    <string name="event_repeat_daily">Diariamente</string>
+    <string name="event_repeat_never">Nunca</string>
+    <string name="event_notification_title">tienes un evento: </string>
+
+
+    <!-- API Error -->
+    <string name="error_api_unknown">Error desconocido</string>
+    <string name="error_api_user_login_400">Solicitud incorrecta. Error en el inicio de sesión</string>
+    <string name="error_api_user_is_token_valid_403">Solicitud incorrecta. La información introducida no es válida</string>
+    <string name="error_api_user_register_400">Solicitud incorrecta. Faltan algunos parámetros</string>
+    <string name="error_api_user_register_409">Conflicto. El correo ya está registrado</string>
+    <string name="error_api_user_is_email_available_to_register_409">Conflicto. El correo ya está registrado</string>
+    <string name="error_api_user_update_profile_400">Solicitud incorrecta. Faltan algunos parámetros</string>
+    <string name="error_api_user_retrieve_user_profile_400">Solicitud incorrecta. La información introducida no es válida</string>
+    <string name="error_api_user_find_by_email_400">Solicitud incorrecta. Falta el parámetro del correo electrónico</string>
+    <string name="error_api_user_find_by_email_404">No encontrado. No se puede encontrar al usuario por el correo</string>
+    <string name="error_api_user_avatar_upload_400">Solicitud incorrecta. Faltan algunos parámetros</string>
+    <string name="error_api_user_avatar_upload_kid_400">Solicitud incorrecta. Faltan algunos parámetros</string>
+    <string name="error_api_kid_add_400">Solicitud incorrecta. Faltan algunos parámetros</string>
+    <string name="error_api_kid_add_409">Conflicto. El ID del MAC  ya está registrado</string>
+    <string name="error_api_kid_update_400">Solicitud incorrecta. Faltan algunos parámetros</string>
+    <string name="error_api_kid_delete_400">Solicitud incorrecta. Faltan algunos parámetros</string>
+    <string name="error_api_kid_list_403">El usuario no está registrado</string>
+    <string name="error_api_kid_who_registered_mac_id_404">Usuario no encontrado; El ID del MAC no está registrado</string>
+    <string name="error_api_kid_who_registered_mac_id_400">Solicitud incorrecta. Faltan algunos parámetros</string>
+    <string name="error_api_activity_update_raw_data_400">Solicitud incorrecta. Faltan algunos parámetros</string>
+    <string name="error_api_activity_update_raw_data_404">Conflicto. Los datos ya existen</string>
+    <string name="error_api_activity_retrieve_data_400">Solicitud incorrecta. Faltan algunos parámetros o el tipo es incorrecto</string>
+    <string name="error_api_activity_retrieve_data_by_time_400">Solicitud incorrecta. Faltan algunos parámetros o el tipo es incorrecto</string>
+    <string name="error_api_event_add_400">Solicitud incorrecta. Faltan algunos parámetros o el tipo es incorrecto</string>
+    <string name="error_api_event_add_403">No autorizado. El usuario no tiene permiso para añadir eventos</string>
+    <string name="error_api_event_update_400">Solicitud incorrecta. Faltan algunos parámetros o el tipo es incorrecto</string>
+    <string name="error_api_event_update_403">No autorizado. El usuario no tiene permiso para actualizar</string>
+    <string name="error_api_event_delete_400">Solicitud incorrecta. Faltan algunos parámetros o el tipo es incorrecto</string>
+    <string name="error_api_event_delete_403">No autorizado. El usuario no tiene permiso para eliminar</string>
+    <string name="error_api_event_todo_done_400">Solicitud incorrecta. Faltan algunos parámetros o el tipo es incorrecto</string>
+    <string name="error_subhost_add_400">Solicitud incorrecta. Faltan algunos parámetros o el tipo es incorrecto</string>
+    <string name="error_subhost_add_409">Conflicto. La petición ya existe</string>
+    <string name="error_subhost_accept_400">Solicitud incorrecta. Faltan algunos parámetros, o el tipo es incorrecto. O el usuario conectado no tiene permiso</string>
+    <string name="error_subhost_deny_400">Solicitud incorrecta. Faltan algunos parámetros o el tipo es incorrecto</string>
+    <string name="error_subhost_remove_kid_400">Solicitud incorrecta. Faltan algunos parámetros o el tipo es incorrecto</string>
+    <string name="error_subhost_remove_kid_403">No autorizado. El usuario no tiene permiso</string>
+    <string name="signup_profile_done">hecho</string>
+    <string name="signup_profile_next">siguiente</string>
+    <string name="dashboard_add_watch">Agregar un relo</string>
+    <string name="calendar_month_sync">Sincronizar ahora</string>
+    <string name="dialog_sync_content">Sincroniza después de editar el evento</string>
+    <string name="dialog_sync_header">Sync Data</string>
+    <string name="dialog_sync_skip_button">Skip</string>
+    <string name="dialog_sync_sync_button">Sincronizar</string>
+</resources>
