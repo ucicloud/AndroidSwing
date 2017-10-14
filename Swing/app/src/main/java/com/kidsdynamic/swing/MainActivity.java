@@ -5,9 +5,9 @@ import android.os.Bundle;
 import android.widget.Button;
 
 import com.bobomee.android.htttp.retrofit2.Retrofit2Client;
-import com.kidsdynamic.data.user.UserApi;
-import com.kidsdynamic.data.user.model.LoginEntity;
-import com.kidsdynamic.data.user.model.LoginSuccessRep;
+import com.kidsdynamic.data.net.user.UserApi;
+import com.kidsdynamic.data.net.user.model.LoginEntity;
+import com.kidsdynamic.data.net.user.model.LoginSuccessRep;
 import com.kidsdynamic.data.utils.LogUtil2;
 
 import butterknife.BindView;

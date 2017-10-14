@@ -1,4 +1,4 @@
-package com.kidsdynamic.data.user.model;
+package com.kidsdynamic.data.net.user.model;
 
 /**
  * Created by Administrator on 2017/10/12.

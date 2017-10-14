@@ -1,1 +1,1 @@
-include ':app', ':htttp', ':data'
+include ':app', ':htttp', ':data', ':greendaomaker', ':commonlib'

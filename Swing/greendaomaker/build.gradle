@@ -1,0 +1,18 @@
+import com.sun.org.apache.xalan.internal.xsltc.cmdline.Compile
+
+apply plugin: 'java'
+
+//main 方法运行不成功时，配置下面的gradle application plugin；运行生成相关java文件
+apply plugin: 'application'
+mainClassName = "com.daomaker.MainMaker"
+
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile files('libs/freemarker.jar')
+    compile files('libs/greendao-generator-2.0.0.jar')
+    compile files('libs/gson-2.3.1.jar')
+}
+tasks.withType(Compile) {
+    options.encoding = "UTF-8"
+}
