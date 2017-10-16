@@ -8,6 +8,7 @@ import com.bobomee.android.htttp.retrofit2.Retrofit2Client;
 import com.kidsdynamic.data.net.user.UserApi;
 import com.kidsdynamic.data.net.user.model.LoginEntity;
 import com.kidsdynamic.data.net.user.model.LoginSuccessRep;
+import com.kidsdynamic.data.net.user.model.UpdateProfileEntity;
 import com.kidsdynamic.data.utils.LogUtil2;
 
 import butterknife.BindView;
@@ -62,5 +63,49 @@ public class MainActivity extends Activity {
                 LogUtil2.getUtils().d(t.getMessage());
             }
         });
+
+
+        userApi.updateProfile(new UpdateProfileEntity()).enqueue(new Callback() {
+            @Override
+            public void onResponse(Call call, Response response) {
+
+                if (response.isSuccessful()) {
+                    // use response data and do some fancy stuff :)
+                } else {
+                    // parse the response body …
+//                    APIError error = ErrorUtils.parseError(response);
+                    // … and use it to show error information
+
+                    // … or just log the issue like we’re doing :)
+//                    Log.d("error message", error.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call call, Throwable t) {
+
+            }
+        });
+    }
+
+
+    public class ErrorUtils {
+
+        //https://futurestud.io/tutorials/retrofit-2-simple-error-handling
+        /*public static APIError parseError(Response<?> response) {
+            Converter<ResponseBody, APIError> converter =
+                    ServiceGenerator.retrofit()
+                            .responseBodyConverter(APIError.class, new Annotation[0]);
+
+            APIError error;
+
+            try {
+                error = converter.convert(response.errorBody());
+            } catch (IOException e) {
+                return new APIError();
+            }
+
+            return error;
+        }*/
     }
 }

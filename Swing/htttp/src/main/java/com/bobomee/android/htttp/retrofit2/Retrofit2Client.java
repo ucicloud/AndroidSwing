@@ -1,8 +1,8 @@
 package com.bobomee.android.htttp.retrofit2;
 
-import com.bobomee.android.htttp.error_handle.RxErrorHandlingCallAdapterFactory;
 import com.bobomee.android.htttp.okhttp.okHttp;
 import com.bobomee.android.htttp.retrofit2.converfactory.StringConverterFactory;
+
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
