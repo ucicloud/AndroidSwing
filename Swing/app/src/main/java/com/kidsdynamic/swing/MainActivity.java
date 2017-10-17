@@ -2,14 +2,22 @@ package com.kidsdynamic.swing;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.widget.Button;
+import android.widget.Toast;
 
-import com.bobomee.android.htttp.retrofit2.Retrofit2Client;
-import com.kidsdynamic.data.net.user.UserApi;
+import com.google.gson.Gson;
+import com.kidsdynamic.data.net.ApiGen;
+import com.kidsdynamic.data.net.user.UserApiNoNeedToken;
+import com.kidsdynamic.data.net.user.model.InternalErrMsgEntity;
 import com.kidsdynamic.data.net.user.model.LoginEntity;
 import com.kidsdynamic.data.net.user.model.LoginSuccessRep;
+import com.kidsdynamic.data.net.user.model.RegisterEntity;
+import com.kidsdynamic.data.net.user.model.RegisterFailResponse;
 import com.kidsdynamic.data.net.user.model.UpdateProfileEntity;
+import com.kidsdynamic.data.net.user.model.UpdateProfileSuccess;
 import com.kidsdynamic.data.utils.LogUtil2;
+import com.kidsdynamic.swing.domain.LoginManager;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -35,10 +43,142 @@ public class MainActivity extends Activity {
     }
 
     @OnClick(R.id.button_test_login)
+    void loginTest2(){
+        //show waiting dialog
+
+        String email = "only_app@163.com";
+        String psw = "123456";
+
+        final LoginEntity loginEntity = new LoginEntity();
+        loginEntity.setEmail("only_aap@163.com");
+        loginEntity.setPassword("123123");
+
+        //查询账户是否注册；如果未注册则展示注册界面（输入last name, first name;avatar）;注册成功后，再次执行
+        //登录流程；登录成功后，开始同步数据（同步那些？）
+        final UserApiNoNeedToken userApi = ApiGen.getInstance(this.getApplicationContext()).
+                generateApi(UserApiNoNeedToken.class,false);
+
+        userApi.checkEmailAvailableToRegister(email).enqueue(new Callback<Object>() {
+            @Override
+            public void onResponse(Call<Object> call, Response<Object> response) {
+                LogUtil2.getUtils().d("check mail onResponse code: " + response.code());
+
+                if (response.code() == 200) {
+                    //邮箱未注册，则展示注册界面
+                    showRegisterUI();
+
+                }else if(response.code() == 409){
+                    //邮箱已经注册，则执行登录流程
+                    exeLogin(userApi,loginEntity);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Object> call, Throwable t) {
+                //dismiss waiting dialog,show error; terminate exe
+                t.printStackTrace();
+                LogUtil2.getUtils().d("check mail fail, " );
+            }
+        });
+
+    }
+
+    @OnClick(R.id.btn_register)
+    protected void showRegisterUI() {
+        //dismiss wait dialog, show register UI
+        // TODO: 2017/10/17
+
+        String email = "123@qq.com";
+        String psw = "123456";
+        register(email, psw);
+    }
+
+    void exeLogin(UserApiNoNeedToken userApi, LoginEntity loginEntity){
+
+        userApi.login(loginEntity).enqueue(new Callback<LoginSuccessRep>() {
+            @Override
+            public void onResponse(Call<LoginSuccessRep> call, Response<LoginSuccessRep> response) {
+                //
+
+                if(response.code() == 200){
+                    LogUtil2.getUtils().d("login success");
+                    LogUtil2.getUtils().d(response.body().getAccess_token());
+                    //缓存token
+                    new LoginManager().cacheToken(response.body().getAccess_token());
+
+                    //同步数据
+                    syncData();
+
+                }else{
+                    LogUtil2.getUtils().d("login error, code: " + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<LoginSuccessRep> call, Throwable t) {
+                //fail, dismiss dialog, show error info
+                // TODO: 2017/10/17
+            }
+        });
+
+    }
+
+    private void syncData() {
+        // TODO: 2017/10/17 同步账户数据 成功后关闭等待对话框，跳转到主界面；失败提醒
+        Toast.makeText(this,"login ok, start sync data", Toast.LENGTH_SHORT).show();
+    }
+
+
+
+    public void register(@NonNull final String email, @NonNull final String psw){
+        //使用用户数据，执行注册，如果注册成功则进行登录，登录成功执行同步数据
+        final RegisterEntity registerEntity = new RegisterEntity();
+        registerEntity.setEmail(email);
+        registerEntity.setPassword(psw);
+        registerEntity.setFirstName("firstName");
+        registerEntity.setLastName("LastName");
+        registerEntity.setPhoneNumber("18567891234");
+        registerEntity.setZipCode("12345");
+
+        final UserApiNoNeedToken userApi = ApiGen.getInstance(this.getApplicationContext()).
+                generateApi(UserApiNoNeedToken.class,false);
+
+        userApi.registerUser(registerEntity).enqueue(new Callback<RegisterFailResponse>() {
+            @Override
+            public void onResponse(Call<RegisterFailResponse> call, Response<RegisterFailResponse> response) {
+                LogUtil2.getUtils().d("register onResponse");
+                int code = response.code();
+                if(code == 200){
+                    //
+                    LogUtil2.getUtils().d("register ok start login");
+
+                    LoginEntity loginEntity = new LoginEntity();
+                    loginEntity.setEmail(email);
+                    loginEntity.setPassword(psw);
+                    exeLogin(userApi,loginEntity);
+                }else{
+                    LogUtil2.getUtils().d("register fail code: " + code);
+                    // TODO: 2017/10/17 dismiss dialog, show error msg
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<RegisterFailResponse> call, Throwable t) {
+                //todo fail, dismiss dialog, show error info
+                LogUtil2.getUtils().d("register error, code: ");
+                t.printStackTrace();
+            }
+        });
+    }
+
     void loginTest(){
-        UserApi userApi = Retrofit2Client.INSTANCE.getRetrofitBuilder()
+       /* UserApi userApi = Retrofit2Client.INSTANCE.getRetrofitBuilder()
                 .baseUrl(UserApi.BASE_URL).build()
-                .create(UserApi.class);
+                .create(UserApi.class);*/
+
+        UserApiNoNeedToken userApi = ApiGen.getInstance(this.getApplicationContext()).
+                generateApi(UserApiNoNeedToken.class,false);
 
         LoginEntity loginEntity = new LoginEntity();
         loginEntity.setEmail("only_aap@163.com");
@@ -65,12 +205,16 @@ public class MainActivity extends Activity {
         });
 
 
-        userApi.updateProfile(new UpdateProfileEntity()).enqueue(new Callback() {
+        userApi.updateProfile(new UpdateProfileEntity()).enqueue(new Callback<UpdateProfileSuccess>() {
             @Override
-            public void onResponse(Call call, Response response) {
+            public void onResponse(Call<UpdateProfileSuccess> call, Response<UpdateProfileSuccess> response) {
 
+                //code >= 200 && code < 300
                 if (response.isSuccessful()) {
                     // use response data and do some fancy stuff :)
+
+                    response.body().getUser();
+                    //show msg
                 } else {
                     // parse the response body …
 //                    APIError error = ErrorUtils.parseError(response);
@@ -78,11 +222,22 @@ public class MainActivity extends Activity {
 
                     // … or just log the issue like we’re doing :)
 //                    Log.d("error message", error.message());
+
+                    if(response.code() == 400){
+                        //bad request, missing some parameters
+                    }else if(response.code() == 500){
+                        //internal error
+                        Gson gson = new Gson();
+                        InternalErrMsgEntity internalErrMsgEntity = gson.fromJson(gson.newJsonReader(response.errorBody().charStream()),
+                                InternalErrMsgEntity.class);
+
+
+                    }
                 }
             }
 
             @Override
-            public void onFailure(Call call, Throwable t) {
+            public void onFailure(Call<UpdateProfileSuccess> call, Throwable t) {
 
             }
         });
