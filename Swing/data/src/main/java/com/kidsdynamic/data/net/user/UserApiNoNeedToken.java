@@ -12,8 +12,6 @@ import com.kidsdynamic.data.net.user.model.UpdateProfileSuccess;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
-import retrofit2.http.HEAD;
-import retrofit2.http.Header;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
@@ -27,7 +25,7 @@ public interface UserApiNoNeedToken {
 //    200 Success Login
 //    400 Bad Request. Login failed
     @Headers("Content-Type: application/json; charset=UTF-8")
-    @POST("v1/user/login")
+    @POST("/v1/user/login")
     Call<LoginSuccessRep> login(@Body LoginEntity loginEntity);
 
 

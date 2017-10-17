@@ -5,13 +5,13 @@ package com.kidsdynamic.data.net.user.model;
  */
 
 public class UpdateProfileSuccess {
-    UserInfoUpdate user;
+    UserInfo user;
 
-    public UserInfoUpdate getUser() {
+    public UserInfo getUser() {
         return user;
     }
 
-    public void setUser(UserInfoUpdate user) {
+    public void setUser(UserInfo user) {
         this.user = user;
     }
 }

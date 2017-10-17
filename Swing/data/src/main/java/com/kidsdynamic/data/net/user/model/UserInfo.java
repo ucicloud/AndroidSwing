@@ -4,7 +4,7 @@ package com.kidsdynamic.data.net.user.model;
  * Created by Administrator on 2017/10/16.
  */
 
-public class UserInfoUpdate {
+public class UserInfo {
 
     /**
      * id : 29

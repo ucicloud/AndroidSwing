@@ -58,7 +58,7 @@ public class ApiGen {
             headMap.put(Config.HEADER_LABEL,authToken);
 
             //新增header添加拦截器
-            okHttpClient.interceptors().add(new HeaderInterceptor(headMap));
+            return okHttpClient.newBuilder().addInterceptor(new HeaderInterceptor(headMap)).build();
         }
 
         return okHttpClient;

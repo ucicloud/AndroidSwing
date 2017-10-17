@@ -8,6 +8,9 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.kidsdynamic.data.net.ApiGen;
+import com.kidsdynamic.data.net.event.EventApi;
+import com.kidsdynamic.data.net.event.model.EventWithTodo;
+import com.kidsdynamic.data.net.user.UserApiNeedToken;
 import com.kidsdynamic.data.net.user.UserApiNoNeedToken;
 import com.kidsdynamic.data.net.user.model.InternalErrMsgEntity;
 import com.kidsdynamic.data.net.user.model.LoginEntity;
@@ -16,8 +19,11 @@ import com.kidsdynamic.data.net.user.model.RegisterEntity;
 import com.kidsdynamic.data.net.user.model.RegisterFailResponse;
 import com.kidsdynamic.data.net.user.model.UpdateProfileEntity;
 import com.kidsdynamic.data.net.user.model.UpdateProfileSuccess;
+import com.kidsdynamic.data.net.user.model.UserProfileRep;
 import com.kidsdynamic.data.utils.LogUtil2;
 import com.kidsdynamic.swing.domain.LoginManager;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -50,8 +56,8 @@ public class MainActivity extends Activity {
         String psw = "123456";
 
         final LoginEntity loginEntity = new LoginEntity();
-        loginEntity.setEmail("only_aap@163.com");
-        loginEntity.setPassword("123123");
+        loginEntity.setEmail(email);
+        loginEntity.setPassword(psw);
 
         //查询账户是否注册；如果未注册则展示注册界面（输入last name, first name;avatar）;注册成功后，再次执行
         //登录流程；登录成功后，开始同步数据（同步那些？）
@@ -126,8 +132,67 @@ public class MainActivity extends Activity {
     private void syncData() {
         // TODO: 2017/10/17 同步账户数据 成功后关闭等待对话框，跳转到主界面；失败提醒
         Toast.makeText(this,"login ok, start sync data", Toast.LENGTH_SHORT).show();
+
+        //登陆成功后，需要获取两个业务数据：
+        //“/v1/user/retrieveUserProfile”
+        //“/v1/event/retrieveAllEventsWithTodo”
+
+        final UserApiNeedToken userApiNeedToken = ApiGen.getInstance(this.getApplicationContext()).
+                generateApi(UserApiNeedToken.class,true);
+
+        userApiNeedToken.retrieveUserProfile().enqueue(new Callback<UserProfileRep>() {
+            @Override
+            public void onResponse(Call<UserProfileRep> call, Response<UserProfileRep> response) {
+                LogUtil2.getUtils().d("onResponse: " + response.code());
+                if(response.code() == 200){
+                    LogUtil2.getUtils().d("onResponse: " + response.body());
+
+                    //todo save to db
+                    //继续获取信息
+                    getKidInfos();
+
+                }else {
+                    //todo dismiss dialog
+                    LogUtil2.getUtils().d("onResponse not 200" );
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserProfileRep> call, Throwable t) {
+                //todo dismiss dialog
+                LogUtil2.getUtils().d("retrieveUserProfile error, ");
+                t.printStackTrace();
+            }
+        });
     }
 
+    private void getKidInfos() {
+        LogUtil2.getUtils().d("getKidInfos ");
+        final EventApi eventApi = ApiGen.getInstance(this.getApplicationContext()).
+                generateApi(EventApi.class,true);
+
+        eventApi.retrieveAllEventsWithTodo().enqueue(new Callback<List<EventWithTodo>>() {
+            @Override
+            public void onResponse(Call<List<EventWithTodo>> call, Response<List<EventWithTodo>> response) {
+                if(response.code() == 200){
+                    LogUtil2.getUtils().d("onResponse: " + response.body());
+
+                    //todo dismiss dialog save to db
+                    Toast.makeText(MainActivity.this," sync data ok, show next UI", Toast.LENGTH_SHORT).show();
+
+                }else{
+                    LogUtil2.getUtils().d("login error, code: " + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<EventWithTodo>> call, Throwable t) {
+                //todo dismiss dialog
+                LogUtil2.getUtils().d("retrieveAllEventsWithTodo error, ");
+                t.printStackTrace();
+            }
+        });
+    }
 
 
     public void register(@NonNull final String email, @NonNull final String psw){
