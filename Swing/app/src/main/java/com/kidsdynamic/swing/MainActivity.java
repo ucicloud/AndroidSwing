@@ -8,6 +8,8 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.kidsdynamic.data.net.ApiGen;
+import com.kidsdynamic.data.net.avatar.AvatarApi;
+import com.kidsdynamic.data.net.avatar.PartUtils;
 import com.kidsdynamic.data.net.event.EventApi;
 import com.kidsdynamic.data.net.event.model.EventWithTodo;
 import com.kidsdynamic.data.net.user.UserApiNeedToken;
@@ -17,17 +19,24 @@ import com.kidsdynamic.data.net.user.model.LoginEntity;
 import com.kidsdynamic.data.net.user.model.LoginSuccessRep;
 import com.kidsdynamic.data.net.user.model.RegisterEntity;
 import com.kidsdynamic.data.net.user.model.RegisterFailResponse;
+import com.kidsdynamic.data.net.user.model.UpdateKidAvatarRepEntity;
 import com.kidsdynamic.data.net.user.model.UpdateProfileEntity;
 import com.kidsdynamic.data.net.user.model.UpdateProfileSuccess;
+import com.kidsdynamic.data.net.user.model.UserInfo;
 import com.kidsdynamic.data.net.user.model.UserProfileRep;
 import com.kidsdynamic.data.utils.LogUtil2;
 import com.kidsdynamic.swing.domain.LoginManager;
 
+import java.io.File;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -327,5 +336,62 @@ public class MainActivity extends Activity {
 
             return error;
         }*/
+    }
+
+//    @OnClick(R.id.btn_upload_avatar)
+    public void uploadAvatar(){
+//        "upload"
+        final AvatarApi avatarApi = ApiGen.getInstance(this.getApplicationContext()).
+                generateApi4Avatar(AvatarApi.class);
+
+        String filePath = "/sdcard/1.jpg";
+        MultipartBody.Part filePart = PartUtils.prepareFilePart("upload", "avatar_t01", new File(filePath));
+
+        avatarApi.uploadUserAvatar(filePart).enqueue(new Callback<UserInfo>() {
+            @Override
+            public void onResponse(Call<UserInfo> call, Response<UserInfo> response) {
+                LogUtil2.getUtils().d("uploadUserAvatar onResponse");
+                LogUtil2.getUtils().d("uploadUserAvatar  code: " + response.code());
+                //code == 200 upload ok
+            }
+
+            @Override
+            public void onFailure(Call<UserInfo> call, Throwable t) {
+                LogUtil2.getUtils().d("uploadUserAvatar onFailure");
+                t.printStackTrace();
+            }
+        });
+    }
+
+    @OnClick(R.id.btn_upload_avatar)
+    public void uploadKidAvatar(){
+//        "upload"
+        final AvatarApi avatarApi = ApiGen.getInstance(this.getApplicationContext()).
+                generateApi4Avatar(AvatarApi.class);
+
+        String filePath = "/sdcard/1.jpg";
+        MultipartBody.Part filePart = PartUtils.prepareFilePart("upload", "avatar_t01", new File(filePath));
+
+        avatarApi.uploadKidAvatar(getUploadKidAvatarPram(),filePart).enqueue(new Callback<UpdateKidAvatarRepEntity>() {
+            @Override
+            public void onResponse(Call<UpdateKidAvatarRepEntity> call, Response<UpdateKidAvatarRepEntity> response) {
+                LogUtil2.getUtils().d("uploadKidAvatar onResponse");
+                LogUtil2.getUtils().d("uploadKidAvatar  code: " + response.code());
+                //code == 200 upload ok
+            }
+
+            @Override
+            public void onFailure(Call<UpdateKidAvatarRepEntity> call, Throwable t) {
+                LogUtil2.getUtils().d("uploadKidAvatar onFailure");
+                t.printStackTrace();
+            }
+        });
+    }
+
+    private Map<String, RequestBody> getUploadKidAvatarPram(){
+        HashMap<String, RequestBody> paramMap = new HashMap<>();
+        PartUtils.putRequestBodyMap(paramMap,AvatarApi.param_kidId,"123");
+
+        return paramMap;
     }
 }

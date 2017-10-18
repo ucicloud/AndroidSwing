@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import com.bobomee.android.htttp.okhttp.okHttp;
 import com.bobomee.android.htttp.retrofit2.Retrofit2Client;
 import com.kidsdynamic.data.net.OkhttpInterceptor.HeaderInterceptor;
+import com.kidsdynamic.data.net.avatar.AvatarApi;
 import com.kidsdynamic.data.net.user.UserApiNoNeedToken;
 import com.kidsdynamic.data.persistent.PreferencesUtil;
 
@@ -44,6 +45,13 @@ public class ApiGen {
         return Retrofit2Client.INSTANCE.getRetrofitBuilder()
                 .client(getOkHttpClient(isNeedToken))
                 .baseUrl(UserApiNoNeedToken.BASE_URL).build()
+                .create(service);
+    }
+
+    public <T> T generateApi4Avatar(Class<T> service){
+        return Retrofit2Client.INSTANCE.getRetrofitBuilder()
+                .client(getOkHttpClient(true))
+                .baseUrl(AvatarApi.BASE_URL).build()
                 .create(service);
     }
 

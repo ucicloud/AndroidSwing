@@ -25,24 +25,24 @@ public interface UserApiNoNeedToken {
 //    200 Success Login
 //    400 Bad Request. Login failed
     @Headers("Content-Type: application/json; charset=UTF-8")
-    @POST("/v1/user/login")
+    @POST("v1/user/login")
     Call<LoginSuccessRep> login(@Body LoginEntity loginEntity);
 
 
     //200 The token is valid
     //403 Forbidden. The token is not valid
     //•The API doesn't return any JSON
-    @GET("/v1/user/isTokenValid")
+    @GET("v1/user/isTokenValid")
     Call<RegisterFailResponse> checkTokenValid(@Query("email") String email, @Query("token") String token);
 
     @Headers("Content-Type: application/json; charset=UTF-8")
-    @POST("/v1/user/register")
+    @POST("v1/user/register")
     Call<RegisterFailResponse> registerUser(@Body RegisterEntity registerEntity);
 
     //200 The email is able to register ;
     //409 Conflict. The email is already registered
     //curl -X GET "http://localhost:8111/v1/user/isEmailAvailableToRegister?email=jack083001@gmail.com"
-    @GET("/v1/user/isEmailAvailableToRegister")
+    @GET("v1/user/isEmailAvailableToRegister")
     Call<Object> checkEmailAvailableToRegister(@Query("email") String email);
 
 
@@ -54,7 +54,7 @@ public interface UserApiNoNeedToken {
     })*/
 
     @Headers("Content-Type: application/json; charset=UTF-8")
-    @PUT("/v1/user/updateProfile")
+    @PUT("v1/user/updateProfile")
     Call<UpdateProfileSuccess> updateProfile (@Body UpdateProfileEntity updateProfileEntity);
 
 

@@ -40,4 +40,16 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
+    <Button
+        android:id="@+id/btn_upload_avatar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="uploadAvatar"
+        tools:layout_editor_absoluteX="162dp"
+        tools:layout_editor_absoluteY="172dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/button_test_login"/>
+
 </android.support.constraint.ConstraintLayout>

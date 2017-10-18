@@ -17,7 +17,7 @@ public interface UserApiNeedToken {
 //    200	Retrieve successfully
 //    400	Bad request. The token is invalid
 //    500	Internal error. Please send me the error. I will fix it
-    @GET("/v1/user/retrieveUserProfile")
+    @GET("v1/user/retrieveUserProfile")
     Call<UserProfileRep> retrieveUserProfile();
 
 }

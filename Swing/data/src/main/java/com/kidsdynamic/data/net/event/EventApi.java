@@ -15,6 +15,6 @@ public interface EventApi {
 
 //    200	Retrieve successfully
 //    500	Internal error. Please send me the error. I will fix it
-    @GET("/v1/event/retrieveAllEventsWithTodo")
+    @GET("v1/event/retrieveAllEventsWithTodo")
     Call<List<EventWithTodo>> retrieveAllEventsWithTodo();
 }
