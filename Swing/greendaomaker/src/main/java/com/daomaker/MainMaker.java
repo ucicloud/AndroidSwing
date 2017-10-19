@@ -1,5 +1,8 @@
 package com.daomaker;
 
+import com.daomaker.maker.ActivityFromCloudMaker;
+import com.daomaker.maker.EventMaker;
+import com.daomaker.maker.RawActivityMaker;
 import com.daomaker.maker.UserMaker;
 
 import java.io.File;
@@ -17,8 +20,14 @@ public class MainMaker {
         Schema schema = new Schema(1,"com.kidsdynamic.data.dao");
         schema.setDefaultJavaPackageTest("com.kidsdynamic.data.dao.test");
         schema.setDefaultJavaPackageDao("com.kidsdynamic.data.dao");
+
         ArrayList<Maker> makers = new ArrayList<>();
         makers.add(new UserMaker());
+        makers.add(new ActivityFromCloudMaker());
+        makers.add(new EventMaker());
+        makers.add(new RawActivityMaker());
+
+
         for (Maker maker : makers) {
             maker.build(schema);
         }
