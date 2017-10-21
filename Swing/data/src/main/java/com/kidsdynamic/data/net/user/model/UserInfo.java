@@ -27,6 +27,7 @@ public class UserInfo {
     private String zipCode;
     private String phoneNumber;
     private String profile;
+    private String registrationId;
 
     public int getId() {
         return id;
@@ -98,5 +99,13 @@ public class UserInfo {
 
     public void setProfile(String profile) {
         this.profile = profile;
+    }
+
+    public String getRegistrationId() {
+        return registrationId;
+    }
+
+    public void setRegistrationId(String registrationId) {
+        this.registrationId = registrationId;
     }
 }

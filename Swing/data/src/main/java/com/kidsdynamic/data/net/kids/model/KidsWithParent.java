@@ -6,7 +6,7 @@ import com.kidsdynamic.data.net.user.model.UserInfo;
  * date:   2017/10/21 15:33 <br/>
  */
 
-public class KidsAddSuccessRep {
+public class KidsWithParent {
 
     /**
      * id : 2

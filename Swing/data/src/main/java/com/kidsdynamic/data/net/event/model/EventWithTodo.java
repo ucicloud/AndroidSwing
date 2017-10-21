@@ -22,7 +22,7 @@ public class EventWithTodo {
      * status : OPEN
      * description : Hafdewadhah
      * alert : 49
-     * repeat :
+     * repeat : "DAILY"
      * timezoneOffset : 300
      * dateCreated : 2017-02-12T22:41:55Z
      * lastUpdated : 2017-02-12T22:41:55Z

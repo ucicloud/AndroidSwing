@@ -27,20 +27,20 @@ public interface UserApiNeedToken {
 //    200 Update the registration id successfully
 //    400 Bad request. The token is invalid
 //    500 Internal error. Please send me the error. I will fix it
-    @POST("/v1/user/updateLanguage")
+    @POST("v1/user/updateLanguage")
     Call<Object> updateLanguage(@Body String language);
 
 //    200 send successfully
 //    400 Bad request. The token is invalid
 //    500 Internal error. Please send me the error. I will fix it
-    @POST("/v1/user/sendResetPasswordEmail")
+    @POST("v1/user/sendResetPasswordEmail")
     Call<Object> sendResetPasswordEmail();
 
 //    200 Get user successfully
 //    400 Bad request. The email parameter is missing
 //    404 Not found. Can't find user by the email
 //    500 Internal error. Please send me the error. I will fix it
-    @GET("/v1/user/findByEmail")
+    @GET("v1/user/findByEmail")
     Call<UserInfo> findByEmail(@Query("email") String email);
 
 }
