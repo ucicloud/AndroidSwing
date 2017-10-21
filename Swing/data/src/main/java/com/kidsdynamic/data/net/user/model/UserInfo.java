@@ -15,7 +15,7 @@ public class UserInfo {
      * dateCreated : 2016-12-06T00:40:10Z
      * zipCode : 11111
      * phoneNumber : 3444943214
-     * profile :
+     * profile ://头像信息
      */
 
     private int id;
