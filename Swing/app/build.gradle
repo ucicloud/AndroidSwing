@@ -43,6 +43,8 @@ dependencies {
     compile "com.jakewharton:butterknife:$rootProject.butterKnifeVersion"
     annotationProcessor "com.jakewharton:butterknife-compiler:$rootProject.butterKnifeVersion"
 
+    compile 'com.prolificinteractive:material-calendarview:1.4.3'
+
     compile project(':data')
     compile project(':htttp')
     compile project(path: ':base')

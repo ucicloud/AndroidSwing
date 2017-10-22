@@ -10,7 +10,12 @@ import android.widget.TextView;
 
 import com.kidsdynamic.swing.BaseFragment;
 import com.kidsdynamic.swing.R;
+import com.prolificinteractive.materialcalendarview.CalendarMode;
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 
+import java.util.Calendar;
+
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
@@ -30,6 +35,9 @@ public class TestFragment_2 extends BaseFragment {
     TextView tv_myAskCount;
     TextView tv_myWealthNum;
 
+    @BindView(R.id.calendarView)
+    MaterialCalendarView materialCalendarView;
+
    /* @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -46,7 +54,7 @@ public class TestFragment_2 extends BaseFragment {
 
         ButterKnife.bind(this,layoutView);
 
-
+        initView();
         return layoutView;
     }
 
@@ -54,5 +62,9 @@ public class TestFragment_2 extends BaseFragment {
 
     }
 
+    private void initView(){
+        materialCalendarView.state().edit().setCalendarDisplayMode(CalendarMode.WEEKS)
+                .setFirstDayOfWeek(Calendar.MONDAY).commit();
+    }
 
 }
