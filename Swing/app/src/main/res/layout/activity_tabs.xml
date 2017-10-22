@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/content"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:clipToPadding="false"
+    android:fitsSystemWindows="true">
+
+    <FrameLayout
+        android:id="@+id/fragment_container1"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginBottom="@dimen/ds160"
+        android:background="@color/transparent" />
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1.0px"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="@dimen/ds110"
+        android:background="#ffcccccc" />
+
+    <LinearLayout
+        android:id="@+id/bottom_tab"
+        android:layout_width="fill_parent"
+        android:layout_height="70dp"
+        android:layout_gravity="bottom"
+        android:background="#fff6f6f6"
+        android:baselineAligned="false"
+        android:minHeight="@dimen/ds110"
+        android:paddingLeft="@dimen/ds20"
+        android:paddingRight="@dimen/ds20">
+
+        <include
+            android:id="@+id/news_tab"
+            layout="@layout/tab_item"
+            android:layout_width="0.0dip"
+            android:layout_height="fill_parent"
+            android:layout_weight="1.0"
+            android:minHeight="@dimen/ds110" />
+
+        <include
+            android:id="@+id/answer_tab"
+            layout="@layout/tab_item"
+            android:layout_width="0.0dip"
+            android:layout_height="fill_parent"
+            android:layout_weight="1.0" />
+
+        <!--<LinearLayout
+            android:layout_width="0.0dip"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1.0"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/ask_tab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@null"
+                android:src="@drawable/ic_tab_ask_new" />
+        </LinearLayout>-->
+
+        <include
+            android:id="@+id/activity_tab"
+            layout="@layout/tab_item"
+            android:layout_width="0.0dip"
+            android:layout_height="fill_parent"
+            android:layout_weight="1.0"
+            android:minHeight="@dimen/ds110" />
+
+        <include
+            android:id="@+id/user_info_tab"
+            layout="@layout/tab_item"
+            android:layout_width="0.0dip"
+            android:layout_height="fill_parent"
+            android:layout_weight="1.0"
+            android:minHeight="@dimen/ds110" />
+    </LinearLayout>
+
+<!--    <FrameLayout
+        android:id="@+id/ad_popup_fl"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="#b3000000"
+        android:visibility="gone">
+
+        <com.baidu.iknow.imageloader.widgets.CustomImageView
+            android:id="@id/ad_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/ad_close_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center"
+            android:layout_marginBottom="@dimen/ds60"
+            android:src="@drawable/ic_ad_close" />
+    </FrameLayout>-->
+</FrameLayout>

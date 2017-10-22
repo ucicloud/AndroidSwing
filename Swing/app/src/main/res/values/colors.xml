@@ -47,4 +47,13 @@
 
     <color name="color_brown">#8B4513</color>
 
+    <color name="transparent">#00000000</color>
+    <color name="ik_common_font_paragraph_main">#ff9d9d9d</color>
+    <color name="ik_common_main_normal">#ff37b059</color>
+    <color name="ik_common_main_pressed">#ff2c984a</color>
+    <color name="tab_text_focused">#0564A8</color>
+
+    <color name="hex_9c9c9c">#FF9C9C9C</color>
+    <color name="hex_1b89cd">#FF1B89CD</color>
+
 </resources>

@@ -13,6 +13,7 @@ public class KidsWithParent {
      * name : Kids3
      * dateCreated : 2017‐02‐02T01:14:16Z
      * macId : Mac_ID4
+     * firmwareVersion: "",
      * profile :
      * parent : {"id":2,"email":"jack08300@gmail.com","firstName":"Jay","lastName":"Chen","lastUpdate":"0001\u201001\u201001T00:00:00Z","dateCreated":"0001\u201001\u201001T00:00:00Z","zipCode":"","phoneNumber":"","profile":""}
      */
@@ -21,6 +22,7 @@ public class KidsWithParent {
     private String name;
     private String dateCreated;
     private String macId;
+    private String firmwareVersion;
     private String profile;
     private UserInfo parent;
 
@@ -54,6 +56,14 @@ public class KidsWithParent {
 
     public void setMacId(String macId) {
         this.macId = macId;
+    }
+
+    public String getFirmwareVersion() {
+        return firmwareVersion;
+    }
+
+    public void setFirmwareVersion(String firmwareVersion) {
+        this.firmwareVersion = firmwareVersion;
     }
 
     public String getProfile() {

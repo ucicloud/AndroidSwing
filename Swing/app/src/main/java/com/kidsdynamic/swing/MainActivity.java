@@ -1,6 +1,7 @@
 package com.kidsdynamic.swing;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.widget.Button;
@@ -12,6 +13,9 @@ import com.kidsdynamic.data.net.avatar.AvatarApi;
 import com.kidsdynamic.data.net.avatar.PartUtils;
 import com.kidsdynamic.data.net.event.EventApi;
 import com.kidsdynamic.data.net.event.model.EventWithTodo;
+import com.kidsdynamic.data.net.kids.KidsApi;
+import com.kidsdynamic.data.net.kids.model.KidsAddRequest;
+import com.kidsdynamic.data.net.kids.model.KidsWithParent;
 import com.kidsdynamic.data.net.user.UserApiNeedToken;
 import com.kidsdynamic.data.net.user.UserApiNoNeedToken;
 import com.kidsdynamic.data.net.user.model.InternalErrMsgEntity;
@@ -26,6 +30,7 @@ import com.kidsdynamic.data.net.user.model.UserInfo;
 import com.kidsdynamic.data.net.user.model.UserProfileRep;
 import com.kidsdynamic.data.utils.LogUtil2;
 import com.kidsdynamic.swing.domain.LoginManager;
+import com.kidsdynamic.swing.presenter.ActivityTest;
 
 import java.io.File;
 import java.util.HashMap;
@@ -393,5 +398,69 @@ public class MainActivity extends Activity {
         PartUtils.putRequestBodyMap(paramMap,AvatarApi.param_kidId,"123");
 
         return paramMap;
+    }
+
+    @OnClick(R.id.btn_kids_is_bind)
+    public void checkWatchBindStatus(){
+        String watchMacId = "hgweorahgbkljwhnpi2";
+        KidsApi kidsApi = ApiGen.getInstance(this.getApplication()).
+                generateApi(KidsApi.class, true);
+
+        kidsApi.whoRegisteredMacID(watchMacId).enqueue(new Callback<KidsWithParent>() {
+            @Override
+            public void onResponse(Call<KidsWithParent> call, Response<KidsWithParent> response) {
+                LogUtil2.getUtils().d("whoRegisteredMacID onResponse: " + response.code());
+
+                if (response.code() == 200) {
+                    LogUtil2.getUtils().d("watch binder: ");
+                    LogUtil2.getUtils().d("watch binder info: " + response.body().getName());
+                    LogUtil2.getUtils().d("watch binder info: " + response.body().getParent().getFirstName());
+                }else if(response.code() == 404){
+                    LogUtil2.getUtils().d("watch not binde: ");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<KidsWithParent> call, Throwable t) {
+                LogUtil2.getUtils().d("whoRegisteredMacID onFailure");
+                t.printStackTrace();
+            }
+        });
+    }
+
+    @OnClick(R.id.btn_kids_add)
+    public void addKids(){
+        String watchMacId = "hgweorahgbkljwhnpi2";
+        String kidsName = "yy1";
+
+        KidsApi kidsApi = ApiGen.getInstance(this.getApplication()).
+                generateApi(KidsApi.class, true);
+
+        KidsAddRequest kidsAddRequest = new KidsAddRequest();
+        kidsAddRequest.setMacId(watchMacId);
+        kidsAddRequest.setName(kidsName);
+
+        kidsApi.addKid(kidsAddRequest).enqueue(new Callback<KidsWithParent>() {
+            @Override
+            public void onResponse(Call<KidsWithParent> call, Response<KidsWithParent> response) {
+                LogUtil2.getUtils().d("addKid onResponse: " + response.code());
+
+                if(response.code() == 200){
+                    //add successfully
+                    LogUtil2.getUtils().d("addKid rep kid ID: " + response.body().getId());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<KidsWithParent> call, Throwable t) {
+                LogUtil2.getUtils().d("addKid onFailure");
+                t.printStackTrace();
+            }
+        });
+    }
+
+    @OnClick(R.id.btn_show_main)
+    public void showMain(){
+        startActivity(new Intent(this, ActivityTest.class));
     }
 }
