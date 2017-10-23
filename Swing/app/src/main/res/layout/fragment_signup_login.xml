@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <EditText
+        android:id="@+id/et_email"
+        style="@style/edittext_main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:hint="@string/signup_account_mail"
+        android:imeOptions="actionNext"
+        android:inputType="textEmailAddress" />
+
+    <EditText
+        android:id="@+id/et_password"
+        style="@style/edittext_main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/et_email"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/base_10"
+        android:hint="@string/signup_account_password"
+        android:imeOptions="actionDone"
+        android:inputType="textPassword" />
+
+    <TextView
+        android:id="@+id/signup_login_hint_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/et_password"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="10dp"
+        android:gravity="center"
+        android:minLines="1"
+        android:text="@string/error_api_user_login_400"
+        android:textColor="@color/color_red_main"
+        android:textSize="15sp"
+        android:visibility="visible" />
+
+    <Button
+        android:id="@+id/signup_login_login"
+        style="@style/button_main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/signup_login_hint_text"
+        android:text="@string/signup_login_login" />
+
+    <Button
+        android:id="@+id/signup_login_reset_pwd"
+        style="@style/button_main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/signup_login_login"
+        android:layout_marginTop="@dimen/base_10"
+        android:text="@string/signup_login_login" />
+</RelativeLayout>

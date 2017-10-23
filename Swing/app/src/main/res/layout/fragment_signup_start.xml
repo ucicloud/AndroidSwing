@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Button
+        android:id="@+id/signup_start_login"
+        style="@style/button_main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/signup_login_login" />
+
+    <TextView
+        android:id="@+id/signup_login_hint_text"
+        style="@style/textview_hint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/signup_start_login"
+        android:layout_centerInParent="true"
+        android:layout_margin="10dp"
+        android:gravity="center"
+        android:text="@string/signup_login_or"
+        android:visibility="invisible" />
+
+    <Button
+        android:id="@+id/signup_login_facebook"
+        style="@style/button_main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/signup_login_hint_text"
+        android:layout_marginBottom="10dp"
+        android:text="@string/signup_login_facebook"
+        android:visibility="invisible" />
+
+    <Button
+        android:id="@+id/signup_login_google"
+        style="@style/button_main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/signup_login_facebook"
+        android:text="@string/signup_login_google"
+        android:visibility="invisible" />
+</RelativeLayout>

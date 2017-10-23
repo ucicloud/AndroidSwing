@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="ViewSponge">
+        <attr name="shrinkWidth" format="float" />
+        <attr name="shrinkHeight" format="float" />
+    </declare-styleable>
+</resources>
