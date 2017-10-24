@@ -19,6 +19,7 @@ import com.kidsdynamic.swing.BaseFragment;
 import com.kidsdynamic.swing.R;
 import com.kidsdynamic.swing.view.FirstEventDecorator;
 import com.kidsdynamic.swing.view.SecondEventDecorator;
+import com.kidsdynamic.swing.view.calendar.MultiEventDecorator;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.CalendarMode;
 import com.prolificinteractive.materialcalendarview.DayViewDecorator;
@@ -94,7 +95,14 @@ public class TestFragment_2 extends BaseFragment {
         materialCalendarView.state().edit().setCalendarDisplayMode(CalendarMode.WEEKS)
                 .setFirstDayOfWeek(Calendar.MONDAY).commit();
 
-        CalendarDay calendarDay = CalendarDay.today();
+        for(int year = 2010; year <= 2020; year++){
+            for(int month = 1; month <= 12; month ++){
+                materialCalendarView.addDecorator(new MultiEventDecorator(year,month));
+            }
+        }
+
+
+        /*CalendarDay calendarDay = CalendarDay.today();
         Log.w("TestCalendar","initView day is " + calendarDay.toString());
 
         List<CalendarDay> calendarDayList = new ArrayList<>();
@@ -118,7 +126,7 @@ public class TestFragment_2 extends BaseFragment {
 
 
         materialCalendarView.addDecorator(new FirstEventDecorator(calendarDayList));
-        materialCalendarView.addDecorator(new SecondEventDecorator(calendarDayList2));
+        materialCalendarView.addDecorator(new SecondEventDecorator(calendarDayList2));*/
     }
 
 

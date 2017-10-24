@@ -36,7 +36,7 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:background="@color/color_yellow_light"
-        android:layout_marginTop="148dp"/>
+        android:layout_marginTop="56dp"/>
 
 
 </FrameLayout>
