@@ -6,7 +6,6 @@ import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.text.style.ForegroundColorSpan;
 import android.text.style.LineBackgroundSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,23 +14,26 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.alamkanak.weekview.DateTimeInterpreter;
+import com.alamkanak.weekview.MonthLoader;
+import com.alamkanak.weekview.WeekView;
+import com.alamkanak.weekview.WeekViewEvent;
 import com.kidsdynamic.swing.BaseFragment;
 import com.kidsdynamic.swing.R;
-import com.kidsdynamic.swing.view.FirstEventDecorator;
-import com.kidsdynamic.swing.view.SecondEventDecorator;
 import com.kidsdynamic.swing.view.calendar.MultiEventDecorator;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.CalendarMode;
 import com.prolificinteractive.materialcalendarview.DayViewDecorator;
 import com.prolificinteractive.materialcalendarview.DayViewFacade;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
-import com.prolificinteractive.materialcalendarview.spans.DotSpan;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -60,6 +62,9 @@ public class TestFragment_2 extends BaseFragment {
     @BindView(R.id.btn_change_style)
     Button btnChangeCalendarStyle;
 
+    @BindView(R.id.weekView)
+    WeekView weekView;
+
    /* @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -77,7 +82,63 @@ public class TestFragment_2 extends BaseFragment {
         ButterKnife.bind(this,layoutView);
 
         initView();
+
+        initDayEvent();
         return layoutView;
+    }
+
+    private void initDayEvent() {
+
+        weekView.setXScrollingSpeed(0);
+        weekView.setMonthChangeListener(new MonthLoader.MonthChangeListener() {
+            @Override
+            public List<? extends WeekViewEvent> onMonthChange(int newYear, int newMonth) {
+                List<WeekViewEvent> events = new ArrayList<WeekViewEvent>();
+
+                Calendar startTime = Calendar.getInstance();
+                startTime.set(Calendar.HOUR_OF_DAY, 3);
+                startTime.set(Calendar.MINUTE, 0);
+                startTime.set(Calendar.MONTH, newMonth - 1);
+                startTime.set(Calendar.YEAR, newYear);
+                Calendar endTime = (Calendar) startTime.clone();
+                endTime.add(Calendar.HOUR, 1);
+                endTime.set(Calendar.MONTH, newMonth - 1);
+                WeekViewEvent event = new WeekViewEvent(1, getEventTitle(startTime), startTime, endTime);
+                event.setColor(getResources().getColor(R.color.color_blue));
+                events.add(event);
+
+                return events;
+            }
+        });
+
+        setupDateTimeInterpreter(false);
+    }
+
+    private void setupDateTimeInterpreter(final boolean shortDate) {
+        weekView.setDateTimeInterpreter(new DateTimeInterpreter() {
+            @Override
+            public String interpretDate(Calendar date) {
+                SimpleDateFormat weekdayNameFormat = new SimpleDateFormat("EEE", Locale.getDefault());
+                String weekday = weekdayNameFormat.format(date.getTime());
+                SimpleDateFormat format = new SimpleDateFormat(" M/d", Locale.getDefault());
+
+                // All android api level do not have a standard way of getting the first letter of
+                // the week day name. Hence we get the first char programmatically.
+                // Details: http://stackoverflow.com/questions/16959502/get-one-letter-abbreviation-of-week-day-of-a-date-in-java#answer-16959657
+                if (shortDate)
+                    weekday = String.valueOf(weekday.charAt(0));
+                return weekday.toUpperCase() + format.format(date.getTime());
+            }
+
+            @Override
+            public String interpretTime(int hour) {
+                return hour > 11 ? (hour - 12) + " PM" : (hour == 0 ? "0 AM" : hour + " AM");
+            }
+        });
+    }
+
+    protected String getEventTitle(Calendar time) {
+        return String.format("Event of %02d:%02d %s/%d", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), time.get(Calendar.MONTH)+1, time.get(Calendar.DAY_OF_MONTH));
     }
 
     public void changeFragmentTest(){
@@ -100,6 +161,7 @@ public class TestFragment_2 extends BaseFragment {
                 materialCalendarView.addDecorator(new MultiEventDecorator(year,month));
             }
         }
+
 
 
         /*CalendarDay calendarDay = CalendarDay.today();

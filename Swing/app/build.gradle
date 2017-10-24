@@ -44,6 +44,7 @@ dependencies {
     annotationProcessor "com.jakewharton:butterknife-compiler:$rootProject.butterKnifeVersion"
 
     compile 'com.prolificinteractive:material-calendarview:1.4.3'
+    compile 'com.github.alamkanak:android-week-view:1.2.6'
 
     compile project(':data')
     compile project(':htttp')
