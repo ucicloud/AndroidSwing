@@ -10,6 +10,9 @@ import android.widget.ImageButton;
 import com.kidsdynamic.swing.R;
 import com.yy.base.BaseFragmentActivity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -25,7 +28,7 @@ public class SignupActivity extends BaseFragmentActivity {
     @BindView(R.id.ib_back)
     ImageButton ibBack;
 
-    private String mCurFragmentClzName;
+    private Class mCurFragmentClz;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -42,10 +45,15 @@ public class SignupActivity extends BaseFragmentActivity {
 
     @OnClick(R.id.ib_back)
     void clickBack() {
-        if (!TextUtils.isEmpty(mCurFragmentClzName)
-                && SignupLoginFragment.class.getSimpleName().equals(mCurFragmentClzName)) {
+        if (null == mCurFragmentClz) {
+            return;
+        }
+        if (SignupLoginFragment.class == mCurFragmentClz) {
             setFragment(SignupStartFragment.newInstance());
             setBackVisibility(View.INVISIBLE);
+        } else if (SignupProfileFragment.class == mCurFragmentClz) {
+            setFragment(SignupLoginFragment.newInstance());
+            setBackVisibility(View.VISIBLE);
         }
     }
 
@@ -55,7 +63,7 @@ public class SignupActivity extends BaseFragmentActivity {
                 .replace(R.id.frameContainer, fragment)
 //                .addToBackStack(null)
                 .commit();
-        mCurFragmentClzName = fragment.getClass().getSimpleName();
+        mCurFragmentClz = fragment.getClass();
     }
 
     public void setBackVisibility(int visibility) {

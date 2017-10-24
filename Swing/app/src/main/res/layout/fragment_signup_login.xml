@@ -10,6 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/base_65"
         android:hint="@string/signup_account_mail"
         android:imeOptions="actionNext"
         android:inputType="textEmailAddress" />
@@ -38,7 +39,7 @@
         android:text="@string/error_api_user_login_400"
         android:textColor="@color/color_red_main"
         android:textSize="15sp"
-        android:visibility="visible" />
+        android:visibility="invisible" />
 
     <Button
         android:id="@+id/signup_login_login"
@@ -55,5 +56,6 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/signup_login_login"
         android:layout_marginTop="@dimen/base_10"
-        android:text="@string/signup_login_login" />
+        android:text="@string/signup_login_login"
+        android:visibility="invisible" />
 </RelativeLayout>

@@ -4,4 +4,19 @@
         <attr name="shrinkWidth" format="float" />
         <attr name="shrinkHeight" format="float" />
     </declare-styleable>
+    <declare-styleable name="ViewCircle">
+        <attr name="strokeWidth" format="dimension" />
+        <attr name="strokeColorActive" format="color" />
+        <attr name="strokeColorNormal" format="color" />
+        <attr name="strokeType" format="integer" />
+        <attr name="strokeCount" format="integer" />
+        <attr name="strokeBegin" format="integer" />
+        <attr name="strokeEnd" format="integer" />
+        <attr name="android:src" />
+        <attr name="fillColor" format="color" />
+        <attr name="fillDarker" format="boolean" />
+        <attr name="crossWidth" format="dimension" />
+        <attr name="crossColor" format="color" />
+        <attr name="crossRatio" format="float" />
+    </declare-styleable>
 </resources>
