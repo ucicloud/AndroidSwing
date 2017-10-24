@@ -8,6 +8,7 @@
         style="@style/button_main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/base_65"
         android:text="@string/signup_login_login" />
 
     <TextView

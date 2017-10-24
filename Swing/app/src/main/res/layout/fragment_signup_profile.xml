@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <com.kidsdynamic.swing.presenter.ViewCircle
+            android:id="@+id/signup_profile_photo"
+            android:layout_width="136dp"
+            android:layout_height="136dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/base_15"
+            app:crossColor="@color/hex_1b89cd"
+            app:crossWidth="2dp"
+            app:strokeColorNormal="@color/hex_1b89cd" />
+
+        <EditText
+            android:id="@+id/signup_profile_first"
+            style="@style/edittext_main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:hint="@string/signup_profile_first_name"
+            android:imeOptions="actionNext"
+            android:inputType="text"
+            android:nextFocusForward="@+id/registration_info_last" />
+
+        <EditText
+            android:id="@+id/signup_profile_last"
+            style="@style/edittext_main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:gravity="center"
+            android:hint="@string/signup_profile_last_name"
+            android:imeOptions="actionNext"
+            android:inputType="text"
+            android:nextFocusForward="@+id/registration_info_phone" />
+
+        <EditText
+            android:id="@+id/signup_profile_phone"
+            style="@style/edittext_main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:gravity="center"
+            android:hint="@string/signup_profile_phone_number"
+            android:imeOptions="actionNext"
+            android:inputType="phone"
+            android:nextFocusForward="@+id/signup_profile_zip" />
+
+        <EditText
+            android:id="@+id/signup_profile_zip"
+            style="@style/edittext_main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:gravity="center"
+            android:hint="@string/signup_profile_zip_code"
+            android:imeOptions="actionDone"
+            android:inputType="number" />
+
+        <Button
+            android:id="@+id/signup_profile_submit"
+            style="@style/button_main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:gravity="center"
+            android:text="@string/signup_profile_next" />
+    </LinearLayout>
+
+</ScrollView>
