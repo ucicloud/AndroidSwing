@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/watch_request_title"
+        style="@style/text_view_main"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:gravity="center"
+        android:text="Request access" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_weight="2">
+
+        <com.kidsdynamic.swing.view.ListLinearLayout
+            android:id="@+id/watch_request_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/base_15"
+            android:layout_marginRight="@dimen/base_15"
+            android:background="@null"
+            android:orientation="vertical"
+            app:divideLine="@null"
+            app:dividerHeight="0dp"
+            app:footerDividersEnabled="false"
+            app:headerDividersEnabled="false"
+            app:listSelector="@color/transparent" />
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginLeft="@dimen/base_56"
+        android:layout_marginRight="@dimen/base_56"
+        android:layout_weight="3"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/watch_request_search"
+            style="@style/button_main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="Search again" />
+
+        <Button
+            android:id="@+id/watch_request_dashboard"
+            style="@style/button_main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="Cancel &amp; Go to Dashboard" />
+    </LinearLayout>
+
+</LinearLayout>

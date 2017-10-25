@@ -1,10 +1,14 @@
 package com.kidsdynamic.swing.presenter;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -47,6 +51,19 @@ public class SignupLoginFragment extends BaseFragment {
         return layout;
     }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        et_email.setText("123@qq.com");
+        et_password.setText("123456");
+    }
+
+    @OnClick(R.id.ib_back)
+    public void back() {
+        SignupActivity signupActivity = (SignupActivity) getActivity();
+        signupActivity.setFragment(SignupStartFragment.newInstance());
+    }
+
     @OnClick(R.id.signup_login_login)
     public void login() {
         String email = et_email.getText().toString().trim();
@@ -63,9 +80,31 @@ public class SignupLoginFragment extends BaseFragment {
             tvHint.setVisibility(View.VISIBLE);
             return;
         }
+        hideSoftKeyboard(getActivity());
         SignupActivity signupActivity = (SignupActivity) getActivity();
         signupActivity.setFragment(SignupProfileFragment.newInstance());
-        signupActivity.setBackVisibility(View.VISIBLE);
+    }
+
+    /**
+     * Hide SoftKeyBoard
+     *
+     * @param activity Activity
+     */
+    private static boolean hideSoftKeyboard(Activity activity) {
+        if (activity == null) {
+            return false;
+        }
+        View view = activity.getCurrentFocus();
+        if (null == view) {
+            return false;
+        }
+        IBinder ib = view.getWindowToken();
+        if (null == ib) {
+            return false;
+        }
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(
+                Context.INPUT_METHOD_SERVICE);
+        return null != imm && imm.hideSoftInputFromWindow(ib, 0);
     }
 
 }

@@ -4,51 +4,59 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <View
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="2" />
+        android:layout_weight="3"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            style="@style/text_view_main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/watch_sorry_sorry" />
+
+        <TextView
+            style="@style/text_view_hint"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/watch_sorry_message" />
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginLeft="@dimen/base_56"
         android:layout_marginRight="@dimen/base_56"
-        android:layout_weight="7"
+        android:layout_weight="6"
         android:orientation="vertical">
 
         <Button
-            android:id="@+id/signup_start_login"
-            style="@style/button_main"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/signup_login_login" />
-
-        <TextView
-            android:id="@+id/signup_start_or"
-            style="@style/text_view_main"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:gravity="center"
-            android:text="@string/signup_login_or"
-            android:visibility="invisible" />
-
-        <Button
-            android:id="@+id/signup_login_facebook"
+            android:id="@+id/watch_sorry_search"
             style="@style/button_main"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:text="@string/signup_login_facebook"
-            android:visibility="invisible" />
+            android:text="@string/watch_sorry_again" />
 
         <Button
-            android:id="@+id/signup_login_google"
+            android:id="@+id/watch_sorry_request"
             style="@style/button_main"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/signup_login_google"
-            android:visibility="invisible" />
+            android:layout_marginBottom="10dp"
+            android:text="@string/watch_sorry_others"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/watch_sorry_contact"
+            style="@style/button_main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/watch_sorry_contact_us" />
     </LinearLayout>
+
 </LinearLayout>

@@ -26,30 +26,28 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
- * SignupProfileFragment
+ * WatchProfileFragment
  * <p>
- * Created by Stefan on 2017/10/24.
+ * Created by Stefan on 2017/10/25.
  */
 
-public class SignupProfileFragment extends BaseFragment {
+public class WatchProfileFragment extends BaseFragment {
 
     private static final int REQUEST_CODE_CAMERA = 1;
     private static final int REQUEST_CODE_ALBUM = 2;
 
-    @BindView(R.id.signup_profile_photo)
+    @BindView(R.id.watch_profile_photo)
     ViewCircle vc_photo;
-    @BindView(R.id.signup_profile_first)
+    @BindView(R.id.watch_profile_first)
     EditText et_first;
-    @BindView(R.id.signup_profile_last)
+    @BindView(R.id.watch_profile_last)
     EditText et_last;
-    @BindView(R.id.signup_profile_phone)
-    EditText et_phone;
-    @BindView(R.id.signup_profile_zip)
+    @BindView(R.id.watch_profile_zip)
     EditText et_zip;
 
-    public static SignupProfileFragment newInstance() {
+    public static WatchProfileFragment newInstance() {
         Bundle args = new Bundle();
-        SignupProfileFragment fragment = new SignupProfileFragment();
+        WatchProfileFragment fragment = new WatchProfileFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -58,7 +56,7 @@ public class SignupProfileFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View layout = inflater.inflate(R.layout.fragment_signup_profile, container, false);
+        View layout = inflater.inflate(R.layout.fragment_watch_profile, container, false);
         ButterKnife.bind(this, layout);
         return layout;
     }
@@ -85,7 +83,7 @@ public class SignupProfileFragment extends BaseFragment {
         signupActivity.setFragment(SignupLoginFragment.newInstance());
     }
 
-    @OnClick(R.id.signup_profile_photo)
+    @OnClick(R.id.watch_profile_photo)
     public void addPhoto() {
         CharSequence array[] = new CharSequence[]{"Take a new picture", "Choose from Library"};
         BottomPopWindow.Builder builder = new BottomPopWindow.Builder(getContext());
@@ -99,7 +97,7 @@ public class SignupProfileFragment extends BaseFragment {
         bottomPopWindow.showAtLocation(getView(), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
     }
 
-    @OnClick(R.id.signup_profile_submit)
+    @OnClick(R.id.watch_profile_submit)
     public void doSubmit() {
         SignupActivity signupActivity = (SignupActivity) getActivity();
         signupActivity.setFragment(WatchHaveFragment.newInstance());
@@ -108,7 +106,7 @@ public class SignupProfileFragment extends BaseFragment {
     private void doWhichClick(int position) {
         switch (position) {
             case 0:
-                // TODO: 2017/10/25 add Camera permission 
+                // TODO: 2017/10/25 add Camera permission
                 startCameraActivity();
                 break;
             case 1:

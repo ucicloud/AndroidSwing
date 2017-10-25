@@ -1,61 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/et_email"
-        style="@style/edittext_main"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="@dimen/base_65"
-        android:hint="@string/signup_account_mail"
-        android:imeOptions="actionNext"
-        android:inputType="textEmailAddress" />
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/et_password"
-        style="@style/edittext_main"
+        <ImageButton
+            android:id="@+id/ib_back"
+            android:layout_width="@dimen/base_56"
+            android:layout_height="@dimen/base_56"
+            android:layout_gravity="start|top"
+            android:background="@null"
+            android:contentDescription="@null"
+            android:scaleType="fitCenter"
+            android:src="@drawable/icon_left" />
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/et_email"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="@dimen/base_10"
-        android:hint="@string/signup_account_password"
-        android:imeOptions="actionDone"
-        android:inputType="textPassword" />
+        android:layout_height="0dp"
+        android:layout_marginLeft="@dimen/base_56"
+        android:layout_marginRight="@dimen/base_56"
+        android:layout_weight="7"
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/signup_login_hint_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/et_password"
-        android:layout_centerHorizontal="true"
-        android:layout_margin="10dp"
-        android:gravity="center"
-        android:minLines="1"
-        android:text="@string/error_api_user_login_400"
-        android:textColor="@color/color_red_main"
-        android:textSize="15sp"
-        android:visibility="invisible" />
+        <EditText
+            android:id="@+id/et_email"
+            style="@style/edit_text_main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/signup_account_mail"
+            android:imeOptions="actionNext"
+            android:inputType="textEmailAddress" />
 
-    <Button
-        android:id="@+id/signup_login_login"
-        style="@style/button_main"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/signup_login_hint_text"
-        android:text="@string/signup_login_login" />
+        <EditText
+            android:id="@+id/et_password"
+            style="@style/edit_text_main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/base_10"
+            android:hint="@string/signup_account_password"
+            android:imeOptions="actionDone"
+            android:inputType="textPassword" />
 
-    <Button
-        android:id="@+id/signup_login_reset_pwd"
-        style="@style/button_main"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/signup_login_login"
-        android:layout_marginTop="@dimen/base_10"
-        android:text="@string/signup_login_login"
-        android:visibility="invisible" />
-</RelativeLayout>
+        <TextView
+            android:id="@+id/signup_login_hint_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:gravity="center"
+            android:minLines="1"
+            android:text=""
+            android:textColor="@color/color_red_main"
+            android:textSize="15sp"
+            android:visibility="invisible" />
+
+        <Button
+            android:id="@+id/signup_login_login"
+            style="@style/button_main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Enter" />
+
+        <Button
+            android:id="@+id/signup_login_reset_pwd"
+            style="@style/button_main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/base_10"
+            android:text="Reset password"
+            android:visibility="invisible" />
+    </LinearLayout>
+
+</LinearLayout>

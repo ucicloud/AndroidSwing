@@ -10,19 +10,18 @@ import com.kidsdynamic.swing.BaseFragment;
 import com.kidsdynamic.swing.R;
 
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 /**
- * SignupStartFragment
+ * WatchPurchaseFragment
  * <p>
- * Created by Stefan on 2017/10/23.
+ * Created by Stefan on 2017/10/25.
  */
 
-public class SignupStartFragment extends BaseFragment {
+public class WatchPurchaseFragment extends BaseFragment {
 
-    public static SignupStartFragment newInstance() {
+    public static WatchPurchaseFragment newInstance() {
         Bundle args = new Bundle();
-        SignupStartFragment fragment = new SignupStartFragment();
+        WatchPurchaseFragment fragment = new WatchPurchaseFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -31,15 +30,9 @@ public class SignupStartFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View layout = inflater.inflate(R.layout.fragment_signup_start, container, false);
+        View layout = inflater.inflate(R.layout.fragment_watch_purchase, container, false);
         ButterKnife.bind(this, layout);
         return layout;
-    }
-
-    @OnClick(R.id.signup_start_login)
-    public void clickLogin(View v) {
-        SignupActivity signupActivity = (SignupActivity) getActivity();
-        signupActivity.setFragment(SignupLoginFragment.newInstance());
     }
 
 }

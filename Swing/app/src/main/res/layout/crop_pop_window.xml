@@ -15,6 +15,9 @@
         app:cropAspectRatioX="1"
         app:cropAspectRatioY="1"
         app:cropAutoZoomEnabled="false"
+        app:cropBorderCornerThickness="0dp"
+        app:cropBorderLineThickness="0dp"
+        app:cropGuidelines="off"
         app:cropScaleType="fitCenter"
         app:cropShape="oval" />
 

@@ -13,16 +13,16 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
- * SignupStartFragment
+ * WatchHaveFragment
  * <p>
- * Created by Stefan on 2017/10/23.
+ * Created by Stefan on 2017/10/25.
  */
 
-public class SignupStartFragment extends BaseFragment {
+public class WatchHaveFragment extends BaseFragment {
 
-    public static SignupStartFragment newInstance() {
+    public static WatchHaveFragment newInstance() {
         Bundle args = new Bundle();
-        SignupStartFragment fragment = new SignupStartFragment();
+        WatchHaveFragment fragment = new WatchHaveFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -31,15 +31,22 @@ public class SignupStartFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View layout = inflater.inflate(R.layout.fragment_signup_start, container, false);
+        View layout = inflater.inflate(R.layout.fragment_watch_have, container, false);
         ButterKnife.bind(this, layout);
         return layout;
     }
 
-    @OnClick(R.id.signup_start_login)
-    public void clickLogin(View v) {
+    @OnClick({R.id.watch_have_yes, R.id.watch_have_no})
+    public void onClick(View v) {
         SignupActivity signupActivity = (SignupActivity) getActivity();
-        signupActivity.setFragment(SignupLoginFragment.newInstance());
+        switch (v.getId()) {
+            case R.id.watch_have_yes:
+                signupActivity.setFragment(WatchSearchFragment.newInstance());
+                break;
+            case R.id.watch_have_no:
+                signupActivity.setFragment(WatchPurchaseFragment.newInstance());
+                break;
+        }
     }
 
 }

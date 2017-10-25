@@ -365,7 +365,7 @@ public class ViewCircle extends View {
         }
     };
 
-    interface OnProgressListener {
+    public interface OnProgressListener {
         void onProgress(ViewCircle view, int begin, int end);
     }
 

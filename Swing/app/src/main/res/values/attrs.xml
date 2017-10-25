@@ -5,18 +5,28 @@
         <attr name="shrinkHeight" format="float" />
     </declare-styleable>
     <declare-styleable name="ViewCircle">
+        <attr name="android:src" />
         <attr name="strokeWidth" format="dimension" />
         <attr name="strokeColorActive" format="color" />
         <attr name="strokeColorNormal" format="color" />
-        <attr name="strokeType" format="integer" />
+        <attr name="strokeType" format="integer">
+            <enum name="dot" value="0" />
+            <enum name="arc" value="1" />
+        </attr>
         <attr name="strokeCount" format="integer" />
         <attr name="strokeBegin" format="integer" />
         <attr name="strokeEnd" format="integer" />
-        <attr name="android:src" />
         <attr name="fillColor" format="color" />
         <attr name="fillDarker" format="boolean" />
         <attr name="crossWidth" format="dimension" />
         <attr name="crossColor" format="color" />
         <attr name="crossRatio" format="float" />
+    </declare-styleable>
+    <declare-styleable name="ListLinearLayout">
+        <attr name="divideLine" format="reference|color" />
+        <attr name="listSelector" format="reference|color" />
+        <attr name="dividerHeight" format="reference|dimension" />
+        <attr name="footerDividersEnabled" format="boolean" />
+        <attr name="headerDividersEnabled" format="boolean" />
     </declare-styleable>
 </resources>

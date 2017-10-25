@@ -13,16 +13,16 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
- * SignupStartFragment
+ * WatchSorryFragment
  * <p>
- * Created by Stefan on 2017/10/23.
+ * Created by Stefan on 2017/10/25.
  */
 
-public class SignupStartFragment extends BaseFragment {
+public class WatchSorryFragment extends BaseFragment {
 
-    public static SignupStartFragment newInstance() {
+    public static WatchSorryFragment newInstance() {
         Bundle args = new Bundle();
-        SignupStartFragment fragment = new SignupStartFragment();
+        WatchSorryFragment fragment = new WatchSorryFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -31,15 +31,25 @@ public class SignupStartFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View layout = inflater.inflate(R.layout.fragment_signup_start, container, false);
+        View layout = inflater.inflate(R.layout.fragment_watch_sorry, container, false);
         ButterKnife.bind(this, layout);
         return layout;
     }
 
-    @OnClick(R.id.signup_start_login)
-    public void clickLogin(View v) {
+    @OnClick(R.id.watch_sorry_search)
+    public void searchAgain() {
         SignupActivity signupActivity = (SignupActivity) getActivity();
-        signupActivity.setFragment(SignupLoginFragment.newInstance());
+        signupActivity.setFragment(WatchSearchFragment.newInstance());
+    }
+
+    @OnClick(R.id.watch_sorry_request)
+    public void request() {
+
+    }
+
+    @OnClick(R.id.watch_sorry_contact)
+    public void contactUs() {
+
     }
 
 }

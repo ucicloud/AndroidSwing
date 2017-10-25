@@ -33,7 +33,7 @@
             android:orientation="vertical">
 
             <com.kidsdynamic.swing.view.ViewCircle
-                android:id="@+id/signup_profile_photo"
+                android:id="@+id/watch_profile_photo"
                 android:layout_width="124dp"
                 android:layout_height="124dp"
                 android:layout_gravity="center_horizontal"
@@ -49,7 +49,7 @@
                 android:orientation="vertical">
 
                 <EditText
-                    android:id="@+id/signup_profile_first"
+                    android:id="@+id/watch_profile_first"
                     style="@style/edit_text_main"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -62,7 +62,7 @@
                     android:nextFocusForward="@+id/registration_info_last" />
 
                 <EditText
-                    android:id="@+id/signup_profile_last"
+                    android:id="@+id/watch_profile_last"
                     style="@style/edit_text_main"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -74,7 +74,7 @@
                     android:nextFocusForward="@+id/registration_info_phone" />
 
                 <EditText
-                    android:id="@+id/signup_profile_phone"
+                    android:id="@+id/watch_profile_phone"
                     style="@style/edit_text_main"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -83,10 +83,11 @@
                     android:hint="@string/signup_profile_phone_number"
                     android:imeOptions="actionNext"
                     android:inputType="phone"
-                    android:nextFocusForward="@+id/signup_profile_zip" />
+                    android:nextFocusForward="@+id/signup_profile_zip"
+                    android:visibility="gone" />
 
                 <EditText
-                    android:id="@+id/signup_profile_zip"
+                    android:id="@+id/watch_profile_zip"
                     style="@style/edit_text_main"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -97,7 +98,7 @@
                     android:inputType="number" />
 
                 <Button
-                    android:id="@+id/signup_profile_submit"
+                    android:id="@+id/watch_profile_submit"
                     style="@style/button_main"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
