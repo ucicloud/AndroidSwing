@@ -1,4 +1,4 @@
-package com.kidsdynamic.swing.presenter;
+package com.kidsdynamic.swing.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -85,6 +85,7 @@ public class ViewCircle extends View {
 
                 if (attr == R.styleable.ViewCircle_android_src) {
                     Drawable drawable = typedArray.getDrawable(attr);
+                    if (null == drawable) return;
                     setBitmap(((BitmapDrawable) drawable).getBitmap());
                 } else if (attr == R.styleable.ViewCircle_strokeWidth) {
                     mStrokeWidth = typedArray.getDimension(attr, mStrokeWidth);
@@ -159,7 +160,8 @@ public class ViewCircle extends View {
             } else if (heightMode == MeasureSpec.AT_MOST) {
                 width = heightSize;
             } else {
-                width = (int) Math.ceil(mStrokeWidth * 2) + Math.max(getPaddingStart() + getPaddingEnd(), getPaddingTop() + getPaddingBottom());
+                width = (int) Math.ceil(mStrokeWidth * 2)
+                        + Math.max(getPaddingStart() + getPaddingEnd(), getPaddingTop() + getPaddingBottom());
             }
 
             height = width;

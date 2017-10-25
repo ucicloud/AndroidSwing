@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <com.kidsdynamic.swing.presenter.ViewCircle
+        <com.kidsdynamic.swing.view.ViewCircle
             android:id="@+id/signup_profile_photo"
             android:layout_width="136dp"
             android:layout_height="136dp"

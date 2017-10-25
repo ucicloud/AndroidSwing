@@ -1,4 +1,4 @@
-package com.kidsdynamic.swing.presenter;
+package com.kidsdynamic.swing.view;
 
 import android.graphics.ColorFilter;
 import android.graphics.ColorMatrix;

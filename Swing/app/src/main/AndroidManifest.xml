@@ -22,8 +22,10 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".presenter.SignupActivity">
+        android:theme="@style/AppThemeViewlib">
+        <activity
+            android:name=".presenter.SignupActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -31,6 +33,13 @@
             </intent-filter>
         </activity>
         <activity android:name=".presenter.ActivityTest" />
+        <activity
+            android:name=".presenter.VirtualCameraActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/ThemeTranslucent" />
+        <activity
+            android:name=".presenter.VirtualResultActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

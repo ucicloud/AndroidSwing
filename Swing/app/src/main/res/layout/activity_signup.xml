@@ -9,7 +9,7 @@
         android:background="@color/color_blue_sky"
         android:contentDescription="@null"
         android:scaleType="fitEnd"
-        android:src="@mipmap/city_california" />
+        android:src="@drawable/city_california" />
 
     <LinearLayout
         android:layout_width="match_parent"

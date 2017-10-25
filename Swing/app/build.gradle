@@ -45,6 +45,7 @@ dependencies {
 
     compile 'com.prolificinteractive:material-calendarview:1.4.3'
     compile 'com.github.alamkanak:android-week-view:1.2.6'
+    compile 'com.theartofdev.edmodo:android-image-cropper:2.5.1'
 
     compile project(':data')
     compile project(':htttp')

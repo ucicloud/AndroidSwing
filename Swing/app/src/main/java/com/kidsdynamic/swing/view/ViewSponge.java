@@ -1,4 +1,4 @@
-package com.kidsdynamic.swing.presenter;
+package com.kidsdynamic.swing.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -8,6 +8,8 @@ import android.view.View;
 import com.kidsdynamic.swing.R;
 
 /**
+ * ViewSponge
+ * <p>
  * Created by 03543 on 2016/12/31.
  */
 
