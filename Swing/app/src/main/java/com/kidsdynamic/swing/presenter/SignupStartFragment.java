@@ -39,6 +39,10 @@ public class SignupStartFragment extends BaseFragment {
 
     @OnClick(R.id.signup_start_login)
     public void clickLogin(View v) {
+        //查询账户是否注册；如果未注册则展示注册界面（输入last name, first name;avatar）;注册成功后，再次执行
+        //登录流程；登录成功后，开始同步数据（同步那些？）
+        //如果是已经注册账户，则尝试登陆，如果登陆失败，则显示找回密码按钮
+
         SignupActivity signupActivity = (SignupActivity) getActivity();
         signupActivity.setFragment(SignupLoginFragment.newInstance());
         signupActivity.setBackVisibility(View.VISIBLE);

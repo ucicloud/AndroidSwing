@@ -1,4 +1,4 @@
-package com.kidsdynamic.data.net.user.model;
+package com.kidsdynamic.data.net;
 
 /**
  * date:   2017/10/17 14:08 <br/>

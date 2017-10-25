@@ -35,6 +35,9 @@ public class SignupActivity extends BaseFragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
         ButterKnife.bind(this);
+
+        // TODO: 2017/10/25 weizg
+        //读取配置，是否已经登陆成功，如果是，则不显示登陆界面，直接进入主界面
     }
 
     @Override
