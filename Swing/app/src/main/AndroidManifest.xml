@@ -40,6 +40,7 @@
         <activity
             android:name=".presenter.VirtualResultActivity"
             android:screenOrientation="portrait" />
+        <activity android:name=".MainActivity" />
     </application>
 
 </manifest>
