@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.kidsdynamic.data.net.ApiGen;
+import com.kidsdynamic.data.net.InternalErrMsgEntity;
 import com.kidsdynamic.data.net.avatar.AvatarApi;
 import com.kidsdynamic.data.net.avatar.PartUtils;
 import com.kidsdynamic.data.net.event.EventApi;
@@ -19,7 +20,6 @@ import com.kidsdynamic.data.net.kids.model.KidsAddRequest;
 import com.kidsdynamic.data.net.kids.model.KidsWithParent;
 import com.kidsdynamic.data.net.user.UserApiNeedToken;
 import com.kidsdynamic.data.net.user.UserApiNoNeedToken;
-import com.kidsdynamic.data.net.user.model.InternalErrMsgEntity;
 import com.kidsdynamic.data.net.user.model.LoginEntity;
 import com.kidsdynamic.data.net.user.model.LoginSuccessRep;
 import com.kidsdynamic.data.net.user.model.RegisterEntity;

@@ -1,10 +1,13 @@
 package com.kidsdynamic.swing.presenter;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 
+import com.kidsdynamic.swing.MainActivity;
 import com.kidsdynamic.swing.R;
+import com.kidsdynamic.swing.utils.ConfigUtil;
 import com.yy.base.BaseFragmentActivity;
 
 import butterknife.ButterKnife;
@@ -25,7 +28,21 @@ public class SignupActivity extends BaseFragmentActivity {
 
         // TODO: 2017/10/25 weizg
         //读取配置，是否已经登陆成功，如果是，则不显示登陆界面，直接进入主界面
+        if(ConfigUtil.isLoginState(this)){
+            loginSuccess();
+            return;
+        }
     }
+
+    private void loginSuccess() {
+        // TODO: 2017/10/25
+        //如果登录成功，则跳转到主界面
+        //关闭当前界面，进入主界面
+        startActivity(new Intent(this,MainActivity.class));
+
+        this.finish();
+    }
+
 
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
