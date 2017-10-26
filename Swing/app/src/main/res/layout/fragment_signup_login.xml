@@ -34,7 +34,7 @@
             style="@style/edit_text_main"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/signup_account_mail"
+            android:hint="@string/signup_login_email"
             android:imeOptions="actionNext"
             android:inputType="textEmailAddress" />
 
@@ -44,7 +44,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/base_10"
-            android:hint="@string/signup_account_password"
+            android:hint="@string/signup_login_password"
             android:imeOptions="actionDone"
             android:inputType="textPassword" />
 
@@ -65,7 +65,7 @@
             style="@style/button_main"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Enter" />
+            android:text="@string/signup_login_enter" />
 
         <Button
             android:id="@+id/signup_login_reset_pwd"
@@ -73,7 +73,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/base_10"
-            android:text="Reset password"
+            android:text="@string/singup_login_reset_password"
             android:visibility="invisible" />
     </LinearLayout>
 

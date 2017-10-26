@@ -209,23 +209,26 @@
     <string name="profile_sorry_others">Request Access to Others</string>
     <string name="profile_sorry_contact_us">Contact Us</string>
 
-    <!-- FragmentSignupAccount -->
-    <string name="signup_account_mail">Email</string>
-    <string name="signup_account_password">Password</string>
-    <string name="signup_account_login_failed">Login Failed</string>
-    <string name="signup_account_processing">Processing</string>
-    <string name="signup_account_wait">Please Wait&#8230;</string>
+    <!-- FragmentSignupLogin -->
+    <string name="signup_login_email">Email</string>
+    <string name="signup_login_password">Password</string>
+    <string name="signup_login_login_failed">Login Failed</string>
+    <string name="signup_login_processing">Processing</string>
+    <string name="signup_login_wait">Please Wait&#8230;</string>
+
+    <string name="signup_login_enter">Enter</string>
+    <string name="singup_login_reset_password">Reset password</string>
 
     <!-- FragmentSignupLanguage -->
     <string name="signup_language_message">Please Select\nYour Language</string>
     <string name="signup_language_select">Select</string>
 
-    <!-- FragmentSignupLogin -->
-    <string name="signup_login_login">Sign Up/ Login</string>
+    <!-- FragmentSignupStart -->
+    <string name="signup_start_login">Sign Up/ Login</string>
     <string name="signup">Sign Up</string>
-    <string name="signup_login_or">or</string>
-    <string name="signup_login_facebook">Login with Facebook</string>
-    <string name="signup_login_google">Login with Google</string>
+    <string name="signup_start_or">or</string>
+    <string name="signup_start_facebook">Login with Facebook</string>
+    <string name="signup_start_google">Login with Google</string>
 
     <!-- FragmentSignupProfile -->
     <string name="signup_profile_first_name">First Name</string>
@@ -254,6 +257,8 @@
     <string name="watch_have_yes">Yes</string>
     <string name="watch_have_no">No</string>
 
+    <string name="watch_have_message">Please have your watch nearby</string>
+
     <!-- FragmentWatchOwner -->
     <string name="watch_owner_message">Register Your Watch</string>
     <string name="watch_owner_search">Search Now</string>
@@ -265,6 +270,11 @@
     <string name="watch_profile_name">Kid\'s Name</string>
     <string name="watch_profile_processing">Processing</string>
     <string name="watch_profile_wait">Please Wait</string>
+    <string name="watch_profile_zip_code">Zip Code</string>
+
+    <string name="watch_profile_first_name">Kid\'s first name</string>
+    <string name="watch_profile_last_name">Kid\'s last name</string>
+    <string name="watch_profile_save">Save</string>
 
     <!-- FragmentWatchPurchase -->
     <string name="watch_purchase_message">Would You Like\nto Purchase One?</string>
@@ -283,6 +293,11 @@
     <string name="watch_request_processing">Processing</string>
     <string name="watch_request_wait">Please Wait</string>
     <string name="watch_request_add">Add</string>
+    <string name="watch_request_search_again">Search again</string>
+
+    <string name="watch_request_access">Request access</string>
+    <string name="watch_request_access_pending">Request access pending</string>
+    <string name="watch_request_cancel_and_dashboard">Cancel &amp; go to Dashboard</string>
 
     <!-- FragmentWatchSearch -->
     <string name="watch_search_searching">Searching</string>

@@ -56,7 +56,7 @@
                     android:layout_marginBottom="10dp"
                     android:layout_marginTop="20dp"
                     android:gravity="center"
-                    android:hint="@string/signup_profile_first_name"
+                    android:hint="@string/watch_profile_first_name"
                     android:imeOptions="actionNext"
                     android:inputType="text"
                     android:nextFocusForward="@+id/registration_info_last" />
@@ -68,23 +68,10 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
                     android:gravity="center"
-                    android:hint="@string/signup_profile_last_name"
+                    android:hint="@string/watch_profile_last_name"
                     android:imeOptions="actionNext"
                     android:inputType="text"
                     android:nextFocusForward="@+id/registration_info_phone" />
-
-                <EditText
-                    android:id="@+id/watch_profile_phone"
-                    style="@style/edit_text_main"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:gravity="center"
-                    android:hint="@string/signup_profile_phone_number"
-                    android:imeOptions="actionNext"
-                    android:inputType="phone"
-                    android:nextFocusForward="@+id/signup_profile_zip"
-                    android:visibility="gone" />
 
                 <EditText
                     android:id="@+id/watch_profile_zip"
@@ -93,7 +80,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
                     android:gravity="center"
-                    android:hint="@string/signup_profile_zip_code"
+                    android:hint="@string/watch_profile_zip_code"
                     android:imeOptions="actionDone"
                     android:inputType="number" />
 
@@ -104,7 +91,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
                     android:gravity="center"
-                    android:text="@string/signup_profile_next" />
+                    android:text="@string/watch_profile_save" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

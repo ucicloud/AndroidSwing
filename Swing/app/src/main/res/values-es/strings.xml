@@ -44,6 +44,9 @@
     <string name="calendar_main_monthly_schedule">Agenda mensual</string>
     <string name="calendar_main_no_incoming_event">Sin evento</string>
 
+    <!-- FragmentCalendarMain -->
+    <string name="calendar_month_sync">Sincronizar ahora</string>
+
     <!-- FragmentCalendarTodo -->
     <string name="calendar_todo_save">Guardar</string>
     <string name="calendar_todo_processing">Procesando</string>
@@ -88,6 +91,7 @@
 
     <!-- FragmentDashboardRequest -->
     <string name="dashboard_request_request">Permitir acceso</string>
+    <string name="dashboard_add_watch">Agregar un relo</string>
     <string name="dashboard_request_profile">Ir al perfil</string>
     <string name="dashboard_request_process">Procesando</string>
     <string name="dashboard_request_waiting">Por favor, espera&#8230;</string>
@@ -197,23 +201,26 @@
     <string name="profile_sorry_others">Permitir acceso a otros</string>
     <string name="profile_sorry_contact_us">Contacta con nosotros</string>
 
-    <!-- FragmentSignupAccount -->
-    <string name="signup_account_mail">Correo electrónico</string>
-    <string name="signup_account_password">Contraseña</string>
-    <string name="signup_account_login_failed">Fallo en el inicio de sesión</string>
-    <string name="signup_account_processing">Procesando</string>
-    <string name="signup_account_wait">Por favor, espera&#8230;</string>
+    <!-- FragmentSignupLogin -->
+    <string name="signup_login_email">Correo electrónico</string>
+    <string name="signup_login_password">Contraseña</string>
+    <string name="signup_login_login_failed">Fallo en el inicio de sesión</string>
+    <string name="signup_login_processing">Procesando</string>
+    <string name="signup_login_wait">Por favor, espera&#8230;</string>
+
+    <string name="signup_login_enter">Enter</string>
+    <string name="singup_login_reset_password">Reset password</string>
 
     <!-- FragmentSignupLanguage -->
     <string name="signup_language_message">Por favor, selecciona\ntu idioma</string>
     <string name="signup_language_select">Seleccionar</string>
 
-    <!-- FragmentSignupLogin -->
-    <string name="signup_login_login">Iniciar sesión</string>
+    <!-- FragmentSignupStart -->
+    <string name="signup_Start_login">Iniciar sesión</string>
     <string name="signup">Iniciar</string>
-    <string name="signup_login_or">o</string>
-    <string name="signup_login_facebook">Iniciar con Facebook</string>
-    <string name="signup_login_google">Iniciar con Google</string>
+    <string name="signup_start_or">o</string>
+    <string name="signup_start_facebook">Iniciar con Facebook</string>
+    <string name="signup_start_google">Iniciar con Google</string>
 
     <!-- FragmentSignupProfile -->
     <string name="signup_profile_first_name">Nombre</string>
@@ -225,6 +232,8 @@
     <string name="signup_profile_login_failed">Fallo en el inicio de sesión</string>
     <string name="signup_profile_update_failed">Fallo en la actualización</string>
     <string name="signup_profile_avatar_failed">Fallo en la actualización</string>
+    <string name="signup_profile_done">hecho</string>
+    <string name="signup_profile_next">siguiente</string>
 
     <!-- FragmentWatchAdded -->
     <string name="watch_added_added">¡Completado!</string>
@@ -240,6 +249,8 @@
     <string name="watch_have_yes">Sí</string>
     <string name="watch_have_no">No</string>
 
+    <string name="watch_have_message">Please have your watch nearby</string>
+
     <!-- FragmentWatchOwner -->
     <string name="watch_owner_message">Registra tu reloj</string>
     <string name="watch_owner_search">Buscar ahora</string>
@@ -251,6 +262,11 @@
     <string name="watch_profile_name">Nombre del niño</string>
     <string name="watch_profile_processing">Procesando</string>
     <string name="watch_profile_wait">Por favor, espera</string>
+    <string name="watch_profile_zip_code">Código Postal</string>
+
+    <string name="watch_profile_first_name">Kid\'s first name</string>
+    <string name="watch_profile_last_name">Kid\'s last name</string>
+    <string name="watch_profile_save">Save</string>
 
     <!-- FragmentWatchPurchase -->
     <string name="watch_purchase_message">¿Quieres\ncomprar uno?</string>
@@ -269,6 +285,11 @@
     <string name="watch_request_processing">Procesando</string>
     <string name="watch_request_wait">Por favor, espera</string>
     <string name="watch_request_add">Añadir</string>
+    <string name="watch_request_search_again">Buscar de nuevo</string>
+
+    <string name="watch_request_access">Request access</string>
+    <string name="watch_request_access_pending">Request access pending</string>
+    <string name="watch_request_cancel_and_dashboard">Cancel &amp; go to Dashboard</string>
 
     <!-- FragmentWatchSearch -->
     <string name="watch_search_searching">Buscando</string>
@@ -324,7 +345,6 @@
     <string name="event_repeat_never">Nunca</string>
     <string name="event_notification_title">tienes un evento: </string>
 
-
     <!-- API Error -->
     <string name="error_api_unknown">Error desconocido</string>
     <string name="error_api_user_login_400">Solicitud incorrecta. Error en el inicio de sesión</string>
@@ -362,10 +382,8 @@
     <string name="error_subhost_deny_400">Solicitud incorrecta. Faltan algunos parámetros o el tipo es incorrecto</string>
     <string name="error_subhost_remove_kid_400">Solicitud incorrecta. Faltan algunos parámetros o el tipo es incorrecto</string>
     <string name="error_subhost_remove_kid_403">No autorizado. El usuario no tiene permiso</string>
-    <string name="signup_profile_done">hecho</string>
-    <string name="signup_profile_next">siguiente</string>
-    <string name="dashboard_add_watch">Agregar un relo</string>
-    <string name="calendar_month_sync">Sincronizar ahora</string>
+
+    <!-- API Error -->
     <string name="dialog_sync_content">Sincroniza después de editar el evento</string>
     <string name="dialog_sync_header">Sync Data</string>
     <string name="dialog_sync_skip_button">Skip</string>
