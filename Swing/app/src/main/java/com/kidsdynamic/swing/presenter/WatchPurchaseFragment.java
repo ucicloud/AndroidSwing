@@ -1,5 +1,7 @@
 package com.kidsdynamic.swing.presenter;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -10,6 +12,7 @@ import com.kidsdynamic.swing.BaseFragment;
 import com.kidsdynamic.swing.R;
 
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * WatchPurchaseFragment
@@ -33,6 +36,21 @@ public class WatchPurchaseFragment extends BaseFragment {
         View layout = inflater.inflate(R.layout.fragment_watch_purchase, container, false);
         ButterKnife.bind(this, layout);
         return layout;
+    }
+
+    @OnClick(R.id.watch_purchase_yes)
+    public void yes() {
+        startBrowser("https://www.kidsdynamic.com/");
+    }
+
+    private void startBrowser(String strUrl) {
+        try {
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(strUrl));
+            intent.setClassName("com.android.browser", "com.android.browser.BrowserActivity");
+            startActivity(intent);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }

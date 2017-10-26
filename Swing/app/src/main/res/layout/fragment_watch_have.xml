@@ -24,7 +24,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="Please have your watch nearby" />
+            android:text="@string/watch_have_message" />
     </LinearLayout>
 
     <LinearLayout

@@ -44,6 +44,9 @@
     <string name="calendar_main_monthly_schedule">Календарь на месяц</string>
     <string name="calendar_main_no_incoming_event">Нет событий</string>
 
+    <!-- FragmentCalendarMain -->
+    <string name="calendar_month_sync">Синхронизировать сейчас</string>
+
     <!-- FragmentCalendarTodo -->
     <string name="calendar_todo_save">Сохранить</string>
     <string name="calendar_todo_processing">Идет обработка</string>
@@ -88,6 +91,7 @@
 
     <!-- FragmentDashboardRequest -->
     <string name="dashboard_request_request">Разрешить доступ</string>
+    <string name="dashboard_add_watch">Добавить часы</string>
     <string name="dashboard_request_profile">Перейти к профилю</string>
     <string name="dashboard_request_process">Идет обработка</string>
     <string name="dashboard_request_waiting">Пожалуйста, подождите&#8230;</string>
@@ -197,23 +201,26 @@
     <string name="profile_sorry_others">Разрешить доступ другим</string>
     <string name="profile_sorry_contact_us">Свяжись с нами</string>
 
-    <!-- FragmentSignupAccount -->
-    <string name="signup_account_mail">Электронная почта</string>
-    <string name="signup_account_password">Пароль</string>
-    <string name="signup_account_login_failed">Сбой начала сеанса</string>
-    <string name="signup_account_processing">Идет обработка</string>
-    <string name="signup_account_wait">Пожалуйста, подождите&#8230;</string>
+    <!-- FragmentSignupLogin -->
+    <string name="signup_login_email">Электронная почта</string>
+    <string name="signup_login_password">Пароль</string>
+    <string name="signup_login_login_failed">Сбой начала сеанса</string>
+    <string name="signup_login_processing">Идет обработка</string>
+    <string name="signup_login_wait">Пожалуйста, подождите&#8230;</string>
+
+    <string name="signup_login_enter">Enter</string>
+    <string name="singup_login_reset_password">Reset password</string>
 
     <!-- FragmentSignupLanguage -->
     <string name="signup_language_message">Пожалуйста,\nвыбери язык</string>
     <string name="signup_language_select">Выбрать</string>
 
-    <!-- FragmentSignupLogin -->
-    <string name="signup_login_login">Начать сеанс</string>
+    <!-- FragmentSignupStart -->
+    <string name="signup_start_login">Начать сеанс</string>
     <string name="signup">Начать</string>
-    <string name="signup_login_or">или</string>
-    <string name="signup_login_facebook">Начать через Facebook</string>
-    <string name="signup_login_google">Начать через Google</string>
+    <string name="signup_start_or">или</string>
+    <string name="signup_start_facebook">Начать через Facebook</string>
+    <string name="signup_start_google">Начать через Google</string>
 
     <!-- FragmentSignupProfile -->
     <string name="signup_profile_first_name">Имя</string>
@@ -225,6 +232,8 @@
     <string name="signup_profile_login_failed">Сбой начала сеанса</string>
     <string name="signup_profile_update_failed">Сбой при обновлении</string>
     <string name="signup_profile_avatar_failed">Сбой при обновлении</string>
+    <string name="signup_profile_done">сделанный</string>
+    <string name="signup_profile_next">следующий</string>
 
     <!-- FragmentWatchAdded -->
     <string name="watch_added_added">Готово!</string>
@@ -240,6 +249,8 @@
     <string name="watch_have_yes">Да</string>
     <string name="watch_have_no">Нет</string>
 
+    <string name="watch_have_message">Please have your watch nearby</string>
+
     <!-- FragmentWatchOwner -->
     <string name="watch_owner_message">Зарегистрировать часы</string>
     <string name="watch_owner_search">Искать сейчас</string>
@@ -251,6 +262,11 @@
     <string name="watch_profile_name">Имя ребенка</string>
     <string name="watch_profile_processing">Идет обработка</string>
     <string name="watch_profile_wait">Пожалуйста, подождите</string>
+    <string name="watch_profile_zip_code">Почтовый индекс</string>
+
+    <string name="watch_profile_first_name">Kid\'s first name</string>
+    <string name="watch_profile_last_name">Kid\'s last name</string>
+    <string name="watch_profile_save">Save</string>
 
     <!-- FragmentWatchPurchase -->
     <string name="watch_purchase_message">Ты хочешь\nкупить их?</string>
@@ -269,6 +285,11 @@
     <string name="watch_request_processing">Идет обработка</string>
     <string name="watch_request_wait">Пожалуйста, подождите</string>
     <string name="watch_request_add">Добавить</string>
+    <string name="watch_request_search_again">Повторить поиск</string>
+
+    <string name="watch_request_access">Request access</string>
+    <string name="watch_request_access_pending">Request access pending</string>
+    <string name="watch_request_cancel_and_dashboard">Cancel &amp; go to Dashboard</string>
 
     <!-- FragmentWatchSearch -->
     <string name="watch_search_searching">Идет поиск</string>
@@ -361,14 +382,10 @@
     <string name="error_subhost_deny_400">Неверный запрос. Отсутствуют некоторые параметры, или тип является неверным</string>
     <string name="error_subhost_remove_kid_400">Неверный запрос. Отсутствуют некоторые параметры, или тип является неверным</string>
     <string name="error_subhost_remove_kid_403">Отсутствует разрешение. У пользователя нет разрешения</string>
-    <string name="signup_profile_done">сделанный</string>
-    <string name="signup_profile_next">следующий</string>
-    <string name="dashboard_add_watch">Добавить часы</string>
-    <string name="calendar_month_sync">Синхронизировать сейчас</string>
+
+    <!-- API Error -->
     <string name="dialog_sync_content">Синхронизация после редактирования события</string>
     <string name="dialog_sync_header">Sync Data</string>
     <string name="dialog_sync_skip_button">Skip</string>
     <string name="dialog_sync_sync_button">Синхронизация</string>
-
-
 </resources>

@@ -12,7 +12,7 @@
         android:layout_height="0dp"
         android:layout_weight="2"
         android:gravity="center"
-        android:text="Request access" />
+        android:text="@string/watch_request_access" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -50,7 +50,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:text="Search again" />
+            android:text="@string/watch_request_search_again" />
 
         <Button
             android:id="@+id/watch_request_dashboard"
@@ -58,7 +58,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:text="Cancel &amp; Go to Dashboard" />
+            android:text="@string/watch_request_cancel_and_dashboard" />
     </LinearLayout>
 
 </LinearLayout>
