@@ -9,6 +9,7 @@ import de.greenrobot.dao.AbstractDaoMaster;
 import de.greenrobot.dao.identityscope.IdentityScopeType;
 
 import com.kidsdynamic.data.dao.UserDao;
+import com.kidsdynamic.data.dao.KidsDao;
 import com.kidsdynamic.data.dao.CloudActivityDao;
 import com.kidsdynamic.data.dao.EventDao;
 import com.kidsdynamic.data.dao.TodoDao;
@@ -24,6 +25,7 @@ public class DaoMaster extends AbstractDaoMaster {
     /** Creates underlying database table using DAOs. */
     public static void createAllTables(SQLiteDatabase db, boolean ifNotExists) {
         UserDao.createTable(db, ifNotExists);
+        KidsDao.createTable(db, ifNotExists);
         CloudActivityDao.createTable(db, ifNotExists);
         EventDao.createTable(db, ifNotExists);
         TodoDao.createTable(db, ifNotExists);
@@ -33,6 +35,7 @@ public class DaoMaster extends AbstractDaoMaster {
     /** Drops underlying database table using DAOs. */
     public static void dropAllTables(SQLiteDatabase db, boolean ifExists) {
         UserDao.dropTable(db, ifExists);
+        KidsDao.dropTable(db, ifExists);
         CloudActivityDao.dropTable(db, ifExists);
         EventDao.dropTable(db, ifExists);
         TodoDao.dropTable(db, ifExists);
@@ -69,6 +72,7 @@ public class DaoMaster extends AbstractDaoMaster {
     public DaoMaster(SQLiteDatabase db) {
         super(db, SCHEMA_VERSION);
         registerDaoClass(UserDao.class);
+        registerDaoClass(KidsDao.class);
         registerDaoClass(CloudActivityDao.class);
         registerDaoClass(EventDao.class);
         registerDaoClass(TodoDao.class);

@@ -12,8 +12,8 @@ import de.greenrobot.daogenerator.DaoGenerator;
 import de.greenrobot.daogenerator.Schema;
 
 /**
- * 数据库表生成器
- * @since 2017年10月14日11:20:30.
+ * db table generator
+ * @since 2017-10-14 11:20:30.
  */
 public class MainMaker {
     public static void main(String args[]){

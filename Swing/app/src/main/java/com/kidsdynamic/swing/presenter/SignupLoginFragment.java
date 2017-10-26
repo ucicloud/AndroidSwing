@@ -2,9 +2,11 @@ package com.kidsdynamic.swing.presenter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +18,7 @@ import android.widget.Toast;
 
 import com.kidsdynamic.commonlib.utils.ObjectUtils;
 import com.kidsdynamic.data.net.ApiGen;
+import com.kidsdynamic.data.net.BaseRetrofitCallback;
 import com.kidsdynamic.data.net.event.EventApi;
 import com.kidsdynamic.data.net.event.model.EventWithTodo;
 import com.kidsdynamic.data.net.user.UserApiNeedToken;
@@ -23,9 +26,14 @@ import com.kidsdynamic.data.net.user.UserApiNoNeedToken;
 import com.kidsdynamic.data.net.user.model.LoginEntity;
 import com.kidsdynamic.data.net.user.model.LoginSuccessRep;
 import com.kidsdynamic.data.net.user.model.UserProfileRep;
+import com.kidsdynamic.data.persistent.DbUtil;
+import com.kidsdynamic.data.repository.disk.KidsDataStore;
+import com.kidsdynamic.data.repository.disk.UserDataStore;
 import com.kidsdynamic.data.utils.LogUtil2;
 import com.kidsdynamic.swing.BaseFragment;
+import com.kidsdynamic.swing.MainActivity;
 import com.kidsdynamic.swing.R;
+import com.kidsdynamic.swing.domain.EventManager;
 import com.kidsdynamic.swing.domain.LoginManager;
 
 import java.util.List;
@@ -33,6 +41,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import de.greenrobot.dao.DbUtils;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -126,10 +135,11 @@ public class SignupLoginFragment extends BaseFragment {
         final UserApiNoNeedToken userApi = ApiGen.getInstance(getActivity().getApplicationContext()).
                 generateApi(UserApiNoNeedToken.class,false);
 
-        userApi.checkEmailAvailableToRegister(email).enqueue(new Callback<Object>() {
+        userApi.checkEmailAvailableToRegister(email).enqueue(new BaseRetrofitCallback<Object>() {
             @Override
             public void onResponse(Call<Object> call, Response<Object> response) {
-                LogUtil2.getUtils().d("check mail onResponse code: " + response.code());
+                LogUtil2.getUtils().d("check mail onResponse ");
+                super.onResponse(call,response);
 
                 if (response.code() == 200) {
                     SignupLoginFragment.this.finishLoadingDialog();
@@ -144,6 +154,8 @@ public class SignupLoginFragment extends BaseFragment {
 
             @Override
             public void onFailure(Call<Object> call, Throwable t) {
+                super.onFailure(call,t);
+
                 //dismiss waiting dialog,show error; terminate exe
                 SignupLoginFragment.this.finishLoadingDialog();
 
@@ -183,11 +195,12 @@ public class SignupLoginFragment extends BaseFragment {
         return null != imm && imm.hideSoftInputFromWindow(ib, 0);
     }
 
+    //开始执行登录接口，如果登录成功，则同步数据
     private void loginByEmail(UserApiNoNeedToken userApi, LoginEntity loginEntity) {
-        userApi.login(loginEntity).enqueue(new Callback<LoginSuccessRep>() {
+        userApi.login(loginEntity).enqueue(new BaseRetrofitCallback<LoginSuccessRep>() {
             @Override
             public void onResponse(Call<LoginSuccessRep> call, Response<LoginSuccessRep> response) {
-                //
+                super.onResponse(call,response);
 
                 if(response.code() == 200){
                     LogUtil2.getUtils().d("login success");
@@ -209,6 +222,7 @@ public class SignupLoginFragment extends BaseFragment {
 
             @Override
             public void onFailure(Call<LoginSuccessRep> call, Throwable t) {
+                super.onFailure(call,t);
                 //fail, dismiss dialog, show error info
                 SignupLoginFragment.this.finishLoadingDialog();
                 showErrInfo(R.string.signup_profile_login_failed);
@@ -218,7 +232,7 @@ public class SignupLoginFragment extends BaseFragment {
 
     private void syncData() {
         // TODO: 2017/10/17 同步账户数据 成功后关闭等待对话框，跳转到主界面；失败提醒
-        Toast.makeText(getActivity(),"login ok, start sync data", Toast.LENGTH_SHORT).show();
+        Log.w("login","login ok, start sync data");
 
         //登陆成功后，需要获取两个业务数据：
         //“/v1/user/retrieveUserProfile”
@@ -227,59 +241,74 @@ public class SignupLoginFragment extends BaseFragment {
         final UserApiNeedToken userApiNeedToken = ApiGen.getInstance(getActivity().getApplicationContext()).
                 generateApi(UserApiNeedToken.class,true);
 
-        userApiNeedToken.retrieveUserProfile().enqueue(new Callback<UserProfileRep>() {
+        userApiNeedToken.retrieveUserProfile().enqueue(new BaseRetrofitCallback<UserProfileRep>() {
             @Override
             public void onResponse(Call<UserProfileRep> call, Response<UserProfileRep> response) {
-                LogUtil2.getUtils().d("onResponse: " + response.code());
-                if(response.code() == 200){
+                LogUtil2.getUtils().d("retrieveUserProfile onResponse" );
+                super.onResponse(call,response);
+
+                if(response.code() == 200){//获取到用户信息
                     LogUtil2.getUtils().d("onResponse: " + response.body());
 
-                    //todo save to db
-                    //继续获取信息
-                    getKidInfos();
+                    //先清除本地数据，然后再保存
+                    new LoginManager().saveLoginData(getContext(),response.body());
+                    //继续获取信息: 获取event信息
+                    getEventInfos();
 
                 }else {
-                    //todo dismiss dialog
+                    finishLoadingDialog();
                     LogUtil2.getUtils().d("onResponse not 200" );
+
+                    showErrInfo(R.string.signup_profile_login_failed);
                 }
             }
 
             @Override
             public void onFailure(Call<UserProfileRep> call, Throwable t) {
-                //todo dismiss dialog
-                LogUtil2.getUtils().d("retrieveUserProfile error, ");
-                t.printStackTrace();
+                Log.d("syncData","retrieveUserProfile error, ");
+                super.onFailure(call,t);
+
+                showErrInfo(R.string.signup_profile_login_failed);
+                finishLoadingDialog();
             }
         });
     }
 
-    private void getKidInfos() {
-        LogUtil2.getUtils().d("getKidInfos ");
+
+    private void getEventInfos() {
+        LogUtil2.getUtils().d("getEventInfo");
         final EventApi eventApi = ApiGen.getInstance(getActivity().getApplicationContext()).
                 generateApi(EventApi.class,true);
 
-        eventApi.retrieveAllEventsWithTodo().enqueue(new Callback<List<EventWithTodo>>() {
+        eventApi.retrieveAllEventsWithTodo().enqueue(new BaseRetrofitCallback<List<EventWithTodo>>() {
             @Override
             public void onResponse(Call<List<EventWithTodo>> call, Response<List<EventWithTodo>> response) {
-                if(response.code() == 200){
+                super.onResponse(call,response);
+
+                if(response.code() == 200){//获取成功
                     LogUtil2.getUtils().d("onResponse: " + response.body());
 
                     //todo dismiss dialog save to db
-                    Toast.makeText(getActivity()," sync data ok, show next UI", Toast.LENGTH_SHORT).show();
+                    Log.w("login"," sync data ok, show next UI");
+                    new EventManager().saveEventForLogin(getContext(),response.body());
 
                     //todo 登陆成功后，进入到主界面
-
+                    startActivity(new Intent(getActivity(),MainActivity.class));
                 }else{
                     LogUtil2.getUtils().d("login error, code: " + response.code());
+
+                    finishLoadingDialog();
+                    showErrInfo(R.string.signup_profile_login_failed);
                 }
             }
 
             @Override
             public void onFailure(Call<List<EventWithTodo>> call, Throwable t) {
-                finishLoadingDialog();
+                Log.d("syncData","retrieveAllEventsWithTodo error, ");
+                super.onFailure(call, t);
 
-                LogUtil2.getUtils().d("retrieveAllEventsWithTodo error, ");
-                t.printStackTrace();
+                finishLoadingDialog();
+                showErrInfo(R.string.signup_profile_login_failed);
             }
         });
     }

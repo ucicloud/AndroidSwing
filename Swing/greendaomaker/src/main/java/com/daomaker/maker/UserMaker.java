@@ -3,6 +3,7 @@ package com.daomaker.maker;
 import com.daomaker.Maker;
 
 import de.greenrobot.daogenerator.Entity;
+import de.greenrobot.daogenerator.Property;
 import de.greenrobot.daogenerator.Schema;
 
 /**
@@ -14,17 +15,39 @@ public class UserMaker implements Maker {
         Entity entity = schema.addEntity("DB_User");
         entity.setTableName("t_user");
         entity.setClassNameDao("UserDao");
-        entity.addIdProperty().primaryKey().autoincrement().unique();
+
+//        entity.addIdProperty().primaryKey().autoincrement().unique();
+        entity.addIntProperty("userId").columnName("users_id").notNull().primaryKey();
         entity.addStringProperty("email").columnName("email").notNull();
         entity.addStringProperty("firstName").columnName("first_name");
         entity.addStringProperty("lastName").columnName("last_name");
-        entity.addLongProperty("lastUpdate").columnName("last_update");
-        entity.addLongProperty("dataCreate").columnName("data_create");
+        entity.addStringProperty("lastUpdate").columnName("last_update");
+        entity.addStringProperty("dataCreate").columnName("data_create");
         entity.addStringProperty("zipCode").columnName("zip_code");
         entity.addStringProperty("phoneNum").columnName("phone_number");
         entity.addStringProperty("profile").columnName("profile");
         entity.addIntProperty("focusID").columnName("focus_id");
         entity.addIntProperty("focusPID").columnName("focus_pid");
+        entity.addStringProperty("registrationId").columnName("registrationId");
+
+        //kids info table
+        Entity kids = schema.addEntity("DB_Kids");
+        kids.setTableName("t_kids");
+        kids.setClassNameDao("KidsDao");
+        kids.addIntProperty("kidsId").columnName("kids_id").notNull().primaryKey();
+        kids.addStringProperty("name").columnName("name");
+        kids.addStringProperty("dateCreated").columnName("dateCreated");
+        kids.addStringProperty("macId").columnName("macId");
+        kids.addStringProperty("firmwareVersion").columnName("firmwareVersion");
+        kids.addStringProperty("profile").columnName("profile");
+        kids.addStringProperty("state").columnName("state");
+
+
+        //建立user表与kids表一对多关系
+        Property property = kids.addIntProperty("parentId").columnName("parent_id").getProperty();
+        kids.addToOne(entity,property);
+
+        entity.addToMany(kids,property).setName("kidsList");
 
         return entity;
     }

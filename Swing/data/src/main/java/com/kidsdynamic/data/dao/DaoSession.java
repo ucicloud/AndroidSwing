@@ -10,12 +10,14 @@ import de.greenrobot.dao.identityscope.IdentityScopeType;
 import de.greenrobot.dao.internal.DaoConfig;
 
 import com.kidsdynamic.data.dao.DB_User;
+import com.kidsdynamic.data.dao.DB_Kids;
 import com.kidsdynamic.data.dao.DB_CloudActivity;
 import com.kidsdynamic.data.dao.DB_Event;
 import com.kidsdynamic.data.dao.DB_Todo;
 import com.kidsdynamic.data.dao.DB_RawActivity;
 
 import com.kidsdynamic.data.dao.UserDao;
+import com.kidsdynamic.data.dao.KidsDao;
 import com.kidsdynamic.data.dao.CloudActivityDao;
 import com.kidsdynamic.data.dao.EventDao;
 import com.kidsdynamic.data.dao.TodoDao;
@@ -31,12 +33,14 @@ import com.kidsdynamic.data.dao.RawActivityDao;
 public class DaoSession extends AbstractDaoSession {
 
     private final DaoConfig userDaoConfig;
+    private final DaoConfig kidsDaoConfig;
     private final DaoConfig cloudActivityDaoConfig;
     private final DaoConfig eventDaoConfig;
     private final DaoConfig todoDaoConfig;
     private final DaoConfig rawActivityDaoConfig;
 
     private final UserDao userDao;
+    private final KidsDao kidsDao;
     private final CloudActivityDao cloudActivityDao;
     private final EventDao eventDao;
     private final TodoDao todoDao;
@@ -48,6 +52,9 @@ public class DaoSession extends AbstractDaoSession {
 
         userDaoConfig = daoConfigMap.get(UserDao.class).clone();
         userDaoConfig.initIdentityScope(type);
+
+        kidsDaoConfig = daoConfigMap.get(KidsDao.class).clone();
+        kidsDaoConfig.initIdentityScope(type);
 
         cloudActivityDaoConfig = daoConfigMap.get(CloudActivityDao.class).clone();
         cloudActivityDaoConfig.initIdentityScope(type);
@@ -62,12 +69,14 @@ public class DaoSession extends AbstractDaoSession {
         rawActivityDaoConfig.initIdentityScope(type);
 
         userDao = new UserDao(userDaoConfig, this);
+        kidsDao = new KidsDao(kidsDaoConfig, this);
         cloudActivityDao = new CloudActivityDao(cloudActivityDaoConfig, this);
         eventDao = new EventDao(eventDaoConfig, this);
         todoDao = new TodoDao(todoDaoConfig, this);
         rawActivityDao = new RawActivityDao(rawActivityDaoConfig, this);
 
         registerDao(DB_User.class, userDao);
+        registerDao(DB_Kids.class, kidsDao);
         registerDao(DB_CloudActivity.class, cloudActivityDao);
         registerDao(DB_Event.class, eventDao);
         registerDao(DB_Todo.class, todoDao);
@@ -76,6 +85,7 @@ public class DaoSession extends AbstractDaoSession {
     
     public void clear() {
         userDaoConfig.getIdentityScope().clear();
+        kidsDaoConfig.getIdentityScope().clear();
         cloudActivityDaoConfig.getIdentityScope().clear();
         eventDaoConfig.getIdentityScope().clear();
         todoDaoConfig.getIdentityScope().clear();
@@ -84,6 +94,10 @@ public class DaoSession extends AbstractDaoSession {
 
     public UserDao getUserDao() {
         return userDao;
+    }
+
+    public KidsDao getKidsDao() {
+        return kidsDao;
     }
 
     public CloudActivityDao getCloudActivityDao() {
