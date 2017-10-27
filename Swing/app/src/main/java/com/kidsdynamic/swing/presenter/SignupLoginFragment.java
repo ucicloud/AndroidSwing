@@ -28,12 +28,8 @@ import com.kidsdynamic.data.net.user.UserApiNoNeedToken;
 import com.kidsdynamic.data.net.user.model.LoginEntity;
 import com.kidsdynamic.data.net.user.model.LoginSuccessRep;
 import com.kidsdynamic.data.net.user.model.UserProfileRep;
-import com.kidsdynamic.data.persistent.DbUtil;
-import com.kidsdynamic.data.repository.disk.KidsDataStore;
-import com.kidsdynamic.data.repository.disk.UserDataStore;
 import com.kidsdynamic.data.utils.LogUtil2;
 import com.kidsdynamic.swing.BaseFragment;
-import com.kidsdynamic.swing.MainActivity;
 import com.kidsdynamic.swing.R;
 import com.kidsdynamic.swing.domain.EventManager;
 import com.kidsdynamic.swing.domain.LoginManager;
@@ -44,9 +40,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import de.greenrobot.dao.DbUtils;
 import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
@@ -291,12 +285,12 @@ public class SignupLoginFragment extends BaseFragment {
                 if(response.code() == 200){//获取成功
                     LogUtil2.getUtils().d("onResponse: " + response.body());
 
-                    //todo dismiss dialog save to db
                     Log.w("login"," sync data ok, show next UI");
                     new EventManager().saveEventForLogin(getContext(),response.body());
 
                     //todo 登陆成功后，进入到主界面
-                    startActivity(new Intent(getActivity(),MainActivity.class));
+                    finishLoadingDialog();
+                    loginFlowOK();
                 }else{
                     LogUtil2.getUtils().d("login error, code: " + response.code());
 
@@ -314,6 +308,14 @@ public class SignupLoginFragment extends BaseFragment {
                 showErrInfo(R.string.signup_profile_login_failed);
             }
         });
+    }
+
+    private void loginFlowOK() {
+        getActivity().finish();
+        startActivity(new Intent(getActivity(),MainFrameActivity.class));
+
+        // TODO: 2017/10/27 测试阶段，暂不记录状态
+//        PreferencesUtil.getInstance(getContext()).setPreferenceBooleanValue(ConfigUtil.login_state, true);
     }
 
 

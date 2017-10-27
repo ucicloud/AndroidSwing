@@ -7,9 +7,8 @@ import android.view.View;
 
 import com.kidsdynamic.swing.R;
 
+
 /**
- * ViewSponge
- * <p>
  * Created by 03543 on 2016/12/31.
  */
 

@@ -11,10 +11,10 @@ import com.kidsdynamic.data.persistent.PreferencesUtil;
  *
  */
 public class ConfigUtil {
-	private static final String lable_user_name = "userName";
-	private static final String label_notify_getreqward = "isNotifyReward";
-	private static final String value_notify_getreqward_nomore = "nomore";
-	private static final String login_state = "login";
+	public static final String lable_user_name = "userName";
+	public static final String label_notify_getreqward = "isNotifyReward";
+	public static final String value_notify_getreqward_nomore = "nomore";
+	public static final String login_state = "login";
 
 
 	/**

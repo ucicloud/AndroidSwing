@@ -14,7 +14,7 @@ import com.kidsdynamic.data.dao.DB_User;
 /** 
  * DAO for table "t_user".
 */
-public class UserDao extends AbstractDao<DB_User, Integer> {
+public class UserDao extends AbstractDao<DB_User, Long> {
 
     public static final String TABLENAME = "t_user";
 
@@ -23,7 +23,7 @@ public class UserDao extends AbstractDao<DB_User, Integer> {
      * Can be used for QueryBuilder and for referencing column names.
     */
     public static class Properties {
-        public final static Property UserId = new Property(0, int.class, "userId", true, "users_id");
+        public final static Property UserId = new Property(0, long.class, "userId", true, "users_id");
         public final static Property Email = new Property(1, String.class, "email", false, "email");
         public final static Property FirstName = new Property(2, String.class, "firstName", false, "first_name");
         public final static Property LastName = new Property(3, String.class, "lastName", false, "last_name");
@@ -139,15 +139,15 @@ public class UserDao extends AbstractDao<DB_User, Integer> {
 
     /** @inheritdoc */
     @Override
-    public Integer readKey(Cursor cursor, int offset) {
-        return cursor.getInt(offset + 0);
+    public Long readKey(Cursor cursor, int offset) {
+        return cursor.getLong(offset + 0);
     }    
 
     /** @inheritdoc */
     @Override
     public DB_User readEntity(Cursor cursor, int offset) {
         DB_User entity = new DB_User( //
-            cursor.getInt(offset + 0), // userId
+            cursor.getLong(offset + 0), // userId
             cursor.getString(offset + 1), // email
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // firstName
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // lastName
@@ -166,7 +166,7 @@ public class UserDao extends AbstractDao<DB_User, Integer> {
     /** @inheritdoc */
     @Override
     public void readEntity(Cursor cursor, DB_User entity, int offset) {
-        entity.setUserId(cursor.getInt(offset + 0));
+        entity.setUserId(cursor.getLong(offset + 0));
         entity.setEmail(cursor.getString(offset + 1));
         entity.setFirstName(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setLastName(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
@@ -182,13 +182,14 @@ public class UserDao extends AbstractDao<DB_User, Integer> {
     
     /** @inheritdoc */
     @Override
-    protected Integer updateKeyAfterInsert(DB_User entity, long rowId) {
-        return entity.getUserId();
+    protected Long updateKeyAfterInsert(DB_User entity, long rowId) {
+        entity.setUserId(rowId);
+        return rowId;
     }
     
     /** @inheritdoc */
     @Override
-    public Integer getKey(DB_User entity) {
+    public Long getKey(DB_User entity) {
         if(entity != null) {
             return entity.getUserId();
         } else {
