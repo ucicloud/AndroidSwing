@@ -2,10 +2,12 @@ package com.kidsdynamic.swing.presenter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,6 +37,7 @@ import com.kidsdynamic.swing.MainActivity;
 import com.kidsdynamic.swing.R;
 import com.kidsdynamic.swing.domain.EventManager;
 import com.kidsdynamic.swing.domain.LoginManager;
+import com.kidsdynamic.swing.view.ViewUtils;
 
 import java.util.List;
 
@@ -314,4 +317,50 @@ public class SignupLoginFragment extends BaseFragment {
     }
 
 
+    @OnClick(R.id.signup_login_reset_pwd)
+    public void resetPsw(){
+        new AlertDialog.Builder(getContext())
+                .setTitle(R.string.profile_option_password)
+                .setMessage(R.string.profile_reset_password_confirmation)
+                .setNegativeButton(R.string.profile_request_to_cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                })
+                .setPositiveButton(R.string.watch_have_yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        //调用接口重置
+                        dialogInterface.dismiss();
+                        exeResetPswFlow();
+                    }
+                }).show();
+
+    }
+
+    private void exeResetPswFlow() {
+        final UserApiNeedToken userApiNeedToken = ApiGen.getInstance(getActivity().getApplicationContext()).
+                generateApi(UserApiNeedToken.class,true);
+
+        userApiNeedToken.sendResetPasswordEmail().enqueue(new BaseRetrofitCallback<Object>() {
+            @Override
+            public void onResponse(Call<Object> call, Response<Object> response) {
+                super.onResponse(call,response);
+                int code = response.code();
+                if(code == 200){
+                    ViewUtils.showMsgDialog(getActivity(),
+                            getString(R.string.profile_reset_password_note,et_email.getText().toString()));
+                }else {
+                    Toast.makeText(getContext(),R.string.error_api_unknown,Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Object> call, Throwable t) {
+                super.onFailure(call,t);
+                Toast.makeText(getContext(),R.string.net_err,Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 }

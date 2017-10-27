@@ -388,4 +388,8 @@
     <string name="dialog_sync_header">Sync Data</string>
     <string name="dialog_sync_skip_button">Skip</string>
     <string name="dialog_sync_sync_button">接続</string>
+
+    <!--new string 20171027-->
+    <string name="net_err">Net Error</string>
+    <string name="ok_str">OK</string>
 </resources>

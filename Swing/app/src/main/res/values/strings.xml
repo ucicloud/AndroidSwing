@@ -396,4 +396,8 @@
     <string name="dialog_sync_content">Please sync after editing event</string>
     <string name="dialog_sync_sync_button">Sync</string>
     <string name="dialog_sync_skip_button">Skip</string>
+
+    <!--new string 20171027-->
+    <string name="net_err">Net Error</string>
+    <string name="ok_str">OK</string>
 </resources>
