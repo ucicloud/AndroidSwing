@@ -17,7 +17,7 @@ public class UserMaker implements Maker {
         entity.setClassNameDao("UserDao");
 
 //        entity.addIdProperty().primaryKey().autoincrement().unique();
-        entity.addIntProperty("userId").columnName("users_id").notNull().primaryKey();
+        entity.addLongProperty("userId").columnName("users_id").notNull().primaryKey();
         entity.addStringProperty("email").columnName("email").notNull();
         entity.addStringProperty("firstName").columnName("first_name");
         entity.addStringProperty("lastName").columnName("last_name");
@@ -34,7 +34,7 @@ public class UserMaker implements Maker {
         Entity kids = schema.addEntity("DB_Kids");
         kids.setTableName("t_kids");
         kids.setClassNameDao("KidsDao");
-        kids.addIntProperty("kidsId").columnName("kids_id").notNull().primaryKey();
+        kids.addLongProperty("kidsId").columnName("kids_id").notNull().primaryKey();
         kids.addStringProperty("name").columnName("name");
         kids.addStringProperty("dateCreated").columnName("dateCreated");
         kids.addStringProperty("macId").columnName("macId");
@@ -44,7 +44,7 @@ public class UserMaker implements Maker {
 
 
         //建立user表与kids表一对多关系
-        Property property = kids.addIntProperty("parentId").columnName("parent_id").getProperty();
+        Property property = kids.addLongProperty("parentId").columnName("parent_id").getProperty();
         kids.addToOne(entity,property);
 
         entity.addToMany(kids,property).setName("kidsList");

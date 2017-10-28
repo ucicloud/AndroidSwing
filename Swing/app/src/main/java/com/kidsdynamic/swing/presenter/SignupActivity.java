@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 
-import com.kidsdynamic.swing.MainActivity;
 import com.kidsdynamic.swing.R;
 import com.kidsdynamic.swing.utils.ConfigUtil;
 import com.yy.base.BaseFragmentActivity;
@@ -37,7 +36,7 @@ public class SignupActivity extends BaseFragmentActivity {
         // TODO: 2017/10/26 MainActivity 需更新成正式的主界面类名
         //如果登录成功，则跳转到主界面
         //关闭当前界面，进入主界面
-        startActivity(new Intent(this,MainActivity.class));
+        startActivity(new Intent(this,MainFrameActivity.class));
 
         this.finish();
     }

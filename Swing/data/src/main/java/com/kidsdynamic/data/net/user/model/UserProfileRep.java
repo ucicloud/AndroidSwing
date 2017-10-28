@@ -45,7 +45,7 @@ public class UserProfileRep {
          * profile :
          */
 
-        private int id;
+        private long id;
         private String email;
         private String name;
         private String lastUpdate;
@@ -54,11 +54,11 @@ public class UserProfileRep {
         private String phoneNumber;
         private String profile;
 
-        public int getId() {
+        public long getId() {
             return id;
         }
 
-        public void setId(int id) {
+        public void setId(long id) {
             this.id = id;
         }
 

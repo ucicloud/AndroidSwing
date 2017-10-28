@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/content"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:clipToPadding="false"
+    android:fitsSystemWindows="true"
+    android:background="@color/color_blue_sky">
+
+    <FrameLayout
+        android:id="@+id/fragment_container"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginBottom="@dimen/ds110"
+        android:background="@color/transparent" />
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1.0px"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="@dimen/ds110"
+        android:background="#ffcccccc" />
+
+    <LinearLayout
+        android:id="@+id/bottom_tab"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/ds110"
+        android:layout_gravity="bottom"
+        android:background="@color/color_white"
+        android:baselineAligned="false"
+        android:minHeight="@dimen/ds110"
+        android:paddingLeft="@dimen/ds20"
+        android:paddingRight="@dimen/ds20">
+
+
+        <ImageView
+            android:id="@+id/main_console_device"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:background="@drawable/control_button_background"
+            android:gravity="center"
+            android:src="@drawable/control_button_device" />
+
+        <ImageView
+            android:id="@+id/main_console_calendar"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:background="@drawable/control_button_background"
+            android:gravity="center"
+            android:src="@drawable/control_button_calendar" />
+
+        <ImageView
+            android:id="@+id/main_console_dashboard"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:background="@drawable/control_button_background"
+            android:gravity="center"
+            android:src="@drawable/control_button_dashboard" />
+
+        <com.kidsdynamic.swing.view.ViewCircle
+            android:id="@+id/main_control_profile"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:padding="10dp"
+            app:strokeColorActive="@color/color_orange_main"
+            app:strokeColorNormal="@color/color_gray_main"
+            app:strokeWidth="2dp"/>
+    </LinearLayout>
+
+</FrameLayout>

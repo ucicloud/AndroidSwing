@@ -29,4 +29,34 @@
         <attr name="footerDividersEnabled" format="boolean" />
         <attr name="headerDividersEnabled" format="boolean" />
     </declare-styleable>
+
+    <declare-styleable name="ViewCalendar">
+        <attr name="android:textSize" />
+        <attr name="android:textStyle" />
+        <attr name="android:textColor" />
+        <attr name="todayColor" format="color" />
+        <attr name="focusColor" format="color" />
+        <attr name="focusBackgroundColor" format="color" />
+        <attr name="exceedColor" format="color" />
+    </declare-styleable>
+
+    <declare-styleable name="ViewCalendarSelector">
+        <attr name="android:textSize" />
+        <attr name="android:textStyle" />
+        <attr name="android:textColor" />
+        <attr name="calendarMode" format="enum">
+            <enum name="year" value="0" />
+            <enum name="month" value="1" />
+            <enum name="week" value="2" />
+            <enum name="day" value="3" />
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="ViewCalendarDaily">
+        <attr name="android:layout_gravity" />
+        <attr name="start_hour" format="integer" />
+        <attr name="start_minute" format="integer" />
+        <attr name="end_hour" format="integer" />
+        <attr name="end_minute" format="integer" />
+    </declare-styleable>
 </resources>

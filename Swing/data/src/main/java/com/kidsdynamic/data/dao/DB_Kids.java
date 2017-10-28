@@ -9,14 +9,14 @@ import de.greenrobot.dao.DaoException;
  */
 public class DB_Kids {
 
-    private int kidsId;
+    private long kidsId;
     private String name;
     private String dateCreated;
     private String macId;
     private String firmwareVersion;
     private String profile;
     private String state;
-    private Integer parentId;
+    private Long parentId;
 
     /** Used to resolve relations */
     private transient DaoSession daoSession;
@@ -25,17 +25,17 @@ public class DB_Kids {
     private transient KidsDao myDao;
 
     private DB_User dB_User;
-    private Integer dB_User__resolvedKey;
+    private Long dB_User__resolvedKey;
 
 
     public DB_Kids() {
     }
 
-    public DB_Kids(int kidsId) {
+    public DB_Kids(long kidsId) {
         this.kidsId = kidsId;
     }
 
-    public DB_Kids(int kidsId, String name, String dateCreated, String macId, String firmwareVersion, String profile, String state, Integer parentId) {
+    public DB_Kids(long kidsId, String name, String dateCreated, String macId, String firmwareVersion, String profile, String state, Long parentId) {
         this.kidsId = kidsId;
         this.name = name;
         this.dateCreated = dateCreated;
@@ -52,11 +52,11 @@ public class DB_Kids {
         myDao = daoSession != null ? daoSession.getKidsDao() : null;
     }
 
-    public int getKidsId() {
+    public long getKidsId() {
         return kidsId;
     }
 
-    public void setKidsId(int kidsId) {
+    public void setKidsId(long kidsId) {
         this.kidsId = kidsId;
     }
 
@@ -108,17 +108,17 @@ public class DB_Kids {
         this.state = state;
     }
 
-    public Integer getParentId() {
+    public Long getParentId() {
         return parentId;
     }
 
-    public void setParentId(Integer parentId) {
+    public void setParentId(Long parentId) {
         this.parentId = parentId;
     }
 
     /** To-one relationship, resolved on first access. */
     public DB_User getDB_User() {
-        Integer __key = this.parentId;
+        Long __key = this.parentId;
         if (dB_User__resolvedKey == null || !dB_User__resolvedKey.equals(__key)) {
             if (daoSession == null) {
                 throw new DaoException("Entity is detached from DAO context");

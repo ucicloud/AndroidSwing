@@ -19,7 +19,7 @@ import com.kidsdynamic.data.dao.DB_Kids;
 /** 
  * DAO for table "t_kids".
 */
-public class KidsDao extends AbstractDao<DB_Kids, Integer> {
+public class KidsDao extends AbstractDao<DB_Kids, Long> {
 
     public static final String TABLENAME = "t_kids";
 
@@ -28,14 +28,14 @@ public class KidsDao extends AbstractDao<DB_Kids, Integer> {
      * Can be used for QueryBuilder and for referencing column names.
     */
     public static class Properties {
-        public final static Property KidsId = new Property(0, int.class, "kidsId", true, "kids_id");
+        public final static Property KidsId = new Property(0, long.class, "kidsId", true, "kids_id");
         public final static Property Name = new Property(1, String.class, "name", false, "name");
         public final static Property DateCreated = new Property(2, String.class, "dateCreated", false, "dateCreated");
         public final static Property MacId = new Property(3, String.class, "macId", false, "macId");
         public final static Property FirmwareVersion = new Property(4, String.class, "firmwareVersion", false, "firmwareVersion");
         public final static Property Profile = new Property(5, String.class, "profile", false, "profile");
         public final static Property State = new Property(6, String.class, "state", false, "state");
-        public final static Property ParentId = new Property(7, Integer.class, "parentId", false, "parent_id");
+        public final static Property ParentId = new Property(7, Long.class, "parentId", false, "parent_id");
     };
 
     private DaoSession daoSession;
@@ -107,7 +107,7 @@ public class KidsDao extends AbstractDao<DB_Kids, Integer> {
             stmt.bindString(7, state);
         }
  
-        Integer parentId = entity.getParentId();
+        Long parentId = entity.getParentId();
         if (parentId != null) {
             stmt.bindLong(8, parentId);
         }
@@ -121,22 +121,22 @@ public class KidsDao extends AbstractDao<DB_Kids, Integer> {
 
     /** @inheritdoc */
     @Override
-    public Integer readKey(Cursor cursor, int offset) {
-        return cursor.getInt(offset + 0);
+    public Long readKey(Cursor cursor, int offset) {
+        return cursor.getLong(offset + 0);
     }    
 
     /** @inheritdoc */
     @Override
     public DB_Kids readEntity(Cursor cursor, int offset) {
         DB_Kids entity = new DB_Kids( //
-            cursor.getInt(offset + 0), // kidsId
+            cursor.getLong(offset + 0), // kidsId
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // name
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // dateCreated
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // macId
             cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // firmwareVersion
             cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // profile
             cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // state
-            cursor.isNull(offset + 7) ? null : cursor.getInt(offset + 7) // parentId
+            cursor.isNull(offset + 7) ? null : cursor.getLong(offset + 7) // parentId
         );
         return entity;
     }
@@ -144,25 +144,26 @@ public class KidsDao extends AbstractDao<DB_Kids, Integer> {
     /** @inheritdoc */
     @Override
     public void readEntity(Cursor cursor, DB_Kids entity, int offset) {
-        entity.setKidsId(cursor.getInt(offset + 0));
+        entity.setKidsId(cursor.getLong(offset + 0));
         entity.setName(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
         entity.setDateCreated(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setMacId(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
         entity.setFirmwareVersion(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
         entity.setProfile(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
         entity.setState(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
-        entity.setParentId(cursor.isNull(offset + 7) ? null : cursor.getInt(offset + 7));
+        entity.setParentId(cursor.isNull(offset + 7) ? null : cursor.getLong(offset + 7));
      }
     
     /** @inheritdoc */
     @Override
-    protected Integer updateKeyAfterInsert(DB_Kids entity, long rowId) {
-        return entity.getKidsId();
+    protected Long updateKeyAfterInsert(DB_Kids entity, long rowId) {
+        entity.setKidsId(rowId);
+        return rowId;
     }
     
     /** @inheritdoc */
     @Override
-    public Integer getKey(DB_Kids entity) {
+    public Long getKey(DB_Kids entity) {
         if(entity != null) {
             return entity.getKidsId();
         } else {
@@ -177,7 +178,7 @@ public class KidsDao extends AbstractDao<DB_Kids, Integer> {
     }
     
     /** Internal query to resolve the "kidsList" to-many relationship of DB_User. */
-    public List<DB_Kids> _queryDB_User_KidsList(Integer parentId) {
+    public List<DB_Kids> _queryDB_User_KidsList(Long parentId) {
         synchronized (this) {
             if (dB_User_KidsListQuery == null) {
                 QueryBuilder<DB_Kids> queryBuilder = queryBuilder();

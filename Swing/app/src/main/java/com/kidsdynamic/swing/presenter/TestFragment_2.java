@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.style.LineBackgroundSpan;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,12 +21,14 @@ import com.alamkanak.weekview.WeekView;
 import com.alamkanak.weekview.WeekViewEvent;
 import com.kidsdynamic.swing.BaseFragment;
 import com.kidsdynamic.swing.R;
+import com.kidsdynamic.swing.domain.CalendarManager;
 import com.kidsdynamic.swing.view.calendar.MultiEventDecorator;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.CalendarMode;
 import com.prolificinteractive.materialcalendarview.DayViewDecorator;
 import com.prolificinteractive.materialcalendarview.DayViewFacade;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
+import com.prolificinteractive.materialcalendarview.format.TitleFormatter;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -148,13 +151,46 @@ public class TestFragment_2 extends BaseFragment {
 
     @OnClick(R.id.btn_change_style)
     public void testChangeStyle(){
-        materialCalendarView.state().edit().setCalendarDisplayMode(CalendarMode.MONTHS)
-                .setFirstDayOfWeek(Calendar.MONDAY).commit();
+        /*materialCalendarView.state().edit().setCalendarDisplayMode(CalendarMode.MONTHS)
+                .setFirstDayOfWeek(Calendar.MONDAY).commit();*/
+
+        getFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container,new FragmentDevice())
+                .commit();
     }
 
     private void initView(){
         materialCalendarView.state().edit().setCalendarDisplayMode(CalendarMode.WEEKS)
                 .setFirstDayOfWeek(Calendar.MONDAY).commit();
+
+        materialCalendarView.setWeekDayLabels(new String[]{"S","M","T","W","T","F","S"});
+        materialCalendarView.setHeaderTextAppearance(R.style.calendar_header_textappearance);
+       /* materialCalendarView.setTitleFormatter(new TitleFormatter() {
+            @Override
+            public CharSequence format(CalendarDay day) {
+                StringBuilder stringBuilder = new StringBuilder();
+                int years = day.getYear();
+                int monthIndex = day.getMonth();
+                int date = day.getDay() + 1;
+
+                return stringBuilder.append(CalendarManager.MonthLabelMap.get(monthIndex))
+                        .append(" ").append(date).append(", ").append(years);
+            }
+        });*/
+
+        materialCalendarView.setSelectedDate(CalendarDay.today());
+        materialCalendarView.setSelectionMode(MaterialCalendarView.SELECTION_MODE_NONE);
+        materialCalendarView.addDecorator(new DayViewDecorator() {
+            @Override
+            public boolean shouldDecorate(CalendarDay day) {
+                return false;
+            }
+
+            @Override
+            public void decorate(DayViewFacade view) {
+
+            }
+        });
 
         for(int year = 2010; year <= 2020; year++){
             for(int month = 1; month <= 12; month ++){
@@ -249,6 +285,30 @@ public class TestFragment_2 extends BaseFragment {
             paint1.setStrokeWidth(radius);
 
             canvas.drawCircle((right - left)/2,(bottom-top)/2+4, 8, paint1);*/
+        }
+    }
+
+
+    public class AnnulsSpan2 implements LineBackgroundSpan{
+
+        @Override
+        public void drawBackground(Canvas c, Paint p, int left, int right, int top, int baseline, int bottom, CharSequence text, int start, int end, int lnum) {
+            Paint paint = new Paint();
+
+            paint.setAntiAlias(true);
+            paint.setStyle(Paint.Style.FILL_AND_STROKE);//实心圆
+            int ringWith = dpToPx(1);
+
+            paint.setColor(Color.parseColor("#00bcbe"));
+            paint.setStrokeWidth(ringWith);
+
+            c.drawCircle((right-left)/2,(bottom-top)/2,dpToPx(10),paint);
+        }
+
+        private int dpToPx(int dp) {
+            return (int) TypedValue.applyDimension(
+                    TypedValue.COMPLEX_UNIT_DIP, dp, getResources().getDisplayMetrics()
+            );
         }
     }
 
