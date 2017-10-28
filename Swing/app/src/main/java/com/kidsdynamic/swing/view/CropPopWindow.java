@@ -3,7 +3,6 @@ package com.kidsdynamic.swing.view;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
@@ -13,7 +12,9 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.kidsdynamic.swing.R;
-import com.theartofdev.edmodo.cropper.CropImageView;
+import com.kidsdynamic.swing.utils.GlideHelper;
+
+import java.io.File;
 
 /**
  * CropPopWindow
@@ -23,7 +24,7 @@ import com.theartofdev.edmodo.cropper.CropImageView;
 
 public class CropPopWindow extends PopupWindow {
 
-    private CropImageView cropImageView;
+    private CropImageView mCropImageView;
 
     public CropPopWindow(Context context) {
         super(context);
@@ -34,15 +35,16 @@ public class CropPopWindow extends PopupWindow {
     private void init(final Context context) {
         LayoutInflater inflater = LayoutInflater.from(context);
         final View layout = inflater.inflate(R.layout.crop_pop_window, null);
-        cropImageView = layout.findViewById(R.id.cropImageView);
+        mCropImageView = layout.findViewById(R.id.cropImageView);
+        int color = context.getResources().getColor(R.color.pop_window_background);
+        mCropImageView.setPaintColor(color);
         setContentView(layout);
         setWidth(WindowManager.LayoutParams.MATCH_PARENT);
         setHeight(WindowManager.LayoutParams.MATCH_PARENT);
         setFocusable(true);
         setTouchable(true);
         setOutsideTouchable(true);
-        setBackgroundDrawable(new ColorDrawable(context.getResources().
-                getColor(R.color.pop_window_background)));
+        setBackgroundDrawable(new ColorDrawable(color));
         Animation anim = AnimationUtils.loadAnimation(context, R.anim.push_bottom_in);
         layout.startAnimation(anim);
 
@@ -51,8 +53,8 @@ public class CropPopWindow extends PopupWindow {
         tvSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (null != cropImageView) {
-                    cropImageView.getCroppedImageAsync();
+                if (null != mCropImageView) {
+                    mCropImageView.getCroppedImageAsync();
                 }
             }
         });
@@ -76,16 +78,16 @@ public class CropPopWindow extends PopupWindow {
         });
     }
 
-    public void setCropImageUri(Uri uri) {
-        if (null == cropImageView) {
+    public void setCropImageFile(File file) {
+        if (null == mCropImageView) {
             return;
         }
-        cropImageView.setImageUriAsync(uri);
+        GlideHelper.showSquareImageView(mCropImageView.getContext(), file, mCropImageView);
     }
 
     public void setOnCropImageCompleteListener(CropImageView.OnCropImageCompleteListener listener) {
-        if (null != cropImageView) {
-            cropImageView.setOnCropImageCompleteListener(listener);
+        if (null != mCropImageView) {
+            mCropImageView.setOnCropImageCompleteListener(listener);
         }
     }
 

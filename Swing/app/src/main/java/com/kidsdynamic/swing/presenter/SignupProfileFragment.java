@@ -1,11 +1,14 @@
 package com.kidsdynamic.swing.presenter;
 
 import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,9 +18,9 @@ import android.widget.EditText;
 import com.kidsdynamic.swing.BaseFragment;
 import com.kidsdynamic.swing.R;
 import com.kidsdynamic.swing.view.BottomPopWindow;
+import com.kidsdynamic.swing.view.CropImageView;
 import com.kidsdynamic.swing.view.CropPopWindow;
 import com.kidsdynamic.swing.view.ViewCircle;
-import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.io.File;
 
@@ -136,7 +139,7 @@ public class SignupProfileFragment extends BaseFragment {
         if (null == data) return;
         File file = (File) data.getSerializableExtra(VirtualCameraActivity.FILE);
         if (file != null && file.exists()) {
-            showCropPopWindow(Uri.fromFile(file));
+            showCropPopWindow(file);
         }
     }
 
@@ -157,14 +160,43 @@ public class SignupProfileFragment extends BaseFragment {
         if (data == null) return;
         Uri uri = data.getData();
         if (uri != null) {
-            showCropPopWindow(uri);
+            File file = getRealPathFromUri(uri);
+            showCropPopWindow(file);
         }
     }
 
-    private void showCropPopWindow(Uri uri) {
+    private File getRealPathFromUri(Uri contentUri) {
+        Cursor cursor = null;
+        String[] project = {MediaStore.Images.Media.DATA};
+
+        try {
+            ContentResolver contentResolver = getContext().getContentResolver();
+            if (null == contentResolver) {
+                return null;
+            }
+            cursor = contentResolver.query(contentUri, project, null, null, null);
+            if (cursor != null) {
+                cursor.moveToFirst();
+                int columnIndex = cursor.getColumnIndex(project[0]);
+                String path = cursor.getString(columnIndex);
+                if (!TextUtils.isEmpty(path)) {
+                    return new File(path);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return null;
+    }
+
+    private void showCropPopWindow(File file) {
         final CropPopWindow cropPopWindow = new CropPopWindow(getContext());
         cropPopWindow.showAtLocation(getView(), Gravity.CENTER, 0, 0);
-        cropPopWindow.setCropImageUri(uri);
+        cropPopWindow.setCropImageFile(file);
         cropPopWindow.setOnCropImageCompleteListener(new CropImageView.OnCropImageCompleteListener() {
             @Override
             public void onCropImageComplete(CropImageView view, CropImageView.CropResult result) {
@@ -174,7 +206,7 @@ public class SignupProfileFragment extends BaseFragment {
                 }
                 vc_photo.setStrokeWidth(4.0f);
                 vc_photo.setCrossWidth(0.0f);
-                vc_photo.setBitmap(result.getBitmap());
+                vc_photo.setBitmap(result.bitmap);
             }
         });
     }

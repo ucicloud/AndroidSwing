@@ -1,25 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:paddingBottom="@dimen/base_21"
     android:paddingTop="@dimen/base_30">
 
-    <com.theartofdev.edmodo.cropper.CropImageView
+    <CropImageView
         android:id="@+id/cropImageView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        app:cropAspectRatioX="1"
-        app:cropAspectRatioY="1"
-        app:cropAutoZoomEnabled="false"
-        app:cropBorderCornerThickness="0dp"
-        app:cropBorderLineThickness="0dp"
-        app:cropGuidelines="off"
-        app:cropScaleType="fitCenter"
-        app:cropShape="oval" />
+        android:adjustViewBounds="true" />
 
     <TextView
         android:layout_width="match_parent"
@@ -39,7 +31,7 @@
         android:layout_marginLeft="@dimen/base_56"
         android:layout_marginRight="@dimen/base_56"
         android:layout_marginTop="@dimen/base_18"
-        android:gravity="center_horizontal"
+        android:gravity="center"
         android:paddingBottom="10dp"
         android:paddingTop="10dp"
         android:text="@string/profile_share_save" />
@@ -52,7 +44,7 @@
         android:layout_marginLeft="@dimen/base_56"
         android:layout_marginRight="@dimen/base_56"
         android:layout_marginTop="@dimen/base_18"
-        android:gravity="center_horizontal"
+        android:gravity="center"
         android:paddingBottom="10dp"
         android:paddingTop="10dp"
         android:text="@string/photo_clip_cancel" />
