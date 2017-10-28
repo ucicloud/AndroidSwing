@@ -42,8 +42,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:mcv_showOtherDates="all"
-            app:mcv_selectionColor="#00F"
-            android:visibility="gone"/>
+            android:visibility="visible"/>
 
         <com.alamkanak.weekview.WeekView
             android:id="@+id/weekView"
@@ -60,7 +59,8 @@
             app:headerRowBackgroundColor="#ffefefef"
             app:dayBackgroundColor="#05000000"
             app:todayBackgroundColor="#1848adff"
-            app:headerColumnBackground="#ffffffff"/>
+            app:headerColumnBackground="#ffffffff"
+            android:visibility="gone"/>
 
     </LinearLayout>
     </ScrollView>

@@ -113,4 +113,9 @@
         <item name="android:textSize">18sp</item>
         <item name="android:textStyle">normal</item>
     </style>
+
+    <style name="calendar_header_textappearance">
+        <item name="android:textColor">@color/color_orange_main</item>
+        <item name="android:textStyle">bold</item>
+    </style>
 </resources>

@@ -1,16 +1,32 @@
 package com.kidsdynamic.swing.domain;
 
+import android.util.SparseArray;
+
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * <br>author: wzg@xdja.com <br/>
  * date:   2017/10/24 11:06 <br/>
  */
 
 public class CalendarManager {
+    public static SparseArray<String> MonthLabelMap = new SparseArray<>(12);
+    static {
+        MonthLabelMap.put(0,"Jan");
+        MonthLabelMap.put(1,"Feb");
+        MonthLabelMap.put(2,"Mar");
+        MonthLabelMap.put(3,"Apr");
+        MonthLabelMap.put(4,"May");
+        MonthLabelMap.put(5,"Jun");
+        MonthLabelMap.put(6,"Jul");
+        MonthLabelMap.put(7,"Aug");
+        MonthLabelMap.put(8,"Sep");
+        MonthLabelMap.put(9,"Oct");
+        MonthLabelMap.put(10,"Nov");
+        MonthLabelMap.put(11,"Dec");
+    }
 
     /**
      * 获取指定日期中前四个event的颜色列表
@@ -46,4 +62,5 @@ public class CalendarManager {
 
         return colors;
     }
+
 }
