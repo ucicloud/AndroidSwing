@@ -26,11 +26,11 @@
         <activity
             android:name=".presenter.SignupActivity"
             android:screenOrientation="portrait">
-            <intent-filter>
+            <!--<intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            </intent-filter>-->
         </activity>
         <activity android:name=".presenter.ActivityTest" />
         <activity
@@ -51,6 +51,17 @@
 
         <activity android:name=".presenter.MainFrameActivity"
             android:screenOrientation="portrait"/>
+
+        <activity android:name="com.kidsdynamic.swing.bletest.SwingLogActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name="com.kidsdynamic.swing.bletest.SwingScanActivity"
+            android:screenOrientation="portrait" >
+            <!--<intent-filter>
+                    <action android:name="android.intent.action.MAIN" />
+
+                    <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>-->
+        </activity>
     </application>
 
 </manifest>
