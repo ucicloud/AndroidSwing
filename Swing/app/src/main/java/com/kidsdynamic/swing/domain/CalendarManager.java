@@ -2,9 +2,12 @@ package com.kidsdynamic.swing.domain;
 
 import android.util.SparseArray;
 
+import com.kidsdynamic.swing.model.WatchEvent;
+import com.kidsdynamic.swing.model.WatchTodo;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -61,6 +64,53 @@ public class CalendarManager {
 
 
         return colors;
+    }
+
+    public static List<WatchEvent> getEventList(long start, long end){
+
+        List<WatchEvent> list = new ArrayList<>();
+            list.add(new WatchEvent(0, 452, "Name",
+                    2017, 9, 28, 8, 30, 2017, 9, 28, 9, 10, WatchEvent.ColorList[0],
+                    "Deacription 1234567890 abcdefghijklmnopqrstuvwxyz", WatchEvent.AlarmList[0].mId, WatchEvent.REPEAT_NEVER));
+            list.get(list.size() - 1).mKids = Arrays.asList(8);
+            list.get(list.size() - 1).mTodoList = Arrays.asList(
+                    new WatchTodo(1, 452, 0, "1 Todo todo todo todo", WatchTodo.STATUS_DONE),
+                    new WatchTodo(2, 452, 0, "2 Todo todo todo todo", WatchTodo.STATUS_PENDING)
+            );
+
+            list.add(new WatchEvent(0, 452, "Name",
+                    2017, 9, 27, 10, 0, 2017, 9, 27, 10, 50, WatchEvent.ColorList[1],
+                    "Deacription 1234567890 abcdefghijklmnopqrstuvwxyz", WatchEvent.AlarmList[0].mId, WatchEvent.REPEAT_NEVER));
+            list.get(list.size() - 1).mKids = Arrays.asList(8);
+
+            list.add(new WatchEvent(0, 452, "Name",
+                    2017, 9, 27, 8, 30, 2017, 9, 27, 11, 30, WatchEvent.ColorList[2],
+                    "Deacription 1234567890 abcdefghijklmnopqrstuvwxyz", WatchEvent.AlarmList[0].mId, WatchEvent.REPEAT_NEVER));
+            list.get(list.size() - 1).mKids = Arrays.asList(8);
+
+            //26 号
+            list.add(new WatchEvent(0, 452, "Name",
+                    2017, 9, 26, 10, 30, 2017, 9, 26, 11, 10, WatchEvent.ColorList[3],
+                    "Deacription 1234567890 abcdefghijklmnopqrstuvwxyz", WatchEvent.AlarmList[0].mId, WatchEvent.REPEAT_NEVER));
+            list.get(list.size() - 1).mKids = Arrays.asList(8);
+
+        list.add(new WatchEvent(0, 452, "Name",
+                2017, 9, 26, 10, 0, 2017, 9, 26, 10, 50, WatchEvent.ColorList[1],
+                "Deacription 1234567890 abcdefghijklmnopqrstuvwxyz", WatchEvent.AlarmList[0].mId, WatchEvent.REPEAT_NEVER));
+        list.get(list.size() - 1).mKids = Arrays.asList(8);
+
+        list.add(new WatchEvent(0, 452, "Name",
+                2017, 9, 26, 8, 30, 2017, 9, 26, 11, 30, WatchEvent.ColorList[2],
+                "Deacription 1234567890 abcdefghijklmnopqrstuvwxyz", WatchEvent.AlarmList[0].mId, WatchEvent.REPEAT_NEVER));
+        list.get(list.size() - 1).mKids = Arrays.asList(8);
+
+        list.add(new WatchEvent(0, 452, "Name",
+                2017, 9, 26, 9, 30, 2017, 9, 26, 11, 30, WatchEvent.ColorList[2],
+                "Deacription 1234567890 abcdefghijklmnopqrstuvwxyz", WatchEvent.AlarmList[0].mId, WatchEvent.REPEAT_NEVER));
+        list.get(list.size() - 1).mKids = Arrays.asList(8);
+
+
+            return list;
     }
 
 }

@@ -28,12 +28,15 @@ import com.kidsdynamic.data.net.user.UserApiNoNeedToken;
 import com.kidsdynamic.data.net.user.model.LoginEntity;
 import com.kidsdynamic.data.net.user.model.LoginSuccessRep;
 import com.kidsdynamic.data.net.user.model.UserProfileRep;
+import com.kidsdynamic.data.persistent.PreferencesUtil;
 import com.kidsdynamic.data.utils.LogUtil2;
 import com.kidsdynamic.swing.BaseFragment;
 import com.kidsdynamic.swing.R;
 import com.kidsdynamic.swing.domain.EventManager;
 import com.kidsdynamic.swing.domain.LoginManager;
+import com.kidsdynamic.swing.utils.ConfigUtil;
 import com.kidsdynamic.swing.view.ViewUtils;
+import com.yy.base.utils.Functions;
 
 import java.util.List;
 
@@ -80,8 +83,11 @@ public class SignupLoginFragment extends BaseFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        et_email.setText("123@qq.com");
-        et_password.setText("123456");
+//        et_email.setText("123@qq.com");
+//        et_password.setText("123456");
+
+        et_email.setText("lwz3@swing.com");
+        et_password.setText("1");
     }
 
     @OnClick(R.id.ib_back)
@@ -98,7 +104,7 @@ public class SignupLoginFragment extends BaseFragment {
 
         String email = et_email.getText().toString().trim();
         String password = et_password.getText().toString().trim();
-        if (ObjectUtils.isStringEmpty(email)) {
+        if (!Functions.isValidEmail(email)) {
             showErrInfo(R.string.error_api_unknown);
             return;
         }
@@ -315,7 +321,7 @@ public class SignupLoginFragment extends BaseFragment {
         startActivity(new Intent(getActivity(),MainFrameActivity.class));
 
         // TODO: 2017/10/27 测试阶段，暂不记录状态
-//        PreferencesUtil.getInstance(getContext()).setPreferenceBooleanValue(ConfigUtil.login_state, true);
+        PreferencesUtil.getInstance(getContext()).setPreferenceBooleanValue(ConfigUtil.login_state, true);
     }
 
 

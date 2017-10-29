@@ -298,11 +298,11 @@ public class WatchEvent implements Serializable {
         return color;
     }
 
-    final static int[] ColorList = new int[]{//FF7230
+    public final static int[] ColorList = new int[]{//FF7230
             0xFFFAD13E, 0xFF7572C1, 0xFF00C4B3, 0xFFF54A7E, 0xFFFF7230, 0xFF9A989A};
 
     static public class Alarm {
-        int mId;
+        public int mId;
         int mName;
         int mResource;
 
@@ -314,7 +314,7 @@ public class WatchEvent implements Serializable {
     }
 
     public final static int ALARM_INVALID = -1;
-    final static Alarm[] AlarmList = new Alarm[]{
+    public final static Alarm[] AlarmList = new Alarm[]{
             new Alarm(0, R.string.event_alarm_app, 0),
             new Alarm(36, R.string.event_alarm_good_morning, R.drawable.icon_alert),
             new Alarm(37, R.string.event_alarm_make_bed, R.drawable.icon_sound),

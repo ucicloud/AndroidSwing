@@ -11,7 +11,6 @@ import com.kidsdynamic.data.net.event.model.EventWithTodo;
 import com.kidsdynamic.data.net.event.model.TodoEntity;
 import com.kidsdynamic.data.net.user.model.KidInfo;
 import com.kidsdynamic.data.net.user.model.UserProfileRep;
-import com.kidsdynamic.data.repository.disk.UserDataStore;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,7 +73,7 @@ public class BeanConvertor {
         DB_Event db_event = new DB_Event();
 
         db_event.setEventId(eventWithTodo.getId());
-        db_event.setKidIds(getAllKidsIdFromList(eventWithTodo.getKids()));
+        db_event.setKidIds(getAllKidsIdFromList(eventWithTodo.getKid()));
         db_event.setName(eventWithTodo.getName());
         db_event.setStartDate(eventWithTodo.getStartDate());
         db_event.setEndDate(eventWithTodo.getEndDate());

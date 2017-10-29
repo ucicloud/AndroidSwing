@@ -33,6 +33,10 @@ public class ViewCalendarCellWeekName extends ViewCalendarCell {
     static final String dayName_ru[] = new String[]{"?", "В", "П", "В", "С", "Ч", "П", "С"};
     static final String dayName_es[] = new String[]{"?", "D", "L", "M", "X", "J", "V", "S"};
 
+    /*static final String dayName[] = new String[]{"?", "M", "T", "W", "T", "F", "S", "S"};
+    static final String dayName_ru[] = new String[]{"?", "П", "В", "С", "Ч", "П", "С", "В"};
+    static final String dayName_es[] = new String[]{"?", "L", "M", "X", "J", "V", "S", "D"};*/
+
     @Override
     public void setDate(long date) {
         super.setDate(date);

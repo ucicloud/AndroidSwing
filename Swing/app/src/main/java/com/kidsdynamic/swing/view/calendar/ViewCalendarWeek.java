@@ -7,6 +7,8 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.TableRow;
 
+import com.kidsdynamic.swing.model.WatchEvent;
+
 import java.util.Calendar;
 
 /**
@@ -43,7 +45,8 @@ public class ViewCalendarWeek extends ViewCalendar implements View.OnClickListen
 
             mViewNameList[idx].setTextSize(TypedValue.COMPLEX_UNIT_PX, mTextSize);
             mViewNameList[idx].setTypeface(mViewNameList[idx].getTypeface(), mTextStyle);
-            mViewNameList[idx].setTextColor(mTextColor);
+//            mViewNameList[idx].setTextColor(mTextColor);
+            mViewNameList[idx].setTextColor(mWeekNameTextColor);
             mViewNameList[idx].setGravity(Gravity.CENTER);
             mViewNameList[idx].setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, 2));
 
@@ -116,6 +119,31 @@ public class ViewCalendarWeek extends ViewCalendar implements View.OnClickListen
         }
     }
 
+    public ViewCalendarCellWeek addEvent(WatchEvent event) {
+        for (ViewCalendarCellWeek cell : mViewCellList) {
+            if (cell.isSameDay(event.mStartDate)) {
+                cell.addEvent(event);
+                return cell;
+            }
+        }
+
+        return null;
+    }
+
+    public void delEvent(WatchEvent event) {
+        delEvent(event.mId);
+    }
+
+    public void delEvent(int id) {
+        for (ViewCalendarCellWeek cell : mViewCellList)
+            cell.delEvent(id);
+    }
+
+    public void delAllEvent() {
+        for (ViewCalendarCellWeek cell : mViewCellList)
+            cell.delAllEvent();
+    }
+
     @Override
     public void onClick(View view) {
         if (mSelectListener == null)
@@ -134,7 +162,7 @@ public class ViewCalendarWeek extends ViewCalendar implements View.OnClickListen
                 cell.setOnClickListener(this);
     }
 
-    interface OnSelectListener {
+    public interface OnSelectListener {
         void onSelect(ViewCalendarWeek calendar, ViewCalendarCellWeek cell);
     }
 }

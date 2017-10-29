@@ -10,6 +10,7 @@ import android.widget.TableLayout;
 import com.kidsdynamic.swing.R;
 
 import java.util.Calendar;
+import java.util.Locale;
 
 
 // Calendar物件的基类, 所有ViewCalendarXXX均是继承自ViewCalendar
@@ -22,6 +23,9 @@ public class ViewCalendar extends TableLayout {
     protected int mFocusColor = Color.TRANSPARENT;
     protected int mFocusBackgroundColor = Color.TRANSPARENT;
     protected int mExceedColor = Color.LTGRAY;
+
+    protected int mWeekNameTextColor = Color.BLACK;
+
 
     protected long mDate = System.currentTimeMillis();
 
@@ -58,6 +62,8 @@ public class ViewCalendar extends TableLayout {
                     mFocusBackgroundColor = typedArray.getColor(attr, mFocusBackgroundColor);
                 } else if (attr == R.styleable.ViewCalendar_exceedColor) {
                     mExceedColor = typedArray.getColor(attr, mExceedColor);
+                }else if(attr == R.styleable.ViewCalendar_weekNameColor){
+                    mWeekNameTextColor = typedArray.getColor(attr, mExceedColor);
                 }
             }
 
@@ -188,9 +194,9 @@ public class ViewCalendar extends TableLayout {
     }
 
     static Calendar getInstance() {
-        return Calendar.getInstance();
+//        return Calendar.getInstance();
 //        return Calendar.getInstance(Locale.US);       // Force to use Sunday to be the first day of week
-//        return Calendar.getInstance(Locale.GERMANY);  // Force to use Monday to be the first day of week
+        return Calendar.getInstance(Locale.GERMANY);  // Force to use Monday to be the first day of week
     }
 
     static boolean isToday(long date) {

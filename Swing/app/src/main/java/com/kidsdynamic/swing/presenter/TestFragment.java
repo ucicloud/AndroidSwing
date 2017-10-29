@@ -12,7 +12,6 @@ import com.kidsdynamic.swing.BaseFragment;
 import com.kidsdynamic.swing.R;
 
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 
 /**
@@ -42,7 +41,7 @@ public class TestFragment extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View layoutView = inflater.inflate(R.layout.fragment_test, null);
+        View layoutView = inflater.inflate(R.layout.fragment_calendar_main_2, null);
 //        layoutView.findViewById(R.id.)
 
         ButterKnife.bind(this,layoutView);
@@ -51,7 +50,7 @@ public class TestFragment extends BaseFragment {
         return layoutView;
     }
 
-    @OnClick(R.id.btn_change_fragment)
+//    @OnClick(R.id.btn_change_fragment)
     public void changeFragmentTest(){
         getFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container,new TestFragment_2())

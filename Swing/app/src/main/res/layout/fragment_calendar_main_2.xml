@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <!--<include layout="@layout/base_title_bar"/>-->
+
+    <!--<include layout="@layout/view_calendar_topbar"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>-->
+
+   <!-- <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:paddingEnd="10dp"
+        android:paddingStart="10dp"
+        android:paddingTop="10dp">
+
+        <com.kidsdynamic.swing.view.ViewSponge
+            android:id="@+id/calendar_main_selector_sponge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            app:shrinkWidth="0.8" />
+
+        <com.kidsdynamic.swing.view.calendar.ViewCalendarSelector
+            android:id="@+id/calendar_main_selector"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignEnd="@+id/calendar_main_selector_sponge"
+            android:layout_alignStart="@+id/calendar_main_selector_sponge"
+            android:textColor="@color/color_gray_deep"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:calendarMode="week"
+            app:exceedColor="@color/color_gray_deep"
+            app:todayColor="@color/color_orange_main" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:paddingEnd="10dp"
+        android:paddingStart="10dp">
+
+        <com.kidsdynamic.swing.view.ViewSponge
+            android:id="@+id/calendar_main_calendar_sponge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            app:shrinkWidth="0.9" />
+
+        <com.kidsdynamic.swing.view.calendar.ViewCalendarWeek
+            android:id="@+id/calendar_week"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignEnd="@+id/calendar_main_calendar_sponge"
+            android:layout_alignStart="@+id/calendar_main_calendar_sponge"
+            android:textColor="@color/color_gray_deep"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:exceedColor="@color/color_gray_light"
+            app:focusBackgroundColor="@color/color_orange_main"
+            app:focusColor="@color/color_white"
+            app:todayColor="@color/color_orange_main" />
+
+    </RelativeLayout>
+
+    &lt;!&ndash;today almost now event&ndash;&gt;
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="5"
+        android:paddingTop="10dp">
+
+        <com.kidsdynamic.swing.view.ViewSponge
+            android:id="@+id/calendar_main_alert_sponge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            app:shrinkWidth="0.7" />
+
+        <com.kidsdynamic.swing.view.ViewCircle
+            android:id="@+id/calendar_main_alert_circle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignEnd="@+id/calendar_main_alert_sponge"
+            android:layout_alignStart="@+id/calendar_main_alert_sponge"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="10dp"
+            app:strokeBegin="-1"
+            app:strokeColorActive="@color/color_orange"
+            app:strokeColorNormal="@color/color_white_snow"
+            app:strokeCount="60"
+            app:strokeEnd="-1"
+            app:strokeWidth="12dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignEnd="@+id/calendar_main_alert_sponge"
+            android:layout_alignStart="@+id/calendar_main_alert_sponge"
+            android:orientation="vertical"
+            android:paddingEnd="10dp"
+            android:paddingStart="10dp">
+
+            <TextView
+                android:id="@+id/calendar_main_alert_time"
+                style="@style/textview_main"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_gravity="center_horizontal|bottom"
+                android:layout_weight="1"
+                android:gravity="center_horizontal|bottom"
+                android:textSize="28sp" />
+
+            <TextView
+                android:id="@+id/calendar_main_alert_event"
+                style="@style/textview_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_gravity="center_horizontal|top"
+                android:layout_weight="1"
+                android:gravity="center_horizontal|top" />
+
+        </LinearLayout>
+
+    </RelativeLayout>-->
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="4"
+        android:paddingTop="10dp">
+
+
+        <Button
+            android:id="@+id/calendar_main_today"
+            style="@style/button_main"
+            android:layout_width="match_parent"
+            android:layout_height="40sp"
+            android:layout_marginLeft="@dimen/base_56"
+            android:layout_marginRight="@dimen/base_56"
+            android:text="@string/calendar_main_today_schedule" />
+
+        <Button
+            android:id="@+id/calendar_main_monthly"
+            style="@style/button_main"
+            android:textSize="14sp"
+            android:layout_width="match_parent"
+            android:layout_height="40sp"
+            android:layout_marginLeft="@dimen/base_56"
+            android:layout_marginRight="@dimen/base_56"
+            android:layout_below="@+id/calendar_main_today"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="10dp"
+            android:text="@string/calendar_main_monthly_schedule" />
+
+        <Button
+            android:id="@+id/dashboard_main_sync"
+            style="@style/button_main"
+            android:layout_width="match_parent"
+            android:layout_height="40sp"
+            android:layout_marginLeft="@dimen/base_56"
+            android:layout_marginRight="@dimen/base_56"
+            android:layout_below="@+id/calendar_main_monthly"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="10dp"
+            android:text="@string/calendar_month_sync" />
+
+    </RelativeLayout>
+
+</LinearLayout>

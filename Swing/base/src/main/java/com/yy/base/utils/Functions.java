@@ -6,7 +6,6 @@ import android.text.TextUtils;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.regex.Matcher;
 
 /**
  * <br>author: wzg<br/>
@@ -18,11 +17,11 @@ public class Functions {
     /**
      * 验证emailAddr是否为有效地址
      */
-    public static boolean isValidEmail(String emailAddr) {
+   /* public static boolean isValidEmail(String emailAddr) {
         Matcher matcher = Regex.EMAIL_ADDRESS_PATTERN.matcher(emailAddr);
 
         return matcher.matches();
-    }
+    }*/
 
     public static boolean areSameDay(Date dateA, Date dateB) {
         Calendar calDateA = Calendar.getInstance();
@@ -100,5 +99,10 @@ public class Functions {
         }
 
         return numInt;
+    }
+
+    public static boolean isValidEmail(CharSequence target) {
+        return !TextUtils.isEmpty(target) &&
+                android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
     }
 }

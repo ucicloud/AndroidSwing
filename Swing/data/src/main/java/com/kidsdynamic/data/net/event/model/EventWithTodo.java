@@ -14,7 +14,7 @@ public class EventWithTodo {
     /**
      * id : 4
      * user : {"id":2,"email":"jack08300@gmail.com","firstName":"Jay","lastName":"Chen","lastUpdate":"0001-01-01T00:00:00Z","dateCreated":"0001-01-01T00:00:00Z","zipCode":"","phoneNumber":"","profile":"avatar_2.jpg"}
-     * kids : [{"id":5,"name":"hello","dateCreated":"2017-02-03T00:40:15Z","macId":"8D071FCFE5E0","profile":"kid_avatar_5.jpg"}]
+     * kid : [{"id":5,"name":"hello","dateCreated":"2017-02-03T00:40:15Z","macId":"8D071FCFE5E0","profile":"kid_avatar_5.jpg"}]
      * name : Test event name2
      * startDate : 2017-02-23T08:20:00Z
      * endDate : 2017-08-31T08:20:00Z
@@ -42,7 +42,7 @@ public class EventWithTodo {
     private int timezoneOffset;
     private String dateCreated;
     private String lastUpdated;
-    private List<KidInfo> kids;
+    private List<KidInfo> kid;
     private List<TodoEntity> todo;
 
     public int getId() {
@@ -149,12 +149,12 @@ public class EventWithTodo {
         this.lastUpdated = lastUpdated;
     }
 
-    public List<KidInfo> getKids() {
-        return kids;
+    public List<KidInfo> getKid() {
+        return kid;
     }
 
-    public void setKids(List<KidInfo> kids) {
-        this.kids = kids;
+    public void setKid(List<KidInfo> kid) {
+        this.kid = kid;
     }
 
     public List<TodoEntity> getTodo() {

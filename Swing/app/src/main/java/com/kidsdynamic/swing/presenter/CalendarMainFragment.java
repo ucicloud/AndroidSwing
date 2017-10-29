@@ -2,27 +2,31 @@ package com.kidsdynamic.swing.presenter;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.kidsdynamic.swing.BaseFragment;
 import com.kidsdynamic.swing.R;
 import com.kidsdynamic.swing.domain.CalendarManager;
+import com.kidsdynamic.swing.model.WatchEvent;
 import com.kidsdynamic.swing.view.ViewCircle;
-import com.prolificinteractive.materialcalendarview.CalendarDay;
-import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
-import com.prolificinteractive.materialcalendarview.format.TitleFormatter;
+import com.kidsdynamic.swing.view.calendar.ViewCalendar;
+import com.kidsdynamic.swing.view.calendar.ViewCalendarCellWeek;
+import com.kidsdynamic.swing.view.calendar.ViewCalendarSelector;
+import com.kidsdynamic.swing.view.calendar.ViewCalendarWeek;
 
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
@@ -33,15 +37,10 @@ public class CalendarMainFragment extends BaseFragment {
 
     private View mViewMain;
 
-    @BindView(R.id.main_toolbar_title)
-    protected TextView tv_title;
-    @BindView(R.id.main_toolbar_action1)
-    protected ImageView view_left_action;
-    @BindView(R.id.main_toolbar_action2)
-    protected ImageView view_right_action;
-
-    @BindView(R.id.calendarView)
-    protected MaterialCalendarView calendarView;
+    @BindView(R.id.calendar_main_selector)
+    protected ViewCalendarSelector mViewSelector;
+    @BindView(R.id.calendar_week)
+    protected ViewCalendarWeek mViewCalendarWeek;
 
     @BindView(R.id.calendar_main_alert_circle)
     protected ViewCircle mViewAlert;
@@ -59,9 +58,20 @@ public class CalendarMainFragment extends BaseFragment {
     @BindView(R.id.dashboard_main_sync)
     protected Button mSyncButton;
 
+    @BindView(R.id.layout_earliest_detail)
+    protected View layout_event_detail;
+
+    @BindView(R.id.nearby_event_layout)
+    protected View layout_nearby_event;
+
+    @BindView(R.id.layout_event_oper)
+    protected View layout_event_oper;
+
+
     private long mDefaultDate = System.currentTimeMillis();
 
-//    private List<WatchEvent> mEventList;
+    private List<WatchEvent> mEventList;
+    private WatchEvent mNearbyEven;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -72,40 +82,55 @@ public class CalendarMainFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mViewMain = inflater.inflate(R.layout.fragment_calendar_main, container, false);
 
+        ButterKnife.bind(this,mViewMain);
+
         InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(mViewMain.getWindowToken(), 0);
 
-        initTitleBar();
+//        initTitleBar();
         initCalendar();
 
         return mViewMain;
     }
 
-    private void initTitleBar() {
+   /* private void initTitleBar() {
         tv_title.setTextColor(getResources().getColor(R.color.colorAccent));
         view_left_action.setImageResource(R.drawable.icon_calendar);
         view_right_action.setImageResource(R.drawable.icon_add);
-    }
+    }*/
 
-    private void initCalendar(){
-        calendarView.setWeekDayLabels(new String[]{"M","T","S","T","F","S","S"});
-        calendarView.setHeaderTextAppearance(R.style.calendar_header_textappearance);
-        calendarView.setTitleFormatter(new TitleFormatter() {
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        getView().setFocusableInTouchMode(true);
+        getView().requestFocus();
+        getView().setOnKeyListener(new View.OnKeyListener() {
             @Override
-            public CharSequence format(CalendarDay day) {
-                StringBuilder stringBuilder = new StringBuilder();
-                int years = day.getYear();
-                int monthIndex = day.getMonth();
-                int date = day.getDay() + 1;
-
-                return stringBuilder.append(CalendarManager.MonthLabelMap.get(monthIndex))
-                        .append(" ").append(date).append(",").append(years);
+            public boolean onKey(View view, int keycode, KeyEvent keyEvent) {
+                if(keycode == KeyEvent.KEYCODE_BACK){
+                    if(layout_event_detail.getVisibility() == View.VISIBLE){
+                        layout_event_detail.setVisibility(View.GONE);
+                        layout_event_oper.setVisibility(View.VISIBLE);
+                        return true;
+                    }
+                }
+                return false;
             }
         });
     }
 
+    private void initCalendar(){
+        //周日期选择
+        mViewSelector.setOnSelectListener(mSelectorListener);
 
-    @OnClick(R.id.main_toolbar_action1)
+        //每天日期选择
+        mViewCalendarWeek.setOnSelectListener(mCalendarListener);
+
+    }
+
+
+//    @OnClick(R.id.main_toolbar_action1)
     public void onToolbarAction1() {
         //show calendar month model
         /*Bundle bundle = new Bundle();
@@ -114,7 +139,7 @@ public class CalendarMainFragment extends BaseFragment {
         mActivityMain.selectFragment(FragmentCalendarMonth.class.getName(), bundle);*/
     }
 
-    @OnClick(R.id.main_toolbar_action2)
+//    @OnClick(R.id.main_toolbar_action2)
     public void onToolbarAction2() {
         //todo add new event
         /*WatchEvent event = new WatchEvent(mViewCalendar.getDate());
@@ -124,27 +149,38 @@ public class CalendarMainFragment extends BaseFragment {
         mActivityMain.selectFragment(FragmentCalendarEvent.class.getName(), null);*/
     }
 
+//    @OnClick(R.id.nearby_event_layout)
+    @OnClick(R.id.calendar_main_alert_event)
+    protected void onNearbyEventClick(){
+//        if(mNearbyEven != null){
+            layout_event_detail.setVisibility(View.VISIBLE);
+            layout_event_oper.setVisibility(View.GONE);
+//        }
+    }
+
     @Override
     public void onResume() {
         super.onResume();
 
-        /*if (getArguments() != null)
-            mDefaultDate = getArguments().getLong(BUNDLE_KEY_DATE);
+       /* if (getArguments() != null)
+            mDefaultDate = getArguments().getLong(BUNDLE_KEY_DATE);*/
         mViewSelector.setDate(mDefaultDate);
-        mViewCalendar.setDate(mDefaultDate);
+        mViewCalendarWeek.setDate(mDefaultDate);
 
         long start = ViewCalendar.stripTime(mDefaultDate);
         long end = start + 86400000 - 1;
-        mEventList = mActivityMain.mOperator.getEventList(start, end);*/
+        mEventList = CalendarManager.getEventList(start, end);
 
         updateAlert();
+
+        loadEvents();
     }
 
     // 更新中央coming soon的事件, 載入原則為今日即將發生的事件
     private void updateAlert() {
         Calendar cale = Calendar.getInstance();
 
-        /*WatchEvent event = WatchEvent.earliestInDay(cale.getTimeInMillis(), mEventList);
+        WatchEvent event = WatchEvent.earliestInDay(cale.getTimeInMillis(), mEventList);
 
         setAlertMessage(event);
         setAlertClock(event);
@@ -154,10 +190,18 @@ public class CalendarMainFragment extends BaseFragment {
             mViewAlert.setOnClickListener(mAlertListener);
         } else {
             mViewAlert.setOnClickListener(null);
-        }*/
+        }
     }
 
-/*    private void setAlertMessage(WatchEvent event) {
+    private void loadEvents(){
+        mViewCalendarWeek.delAllEvent();
+
+        for (WatchEvent watchEvent : mEventList) {
+            mViewCalendarWeek.addEvent(watchEvent);
+        }
+    }
+
+    private void setAlertMessage(WatchEvent event) {
         String timeString;
         String messageString;
 
@@ -208,55 +252,57 @@ public class CalendarMainFragment extends BaseFragment {
     private ViewCalendarSelector.OnSelectListener mSelectorListener = new ViewCalendarSelector.OnSelectListener() {
         @Override
         public void OnSelect(View view, long offset, long date) {
-            mViewCalendar.setDate(date);
+            mViewCalendarWeek.setDate(date);
+            loadEvents();
         }
     };
 
     private ViewCalendarWeek.OnSelectListener mCalendarListener = new ViewCalendarWeek.OnSelectListener() {
         @Override
         public void onSelect(ViewCalendarWeek calendar, ViewCalendarCellWeek cell) {
-            Bundle bundle = new Bundle();
+            // TODO: 2017/10/29 调整转到每天event界面
+            /*Bundle bundle = new Bundle();
             bundle.putLong(BUNDLE_KEY_DATE, cell.getDate());
 
-            mActivityMain.selectFragment(FragmentCalendarDaily.class.getName(), bundle);
+            mActivityMain.selectFragment(FragmentCalendarDaily.class.getName(), bundle);*/
         }
     };
 
     private View.OnClickListener mAlertListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            WatchEvent event = (WatchEvent) view.getTag();
+            /*WatchEvent event = (WatchEvent) view.getTag();
             if (event == null)
                 return;
 
             mActivityMain.mEventStack.push(event);
-            mActivityMain.selectFragment(FragmentCalendarEvent.class.getName(), null);
+            mActivityMain.selectFragment(FragmentCalendarEvent.class.getName(), null);*/
         }
     };
 
     private View.OnClickListener mTodayListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            Calendar cale = Calendar.getInstance();
+            /*Calendar cale = Calendar.getInstance();
             long date = ViewCalendar.stripTime(cale.getTimeInMillis());
 
             Bundle bundle = new Bundle();
             bundle.putLong(BUNDLE_KEY_DATE, date);
 
-            mActivityMain.selectFragment(FragmentCalendarDaily.class.getName(), bundle);
+            mActivityMain.selectFragment(FragmentCalendarDaily.class.getName(), bundle);*/
         }
     };
 
     private View.OnClickListener mMonthlyListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            Calendar cale = Calendar.getInstance();
+            /*Calendar cale = Calendar.getInstance();
             long date = ViewCalendar.stripTime(cale.getTimeInMillis());
 
             Bundle bundle = new Bundle();
             bundle.putLong(BUNDLE_KEY_DATE, date);
 
-            mActivityMain.selectFragment(FragmentCalendarMonth.class.getName(), bundle);
+            mActivityMain.selectFragment(FragmentCalendarMonth.class.getName(), bundle);*/
         }
-    };*/
+    };
 }

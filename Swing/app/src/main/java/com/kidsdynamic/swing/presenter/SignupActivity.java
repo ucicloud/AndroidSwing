@@ -30,6 +30,8 @@ public class SignupActivity extends BaseFragmentActivity {
             loginSuccess();
             return;
         }
+// TODO: 2017/10/29  测试界面
+//        loginSuccess();
     }
 
     private void loginSuccess() {

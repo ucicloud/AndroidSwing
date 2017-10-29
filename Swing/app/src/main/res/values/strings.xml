@@ -400,4 +400,5 @@
     <!--new string 20171027-->
     <string name="net_err">Net Error</string>
     <string name="ok_str">OK</string>
+    <string name="event_del">Delete</string>
 </resources>

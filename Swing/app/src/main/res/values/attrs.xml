@@ -34,6 +34,7 @@
         <attr name="android:textSize" />
         <attr name="android:textStyle" />
         <attr name="android:textColor" />
+        <attr name="weekNameColor" format="color" />
         <attr name="todayColor" format="color" />
         <attr name="focusColor" format="color" />
         <attr name="focusBackgroundColor" format="color" />

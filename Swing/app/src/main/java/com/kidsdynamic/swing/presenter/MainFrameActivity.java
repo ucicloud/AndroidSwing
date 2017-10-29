@@ -2,6 +2,7 @@ package com.kidsdynamic.swing.presenter;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 
@@ -57,7 +58,7 @@ public class MainFrameActivity extends BaseFragmentActivity {
     private void initFragments(){
 
         fragmentHashMap.put(R.id.main_console_device, new FragmentDevice());
-        fragmentHashMap.put(R.id.main_console_calendar,new TestFragment_2());
+        fragmentHashMap.put(R.id.main_console_calendar,new CalendarContainerFragment());
         fragmentHashMap.put(R.id.main_console_dashboard,new TestFragment());
         fragmentHashMap.put(R.id.main_control_profile,new TestFragment());
     }
@@ -157,9 +158,26 @@ public class MainFrameActivity extends BaseFragmentActivity {
                     .add(R.id.fragment_container,fragment,String.valueOf(fragmentKey));
         }
 
+        //add 2017年10月29日16:35:44 weizg
+        //切换界面前，弹出所以栈中历史fragment
+        clearFragmentStack();
+
         fragmentTransaction.commit();
 
        currentTabKey = fragmentKey;
+    }
+
+    private void clearFragmentStack(){
+        try{
+            if(getSupportFragmentManager().getBackStackEntryCount() > 0){
+                getSupportFragmentManager().popBackStack(null,
+                        FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            }
+
+
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /*private void setCurrentFragment(int fragmentKey) {

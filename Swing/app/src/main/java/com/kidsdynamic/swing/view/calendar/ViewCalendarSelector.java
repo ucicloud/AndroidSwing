@@ -137,7 +137,7 @@ public class ViewCalendarSelector extends ViewCalendar implements View.OnClickLi
         mSelectListener.OnSelect(mThis, offset, date.getTimeInMillis());
     }
 
-    interface OnSelectListener {
+    public interface OnSelectListener {
         void OnSelect(View view, long offset, long date);
     }
 
