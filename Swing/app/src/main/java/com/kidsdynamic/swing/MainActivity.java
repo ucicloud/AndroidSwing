@@ -2,8 +2,10 @@ package com.kidsdynamic.swing;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,8 +34,13 @@ import com.kidsdynamic.data.net.user.model.UserProfileRep;
 import com.kidsdynamic.data.utils.LogUtil2;
 import com.kidsdynamic.swing.domain.LoginManager;
 import com.kidsdynamic.swing.presenter.ActivityTest;
+import com.kidsdynamic.swing.utils.SwingFontsCache;
+
+import org.w3c.dom.Text;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -63,7 +70,32 @@ public class MainActivity extends Activity {
 
         ButterKnife.bind(this);
 
+        try {
+            InputStream inputStream = getAssets().open("testdemo-token.pro");
+            Log.w("Fonts","assets pro file read: " + inputStream.read());
 
+            inputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try {
+//            InputStream inputStream = getAssets().open("avenir_bold.tff");
+            InputStream inputStream = getAssets().open("font_bold");
+            Log.w("Fonts","assets fonts file read: " + inputStream.read());
+
+            inputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        ((TextView) findViewById(R.id.text_test4)).
+                setTypeface(Typeface.createFromAsset(getAssets(),"font_normal"));
+
+        ((TextView) findViewById(R.id.text_test3)).
+                setTypeface(SwingFontsCache.getBoldType(this));
+
+        btn_login.setTypeface(SwingFontsCache.getNormalType(this));
     }
 
     @OnClick(R.id.button_test_login)
