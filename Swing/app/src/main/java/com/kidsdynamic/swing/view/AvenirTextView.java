@@ -37,14 +37,6 @@ public class AvenirTextView extends TextView {
         applyCustomFont(context,attrs);
     }
 
-   /* @Override
-    public void setTypeface(Typeface tf, int style) {
-        if(style == Typeface.BOLD){
-            super.setTypeface(Typeface.createFromAsset(getContext().getAssets(),"font_bold"));
-        }else {
-            super.setTypeface(Typeface.createFromAsset(getContext().getAssets(),"font_normal"));
-        }
-    }*/
 
     public void applyCustomFont(Context context, AttributeSet attrs){
         if(attrs == null){
