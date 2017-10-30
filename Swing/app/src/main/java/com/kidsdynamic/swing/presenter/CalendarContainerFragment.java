@@ -1,5 +1,9 @@
 package com.kidsdynamic.swing.presenter;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -9,9 +13,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.kidsdynamic.swing.BaseFragment;
 import com.kidsdynamic.swing.R;
+import com.kidsdynamic.swing.SwingApplication;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -22,6 +28,11 @@ import butterknife.ButterKnife;
  */
 
 public class CalendarContainerFragment extends BaseFragment {
+
+    public final static String UI_Update_Action = "UI_update_action";
+    public final static String UI_Update_Action_Type = "update_action_type";
+    public final static int UI_Action_Change_Event_detail = 1;
+    public final static int UI_Action_Change_Event_Add = 2;
 
     @BindView(R.id.main_toolbar_title)
     protected TextView tv_title;
@@ -47,6 +58,8 @@ public class CalendarContainerFragment extends BaseFragment {
 
         initTitleBar();
 
+        registerUIReceiver();
+
         selectFragment(CalendarMainFragment.class.getName(),null,false);
 
         /*getView().setFocusableInTouchMode(true);
@@ -67,12 +80,57 @@ public class CalendarContainerFragment extends BaseFragment {
         });*/
     }
 
+    private void registerUIReceiver() {
+        if(SwingApplication.localBroadcastManager != null){
+            IntentFilter intentFilter = new IntentFilter(UI_Update_Action);
+            SwingApplication.localBroadcastManager.registerReceiver(UIChangeReceiver,intentFilter);
+        }
+    }
+
+    private BroadcastReceiver UIChangeReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int update_type = intent.getIntExtra(UI_Update_Action_Type, -1);
+
+            if(UI_Action_Change_Event_detail == update_type){
+                //进入当日日程详情，切换右上角按钮功能
+                view_right_action.setImageResource(R.drawable.icon_pen);
+                view_right_action.setTag(R.drawable.icon_pen);
+            }else if(UI_Action_Change_Event_Add == update_type){
+                view_right_action.setImageResource(R.drawable.icon_add);
+                view_right_action.setTag(R.drawable.icon_add);
+            }
+        }
+    };
+
     private void initTitleBar() {
         tv_title.setTextColor(getResources().getColor(R.color.colorAccent));
         tv_title.setText(R.string.title_calendar);
         view_left_action.setImageResource(R.drawable.icon_calendar);
+
         view_right_action.setImageResource(R.drawable.icon_add);
+        view_right_action.setTag(R.drawable.icon_add);
+
+        view_right_action.setOnClickListener(topbarRightBtnOnclick);
     }
+
+    private View.OnClickListener topbarRightBtnOnclick = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Object tag = view.getTag();
+            if (tag instanceof Integer) {
+                Integer intTag = (Integer) tag;
+                if(intTag == R.drawable.icon_add){
+                    //添加新event
+                }else if(intTag == R.drawable.icon_pen){
+                    //修改event详情
+                    Toast.makeText(getContext(),"modify event detail",Toast.LENGTH_SHORT).show();
+                }
+            }
+
+
+        }
+    };
 
     public void selectFragment(String className, Bundle args, boolean isAddToBackStack) {
         Fragment fragment = Fragment.instantiate(getContext(), className, args);
@@ -95,7 +153,10 @@ public class CalendarContainerFragment extends BaseFragment {
 
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
 
-
-
+        SwingApplication.localBroadcastManager.unregisterReceiver(UIChangeReceiver);
+    }
 }

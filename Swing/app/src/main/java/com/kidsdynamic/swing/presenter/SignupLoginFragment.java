@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -38,6 +39,7 @@ import com.kidsdynamic.swing.utils.ConfigUtil;
 import com.kidsdynamic.swing.view.ViewUtils;
 import com.yy.base.utils.Functions;
 
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
@@ -327,6 +329,13 @@ public class SignupLoginFragment extends BaseFragment {
 
     @OnClick(R.id.signup_login_reset_pwd)
     public void resetPsw(){
+        final String email = et_email.getText().toString();
+
+        if (!Functions.isValidEmail(email)) {
+            showErrInfo(R.string.error_api_unknown);
+            return;
+        }
+
         new AlertDialog.Builder(getContext())
                 .setTitle(R.string.profile_option_password)
                 .setMessage(R.string.profile_reset_password_confirmation)
@@ -341,20 +350,28 @@ public class SignupLoginFragment extends BaseFragment {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         //调用接口重置
                         dialogInterface.dismiss();
-                        exeResetPswFlow();
+                        exeResetPswFlow(email);
                     }
                 }).show();
 
     }
 
-    private void exeResetPswFlow() {
-        final UserApiNeedToken userApiNeedToken = ApiGen.getInstance(getActivity().getApplicationContext()).
-                generateApi(UserApiNeedToken.class,true);
+    private void exeResetPswFlow(@NonNull String email) {
 
-        userApiNeedToken.sendResetPasswordEmail().enqueue(new BaseRetrofitCallback<Object>() {
+        showLoadingDialog(R.string.activity_main_wait);
+
+        final UserApiNeedToken userApiNeedToken = ApiGen.getInstance(getActivity().getApplicationContext()).
+                generateApi(UserApiNeedToken.class,false);
+
+        HashMap<String, String> resetPswParam = new HashMap<>(1);
+        resetPswParam.put("email", email);
+        userApiNeedToken.sendResetPasswordEmail(resetPswParam).enqueue(new BaseRetrofitCallback<Object>() {
             @Override
             public void onResponse(Call<Object> call, Response<Object> response) {
                 super.onResponse(call,response);
+
+                finishLoadingDialog();
+
                 int code = response.code();
                 if(code == 200){
                     ViewUtils.showMsgDialog(getActivity(),
@@ -367,6 +384,8 @@ public class SignupLoginFragment extends BaseFragment {
             @Override
             public void onFailure(Call<Object> call, Throwable t) {
                 super.onFailure(call,t);
+                finishLoadingDialog();
+
                 Toast.makeText(getContext(),R.string.net_err,Toast.LENGTH_SHORT).show();
             }
         });

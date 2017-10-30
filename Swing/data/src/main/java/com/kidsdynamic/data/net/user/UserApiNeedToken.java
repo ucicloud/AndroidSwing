@@ -3,6 +3,8 @@ package com.kidsdynamic.data.net.user;
 import com.kidsdynamic.data.net.user.model.UserInfo;
 import com.kidsdynamic.data.net.user.model.UserProfileRep;
 
+import java.util.Map;
+
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -34,7 +36,7 @@ public interface UserApiNeedToken {
 //    400 Bad request. The token is invalid
 //    500 Internal error. Please send me the error. I will fix it
     @POST("v1/user/sendResetPasswordEmail")
-    Call<Object> sendResetPasswordEmail();
+    Call<Object> sendResetPasswordEmail(@Body Map<String, String> emailMap);
 
 //    200 Get user successfully
 //    400 Bad request. The email parameter is missing

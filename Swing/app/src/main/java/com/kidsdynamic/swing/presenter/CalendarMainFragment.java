@@ -1,6 +1,7 @@
 package com.kidsdynamic.swing.presenter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.KeyEvent;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 
 import com.kidsdynamic.swing.BaseFragment;
 import com.kidsdynamic.swing.R;
+import com.kidsdynamic.swing.SwingApplication;
 import com.kidsdynamic.swing.domain.CalendarManager;
 import com.kidsdynamic.swing.model.WatchEvent;
 import com.kidsdynamic.swing.view.ViewCircle;
@@ -112,6 +114,13 @@ public class CalendarMainFragment extends BaseFragment {
                     if(layout_event_detail.getVisibility() == View.VISIBLE){
                         layout_event_detail.setVisibility(View.GONE);
                         layout_event_oper.setVisibility(View.VISIBLE);
+
+                        //切换右上角图标
+                        Intent intent = new Intent(CalendarContainerFragment.UI_Update_Action);
+                        intent.putExtra(CalendarContainerFragment.UI_Update_Action_Type,
+                                CalendarContainerFragment.UI_Action_Change_Event_Add);
+                        SwingApplication.localBroadcastManager.sendBroadcast(intent);
+
                         return true;
                     }
                 }
@@ -152,9 +161,15 @@ public class CalendarMainFragment extends BaseFragment {
 //    @OnClick(R.id.nearby_event_layout)
     @OnClick(R.id.calendar_main_alert_event)
     protected void onNearbyEventClick(){
+        // TODO: 2017/10/30 测试，不论有没有event都可以点击
 //        if(mNearbyEven != null){
             layout_event_detail.setVisibility(View.VISIBLE);
             layout_event_oper.setVisibility(View.GONE);
+
+        Intent intent = new Intent(CalendarContainerFragment.UI_Update_Action);
+        intent.putExtra(CalendarContainerFragment.UI_Update_Action_Type,
+                CalendarContainerFragment.UI_Action_Change_Event_detail);
+        SwingApplication.localBroadcastManager.sendBroadcast(intent);
 //        }
     }
 
