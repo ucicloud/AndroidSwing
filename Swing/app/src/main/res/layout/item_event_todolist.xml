@@ -3,21 +3,26 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <RadioButton
-        android:id="@+id/radioButton"
-        android:layout_centerVertical="true"
+
+    <ImageView
+        android:id="@+id/todo_check"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_margin="10dp"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
         android:layout_alignParentStart="true"
-        android:clickable="false"/>
+        android:src="@drawable/iconbutton_check_background" />
 
-    <TextView
+    <com.kidsdynamic.swing.view.AvenirTextView
         android:id="@+id/tv_todo_content"
         android:layout_centerVertical="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_toEndOf="@id/radioButton"
+        android:layout_toEndOf="@id/todo_check"
         android:layout_marginStart="@dimen/base_5"
+        android:textColor="@color/color_white"
         android:lines="1"
         android:text="match_parent match_parent match_parent"/>
 </RelativeLayout>

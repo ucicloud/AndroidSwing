@@ -5,7 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.RadioButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.kidsdynamic.data.net.event.model.EventUtils;
@@ -26,6 +26,7 @@ public class TodoListAdapter extends BaseAdapter {
     private List<TodoEntity> todoEntityList = new ArrayList<>(1);
 
     public TodoListAdapter(Context context,List<TodoEntity> todoEntityList){
+        this.context = context;
         inflater = LayoutInflater.from(context);
         this.todoEntityList = todoEntityList;
     }
@@ -61,9 +62,12 @@ public class TodoListAdapter extends BaseAdapter {
         viewHolder.tv_todo_describe.setText(item.getText());
 
         if (item.getStatus().equals(EventUtils.TODO_STATUS_DONE)) {
-            viewHolder.radioButton.setClickable(true);
+            viewHolder.checkView.setSelected(true);
+
+            viewHolder.tv_todo_describe.setTextColor(
+                    context.getResources().getColor(R.color.color_gray_light));
         }else {
-            viewHolder.radioButton.setClickable(false);
+            viewHolder.checkView.setSelected(false);
         }
 
         return convertView;
@@ -71,13 +75,13 @@ public class TodoListAdapter extends BaseAdapter {
 
     private static class ViewHolder{
         TextView tv_todo_describe;
-        RadioButton radioButton;
+        ImageView checkView;
 
         static ViewHolder initView(View containView){
             ViewHolder viewHolder = new ViewHolder();
 
             viewHolder.tv_todo_describe = (TextView) containView.findViewById(R.id.tv_todo_content);
-            viewHolder.radioButton = (RadioButton)containView.findViewById(R.id.radioButton);
+            viewHolder.checkView = (ImageView)containView.findViewById(R.id.todo_check);
 
             return viewHolder;
         }
