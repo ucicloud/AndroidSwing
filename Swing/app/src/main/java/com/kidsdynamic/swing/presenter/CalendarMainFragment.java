@@ -10,11 +10,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 
+import com.kidsdynamic.data.net.event.model.EventUtils;
+import com.kidsdynamic.data.net.event.model.TodoEntity;
 import com.kidsdynamic.swing.BaseFragment;
 import com.kidsdynamic.swing.R;
 import com.kidsdynamic.swing.SwingApplication;
+import com.kidsdynamic.swing.adapter.TodoListAdapter;
 import com.kidsdynamic.swing.domain.CalendarManager;
 import com.kidsdynamic.swing.model.WatchEvent;
 import com.kidsdynamic.swing.view.ViewCircle;
@@ -23,6 +27,7 @@ import com.kidsdynamic.swing.view.calendar.ViewCalendarCellWeek;
 import com.kidsdynamic.swing.view.calendar.ViewCalendarSelector;
 import com.kidsdynamic.swing.view.calendar.ViewCalendarWeek;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
@@ -62,6 +67,9 @@ public class CalendarMainFragment extends BaseFragment {
 
     @BindView(R.id.layout_earliest_detail)
     protected View layout_event_detail;
+
+    @BindView(R.id.listview_event_todo)
+    protected ListView listView_todo;
 
     @BindView(R.id.nearby_event_layout)
     protected View layout_nearby_event;
@@ -170,7 +178,35 @@ public class CalendarMainFragment extends BaseFragment {
         intent.putExtra(CalendarContainerFragment.UI_Update_Action_Type,
                 CalendarContainerFragment.UI_Action_Change_Event_detail);
         SwingApplication.localBroadcastManager.sendBroadcast(intent);
+
+
+        TodoListAdapter todoListAdapter = new TodoListAdapter(getContext(), getTodoEntity());
+        listView_todo.setAdapter(todoListAdapter);
 //        }
+    }
+
+    private  List<TodoEntity> getTodoEntity(){
+        List<TodoEntity> todoEntityList = new ArrayList<>(4);
+
+        TodoEntity todoEntity = new TodoEntity();
+        todoEntity.setId(123);
+        todoEntity.setText("System.arraycopy(info.");
+        todoEntity.setStatus(EventUtils.TODO_STATUS_PENDING);
+        todoEntityList.add(todoEntity);
+
+        TodoEntity todoEntity1 = new TodoEntity();
+        todoEntity1.setId(234);
+        todoEntity1.setText("getTodoEntity System.arraycopy(info.");
+        todoEntity1.setStatus(EventUtils.TODO_STATUS_DONE);
+        todoEntityList.add(todoEntity1);
+
+        TodoEntity todoEntity2 = new TodoEntity();
+        todoEntity2.setId(234);
+        todoEntity2.setText("TodoEntity System.arraycopy(info.");
+        todoEntity2.setStatus(EventUtils.TODO_STATUS_PENDING);
+        todoEntityList.add(todoEntity2);
+
+        return todoEntityList;
     }
 
     @Override
