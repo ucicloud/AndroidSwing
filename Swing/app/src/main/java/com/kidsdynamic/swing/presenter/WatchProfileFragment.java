@@ -15,6 +15,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import com.kidsdynamic.data.net.ApiGen;
+import com.kidsdynamic.data.net.avatar.AvatarApi;
+import com.kidsdynamic.data.net.avatar.PartUtils;
+import com.kidsdynamic.data.net.kids.KidsApi;
+import com.kidsdynamic.data.net.kids.model.KidsAddRequest;
+import com.kidsdynamic.data.net.kids.model.KidsWithParent;
+import com.kidsdynamic.data.net.user.model.UpdateKidAvatarRepEntity;
+import com.kidsdynamic.data.utils.LogUtil2;
 import com.kidsdynamic.swing.BaseFragment;
 import com.kidsdynamic.swing.R;
 import com.kidsdynamic.swing.view.BottomPopWindow;
@@ -23,10 +31,17 @@ import com.kidsdynamic.swing.view.CropPopWindow;
 import com.kidsdynamic.swing.view.ViewCircle;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * WatchProfileFragment
@@ -39,6 +54,9 @@ public class WatchProfileFragment extends BaseFragment {
     private static final int REQUEST_CODE_CAMERA = 1;
     private static final int REQUEST_CODE_ALBUM = 2;
 
+
+    private static final String MAC_ID = "mac_id";
+
     @BindView(R.id.watch_profile_photo)
     ViewCircle vc_photo;
     @BindView(R.id.watch_profile_first)
@@ -48,8 +66,11 @@ public class WatchProfileFragment extends BaseFragment {
     @BindView(R.id.watch_profile_zip)
     EditText et_zip;
 
-    public static WatchProfileFragment newInstance() {
+    private File profile;
+
+    public static WatchProfileFragment newInstance(String macId) {
         Bundle args = new Bundle();
+        args.putString(MAC_ID, macId);
         WatchProfileFragment fragment = new WatchProfileFragment();
         fragment.setArguments(args);
         return fragment;
@@ -102,8 +123,102 @@ public class WatchProfileFragment extends BaseFragment {
 
     @OnClick(R.id.watch_profile_submit)
     public void doSubmit() {
-        SignupActivity signupActivity = (SignupActivity) getActivity();
-        signupActivity.setFragment(WatchHaveFragment.newInstance());
+        if (null == profile || !profile.exists()) {
+            return;
+        }
+        String firstName = et_first.getText().toString().trim();
+        if (TextUtils.isEmpty(firstName)) {
+            return;
+        }
+        String lastName = et_last.getText().toString().trim();
+        if (TextUtils.isEmpty(lastName)) {
+            return;
+        }
+//        uploadAvatar(profile, firstName, lastName);
+        Bundle args = getArguments();
+        String macId = args.getString(MAC_ID);
+        addKids(macId, profile, String.format("%1$s %2$s", firstName, lastName));
+    }
+
+    /**
+     * add kids
+     *
+     * @param watchMacId String
+     * @param kidsName   String
+     */
+    public void addKids(String watchMacId, final File profile, String kidsName) {
+        KidsApi kidsApi = ApiGen
+                .getInstance(getContext().getApplicationContext())
+                .generateApi(KidsApi.class, true);
+
+        KidsAddRequest kidsAddRequest = new KidsAddRequest();
+        kidsAddRequest.setMacId(watchMacId);
+        kidsAddRequest.setName(kidsName);
+
+        kidsApi.addKid(kidsAddRequest).enqueue(new Callback<KidsWithParent>() {
+            @Override
+            public void onResponse(Call<KidsWithParent> call, Response<KidsWithParent> response) {
+                LogUtil2.getUtils().d("addKid onResponse: " + response.code());
+                if (response.code() == 200) {
+                    //add successfully
+                    KidsWithParent kidsWithParent = response.body();
+                    uploadAvatar(profile, String.valueOf(kidsWithParent.getId()));
+                    LogUtil2.getUtils().d("addKid rep kid ID: " + response.body().getId());
+                } else {
+                    // TODO: 2017/10/31 add error msg
+                }
+            }
+
+            @Override
+            public void onFailure(Call<KidsWithParent> call, Throwable t) {
+                // TODO: 2017/10/31 add error msg
+                LogUtil2.getUtils().d("addKid onFailure");
+                t.printStackTrace();
+            }
+        });
+    }
+
+    /**
+     * upload kid's avatar
+     *
+     * @param profile File
+     * @param kidsId  String
+     */
+    public void uploadAvatar(File profile, String kidsId) {
+        final AvatarApi avatarApi = ApiGen.getInstance(getContext().getApplicationContext()).
+                generateApi4Avatar(AvatarApi.class);
+        MultipartBody.Part filePart =
+                PartUtils.prepareFilePart("upload", profile.getName(), profile);
+        avatarApi
+                .uploadKidAvatar(getUploadKidAvatarPram(kidsId), filePart)
+                .enqueue(new Callback<UpdateKidAvatarRepEntity>() {
+                    @Override
+                    public void onResponse(Call<UpdateKidAvatarRepEntity> call,
+                                           Response<UpdateKidAvatarRepEntity> response) {
+                        LogUtil2.getUtils().d("uploadKidAvatar onResponse");
+                        LogUtil2.getUtils().d("uploadKidAvatar  code: " + response.code());
+                        //code == 200 upload ok
+                        int code = response.code();
+                        if (200 == code) {
+                            SignupActivity signupActivity = (SignupActivity) getActivity();
+                            signupActivity.setFragment(WatchHaveFragment.newInstance());
+                        } else {
+                            // TODO: 2017/10/31  show Error Msg
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<UpdateKidAvatarRepEntity> call, Throwable t) {
+                        LogUtil2.getUtils().d("uploadKidAvatar onFailure");
+                        t.printStackTrace();
+                    }
+                });
+    }
+
+    private Map<String, RequestBody> getUploadKidAvatarPram(String kidsId) {
+        HashMap<String, RequestBody> paramMap = new HashMap<>();
+        PartUtils.putRequestBodyMap(paramMap, AvatarApi.param_kidId, kidsId);
+        return paramMap;
     }
 
     private void doWhichClick(int position) {
@@ -191,7 +306,7 @@ public class WatchProfileFragment extends BaseFragment {
         return null;
     }
 
-    private void showCropPopWindow(File file) {
+    private void showCropPopWindow(final File file) {
         final CropPopWindow cropPopWindow = new CropPopWindow(getContext());
         cropPopWindow.showAtLocation(getView(), Gravity.CENTER, 0, 0);
         cropPopWindow.setCropImageFile(file);
@@ -205,6 +320,7 @@ public class WatchProfileFragment extends BaseFragment {
                 vc_photo.setStrokeWidth(4.0f);
                 vc_photo.setCrossWidth(0.0f);
                 vc_photo.setBitmap(result.bitmap);
+                profile = file;
             }
         });
     }

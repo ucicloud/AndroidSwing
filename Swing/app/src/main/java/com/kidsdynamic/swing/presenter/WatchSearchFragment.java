@@ -71,11 +71,11 @@ public class WatchSearchFragment extends BaseFragment {
             if (begin == bound - 1) count += 1;
             if (count == destCount && end == random) {
                 SignupActivity signupActivity = (SignupActivity) getActivity();
-                if (random % 2 == 0) {
-                    signupActivity.setFragment(WatchSelectFragment.newInstance());
-                } else {
-                    signupActivity.setFragment(WatchSorryFragment.newInstance());
-                }
+//                if (random % 2 == 0) {
+                signupActivity.setFragment(WatchSelectFragment.newInstance());
+//                } else {
+//                    signupActivity.setFragment(WatchSorryFragment.newInstance());
+//                }
             }
         }
     }

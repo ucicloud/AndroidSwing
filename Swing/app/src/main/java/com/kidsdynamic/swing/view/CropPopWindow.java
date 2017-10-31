@@ -35,7 +35,7 @@ public class CropPopWindow extends PopupWindow {
     private void init(final Context context) {
         LayoutInflater inflater = LayoutInflater.from(context);
         final View layout = inflater.inflate(R.layout.crop_pop_window, null);
-        mCropImageView = layout.findViewById(R.id.cropImageView);
+        mCropImageView = (CropImageView) layout.findViewById(R.id.cropImageView);
         int color = context.getResources().getColor(R.color.pop_window_background);
         mCropImageView.setPaintColor(color);
         setContentView(layout);

@@ -6,7 +6,7 @@
     android:paddingBottom="@dimen/base_21"
     android:paddingTop="@dimen/base_30">
 
-    <CropImageView
+    <com.kidsdynamic.swing.view.CropImageView
         android:id="@+id/cropImageView"
         android:layout_width="match_parent"
         android:layout_height="0dp"

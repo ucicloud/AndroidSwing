@@ -1,9 +1,18 @@
 package com.kidsdynamic.swing.presenter;
 
+import android.Manifest;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.IBinder;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Pair;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,16 +20,26 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.kidsdynamic.data.net.user.model.KidInfo;
+import com.kidsdynamic.data.net.ApiGen;
+import com.kidsdynamic.data.net.kids.KidsApi;
+import com.kidsdynamic.data.net.kids.model.KidsWithParent;
+import com.kidsdynamic.data.utils.LogUtil2;
 import com.kidsdynamic.swing.BaseFragment;
 import com.kidsdynamic.swing.R;
+import com.kidsdynamic.swing.ble.IDeviceScanCallback;
+import com.kidsdynamic.swing.ble.SwingBLEService;
+import com.kidsdynamic.swing.utils.GlideHelper;
 import com.kidsdynamic.swing.view.ListLinearLayout;
+import com.vise.baseble.model.BluetoothLeDevice;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * WatchSelectFragment
@@ -34,6 +53,8 @@ public class WatchSelectFragment extends BaseFragment {
     ListLinearLayout ll_select;
 
     private DataAdapter dataAdapter;
+
+    private SwingBLEService mBluetoothService;
 
     public static WatchSelectFragment newInstance() {
         Bundle args = new Bundle();
@@ -54,35 +75,199 @@ public class WatchSelectFragment extends BaseFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        List<KidInfo> list = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
-            list.add(new KidInfo());
+        dataAdapter = new DataAdapter(getContext());
+        List<KidsWithParent> items = new ArrayList<>();
+        {
+            KidsWithParent kwp = new KidsWithParent();
+            kwp.setId(-1);
+            kwp.setName("SwingWatch03fc");
+            kwp.setMacId("2f7e");
+            items.add(kwp);
         }
-        setDataAdapter(list);
+        {
+            KidsWithParent kwp = new KidsWithParent();
+            kwp.setId(-1);
+            kwp.setName("SwingWatch5oew");
+            kwp.setMacId("4er2");
+            items.add(kwp);
+        }
+        {
+            KidsWithParent kwp = new KidsWithParent();
+            kwp.setId(1204);
+            kwp.setName("Stefan");
+            kwp.setMacId("3wct");
+            items.add(kwp);
+        }
+        dataAdapter.setData(items);
+        ll_select.setAdapter(dataAdapter);
+        checkPermissions();
     }
 
-    public void setDataAdapter(List<KidInfo> list) {
-        if (null == dataAdapter) {
-            dataAdapter = new DataAdapter(getContext(), list);
-        } else {
-            dataAdapter.setData(list);
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (mBluetoothService != null) {
+            unbindService();
         }
-        ll_select.setAdapter(dataAdapter);
+    }
+
+    private void bindService() {
+        Context context = getContext();
+        Intent bindIntent = new Intent(context, SwingBLEService.class);
+        context.bindService(bindIntent, mFhrSCon, Context.BIND_AUTO_CREATE);
+    }
+
+    private void unbindService() {
+        Context context = getContext();
+        context.unbindService(mFhrSCon);
+    }
+
+    private ServiceConnection mFhrSCon = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            mBluetoothService = ((SwingBLEService.BluetoothBinder) service).getService();
+            exec();
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            mBluetoothService = null;
+        }
+    };
+
+    @Override
+    public final void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                                 @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case 12:
+                if (grantResults.length > 0) {
+                    for (int i = 0; i < grantResults.length; i++) {
+                        if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
+                            onPermissionGranted(permissions[i]);
+                        }
+                    }
+                }
+                break;
+        }
+    }
+
+    private void checkPermissions() {
+        Context context = getContext();
+        String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION};
+        List<String> permissionDeniedList = new ArrayList<>();
+        for (String permission : permissions) {
+            int permissionCheck = ContextCompat.checkSelfPermission(context, permission);
+            if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
+                onPermissionGranted(permission);
+            } else {
+                permissionDeniedList.add(permission);
+            }
+        }
+        if (!permissionDeniedList.isEmpty()) {
+            String[] deniedPermissions = permissionDeniedList.toArray(new String[permissionDeniedList.size()]);
+            ActivityCompat.requestPermissions(getActivity(), deniedPermissions, 12);
+        }
+    }
+
+    private void onPermissionGranted(String permission) {
+        switch (permission) {
+            case Manifest.permission.ACCESS_FINE_LOCATION:
+                if (mBluetoothService == null) {
+                    bindService();
+                } else {
+                    exec();
+                }
+                break;
+        }
+    }
+
+    private void exec() {
+        mBluetoothService.closeConnect();
+        mBluetoothService.scanDevice(30 * 1000, new IDeviceScanCallback() {
+            @Override
+            public void onStartScan() {
+                dataAdapter.clear();
+                dataAdapter.notifyDataSetChanged();
+//                img_loading.startAnimation(operatingAnim);
+//                btn_start.setEnabled(false);
+//                btn_stop.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onScanTimeOut() {
+//                img_loading.clearAnimation();
+//                btn_start.setEnabled(true);
+//                btn_stop.setVisibility(View.INVISIBLE);
+            }
+
+            @Override
+            public void onScanning(BluetoothLeDevice scanResult) {
+//                dataAdapter.addResult(scanResult);
+//                dataAdapter.notifyDataSetChanged();
+                checkWatchBindStatus(scanResult);
+            }
+        });
+    }
+
+    public void checkWatchBindStatus(final BluetoothLeDevice scanResult) {
+        if (null == scanResult) {
+            return;
+        }
+        String watchMacId = scanResult.getAddress();
+        KidsApi kidsApi = ApiGen.getInstance(getContext().getApplicationContext()).
+                generateApi(KidsApi.class, true);
+
+        kidsApi.whoRegisteredMacID(watchMacId).enqueue(new Callback<KidsWithParent>() {
+            @Override
+            public void onResponse(Call<KidsWithParent> call, Response<KidsWithParent> response) {
+                LogUtil2.getUtils().d("whoRegisteredMacID onResponse: " + response.code());
+                KidsWithParent kidsWithParent = null;
+                if (response.code() == 200) {
+                    kidsWithParent = response.body();
+                    LogUtil2.getUtils().d("watch binder: ");
+                    LogUtil2.getUtils().d("watch binder info: " + response.body().getName());
+                    LogUtil2.getUtils().d("watch binder info: " + response.body().getParent().getFirstName());
+                } else if (response.code() == 404) {
+                    kidsWithParent = new KidsWithParent();
+                    kidsWithParent.setId(-1);
+                    kidsWithParent.setName(scanResult.getName());
+                    kidsWithParent.setMacId(scanResult.getAddress());
+                    LogUtil2.getUtils().d("watch not binde: ");
+                }
+                dataAdapter.addItem(kidsWithParent);
+                dataAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(Call<KidsWithParent> call, Throwable t) {
+                LogUtil2.getUtils().d("whoRegisteredMacID onFailure");
+                t.printStackTrace();
+            }
+        });
     }
 
     private class DataAdapter extends BaseAdapter {
 
         private Context mContext;
-        private List<KidInfo> mItems = new ArrayList<>();
+        private List<KidsWithParent> mItems;
 
-        private DataAdapter(Context context, List<KidInfo> items) {
+        private DataAdapter(Context context) {
             mContext = context;
-            mItems = items;
+            mItems = new ArrayList<>();
         }
 
-        public void setData(List<KidInfo> items) {
+        private void setData(List<KidsWithParent> items) {
             mItems.clear();
             mItems.addAll(items);
+        }
+
+        private void addItem(KidsWithParent kidsWithParent) {
+            mItems.add(kidsWithParent);
+        }
+
+        private void clear() {
+            mItems.clear();
         }
 
         @Override
@@ -91,7 +276,7 @@ public class WatchSelectFragment extends BaseFragment {
         }
 
         @Override
-        public KidInfo getItem(int position) {
+        public KidsWithParent getItem(int position) {
             return mItems.get(position);
         }
 
@@ -112,20 +297,29 @@ public class WatchSelectFragment extends BaseFragment {
                 holder = (ViewHolder) convertView.getTag();
             }
 
-            KidInfo kidInfo = getItem(position);
-            if (null != kidInfo) {
-                holder.iv_head.setImageResource(android.R.drawable.ic_menu_compass);
-                holder.tv_content.setText(String.valueOf(position));
-                if (position < getCount() - 1) {
-                    holder.iv_action.setImageResource(android.R.drawable.ic_menu_add);
+            final KidsWithParent kidsWithParent = getItem(position);
+            if (null != kidsWithParent) {
+                long id = kidsWithParent.getId();
+                if (-1 == id) {
+                    holder.iv_head.setImageResource(R.drawable.ic_icon_profile_);
+                    holder.tv_content.setText(String.format("%1$s %2$s", kidsWithParent.getName(),
+                            kidsWithParent.getMacId()));
+                    holder.iv_action.setImageResource(R.drawable.ic_icon_plus);
                     holder.iv_action.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            doPlusClick();
+                            doPlusClick(kidsWithParent.getMacId());
                         }
                     });
                 } else {
-                    holder.iv_action.setImageResource(android.R.drawable.ic_menu_more);
+                    String profile = kidsWithParent.getProfile();
+                    if (!TextUtils.isEmpty(profile)) {
+                        GlideHelper.showCircleImageView(mContext, profile, holder.iv_head);
+                    } else {
+                        holder.iv_head.setImageResource(R.drawable.ic_icon_profile_);
+                    }
+                    holder.tv_content.setText(kidsWithParent.getName());
+                    holder.iv_action.setImageResource(R.drawable.ic_icon_line_arrow);
                     holder.iv_action.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -139,9 +333,9 @@ public class WatchSelectFragment extends BaseFragment {
         }
     }
 
-    private void doPlusClick() {
+    private void doPlusClick(String macId) {
         SignupActivity signupActivity = (SignupActivity) getActivity();
-        signupActivity.setFragment(WatchProfileFragment.newInstance());
+        signupActivity.setFragment(WatchProfileFragment.newInstance(macId));
     }
 
     private void doRequestClick() {

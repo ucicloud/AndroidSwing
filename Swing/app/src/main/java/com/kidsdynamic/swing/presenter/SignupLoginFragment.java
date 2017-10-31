@@ -118,7 +118,7 @@ public class SignupLoginFragment extends BaseFragment {
         hideSoftKeyboard(getActivity());
 
         //执行登录业务
-        exeLoginFlow(email,password);
+        exeLoginFlow(email, password);
     }
 
     private void showErrInfo(int msgId) {
@@ -127,7 +127,7 @@ public class SignupLoginFragment extends BaseFragment {
         tvHint.setVisibility(View.VISIBLE);
     }
 
-    void exeLoginFlow(String email, String psw){
+    void exeLoginFlow(final String email, final String psw) {
         //show waiting dialog
         showLoadingDialog(R.string.activity_main_wait);
 
@@ -138,34 +138,34 @@ public class SignupLoginFragment extends BaseFragment {
         //查询账户是否注册；如果未注册则展示注册界面（输入last name, first name;avatar）;注册成功后，再次执行
         //登录流程；登录成功后，开始同步数据（同步那些？）
         final UserApiNoNeedToken userApi = ApiGen.getInstance(getActivity().getApplicationContext()).
-                generateApi(UserApiNoNeedToken.class,false);
+                generateApi(UserApiNoNeedToken.class, false);
 
         userApi.checkEmailAvailableToRegister(email).enqueue(new BaseRetrofitCallback<Object>() {
             @Override
             public void onResponse(Call<Object> call, Response<Object> response) {
                 LogUtil2.getUtils().d("check mail onResponse ");
-                super.onResponse(call,response);
+                super.onResponse(call, response);
 
                 if (response.code() == 200) {
                     SignupLoginFragment.this.finishLoadingDialog();
                     //邮箱未注册，则展示注册界面
-                    showRegisterUI();
+                    showRegisterUI(email, psw);
 
-                }else if(response.code() == 409){
+                } else if (response.code() == 409) {
                     //邮箱已经注册，则执行登录流程
-                    loginByEmail(userApi,loginEntity);
+                    loginByEmail(userApi, loginEntity);
                 }
             }
 
             @Override
             public void onFailure(Call<Object> call, Throwable t) {
-                super.onFailure(call,t);
+                super.onFailure(call, t);
 
                 //dismiss waiting dialog,show error; terminate exe
                 SignupLoginFragment.this.finishLoadingDialog();
 
                 t.printStackTrace();
-                LogUtil2.getUtils().d("check mail fail, " );
+                LogUtil2.getUtils().d("check mail fail, ");
 
                 showErrInfo(R.string.signup_profile_login_failed);
             }
@@ -173,9 +173,9 @@ public class SignupLoginFragment extends BaseFragment {
 
     }
 
-    private void showRegisterUI() {
+    private void showRegisterUI(String email, String pwd) {
         SignupActivity signupActivity = (SignupActivity) getActivity();
-        signupActivity.setFragment(SignupProfileFragment.newInstance());
+        signupActivity.setFragment(SignupProfileFragment.newInstance(email, pwd));
     }
 
     /**
@@ -205,9 +205,9 @@ public class SignupLoginFragment extends BaseFragment {
         userApi.login(loginEntity).enqueue(new BaseRetrofitCallback<LoginSuccessRep>() {
             @Override
             public void onResponse(Call<LoginSuccessRep> call, Response<LoginSuccessRep> response) {
-                super.onResponse(call,response);
+                super.onResponse(call, response);
 
-                if(response.code() == 200){
+                if (response.code() == 200) {
                     LogUtil2.getUtils().d("login success");
                     LogUtil2.getUtils().d(response.body().getAccess_token());
                     //缓存token
@@ -216,7 +216,7 @@ public class SignupLoginFragment extends BaseFragment {
                     //同步数据
                     syncData();
 
-                }else{
+                } else {
                     SignupLoginFragment.this.finishLoadingDialog();
                     LogUtil2.getUtils().d("login error, code: " + response.code());
                     btn_resetPsw.setVisibility(View.VISIBLE);
@@ -227,7 +227,7 @@ public class SignupLoginFragment extends BaseFragment {
 
             @Override
             public void onFailure(Call<LoginSuccessRep> call, Throwable t) {
-                super.onFailure(call,t);
+                super.onFailure(call, t);
                 //fail, dismiss dialog, show error info
                 SignupLoginFragment.this.finishLoadingDialog();
                 showErrInfo(R.string.signup_profile_login_failed);
@@ -237,32 +237,32 @@ public class SignupLoginFragment extends BaseFragment {
 
     private void syncData() {
         // TODO: 2017/10/17 同步账户数据 成功后关闭等待对话框，跳转到主界面；失败提醒
-        Log.w("login","login ok, start sync data");
+        Log.w("login", "login ok, start sync data");
 
         //登陆成功后，需要获取两个业务数据：
         //“/v1/user/retrieveUserProfile”
         //“/v1/event/retrieveAllEventsWithTodo”
 
         final UserApiNeedToken userApiNeedToken = ApiGen.getInstance(getActivity().getApplicationContext()).
-                generateApi(UserApiNeedToken.class,true);
+                generateApi(UserApiNeedToken.class, true);
 
         userApiNeedToken.retrieveUserProfile().enqueue(new BaseRetrofitCallback<UserProfileRep>() {
             @Override
             public void onResponse(Call<UserProfileRep> call, Response<UserProfileRep> response) {
-                LogUtil2.getUtils().d("retrieveUserProfile onResponse" );
-                super.onResponse(call,response);
+                LogUtil2.getUtils().d("retrieveUserProfile onResponse");
+                super.onResponse(call, response);
 
-                if(response.code() == 200){//获取到用户信息
+                if (response.code() == 200) {//获取到用户信息
                     LogUtil2.getUtils().d("onResponse: " + response.body());
 
                     //先清除本地数据，然后再保存
-                    new LoginManager().saveLoginData(getContext(),response.body());
+                    new LoginManager().saveLoginData(getContext(), response.body());
                     //继续获取信息: 获取event信息
                     getEventInfos();
 
-                }else {
+                } else {
                     finishLoadingDialog();
-                    LogUtil2.getUtils().d("onResponse not 200" );
+                    LogUtil2.getUtils().d("onResponse not 200");
 
                     showErrInfo(R.string.signup_profile_login_failed);
                 }
@@ -270,8 +270,8 @@ public class SignupLoginFragment extends BaseFragment {
 
             @Override
             public void onFailure(Call<UserProfileRep> call, Throwable t) {
-                Log.d("syncData","retrieveUserProfile error, ");
-                super.onFailure(call,t);
+                Log.d("syncData", "retrieveUserProfile error, ");
+                super.onFailure(call, t);
 
                 showErrInfo(R.string.signup_profile_login_failed);
                 finishLoadingDialog();
@@ -283,23 +283,23 @@ public class SignupLoginFragment extends BaseFragment {
     private void getEventInfos() {
         LogUtil2.getUtils().d("getEventInfo");
         final EventApi eventApi = ApiGen.getInstance(getActivity().getApplicationContext()).
-                generateApi(EventApi.class,true);
+                generateApi(EventApi.class, true);
 
         eventApi.retrieveAllEventsWithTodo().enqueue(new BaseRetrofitCallback<List<EventWithTodo>>() {
             @Override
             public void onResponse(Call<List<EventWithTodo>> call, Response<List<EventWithTodo>> response) {
-                super.onResponse(call,response);
+                super.onResponse(call, response);
 
-                if(response.code() == 200){//获取成功
+                if (response.code() == 200) {//获取成功
                     LogUtil2.getUtils().d("onResponse: " + response.body());
 
-                    Log.w("login"," sync data ok, show next UI");
-                    new EventManager().saveEventForLogin(getContext(),response.body());
+                    Log.w("login", " sync data ok, show next UI");
+                    new EventManager().saveEventForLogin(getContext(), response.body());
 
                     //todo 登陆成功后，进入到主界面
                     finishLoadingDialog();
                     loginFlowOK();
-                }else{
+                } else {
                     LogUtil2.getUtils().d("login error, code: " + response.code());
 
                     finishLoadingDialog();
@@ -309,7 +309,7 @@ public class SignupLoginFragment extends BaseFragment {
 
             @Override
             public void onFailure(Call<List<EventWithTodo>> call, Throwable t) {
-                Log.d("syncData","retrieveAllEventsWithTodo error, ");
+                Log.d("syncData", "retrieveAllEventsWithTodo error, ");
                 super.onFailure(call, t);
 
                 finishLoadingDialog();
@@ -320,7 +320,7 @@ public class SignupLoginFragment extends BaseFragment {
 
     private void loginFlowOK() {
         getActivity().finish();
-        startActivity(new Intent(getActivity(),MainFrameActivity.class));
+        startActivity(new Intent(getActivity(), MainFrameActivity.class));
 
         // TODO: 2017/10/27 测试阶段，暂不记录状态
         PreferencesUtil.getInstance(getContext()).setPreferenceBooleanValue(ConfigUtil.login_state, true);
@@ -328,7 +328,7 @@ public class SignupLoginFragment extends BaseFragment {
 
 
     @OnClick(R.id.signup_login_reset_pwd)
-    public void resetPsw(){
+    public void resetPsw() {
         final String email = et_email.getText().toString();
 
         if (!Functions.isValidEmail(email)) {
@@ -361,32 +361,32 @@ public class SignupLoginFragment extends BaseFragment {
         showLoadingDialog(R.string.activity_main_wait);
 
         final UserApiNeedToken userApiNeedToken = ApiGen.getInstance(getActivity().getApplicationContext()).
-                generateApi(UserApiNeedToken.class,false);
+                generateApi(UserApiNeedToken.class, false);
 
         HashMap<String, String> resetPswParam = new HashMap<>(1);
         resetPswParam.put("email", email);
         userApiNeedToken.sendResetPasswordEmail(resetPswParam).enqueue(new BaseRetrofitCallback<Object>() {
             @Override
             public void onResponse(Call<Object> call, Response<Object> response) {
-                super.onResponse(call,response);
+                super.onResponse(call, response);
 
                 finishLoadingDialog();
 
                 int code = response.code();
-                if(code == 200){
+                if (code == 200) {
                     ViewUtils.showMsgDialog(getActivity(),
-                            getString(R.string.profile_reset_password_note,et_email.getText().toString()));
-                }else {
-                    Toast.makeText(getContext(),R.string.error_api_unknown,Toast.LENGTH_SHORT).show();
+                            getString(R.string.profile_reset_password_note, et_email.getText().toString()));
+                } else {
+                    Toast.makeText(getContext(), R.string.error_api_unknown, Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<Object> call, Throwable t) {
-                super.onFailure(call,t);
+                super.onFailure(call, t);
                 finishLoadingDialog();
 
-                Toast.makeText(getContext(),R.string.net_err,Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), R.string.net_err, Toast.LENGTH_SHORT).show();
             }
         });
     }

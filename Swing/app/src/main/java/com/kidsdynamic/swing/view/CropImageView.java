@@ -444,9 +444,9 @@ public class CropImageView extends AppCompatImageView implements ViewTreeObserve
     }
 
     public static final class CropResult {
-        public  final Bitmap bitmap;
-        public  final File file;
-        public  final Exception error;
+        public final Bitmap bitmap;
+        public final File file;
+        public final Exception error;
 
         public CropResult(Bitmap bitmap, File file, Exception error) {
             this.bitmap = bitmap;
@@ -514,11 +514,11 @@ public class CropImageView extends AppCompatImageView implements ViewTreeObserve
                 return null;
             }
             String fileName = FileUtil.getFileNameByTimeStamp();
-            String postfix = "jpg";
+            String postfix = ".jpg";
             if (Bitmap.CompressFormat.PNG == compressFormat) {
-                postfix = "png";
+                postfix = ".png";
             } else if (Bitmap.CompressFormat.WEBP == compressFormat) {
-                postfix = "webp";
+                postfix = ".webp";
             }
             imgFile = new File(curFileDir, fileName + postfix);
             if (imgFile.exists() && !imgFile.delete()) {

@@ -43,10 +43,15 @@ public class WatchPurchaseFragment extends BaseFragment {
         startBrowser("https://www.kidsdynamic.com/");
     }
 
+    @OnClick(R.id.watch_purchase_request)
+    public void request() {
+
+    }
+
     private void startBrowser(String strUrl) {
         try {
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(strUrl));
-            intent.setClassName("com.android.browser", "com.android.browser.BrowserActivity");
+//            intent.setClassName("com.android.browser", "com.android.browser.BrowserActivity");
             startActivity(intent);
         } catch (Exception e) {
             e.printStackTrace();
