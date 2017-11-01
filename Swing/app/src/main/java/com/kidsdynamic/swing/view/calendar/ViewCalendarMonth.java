@@ -45,7 +45,7 @@ public class ViewCalendarMonth extends ViewCalendar implements View.OnClickListe
 
             mViewNameList[idx].setTextSize(TypedValue.COMPLEX_UNIT_PX, mTextSize);
             mViewNameList[idx].setTypeface(mViewNameList[idx].getTypeface(), mTextStyle);
-            mViewNameList[idx].setTextColor(mTextColor);
+            mViewNameList[idx].setTextColor(mWeekNameTextColor);
             mViewNameList[idx].setGravity(Gravity.CENTER);
             mViewNameList[idx].setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, 2));
 
@@ -165,7 +165,7 @@ public class ViewCalendarMonth extends ViewCalendar implements View.OnClickListe
                 cell.setOnClickListener(this);
     }
 
-    interface OnSelectListener {
+    public interface OnSelectListener {
         void onSelect(ViewCalendarMonth calendar, ViewCalendarCellMonth cell);
     }
 

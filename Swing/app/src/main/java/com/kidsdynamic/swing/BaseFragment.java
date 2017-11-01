@@ -10,6 +10,9 @@ import android.support.v4.app.Fragment;
  */
 
 public class BaseFragment extends Fragment {
+
+    protected final static String BUNDLE_KEY_DATE = "DATE";
+
     private ProgressDialog progressDialog;
 
     public static BaseFragment newInstance(String info) {

@@ -103,8 +103,11 @@ public class ViewCalendarCellMonth extends ViewCalendarCell {
         if (calendar != null && calendar.getFocusBackgroundColor()!= Color.TRANSPARENT && calendar.isSameDay(mDate))
             drawFocus(canvas, calendar.getFocusBackgroundColor());
 
-        if (mEventList.size() > 0)
-            drawEvent(canvas);
+        if (mEventList.size() > 0){
+//            drawEvent(canvas);
+            ViewCalendarCellUtils.drawEvent(this,canvas,mPaint,mRect,mEventList);
+        }
+
 
         super.onDraw(canvas);
     }

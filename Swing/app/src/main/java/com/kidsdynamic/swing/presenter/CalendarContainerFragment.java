@@ -11,15 +11,12 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.kidsdynamic.swing.BaseFragment;
 import com.kidsdynamic.swing.R;
 import com.kidsdynamic.swing.SwingApplication;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -34,12 +31,12 @@ public class CalendarContainerFragment extends BaseFragment {
     public final static int UI_Action_Change_Event_detail = 1;
     public final static int UI_Action_Change_Event_Add = 2;
 
-    @BindView(R.id.main_toolbar_title)
+    /*@BindView(R.id.main_toolbar_title)
     protected TextView tv_title;
     @BindView(R.id.main_toolbar_action1)
     protected ImageView view_left_action;
     @BindView(R.id.main_toolbar_action2)
-    protected ImageView view_right_action;
+    protected ImageView view_right_action;*/
 
     @Nullable
     @Override
@@ -92,26 +89,26 @@ public class CalendarContainerFragment extends BaseFragment {
         public void onReceive(Context context, Intent intent) {
             int update_type = intent.getIntExtra(UI_Update_Action_Type, -1);
 
-            if(UI_Action_Change_Event_detail == update_type){
+           /* if(UI_Action_Change_Event_detail == update_type){
                 //进入当日日程详情，切换右上角按钮功能
                 view_right_action.setImageResource(R.drawable.icon_pen);
                 view_right_action.setTag(R.drawable.icon_pen);
             }else if(UI_Action_Change_Event_Add == update_type){
                 view_right_action.setImageResource(R.drawable.icon_add);
                 view_right_action.setTag(R.drawable.icon_add);
-            }
+            }*/
         }
     };
 
     private void initTitleBar() {
-        tv_title.setTextColor(getResources().getColor(R.color.colorAccent));
+        /*tv_title.setTextColor(getResources().getColor(R.color.colorAccent));
         tv_title.setText(R.string.title_calendar);
         view_left_action.setImageResource(R.drawable.icon_calendar);
 
         view_right_action.setImageResource(R.drawable.icon_add);
         view_right_action.setTag(R.drawable.icon_add);
 
-        view_right_action.setOnClickListener(topbarRightBtnOnclick);
+        view_right_action.setOnClickListener(topbarRightBtnOnclick);*/
     }
 
     private View.OnClickListener topbarRightBtnOnclick = new View.OnClickListener() {

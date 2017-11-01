@@ -26,13 +26,14 @@
         android:layout_below="@+id/title_bar"
         android:orientation="vertical">
 
-        <TextView
+        <com.kidsdynamic.swing.view.AvenirTextView
             android:id="@+id/device_status"
             style="@style/textview_main"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="2"
             android:gravity="center"
+            android:textStyle="bold"
             android:text="@string/device_battery" />
 
 
@@ -62,13 +63,13 @@
                 app:strokeEnd="-1"
                 app:strokeWidth="10dp" />
 
-            <View
+            <com.kidsdynamic.swing.view.AvenirTextView
                 android:id="@+id/device_base_line"
                 android:layout_width="match_parent"
                 android:layout_height="20dp"
                 android:layout_centerInParent="true" />
 
-            <TextView
+            <com.kidsdynamic.swing.view.AvenirTextView
                 android:id="@+id/device_capacity"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"

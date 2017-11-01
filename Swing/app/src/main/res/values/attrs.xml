@@ -60,4 +60,17 @@
         <attr name="end_hour" format="integer" />
         <attr name="end_minute" format="integer" />
     </declare-styleable>
+
+    <declare-styleable name="ViewShape">
+        <attr name="color" format="color" />
+        <attr name="shape" format="enum">
+            <enum name="circle" value="0" />
+            <enum name="rectangle" value="1" />
+            <enum name="triangle_top" value="2" />
+            <enum name="triangle_bottom" value="3" />
+            <enum name="triangle_left" value="4" />
+            <enum name="triangle_right" value="5" />
+        </attr>
+        <attr name="desiredSize" format="dimension" />
+    </declare-styleable>
 </resources>

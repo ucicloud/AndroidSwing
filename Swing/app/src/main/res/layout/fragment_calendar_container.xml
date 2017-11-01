@@ -7,23 +7,22 @@
     android:fitsSystemWindows="true"
     android:background="@color/color_blue_sky">
 
-    <include layout="@layout/base_title_bar"
-        android:id="@+id/title_bar"/>
+   <!-- <include layout="@layout/base_title_bar"
+        android:id="@+id/title_bar"
+        android:visibility="invisible"/>-->
 
     <ImageView
         android:id="@+id/main_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="fitEnd"
-        android:layout_below="@id/title_bar"
         android:src="@drawable/city_florida" />
 
     <FrameLayout
         android:id="@+id/calender_fragment_container"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:fitsSystemWindows="true"
-        android:layout_below="@id/title_bar"/>
+        android:fitsSystemWindows="true"/>
 
 
 </RelativeLayout>

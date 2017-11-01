@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
+import com.kidsdynamic.data.dao.DB_Kids;
 import com.kidsdynamic.swing.BaseFragment;
 import com.kidsdynamic.swing.R;
 import com.kidsdynamic.swing.domain.DeviceManager;
@@ -25,6 +26,7 @@ public class FragmentDevice extends BaseFragment {
 
     private View mViewMain;
 
+    private TextView tv_title;
     private TextView mViewStatus;
     private TextView mViewCapacity;
     private ViewCircle mViewProgress;
@@ -57,14 +59,26 @@ public class FragmentDevice extends BaseFragment {
 
     private void initTitle() {
 
-        String title = getString(R.string.device_owner, DeviceManager.getFocusWatchName(getContext()));
-        ((TextView) mViewMain.findViewById(R.id.main_toolbar_title))
-                .setText(title);
+        tv_title = ((TextView) mViewMain.findViewById(R.id.main_toolbar_title));
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        //获取缓存电量
+        String title = getString(R.string.device_owner, "My");
+
+        DB_Kids focusWatchInfo = DeviceManager.getFocusWatchInfo(getContext());
+        if(focusWatchInfo != null){
+            title = getString(R.string.device_owner, focusWatchInfo.getName());
+            int battery = DeviceManager.getCacheWatchBattery(focusWatchInfo.getMacId());
+
+            showBattery(battery);
+        }
+
+        tv_title.setText(title);
+        //todo test battery show
+        setCapacity(60);
 
         /*if (mActivityMain.mOperator.mFocusBatteryName.equals("")) {
             mHandler.postDelayed(mRunnable, 1000);
@@ -84,6 +98,10 @@ public class FragmentDevice extends BaseFragment {
             setStatus(STATUS_FOUND);
             setCapacity(mActivityMain.mOperator.mFocusBatteryValue);
         }*/
+    }
+
+    private void showBattery(int battery) {
+        setCapacity(battery);
     }
 
     @Override

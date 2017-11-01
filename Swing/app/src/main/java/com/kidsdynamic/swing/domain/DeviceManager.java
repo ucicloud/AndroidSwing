@@ -3,7 +3,10 @@ package com.kidsdynamic.swing.domain;
 import android.content.Context;
 import android.text.TextUtils;
 
+import com.kidsdynamic.data.dao.DB_Kids;
+import com.kidsdynamic.data.persistent.DbUtil;
 import com.kidsdynamic.data.persistent.PreferencesUtil;
+import com.kidsdynamic.data.repository.disk.KidsDataStore;
 import com.kidsdynamic.swing.SwingApplication;
 
 /**
@@ -13,9 +16,14 @@ import com.kidsdynamic.swing.SwingApplication;
 public class DeviceManager {
 
     private final static String key_focus_kids = "focus_kids";
-    public static String getFocusWatchName(Context context){
-        // TODO: 2017/10/27 查询当前使用的手表名称
-        return "My";
+    public static DB_Kids getFocusWatchInfo(Context context){
+
+        int focusKidsId = getFocusKidsId();
+        DbUtil dbUtil = DbUtil.getInstance(context.getApplicationContext());
+        KidsDataStore kidsDataStore = new KidsDataStore(dbUtil);
+
+
+        return kidsDataStore.getKidsInfo(focusKidsId);
     }
 
     public static String getMacID(String macAddress) {

@@ -100,7 +100,8 @@ public class ViewCalendarCellWeek extends ViewCalendarCell {
             drawFocus(canvas, calendar.getFocusBackgroundColor());
 
         if (mEventList.size() > 0){
-            drawEvent(canvas);
+//            drawEvent(canvas);
+            ViewCalendarCellUtils.drawEvent(this,canvas,mPaint,mRect,mEventList);
         }
 
         super.onDraw(canvas);

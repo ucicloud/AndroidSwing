@@ -5,11 +5,12 @@
     android:layout_height="@dimen/multiplex_title_bar_height"
     android:background="@color/color_white">
 
-    <TextView
+    <com.kidsdynamic.swing.view.AvenirTextView
         android:id="@+id/main_toolbar_title"
         style="@style/textview_toolbar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:textStyle="bold"
         android:gravity="center" />
 
     <ImageView

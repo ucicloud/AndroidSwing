@@ -1,7 +1,6 @@
 package com.kidsdynamic.swing.presenter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.KeyEvent;
@@ -15,9 +14,7 @@ import android.widget.TextView;
 
 import com.kidsdynamic.data.net.event.model.EventUtils;
 import com.kidsdynamic.data.net.event.model.TodoEntity;
-import com.kidsdynamic.swing.BaseFragment;
 import com.kidsdynamic.swing.R;
-import com.kidsdynamic.swing.SwingApplication;
 import com.kidsdynamic.swing.adapter.TodoListAdapter;
 import com.kidsdynamic.swing.domain.CalendarManager;
 import com.kidsdynamic.swing.model.WatchEvent;
@@ -40,9 +37,10 @@ import butterknife.OnClick;
  * calendar main
  */
 
-public class CalendarMainFragment extends BaseFragment {
+public class CalendarMainFragment extends CalendarBaseFragment {
 
     private View mViewMain;
+
 
     @BindView(R.id.calendar_main_selector)
     protected ViewCalendarSelector mViewSelector;
@@ -97,17 +95,21 @@ public class CalendarMainFragment extends BaseFragment {
         InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(mViewMain.getWindowToken(), 0);
 
-//        initTitleBar();
+        initTitleBar();
         initCalendar();
 
         return mViewMain;
     }
 
-   /* private void initTitleBar() {
+    private void initTitleBar() {
         tv_title.setTextColor(getResources().getColor(R.color.colorAccent));
+        tv_title.setText(R.string.title_calendar);
         view_left_action.setImageResource(R.drawable.icon_calendar);
+
         view_right_action.setImageResource(R.drawable.icon_add);
-    }*/
+        view_right_action.setTag(R.drawable.icon_add);
+
+    }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -124,10 +126,12 @@ public class CalendarMainFragment extends BaseFragment {
                         layout_event_oper.setVisibility(View.VISIBLE);
 
                         //切换右上角图标
-                        Intent intent = new Intent(CalendarContainerFragment.UI_Update_Action);
+                        view_right_action.setImageResource(R.drawable.icon_add);
+                        view_right_action.setTag(R.drawable.icon_add);
+                        /*Intent intent = new Intent(CalendarContainerFragment.UI_Update_Action);
                         intent.putExtra(CalendarContainerFragment.UI_Update_Action_Type,
                                 CalendarContainerFragment.UI_Action_Change_Event_Add);
-                        SwingApplication.localBroadcastManager.sendBroadcast(intent);
+                        SwingApplication.localBroadcastManager.sendBroadcast(intent);*/
 
                         return true;
                     }
@@ -147,16 +151,16 @@ public class CalendarMainFragment extends BaseFragment {
     }
 
 
-//    @OnClick(R.id.main_toolbar_action1)
+    @OnClick(R.id.main_toolbar_action1)
     public void onToolbarAction1() {
         //show calendar month model
-        /*Bundle bundle = new Bundle();
-        bundle.putLong(BUNDLE_KEY_DATE, mViewCalendar.getDate());
+        Bundle bundle = new Bundle();
+        bundle.putLong(BUNDLE_KEY_DATE, mViewCalendarWeek.getDate());
 
-        mActivityMain.selectFragment(FragmentCalendarMonth.class.getName(), bundle);*/
+        selectFragment(CalendarMonthFragment.class.getName(), bundle,true);
     }
 
-//    @OnClick(R.id.main_toolbar_action2)
+    @OnClick(R.id.main_toolbar_action2)
     public void onToolbarAction2() {
         //todo add new event
         /*WatchEvent event = new WatchEvent(mViewCalendar.getDate());
@@ -164,6 +168,8 @@ public class CalendarMainFragment extends BaseFragment {
 
         mActivityMain.mEventStack.push(event);
         mActivityMain.selectFragment(FragmentCalendarEvent.class.getName(), null);*/
+
+        selectFragment(CalendarAddEventFragment.class.getName(),null,true);
     }
 
 //    @OnClick(R.id.nearby_event_layout)
@@ -174,10 +180,12 @@ public class CalendarMainFragment extends BaseFragment {
             layout_event_detail.setVisibility(View.VISIBLE);
             layout_event_oper.setVisibility(View.GONE);
 
-        Intent intent = new Intent(CalendarContainerFragment.UI_Update_Action);
+        /*Intent intent = new Intent(CalendarContainerFragment.UI_Update_Action);
         intent.putExtra(CalendarContainerFragment.UI_Update_Action_Type,
                 CalendarContainerFragment.UI_Action_Change_Event_detail);
-        SwingApplication.localBroadcastManager.sendBroadcast(intent);
+        SwingApplication.localBroadcastManager.sendBroadcast(intent);*/
+        view_right_action.setImageResource(R.drawable.icon_pen);
+        view_right_action.setTag(R.drawable.icon_pen);
 
 
         TodoListAdapter todoListAdapter = new TodoListAdapter(getContext(), getTodoEntity());

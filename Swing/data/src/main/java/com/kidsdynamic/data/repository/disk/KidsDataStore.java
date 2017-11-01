@@ -2,10 +2,9 @@ package com.kidsdynamic.data.repository.disk;
 
 import android.support.annotation.NonNull;
 
+import com.kidsdynamic.commonlib.utils.ObjectUtils;
 import com.kidsdynamic.data.dao.DB_Kids;
-import com.kidsdynamic.data.dao.DB_User;
 import com.kidsdynamic.data.dao.KidsDao;
-import com.kidsdynamic.data.dao.UserDao;
 import com.kidsdynamic.data.persistent.DbUtil;
 
 import java.util.List;
@@ -29,5 +28,15 @@ public class KidsDataStore {
     public void save(@NonNull List<DB_Kids> kidsList){
         KidsDao kidsDao = dbUtil.getDaoSession().getKidsDao();
         kidsDao.insertInTx(kidsList);
+    }
+
+    public DB_Kids getKidsInfo(int kidsId){
+        KidsDao kidsDao = dbUtil.getDaoSession().getKidsDao();
+        List<DB_Kids> kidsList = kidsDao.queryBuilder().where(KidsDao.Properties.KidsId.eq(kidsId)).list();
+        if(!ObjectUtils.isListEmpty(kidsList)){
+            return kidsList.get(0);
+        }
+
+        return null;
     }
 }
