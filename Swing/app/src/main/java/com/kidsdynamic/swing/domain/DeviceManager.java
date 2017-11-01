@@ -11,6 +11,8 @@ import com.kidsdynamic.swing.SwingApplication;
  */
 
 public class DeviceManager {
+
+    private final static String key_focus_kids = "focus_kids";
     public static String getFocusWatchName(Context context){
         // TODO: 2017/10/27 查询当前使用的手表名称
         return "My";
@@ -55,5 +57,15 @@ public class DeviceManager {
         PreferencesUtil preferencesUtil = PreferencesUtil.getInstance(SwingApplication.getAppContext());
         return preferencesUtil.gPrefIntValue(watchMacId);
 
+    }
+
+    public static boolean updateFocusKids(int kids){
+        PreferencesUtil preferencesUtil = PreferencesUtil.getInstance(SwingApplication.getAppContext());
+        return preferencesUtil.setPreferenceIntValue(key_focus_kids, kids);
+    }
+
+    public static int getFocusKidsId(){
+        PreferencesUtil preferencesUtil = PreferencesUtil.getInstance(SwingApplication.getAppContext());
+        return preferencesUtil.gPrefIntValue(key_focus_kids);
     }
 }
