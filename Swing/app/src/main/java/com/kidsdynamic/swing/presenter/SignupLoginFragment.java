@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.kidsdynamic.commonlib.utils.ObjectUtils;
+import com.kidsdynamic.commonlib.utils.SoftKeyBoardUtil;
 import com.kidsdynamic.data.net.ApiGen;
 import com.kidsdynamic.data.net.BaseRetrofitCallback;
 import com.kidsdynamic.data.net.event.EventApi;
@@ -115,7 +116,7 @@ public class SignupLoginFragment extends BaseFragment {
             return;
         }
 
-        hideSoftKeyboard(getActivity());
+        SoftKeyBoardUtil.hideSoftKeyboard(getActivity());
 
         //执行登录业务
         exeLoginFlow(email, password);
@@ -176,28 +177,6 @@ public class SignupLoginFragment extends BaseFragment {
     private void showRegisterUI(String email, String pwd) {
         SignupActivity signupActivity = (SignupActivity) getActivity();
         signupActivity.setFragment(SignupProfileFragment.newInstance(email, pwd));
-    }
-
-    /**
-     * Hide SoftKeyBoard
-     *
-     * @param activity Activity
-     */
-    private static boolean hideSoftKeyboard(Activity activity) {
-        if (activity == null) {
-            return false;
-        }
-        View view = activity.getCurrentFocus();
-        if (null == view) {
-            return false;
-        }
-        IBinder ib = view.getWindowToken();
-        if (null == ib) {
-            return false;
-        }
-        InputMethodManager imm = (InputMethodManager) activity.getSystemService(
-                Context.INPUT_METHOD_SERVICE);
-        return null != imm && imm.hideSoftInputFromWindow(ib, 0);
     }
 
     //开始执行登录接口，如果登录成功，则同步数据

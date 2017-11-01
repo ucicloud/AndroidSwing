@@ -15,6 +15,12 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+    signingConfigs {
+        debug {
+        }
+        release {
+        }
+    }
     buildTypes {
         release {
             minifyEnabled false
@@ -22,17 +28,41 @@ android {
 
             buildConfigField "String", "API_BASE_URL", releaseApiBaseUrl
             buildConfigField "String", "PHOTO_BASE_URL", releasePhotoBaseUrl
+
+            signingConfig signingConfigs.release
         }
 
         debug{
             buildConfigField "String", "API_BASE_URL", devApiBaseUrl
             buildConfigField "String", "PHOTO_BASE_URL", devPhotoBaseUrl
+
+            signingConfig signingConfigs.debug
         }
     }
 
     lintOptions{
         abortOnError false
     }
+
+    // Rename file name of APK which is built by Android Studio
+    applicationVariants.all { variant ->
+        variant.outputs.each { output ->
+            def outputFile = output.outputFile
+            if (outputFile != null && outputFile.name.endsWith('.apk')) {
+                def fileName = "Swing" +
+                        "_v" + defaultConfig.versionName +
+                        "_build" + defaultConfig.versionCode +
+                        "_" + packageTime() +
+                        "_" + buildType.name +
+                        ".apk"
+                output.outputFile = new File(outputFile.parent, fileName)
+            }
+        }
+    }
+}
+
+def static packageTime() {
+    return new Date().format('yyyyMMdd', TimeZone.getTimeZone("UTC"))
 }
 
 dependencies {
@@ -58,4 +88,30 @@ dependencies {
     compile project(':htttp')
     compile project(path: ':base')
     compile project(':baseble')
+}
+
+// Read signingConfigs
+File proFile = file('signing.properties');
+if (proFile.exists()) {
+    Properties props = new Properties();
+    props.load(new FileInputStream((proFile)))
+    // Debug
+    if (props.containsKey('DEBUG_STORE_FILE_PATH')) {
+        android.signingConfigs.debug.storeFile = file(props['DEBUG_STORE_FILE_PATH'])
+    } else {
+        android.buildTypes.debug.signingConfig = null
+    }
+    // Release
+    if (props.containsKey('RELEASE_STORE_FILE_PATH') && props.containsKey('RELEASE_STORE_PASSWORD') &&
+            props.containsKey('RELEASE_KEY_ALIAS') && props.containsKey('RELEASE_KEY_PASSWORD')) {
+        android.signingConfigs.release.storeFile = file(props['RELEASE_STORE_FILE_PATH'])
+        android.signingConfigs.release.storePassword = props['RELEASE_STORE_PASSWORD']
+        android.signingConfigs.release.keyAlias = props['RELEASE_KEY_ALIAS']
+        android.signingConfigs.release.keyPassword = props['RELEASE_KEY_PASSWORD']
+    } else {
+        android.buildTypes.release.signingConfig = null
+    }
+} else {
+    android.buildTypes.debug.signingConfig = null
+    android.buildTypes.release.signingConfig = null
 }

@@ -1,0 +1,47 @@
+
+查看apk签名 和 jks 的信息CMD命令：
+keytool -list -v -keystore release.jks
+
+///////////////////////////////以下为cmd命令行输出/////////////////////////////
+
+输入密钥库口令:
+
+密钥库类型: JKS
+密钥库提供方: SUN
+
+您的密钥库包含 1 个条目
+
+别名: swing
+创建日期: 2017-11-1
+条目类型: PrivateKeyEntry
+证书链长度: 1
+证书[1]:
+所有者: CN=Stefan Cheung, OU=App R&D Team, O=Andrios Technology Inc., L=Zhengzho
+u, ST=Henan, C=086
+发布者: CN=Stefan Cheung, OU=App R&D Team, O=Andrios Technology Inc., L=Zhengzho
+u, ST=Henan, C=086
+序列号: 2ff46845
+有效期开始日期: Wed Nov 01 09:05:47 CST 2017, 截止日期: Thu Oct 20 09:05:47 CST
+2067
+证书指纹:
+         MD5: F0:DE:D9:93:5C:BD:E2:28:2A:22:57:42:10:F0:11:03
+         SHA1: 5D:0D:55:05:05:01:92:A1:59:63:F6:3A:85:11:08:EE:AB:40:77:6D
+         SHA256: 27:E7:09:C2:93:B6:AC:EA:38:4F:69:51:6B:43:E9:FF:49:A4:E3:81:7A:
+7D:47:ED:21:77:EE:62:C5:66:44:42
+         签名算法名称: SHA256withRSA
+         版本: 3
+
+扩展:
+
+#1: ObjectId: 2.5.29.14 Criticality=false
+SubjectKeyIdentifier [
+KeyIdentifier [
+0000: 4C 40 17 BB A9 3E 21 D7   A1 1A BB DD 59 27 20 F1  L@...>!.....Y' .
+0010: DC 2A 87 5A                                        .*.Z
+]
+]
+
+
+
+*******************************************
+*******************************************

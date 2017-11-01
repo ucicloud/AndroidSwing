@@ -216,7 +216,7 @@
     <string name="signup_language_select">Seleccionar</string>
 
     <!-- FragmentSignupStart -->
-    <string name="signup_Start_login">Iniciar sesión</string>
+    <string name="signup_start_login">Iniciar sesión</string>
     <string name="signup">Iniciar</string>
     <string name="signup_start_or">o</string>
     <string name="signup_start_facebook">Iniciar con Facebook</string>
