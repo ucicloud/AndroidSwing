@@ -26,14 +26,18 @@ import com.kidsdynamic.data.net.kids.model.KidsWithParent;
 import com.kidsdynamic.data.utils.LogUtil2;
 import com.kidsdynamic.swing.BaseFragment;
 import com.kidsdynamic.swing.R;
+import com.kidsdynamic.swing.ble.IDeviceInitCallback;
 import com.kidsdynamic.swing.ble.IDeviceScanCallback;
 import com.kidsdynamic.swing.ble.SwingBLEService;
+import com.kidsdynamic.swing.domain.DeviceManager;
 import com.kidsdynamic.swing.utils.GlideHelper;
 import com.kidsdynamic.swing.view.ListLinearLayout;
 import com.vise.baseble.model.BluetoothLeDevice;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -53,7 +57,7 @@ public class WatchSelectFragment extends BaseFragment {
     ListLinearLayout ll_select;
 
     private DataAdapter dataAdapter;
-
+    private Map<String, BluetoothLeDevice> mDeviceMap = new HashMap<>();
     private SwingBLEService mBluetoothService;
 
     public static WatchSelectFragment newInstance() {
@@ -76,30 +80,6 @@ public class WatchSelectFragment extends BaseFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         dataAdapter = new DataAdapter(getContext());
-        List<KidsWithParent> items = new ArrayList<>();
-        {
-            KidsWithParent kwp = new KidsWithParent();
-            kwp.setId(-1);
-            kwp.setName("SwingWatch03fc");
-            kwp.setMacId("2f7e");
-            items.add(kwp);
-        }
-        {
-            KidsWithParent kwp = new KidsWithParent();
-            kwp.setId(-1);
-            kwp.setName("SwingWatch5oew");
-            kwp.setMacId("4er2");
-            items.add(kwp);
-        }
-        {
-            KidsWithParent kwp = new KidsWithParent();
-            kwp.setId(1204);
-            kwp.setName("Stefan");
-            kwp.setMacId("3wct");
-            items.add(kwp);
-        }
-        dataAdapter.setData(items);
-        ll_select.setAdapter(dataAdapter);
         checkPermissions();
     }
 
@@ -226,15 +206,16 @@ public class WatchSelectFragment extends BaseFragment {
                 if (response.code() == 200) {
                     kidsWithParent = response.body();
                     LogUtil2.getUtils().d("watch binder: ");
-                    LogUtil2.getUtils().d("watch binder info: " + response.body().getName());
-                    LogUtil2.getUtils().d("watch binder info: " + response.body().getParent().getFirstName());
+                    LogUtil2.getUtils().d("watch binder info: " + kidsWithParent.getName());
+                    LogUtil2.getUtils().d("watch binder info: " + kidsWithParent.getParent().getFirstName());
                 } else if (response.code() == 404) {
                     kidsWithParent = new KidsWithParent();
                     kidsWithParent.setId(-1);
                     kidsWithParent.setName(scanResult.getName());
                     kidsWithParent.setMacId(scanResult.getAddress());
-                    LogUtil2.getUtils().d("watch not binde: ");
+                    LogUtil2.getUtils().d("watch not bind");
                 }
+                mDeviceMap.put(scanResult.getAddress(), scanResult);
                 dataAdapter.addItem(kidsWithParent);
                 dataAdapter.notifyDataSetChanged();
             }
@@ -323,7 +304,7 @@ public class WatchSelectFragment extends BaseFragment {
                     holder.iv_action.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            doRequestClick();
+                            doRequestClick(kidsWithParent.getMacId());
                         }
                     });
                 }
@@ -333,14 +314,47 @@ public class WatchSelectFragment extends BaseFragment {
         }
     }
 
-    private void doPlusClick(String macId) {
-        SignupActivity signupActivity = (SignupActivity) getActivity();
-        signupActivity.setFragment(WatchProfileFragment.newInstance(macId));
+    private void doPlusClick(final String macId) {
+        BluetoothLeDevice device = mDeviceMap.get(macId);
+        mBluetoothService.connectAndInitDevice(device, new IDeviceInitCallback() {
+            @Override
+            public void onInitComplete(String mac) {
+                SignupActivity signupActivity = (SignupActivity) getActivity();
+                signupActivity.setFragment(WatchProfileFragment.newInstance(macId));
+            }
+
+            @Override
+            public void onInitFail(int reason) {
+                LogUtil2.getUtils().d("watch init fail,code:" + reason);
+            }
+
+            @Override
+            public void onDeviceBattery(int battery) {
+                DeviceManager.saveBindWatchBattery(macId, battery);
+            }
+        });
+
     }
 
-    private void doRequestClick() {
-        SignupActivity signupActivity = (SignupActivity) getActivity();
-        signupActivity.setFragment(WatchRegisteredFragment.newInstance());
+    private void doRequestClick(final String macId) {
+        BluetoothLeDevice device = mDeviceMap.get(macId);
+        mBluetoothService.connectAndInitDevice(device, new IDeviceInitCallback() {
+            @Override
+            public void onInitComplete(String mac) {
+                SignupActivity signupActivity = (SignupActivity) getActivity();
+                signupActivity.setFragment(WatchRegisteredFragment.newInstance());
+            }
+
+            @Override
+            public void onInitFail(int reason) {
+                LogUtil2.getUtils().d("watch init fail,code:" + reason);
+            }
+
+            @Override
+            public void onDeviceBattery(int battery) {
+                DeviceManager.saveBindWatchBattery(macId, battery);
+            }
+        });
     }
 
     static class ViewHolder {

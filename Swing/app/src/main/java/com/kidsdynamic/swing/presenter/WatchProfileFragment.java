@@ -25,6 +25,7 @@ import com.kidsdynamic.data.net.user.model.UpdateKidAvatarRepEntity;
 import com.kidsdynamic.data.utils.LogUtil2;
 import com.kidsdynamic.swing.BaseFragment;
 import com.kidsdynamic.swing.R;
+import com.kidsdynamic.swing.domain.DeviceManager;
 import com.kidsdynamic.swing.view.BottomPopWindow;
 import com.kidsdynamic.swing.view.CropImageView;
 import com.kidsdynamic.swing.view.CropPopWindow;
@@ -53,7 +54,6 @@ public class WatchProfileFragment extends BaseFragment {
 
     private static final int REQUEST_CODE_CAMERA = 1;
     private static final int REQUEST_CODE_ALBUM = 2;
-
 
     private static final String MAC_ID = "mac_id";
 
@@ -134,7 +134,6 @@ public class WatchProfileFragment extends BaseFragment {
         if (TextUtils.isEmpty(lastName)) {
             return;
         }
-//        uploadAvatar(profile, firstName, lastName);
         Bundle args = getArguments();
         String macId = args.getString(MAC_ID);
         addKids(macId, profile, String.format("%1$s %2$s", firstName, lastName));
@@ -162,10 +161,12 @@ public class WatchProfileFragment extends BaseFragment {
                 if (response.code() == 200) {
                     //add successfully
                     KidsWithParent kidsWithParent = response.body();
+                    DeviceManager.updateFocusKids(kidsWithParent.getId());
                     uploadAvatar(profile, String.valueOf(kidsWithParent.getId()));
                     LogUtil2.getUtils().d("addKid rep kid ID: " + response.body().getId());
                 } else {
                     // TODO: 2017/10/31 add error msg
+                    LogUtil2.getUtils().d("addKid error code:" + response.code());
                 }
             }
 
@@ -196,7 +197,6 @@ public class WatchProfileFragment extends BaseFragment {
                     public void onResponse(Call<UpdateKidAvatarRepEntity> call,
                                            Response<UpdateKidAvatarRepEntity> response) {
                         LogUtil2.getUtils().d("uploadKidAvatar onResponse");
-                        LogUtil2.getUtils().d("uploadKidAvatar  code: " + response.code());
                         //code == 200 upload ok
                         int code = response.code();
                         if (200 == code) {
@@ -204,6 +204,7 @@ public class WatchProfileFragment extends BaseFragment {
                             signupActivity.setFragment(WatchHaveFragment.newInstance());
                         } else {
                             // TODO: 2017/10/31  show Error Msg
+                            LogUtil2.getUtils().d("uploadKidAvatar error code:" + response.code());
                         }
                     }
 

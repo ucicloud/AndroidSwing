@@ -145,12 +145,12 @@ public class SignupProfileFragment extends BaseFragment {
         String email = args.getString(EMAIL, "");
         String pwd = args.getString(PASSWORD, "");
         register(email, pwd, firstName, lastName, phoneNumber, zipCode);
-
     }
 
     private void register(@NonNull final String email, @NonNull final String psw,
                           @NonNull String firstName, @NonNull String lastName,
                           String phoneNumber, String zipCode) {
+        showLoadingDialog(R.string.signup_profile_wait);
         //使用用户数据，执行注册，如果注册成功则进行登录，登录成功执行同步数据
         final RegisterEntity registerEntity = new RegisterEntity();
         registerEntity.setEmail(email);
@@ -162,14 +162,12 @@ public class SignupProfileFragment extends BaseFragment {
 
         final UserApiNoNeedToken userApi = ApiGen.getInstance(getContext().getApplicationContext()).
                 generateApi(UserApiNoNeedToken.class, false);
-
         userApi.registerUser(registerEntity).enqueue(new Callback<RegisterFailResponse>() {
             @Override
             public void onResponse(Call<RegisterFailResponse> call, Response<RegisterFailResponse> response) {
                 LogUtil2.getUtils().d("register onResponse");
                 int code = response.code();
                 if (code == 200) {
-                    //
                     LogUtil2.getUtils().d("register ok start login");
 
                     LoginEntity loginEntity = new LoginEntity();
@@ -177,66 +175,63 @@ public class SignupProfileFragment extends BaseFragment {
                     loginEntity.setPassword(psw);
                     exeLogin(userApi, loginEntity);
                 } else {
-                    LogUtil2.getUtils().d("register fail code: " + code);
+                    LogUtil2.getUtils().d("register error code: " + code);
                     // TODO: 2017/10/17 dismiss dialog, show error msg
-
+                    finishLoadingDialog();
                 }
             }
 
             @Override
             public void onFailure(Call<RegisterFailResponse> call, Throwable t) {
                 //todo fail, dismiss dialog, show error info
-                LogUtil2.getUtils().d("register error, code: ");
+                LogUtil2.getUtils().d("register onFailure");
                 t.printStackTrace();
+                finishLoadingDialog();
             }
         });
     }
 
     private void exeLogin(UserApiNoNeedToken userApi, LoginEntity loginEntity) {
-
         userApi.login(loginEntity).enqueue(new Callback<LoginSuccessRep>() {
             @Override
             public void onResponse(Call<LoginSuccessRep> call, Response<LoginSuccessRep> response) {
-                //
-
                 if (response.code() == 200) {
+                    finishLoadingDialog();
                     LogUtil2.getUtils().d("login success");
                     LogUtil2.getUtils().d(response.body().getAccess_token());
                     //缓存token
                     new LoginManager().cacheToken(response.body().getAccess_token());
 
+                    uploadAvatar(profile);
+
                     //同步数据
 //                    syncData();
                     SignupActivity signupActivity = (SignupActivity) getActivity();
                     signupActivity.setFragment(WatchHaveFragment.newInstance());
-
                 } else {
-                    LogUtil2.getUtils().d("login error, code: " + response.code());
+                    LogUtil2.getUtils().d("login error code: " + response.code());
                 }
             }
 
             @Override
             public void onFailure(Call<LoginSuccessRep> call, Throwable t) {
-                //fail, dismiss dialog, show error info
-                // TODO: 2017/10/17
+                // TODO: 2017/10/17 fail, dismiss dialog, show error info
+                finishLoadingDialog();
             }
         });
 
     }
 
-    private void uploadAvatar(File profile, int userId) {
+    private void uploadAvatar(File profile) {
         final AvatarApi avatarApi = ApiGen.getInstance(getContext().getApplicationContext()).
                 generateApi4Avatar(AvatarApi.class);
-
-        String fileName = String.format(Locale.getDefault(), "avatar_%1$d", userId);
         MultipartBody.Part filePart =
-                PartUtils.prepareFilePart("upload", fileName, profile);
-
+                PartUtils.prepareFilePart("upload", profile.getName(), profile);
         avatarApi.uploadUserAvatar(filePart).enqueue(new Callback<UserInfo>() {
             @Override
             public void onResponse(Call<UserInfo> call, Response<UserInfo> response) {
                 LogUtil2.getUtils().d("uploadUserAvatar onResponse");
-                LogUtil2.getUtils().d("uploadUserAvatar  code: " + response.code());
+                LogUtil2.getUtils().d("uploadUserAvatar code: " + response.code());
                 //code == 200 upload ok
             }
 
