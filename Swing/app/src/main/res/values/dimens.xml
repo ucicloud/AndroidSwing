@@ -45,6 +45,7 @@
     <dimen name="base_15">15dp</dimen>
     <dimen name="base_17">17dp</dimen>
     <dimen name="base_18">18dp</dimen>
+    <dimen name="base_20">20dp</dimen>
     <dimen name="base_21">21dp</dimen>
     <dimen name="base_25">25dp</dimen>
     <dimen name="base_26">26dp</dimen>
