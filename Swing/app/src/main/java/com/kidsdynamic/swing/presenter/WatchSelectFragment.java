@@ -80,6 +80,7 @@ public class WatchSelectFragment extends BaseFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         dataAdapter = new DataAdapter(getContext());
+        ll_select.setAdapter(dataAdapter);
         checkPermissions();
     }
 
@@ -217,7 +218,7 @@ public class WatchSelectFragment extends BaseFragment {
                 }
                 mDeviceMap.put(scanResult.getAddress(), scanResult);
                 dataAdapter.addItem(kidsWithParent);
-                dataAdapter.notifyDataSetChanged();
+                ll_select.setAdapter(dataAdapter);
             }
 
             @Override
@@ -236,11 +237,6 @@ public class WatchSelectFragment extends BaseFragment {
         private DataAdapter(Context context) {
             mContext = context;
             mItems = new ArrayList<>();
-        }
-
-        private void setData(List<KidsWithParent> items) {
-            mItems.clear();
-            mItems.addAll(items);
         }
 
         private void addItem(KidsWithParent kidsWithParent) {
@@ -315,22 +311,26 @@ public class WatchSelectFragment extends BaseFragment {
     }
 
     private void doPlusClick(final String macId) {
+        showLoadingDialog(R.string.signup_login_wait);
         BluetoothLeDevice device = mDeviceMap.get(macId);
         mBluetoothService.connectAndInitDevice(device, new IDeviceInitCallback() {
             @Override
             public void onInitComplete(String mac) {
-                SignupActivity signupActivity = (SignupActivity) getActivity();
-                signupActivity.setFragment(WatchProfileFragment.newInstance(macId));
+
             }
 
             @Override
             public void onInitFail(int reason) {
-                LogUtil2.getUtils().d("watch init fail,code:" + reason);
+                finishLoadingDialog();
+                LogUtil2.getUtils().d("watch init fail,reason:" + reason);
             }
 
             @Override
             public void onDeviceBattery(int battery) {
+                finishLoadingDialog();
                 DeviceManager.saveBindWatchBattery(macId, battery);
+                SignupActivity signupActivity = (SignupActivity) getActivity();
+                signupActivity.setFragment(WatchProfileFragment.newInstance(macId));
             }
         });
 
@@ -341,18 +341,21 @@ public class WatchSelectFragment extends BaseFragment {
         mBluetoothService.connectAndInitDevice(device, new IDeviceInitCallback() {
             @Override
             public void onInitComplete(String mac) {
-                SignupActivity signupActivity = (SignupActivity) getActivity();
-                signupActivity.setFragment(WatchRegisteredFragment.newInstance());
+
             }
 
             @Override
             public void onInitFail(int reason) {
-                LogUtil2.getUtils().d("watch init fail,code:" + reason);
+                finishLoadingDialog();
+                LogUtil2.getUtils().d("watch init fail, reason:" + reason);
             }
 
             @Override
             public void onDeviceBattery(int battery) {
+                finishLoadingDialog();
                 DeviceManager.saveBindWatchBattery(macId, battery);
+                SignupActivity signupActivity = (SignupActivity) getActivity();
+                signupActivity.setFragment(WatchRegisteredFragment.newInstance());
             }
         });
     }

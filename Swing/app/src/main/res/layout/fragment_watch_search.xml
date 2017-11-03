@@ -17,8 +17,8 @@
         android:layout_marginRight="@dimen/base_56"
         android:layout_weight="6">
 
-        <TextView
-            style="@style/text_view_main"
+        <com.kidsdynamic.swing.view.AvenirTextView
+            style="@style/textview_main"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"

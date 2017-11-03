@@ -13,7 +13,7 @@
         android:layout_weight="1"
         android:adjustViewBounds="true" />
 
-    <TextView
+    <com.kidsdynamic.swing.view.AvenirTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/base_18"
@@ -23,7 +23,7 @@
         android:textColor="@color/color_white"
         android:textSize="17sp" />
 
-    <TextView
+    <com.kidsdynamic.swing.view.AvenirTextView
         android:id="@+id/tv_save"
         style="@style/button_main"
         android:layout_width="match_parent"
@@ -36,7 +36,7 @@
         android:paddingTop="10dp"
         android:text="@string/profile_share_save" />
 
-    <TextView
+    <com.kidsdynamic.swing.view.AvenirTextView
         android:id="@+id/tv_cancel"
         style="@style/button_main"
         android:layout_width="match_parent"
@@ -45,7 +45,5 @@
         android:layout_marginRight="@dimen/base_56"
         android:layout_marginTop="@dimen/base_18"
         android:gravity="center"
-        android:paddingBottom="10dp"
-        android:paddingTop="10dp"
         android:text="@string/photo_clip_cancel" />
 </LinearLayout>

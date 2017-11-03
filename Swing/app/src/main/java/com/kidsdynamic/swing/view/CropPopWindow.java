@@ -38,6 +38,7 @@ public class CropPopWindow extends PopupWindow {
         mCropImageView = (CropImageView) layout.findViewById(R.id.cropImageView);
         int color = context.getResources().getColor(R.color.pop_window_background);
         mCropImageView.setPaintColor(color);
+        mCropImageView.init(context);
         setContentView(layout);
         setWidth(WindowManager.LayoutParams.MATCH_PARENT);
         setHeight(WindowManager.LayoutParams.MATCH_PARENT);

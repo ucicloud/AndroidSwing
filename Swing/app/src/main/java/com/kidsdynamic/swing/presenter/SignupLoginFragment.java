@@ -1,11 +1,8 @@
 package com.kidsdynamic.swing.presenter;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
@@ -13,8 +10,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -65,7 +60,7 @@ public class SignupLoginFragment extends BaseFragment {
     TextView tvHint;
 
     @BindView(R.id.signup_login_reset_pwd)
-    Button btn_resetPsw;
+    TextView btn_resetPsw;
 
     public static SignupLoginFragment newInstance() {
         Bundle args = new Bundle();
@@ -86,9 +81,6 @@ public class SignupLoginFragment extends BaseFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-//        et_email.setText("123@qq.com");
-//        et_password.setText("123456");
-
         et_email.setText("lwz3@swing.com");
         et_password.setText("1");
     }
@@ -119,7 +111,8 @@ public class SignupLoginFragment extends BaseFragment {
         SoftKeyBoardUtil.hideSoftKeyboard(getActivity());
 
         //执行登录业务
-        exeLoginFlow(email, password);
+//        exeLoginFlow(email, password);
+        showRegisterUI(email, password);
     }
 
     private void showErrInfo(int msgId) {
@@ -130,7 +123,7 @@ public class SignupLoginFragment extends BaseFragment {
 
     void exeLoginFlow(final String email, final String psw) {
         //show waiting dialog
-        showLoadingDialog(R.string.activity_main_wait);
+        showLoadingDialog(R.string.signup_login_wait);
 
         final LoginEntity loginEntity = new LoginEntity();
         loginEntity.setEmail(email);
@@ -305,7 +298,6 @@ public class SignupLoginFragment extends BaseFragment {
         PreferencesUtil.getInstance(getContext()).setPreferenceBooleanValue(ConfigUtil.login_state, true);
     }
 
-
     @OnClick(R.id.signup_login_reset_pwd)
     public void resetPsw() {
         final String email = et_email.getText().toString();
@@ -337,7 +329,7 @@ public class SignupLoginFragment extends BaseFragment {
 
     private void exeResetPswFlow(@NonNull String email) {
 
-        showLoadingDialog(R.string.activity_main_wait);
+        showLoadingDialog(R.string.signup_login_wait);
 
         final UserApiNeedToken userApiNeedToken = ApiGen.getInstance(getActivity().getApplicationContext()).
                 generateApi(UserApiNeedToken.class, false);
@@ -369,4 +361,5 @@ public class SignupLoginFragment extends BaseFragment {
             }
         });
     }
+
 }

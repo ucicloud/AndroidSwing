@@ -269,7 +269,7 @@
     <!-- FragmentWatchProfile -->
     <string name="watch_profile_name">Kid\'s Name</string>
     <string name="watch_profile_processing">Processing</string>
-    <string name="watch_profile_wait">Please Wait</string>
+    <string name="watch_profile_wait">Please Wait&#8230;</string>
     <string name="watch_profile_zip_code">Zip Code</string>
 
     <string name="watch_profile_first_name">Kid\'s first name</string>
@@ -306,6 +306,7 @@
     <!-- FragmentWatchSelect -->
     <string name="watch_select_message">Please Select\nYour Swing Watch</string>
     <string name="watch_select_dashboard">Go to Dashboard</string>
+    <string name="watch_select_wait">Please Wait&#8230;</string>
 
     <!-- FragmentWatchSorry -->
     <string name="watch_sorry_sorry">Sorry!</string>

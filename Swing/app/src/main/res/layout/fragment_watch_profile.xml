@@ -69,22 +69,23 @@
                     android:layout_marginBottom="10dp"
                     android:gravity="center"
                     android:hint="@string/watch_profile_last_name"
-                    android:imeOptions="actionNext"
+                    android:imeOptions="actionDone"
                     android:inputType="text"
                     android:nextFocusForward="@+id/registration_info_phone" />
 
-                <EditText
-                    android:id="@+id/watch_profile_zip"
-                    style="@style/edit_text_main"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:gravity="center"
-                    android:hint="@string/watch_profile_zip_code"
-                    android:imeOptions="actionDone"
-                    android:inputType="number" />
+                <!--<EditText-->
+                <!--android:id="@+id/watch_profile_zip"-->
+                <!--style="@style/edit_text_main"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginBottom="10dp"-->
+                <!--android:gravity="center"-->
+                <!--android:hint="@string/watch_profile_zip_code"-->
+                <!--android:imeOptions="actionDone"-->
+                <!--android:inputType="number"-->
+                <!--android:visibility="gone" />-->
 
-                <Button
+                <com.kidsdynamic.swing.view.AvenirTextView
                     android:id="@+id/watch_profile_submit"
                     style="@style/button_main"
                     android:layout_width="match_parent"

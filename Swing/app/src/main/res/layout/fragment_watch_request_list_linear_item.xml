@@ -18,9 +18,9 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="@+id/tv_content" />
 
-    <TextView
+    <com.kidsdynamic.swing.view.AvenirTextView
         android:id="@+id/tv_content"
-        style="@style/text_view_hint"
+        style="@style/textview_hint"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="12dp"

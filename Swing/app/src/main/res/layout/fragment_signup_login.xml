@@ -48,7 +48,7 @@
             android:imeOptions="actionDone"
             android:inputType="textPassword" />
 
-        <TextView
+        <com.kidsdynamic.swing.view.AvenirTextView
             android:id="@+id/signup_login_hint_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -60,14 +60,14 @@
             android:textSize="15sp"
             android:visibility="invisible" />
 
-        <Button
+        <com.kidsdynamic.swing.view.AvenirTextView
             android:id="@+id/signup_login_login"
             style="@style/button_main"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/signup_login_enter" />
 
-        <Button
+        <com.kidsdynamic.swing.view.AvenirTextView
             android:id="@+id/signup_login_reset_pwd"
             style="@style/button_main"
             android:layout_width="match_parent"

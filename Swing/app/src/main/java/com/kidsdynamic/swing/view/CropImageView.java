@@ -23,6 +23,7 @@ import android.view.ScaleGestureDetector;
 import android.view.ViewTreeObserver;
 
 import com.kidsdynamic.commonlib.utils.FileUtil;
+import com.kidsdynamic.swing.R;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -91,10 +92,10 @@ public class CropImageView extends AppCompatImageView implements ViewTreeObserve
     public CropImageView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         super.setScaleType(ScaleType.MATRIX);
-        init(context);
+//        init(context);
     }
 
-    private void init(Context context) {
+    public void init(Context context) {
         Resources resources = this.getResources();
         DisplayMetrics dm = resources.getDisplayMetrics();
         int screenWidth = dm.widthPixels;

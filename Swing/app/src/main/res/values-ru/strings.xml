@@ -261,7 +261,7 @@
     <!-- FragmentWatchProfile -->
     <string name="watch_profile_name">Имя ребенка</string>
     <string name="watch_profile_processing">Идет обработка</string>
-    <string name="watch_profile_wait">Пожалуйста, подождите</string>
+    <string name="watch_profile_wait">Пожалуйста, подождите&#8230;</string>
     <string name="watch_profile_zip_code">Почтовый индекс</string>
 
     <string name="watch_profile_first_name">Kid\'s first name</string>
@@ -298,6 +298,7 @@
     <!-- FragmentWatchSelect -->
     <string name="watch_select_message">Пожалуйста,\nвыбери часы</string>
     <string name="watch_select_dashboard">Вернуться к началу</string>
+    <string name="watch_select_wait">Пожалуйста, подождите&#8230;</string>
 
     <!-- FragmentWatchSorry -->
     <string name="watch_sorry_sorry">Как жаль!</string>

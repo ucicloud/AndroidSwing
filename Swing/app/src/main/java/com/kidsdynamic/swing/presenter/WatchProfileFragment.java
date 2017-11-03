@@ -63,8 +63,8 @@ public class WatchProfileFragment extends BaseFragment {
     EditText et_first;
     @BindView(R.id.watch_profile_last)
     EditText et_last;
-    @BindView(R.id.watch_profile_zip)
-    EditText et_zip;
+//    @BindView(R.id.watch_profile_zip)
+//    EditText et_zip;
 
     private File profile;
 
@@ -145,7 +145,8 @@ public class WatchProfileFragment extends BaseFragment {
      * @param watchMacId String
      * @param kidsName   String
      */
-    public void addKids(String watchMacId, final File profile, String kidsName) {
+    public void addKids(String watchMacId, final File profile, final String kidsName) {
+        showLoadingDialog(R.string.watch_profile_wait);
         KidsApi kidsApi = ApiGen
                 .getInstance(getContext().getApplicationContext())
                 .generateApi(KidsApi.class, true);
@@ -159,11 +160,17 @@ public class WatchProfileFragment extends BaseFragment {
             public void onResponse(Call<KidsWithParent> call, Response<KidsWithParent> response) {
                 LogUtil2.getUtils().d("addKid onResponse: " + response.code());
                 if (response.code() == 200) {
+                    finishLoadingDialog();
                     //add successfully
                     KidsWithParent kidsWithParent = response.body();
-                    DeviceManager.updateFocusKids(kidsWithParent.getId());
-                    uploadAvatar(profile, String.valueOf(kidsWithParent.getId()));
-                    LogUtil2.getUtils().d("addKid rep kid ID: " + response.body().getId());
+                    int kidId = kidsWithParent.getId();
+                    LogUtil2.getUtils().d("addKid rep kid ID: " + kidId);
+                    DeviceManager.updateFocusKids(kidId);
+
+                    uploadAvatar(profile, String.valueOf(kidId));
+
+                    SignupActivity signupActivity = (SignupActivity) getActivity();
+                    signupActivity.setFragment(WatchHaveFragment.newInstance());
                 } else {
                     // TODO: 2017/10/31 add error msg
                     LogUtil2.getUtils().d("addKid error code:" + response.code());
@@ -172,9 +179,10 @@ public class WatchProfileFragment extends BaseFragment {
 
             @Override
             public void onFailure(Call<KidsWithParent> call, Throwable t) {
-                // TODO: 2017/10/31 add error msg
                 LogUtil2.getUtils().d("addKid onFailure");
                 t.printStackTrace();
+                finishLoadingDialog();
+                // TODO: 2017/10/31 add error msg
             }
         });
     }
@@ -200,8 +208,7 @@ public class WatchProfileFragment extends BaseFragment {
                         //code == 200 upload ok
                         int code = response.code();
                         if (200 == code) {
-                            SignupActivity signupActivity = (SignupActivity) getActivity();
-                            signupActivity.setFragment(WatchHaveFragment.newInstance());
+
                         } else {
                             // TODO: 2017/10/31  show Error Msg
                             LogUtil2.getUtils().d("uploadKidAvatar error code:" + response.code());

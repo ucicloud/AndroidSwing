@@ -5,9 +5,9 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <TextView
+    <com.kidsdynamic.swing.view.AvenirTextView
         android:id="@+id/watch_request_title"
-        style="@style/text_view_main"
+        style="@style/textview_main"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="2"
@@ -44,7 +44,7 @@
         android:layout_weight="3"
         android:orientation="vertical">
 
-        <Button
+        <com.kidsdynamic.swing.view.AvenirTextView
             android:id="@+id/watch_request_search"
             style="@style/button_main"
             android:layout_width="match_parent"
@@ -52,7 +52,7 @@
             android:layout_marginBottom="10dp"
             android:text="@string/watch_request_search_again" />
 
-        <Button
+        <com.kidsdynamic.swing.view.AvenirTextView
             android:id="@+id/watch_request_dashboard"
             style="@style/button_main"
             android:layout_width="match_parent"

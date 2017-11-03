@@ -4,8 +4,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <TextView
-        style="@style/text_view_main"
+    <com.kidsdynamic.swing.view.AvenirTextView
+        style="@style/textview_main"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="3"
@@ -20,7 +20,7 @@
         android:layout_weight="6"
         android:orientation="vertical">
 
-        <Button
+        <com.kidsdynamic.swing.view.AvenirTextView
             android:id="@+id/watch_registered_request"
             style="@style/button_main"
             android:layout_width="match_parent"
@@ -28,7 +28,7 @@
             android:layout_marginBottom="10dp"
             android:text="@string/watch_registered_request_access" />
 
-        <Button
+        <com.kidsdynamic.swing.view.AvenirTextView
             android:id="@+id/watch_registered_contact"
             style="@style/button_main"
             android:layout_width="match_parent"

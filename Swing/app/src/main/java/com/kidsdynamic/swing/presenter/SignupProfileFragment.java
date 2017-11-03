@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.kidsdynamic.data.net.ApiGen;
 import com.kidsdynamic.data.net.avatar.AvatarApi;
@@ -27,6 +28,7 @@ import com.kidsdynamic.data.net.user.model.RegisterFailResponse;
 import com.kidsdynamic.data.net.user.model.UserInfo;
 import com.kidsdynamic.data.utils.LogUtil2;
 import com.kidsdynamic.swing.BaseFragment;
+import com.kidsdynamic.swing.BuildConfig;
 import com.kidsdynamic.swing.R;
 import com.kidsdynamic.swing.domain.LoginManager;
 import com.kidsdynamic.swing.view.BottomPopWindow;
@@ -35,7 +37,6 @@ import com.kidsdynamic.swing.view.CropPopWindow;
 import com.kidsdynamic.swing.view.ViewCircle;
 
 import java.io.File;
-import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -59,6 +60,8 @@ public class SignupProfileFragment extends BaseFragment {
     private static final String EMAIL = "email";
     public static final String PASSWORD = "password";
 
+    @BindView(R.id.signup_profile_exit)
+    TextView tvExit;
     @BindView(R.id.signup_profile_photo)
     ViewCircle vc_photo;
     @BindView(R.id.signup_profile_first)
@@ -67,8 +70,8 @@ public class SignupProfileFragment extends BaseFragment {
     EditText et_last;
     @BindView(R.id.signup_profile_phone)
     EditText et_phone;
-    @BindView(R.id.signup_profile_zip)
-    EditText et_zip;
+//    @BindView(R.id.signup_profile_zip)
+//    EditText et_zip;
 
     private File profile;
 
@@ -91,6 +94,14 @@ public class SignupProfileFragment extends BaseFragment {
     }
 
     @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if (BuildConfig.DEBUG) {
+            tvExit.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (Activity.RESULT_OK != resultCode) {
@@ -110,6 +121,12 @@ public class SignupProfileFragment extends BaseFragment {
     public void back() {
         SignupActivity signupActivity = (SignupActivity) getActivity();
         signupActivity.setFragment(SignupLoginFragment.newInstance());
+    }
+
+    @OnClick(R.id.signup_profile_exit)
+    public void exit() {
+        SignupActivity signupActivity = (SignupActivity) getActivity();
+        signupActivity.finish();
     }
 
     @OnClick(R.id.signup_profile_photo)
@@ -140,25 +157,25 @@ public class SignupProfileFragment extends BaseFragment {
             return;
         }
         String phoneNumber = et_phone.getText().toString().trim();
-        String zipCode = et_zip.getText().toString().trim();
+//        String zipCode = et_zip.getText().toString().trim();
         Bundle args = getArguments();
         String email = args.getString(EMAIL, "");
         String pwd = args.getString(PASSWORD, "");
-        register(email, pwd, firstName, lastName, phoneNumber, zipCode);
+        register(email, pwd, firstName, lastName, phoneNumber/*, zipCode*/);
     }
 
     private void register(@NonNull final String email, @NonNull final String psw,
                           @NonNull String firstName, @NonNull String lastName,
-                          String phoneNumber, String zipCode) {
+                          String phoneNumber/*, String zipCode*/) {
         showLoadingDialog(R.string.signup_profile_wait);
-        //使用用户数据，执行注册，如果注册成功则进行登录，登录成功执行同步数据
+        //使用用户数据，执行注册，如果注册成功则进行登录，登录成功执行上传头像
         final RegisterEntity registerEntity = new RegisterEntity();
         registerEntity.setEmail(email);
         registerEntity.setPassword(psw);
         registerEntity.setFirstName(firstName);
         registerEntity.setLastName(lastName);
         registerEntity.setPhoneNumber(phoneNumber);
-        registerEntity.setZipCode(zipCode);
+//        registerEntity.setZipCode(zipCode);
 
         final UserApiNoNeedToken userApi = ApiGen.getInstance(getContext().getApplicationContext()).
                 generateApi(UserApiNoNeedToken.class, false);
@@ -168,7 +185,7 @@ public class SignupProfileFragment extends BaseFragment {
                 LogUtil2.getUtils().d("register onResponse");
                 int code = response.code();
                 if (code == 200) {
-                    LogUtil2.getUtils().d("register ok start login");
+                    LogUtil2.getUtils().d("register ok and start login");
 
                     LoginEntity loginEntity = new LoginEntity();
                     loginEntity.setEmail(email);
@@ -176,14 +193,14 @@ public class SignupProfileFragment extends BaseFragment {
                     exeLogin(userApi, loginEntity);
                 } else {
                     LogUtil2.getUtils().d("register error code: " + code);
-                    // TODO: 2017/10/17 dismiss dialog, show error msg
                     finishLoadingDialog();
+                    // TODO: 2017/10/17 show error msg
                 }
             }
 
             @Override
             public void onFailure(Call<RegisterFailResponse> call, Throwable t) {
-                //todo fail, dismiss dialog, show error info
+                //todo fail, show error info
                 LogUtil2.getUtils().d("register onFailure");
                 t.printStackTrace();
                 finishLoadingDialog();
@@ -196,10 +213,10 @@ public class SignupProfileFragment extends BaseFragment {
             @Override
             public void onResponse(Call<LoginSuccessRep> call, Response<LoginSuccessRep> response) {
                 if (response.code() == 200) {
-                    finishLoadingDialog();
                     LogUtil2.getUtils().d("login success");
                     LogUtil2.getUtils().d(response.body().getAccess_token());
-                    //缓存token
+                    finishLoadingDialog();
+                    // 缓存token
                     new LoginManager().cacheToken(response.body().getAccess_token());
 
                     uploadAvatar(profile);
@@ -215,8 +232,9 @@ public class SignupProfileFragment extends BaseFragment {
 
             @Override
             public void onFailure(Call<LoginSuccessRep> call, Throwable t) {
-                // TODO: 2017/10/17 fail, dismiss dialog, show error info
                 finishLoadingDialog();
+                t.printStackTrace();
+                // TODO: 2017/10/17 fail, dismiss dialog, show error info
             }
         });
 
@@ -300,6 +318,7 @@ public class SignupProfileFragment extends BaseFragment {
         }
     }
 
+    @Nullable
     private File getRealPathFromUri(Uri contentUri) {
         Cursor cursor = null;
         String[] project = {MediaStore.Images.Media.DATA};

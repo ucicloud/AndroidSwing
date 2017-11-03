@@ -298,6 +298,7 @@
     <!-- FragmentWatchSelect -->
     <string name="watch_select_message">貴方の時計をスイングウッォチを選択してください</string>
     <string name="watch_select_dashboard">イベント・レコードを開きます</string>
+    <string name="watch_select_wait">暫くお待ちください&#8230;</string>
 
     <!-- FragmentWatchSorry -->
     <string name="watch_sorry_sorry">すみません</string>

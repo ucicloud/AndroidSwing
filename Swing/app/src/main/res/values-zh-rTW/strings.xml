@@ -176,6 +176,7 @@
 
     <!-- FragmentProfileRequestTo -->
     <string name="profile_request_to_mail">"用戶電子信箱"</string>
+    <string name="profile_request_to_users">用戶</string>
     <string name="profile_request_to_others">"你所發出的請求"</string>
     <string name="profile_request_to_send">"發送"</string>
     <string name="profile_request_to_cancel">"取消"</string>
@@ -297,6 +298,7 @@
     <!-- FragmentWatchSelect -->
     <string name="watch_select_message">"請選擇你的\nSwing Watch"</string>
     <string name="watch_select_dashboard">"開啟活動記錄"</string>
+    <string name="watch_select_wait">"請稍候&#8230;"</string>
 
     <!-- FragmentWatchSorry -->
     <string name="watch_sorry_sorry">"抱歉!"</string>
@@ -342,7 +344,6 @@
     <string name="event_repeat_weekly">"每周"</string>
     <string name="event_repeat_daily">"每日"</string>
     <string name="event_repeat_never">"從不"</string>
-    <string name="profile_request_to_users">用戶</string>
     <string name="event_notification_title">您有一個行程: </string>
 
     <!-- API Error -->

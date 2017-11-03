@@ -25,7 +25,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical" />
 
-        <TextView
+        <com.kidsdynamic.swing.view.AvenirTextView
             android:id="@+id/tv_cancel"
             style="@style/button_main"
             android:layout_width="match_parent"
