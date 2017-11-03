@@ -43,7 +43,7 @@
         android:layout_weight="2"
         android:orientation="vertical">
 
-        <TextView
+        <com.kidsdynamic.swing.view.AvenirTextView
             android:id="@+id/watch_select_dashboard"
             style="@style/button_main"
             android:layout_width="match_parent"

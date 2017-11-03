@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_blue_sky"
+    android:orientation="vertical">
+
+<!--    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <ImageButton
+            android:id="@+id/ib_back"
+            android:layout_width="@dimen/base_56"
+            android:layout_height="@dimen/base_56"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:background="@null"
+            android:contentDescription="@null"
+            android:scaleType="fitCenter"
+            android:src="@drawable/icon_left" />
+
+        <com.kidsdynamic.swing.view.AvenirTextView
+            android:id="@+id/signup_profile_exit"
+            android:layout_width="@dimen/base_56"
+            android:layout_height="@dimen/base_56"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:gravity="center"
+            android:text="Exit"
+            android:textColor="@color/color_gray_deep"
+            android:visibility="gone" />
+    </RelativeLayout>-->
+
+    <include layout="@layout/base_title_bar"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="7"
+        android:layout_marginTop="@dimen/base_10">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="center_vertical">
+
+            <com.kidsdynamic.swing.view.ViewCircle
+                android:id="@+id/signup_profile_photo"
+                android:layout_width="124dp"
+                android:layout_height="124dp"
+                android:layout_gravity="center_horizontal"
+                app:crossColor="@color/hex_1b89cd"
+                app:crossWidth="2dp"
+                app:strokeColorNormal="@color/hex_1b89cd" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <com.kidsdynamic.swing.view.AvenirTextView
+                    android:id="@+id/tv_logout_account_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="20dp"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/fontsize52"
+                    android:gravity="center"
+                    android:text="Teresa Smith"
+                    android:textColor="@color/profile_logout_confirm_name"
+                    android:imeOptions="actionNext"
+                    android:inputType="text" />
+
+                <com.kidsdynamic.swing.view.AvenirTextView
+                    android:id="@+id/tv_account_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                    android:textSize="@dimen/fontsize42"
+                    android:gravity="center"
+                    android:imeOptions="actionNext"
+                    android:text="terase.s@gmail.com"
+                    android:textColor="@color/hex_9c9c9c"
+                    android:inputType="text" />
+
+                <com.kidsdynamic.swing.view.AvenirTextView
+                    android:id="@+id/logout_confirm_note"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:gravity="center"
+                    android:text="@string/profile_logout_confirmation"
+                    android:textColor="@color/color_orange_main"
+                    android:textSize="@dimen/fontsize60"
+                    android:textStyle="bold"/>
+
+            </LinearLayout>
+
+            <com.kidsdynamic.swing.view.AvenirTextView
+                android:id="@+id/btn_confirm_logout"
+                style="@style/button_main"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/base_40"
+                android:layout_marginTop="@dimen/base_30"
+                android:layout_marginBottom="10dp"
+                android:layout_marginStart="@dimen/base_56"
+                android:layout_marginEnd="@dimen/base_56"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:text="@string/profile_logout_confirm_btn" />
+
+            <com.kidsdynamic.swing.view.AvenirTextView
+                android:id="@+id/btn_cancel"
+                style="@style/button_main"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginStart="@dimen/base_56"
+                android:layout_marginEnd="@dimen/base_56"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:text="@string/profile_logout_cancel_btn" />
+
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

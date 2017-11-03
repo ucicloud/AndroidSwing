@@ -55,6 +55,7 @@
     <dimen name="base_40">40dp</dimen>
     <dimen name="base_44">44dp</dimen>
     <dimen name="base_46">46dp</dimen>
+    <dimen name="base_48">48dp</dimen>
     <dimen name="base_51">51dp</dimen>
     <dimen name="base_56">56dp</dimen>
     <dimen name="base_60">60dp</dimen>
@@ -74,4 +75,6 @@
 
     <dimen name="tab_num_margin_right">-7.0dip</dimen>
     <dimen name="tab_num_margin_top">-4.0dip</dimen>
+
+    <dimen name="profile_item_height">48dp</dimen>
 </resources>

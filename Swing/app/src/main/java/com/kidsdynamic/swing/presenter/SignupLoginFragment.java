@@ -111,8 +111,8 @@ public class SignupLoginFragment extends BaseFragment {
         SoftKeyBoardUtil.hideSoftKeyboard(getActivity());
 
         //执行登录业务
-//        exeLoginFlow(email, password);
-        showRegisterUI(email, password);
+        exeLoginFlow(email, password);
+//        showRegisterUI(email, password);
     }
 
     private void showErrInfo(int msgId) {

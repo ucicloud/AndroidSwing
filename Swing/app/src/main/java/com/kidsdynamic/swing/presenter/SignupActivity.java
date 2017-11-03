@@ -47,6 +47,7 @@ public class SignupActivity extends BaseFragmentActivity {
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
+
         setFragment(SignupStartFragment.newInstance());
     }
 

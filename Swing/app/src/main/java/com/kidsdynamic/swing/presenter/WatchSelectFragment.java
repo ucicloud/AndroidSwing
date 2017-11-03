@@ -41,6 +41,7 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -55,6 +56,9 @@ public class WatchSelectFragment extends BaseFragment {
 
     @BindView(R.id.watch_select_container)
     ListLinearLayout ll_select;
+
+    @BindView(R.id.watch_select_dashboard)
+    TextView tv_gotoDashboard;
 
     private DataAdapter dataAdapter;
     private Map<String, BluetoothLeDevice> mDeviceMap = new HashMap<>();
@@ -198,6 +202,9 @@ public class WatchSelectFragment extends BaseFragment {
         String watchMacId = scanResult.getAddress();
         KidsApi kidsApi = ApiGen.getInstance(getContext().getApplicationContext()).
                 generateApi(KidsApi.class, true);
+
+        //业务上的macId不包含":"
+        watchMacId = DeviceManager.getMacID(watchMacId);
 
         kidsApi.whoRegisteredMacID(watchMacId).enqueue(new Callback<KidsWithParent>() {
             @Override
@@ -372,6 +379,12 @@ public class WatchSelectFragment extends BaseFragment {
         ViewHolder(View itemView) {
             ButterKnife.bind(this, itemView);
         }
+    }
+
+    @OnClick(R.id.watch_select_dashboard)
+    protected void gotoDashboard(){
+        startActivity(new Intent(getActivity(),MainFrameActivity.class));
+        getActivity().finish();
     }
 
 }

@@ -58,6 +58,7 @@
     </style>
 
     <style name="button_main">
+        <item name="android:layout_height">@dimen/base_40</item>
         <item name="android:textColor">@color/color_white</item>
         <item name="android:textSize">16sp</item>
         <item name="android:textStyle">normal</item>
@@ -131,5 +132,22 @@
         <item name="android:textSize">16sp</item>
         <item name="android:textStyle">normal</item>
         <item name="android:singleLine">true</item>
+    </style>
+
+    <style name="option_line">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:background">@color/color_gray_light</item>
+        <item name="android:layout_marginStart">10dp</item>
+        <item name="android:layout_marginEnd">10dp</item>
+    </style>
+
+    <style name="option_right_img">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_alignParentEnd">true</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:adjustViewBounds">true</item>
+        <item name="android:src">@drawable/icon_right</item>
     </style>
 </resources>

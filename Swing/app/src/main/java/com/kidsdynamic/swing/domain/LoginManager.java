@@ -23,6 +23,11 @@ public class LoginManager {
                 setPreferenceStringValue(Config.KEY_TOKEN_LABEL, token);
     }
 
+    public boolean clearToken() {
+        return PreferencesUtil.getInstance(SwingApplication.getAppContext()).
+                setPreferenceStringValue(Config.KEY_TOKEN_LABEL, "");
+    }
+
     public boolean saveLoginData(@NonNull Context context, UserProfileRep userProfileRep){
         //首先清除；然后保存
         DbUtil dbUtil = DbUtil.getInstance(context.getApplicationContext());

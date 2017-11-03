@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/content"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:clipToPadding="false"
+    android:fitsSystemWindows="true"
+    android:background="@color/color_blue_sky">
+
+   <!-- <include layout="@layout/base_title_bar"
+        android:id="@+id/title_bar"
+        android:visibility="invisible"/>-->
+
+    <ImageView
+        android:id="@+id/main_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitEnd"
+        android:src="@drawable/city_florida"
+        android:visibility="visible"/>
+
+    <FrameLayout
+        android:id="@+id/profile_fragment_container"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:fitsSystemWindows="true"/>
+
+
+</RelativeLayout>

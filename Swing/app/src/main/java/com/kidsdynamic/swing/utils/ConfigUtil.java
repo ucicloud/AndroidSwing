@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import com.kidsdynamic.data.net.Config;
 import com.kidsdynamic.data.persistent.PreferencesUtil;
 import com.kidsdynamic.swing.SwingApplication;
+import com.kidsdynamic.swing.domain.LoginManager;
 import com.yy.base.utils.Functions;
 
 /**
@@ -35,6 +36,13 @@ public class ConfigUtil {
 		boolean loginFlag = PreferencesUtil.getInstance(context).gPrefBooleanValue(login_state, false);
 
 		return !TextUtils.isEmpty(token) && loginFlag;
+	}
+
+	public static void logoutState(){
+		new LoginManager().clearToken();
+		PreferencesUtil.getInstance(SwingApplication.getAppContext()).
+				setPreferenceBooleanValue(login_state, false);
+
 	}
 
 
