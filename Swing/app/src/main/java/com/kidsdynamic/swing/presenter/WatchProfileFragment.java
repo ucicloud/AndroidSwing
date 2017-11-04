@@ -27,6 +27,7 @@ import com.kidsdynamic.swing.BaseFragment;
 import com.kidsdynamic.swing.R;
 import com.kidsdynamic.swing.domain.DeviceManager;
 import com.kidsdynamic.swing.domain.UserManager;
+import com.kidsdynamic.swing.net.BaseRetrofitCallback;
 import com.kidsdynamic.swing.view.BottomPopWindow;
 import com.kidsdynamic.swing.view.CropImageView;
 import com.kidsdynamic.swing.view.CropPopWindow;
@@ -158,7 +159,7 @@ public class WatchProfileFragment extends BaseFragment {
         kidsAddRequest.setMacId(watchMacId);
         kidsAddRequest.setName(kidsName);
 
-        kidsApi.addKid(kidsAddRequest).enqueue(new Callback<KidsWithParent>() {
+        kidsApi.addKid(kidsAddRequest).enqueue(new BaseRetrofitCallback<KidsWithParent>() {
             @Override
             public void onResponse(Call<KidsWithParent> call, Response<KidsWithParent> response) {
                 LogUtil2.getUtils().d("addKid onResponse: " + response.code());
@@ -183,10 +184,14 @@ public class WatchProfileFragment extends BaseFragment {
                         signupActivity.selectFragment(WatchAddSuccessFragment.class.getName(),bundle);
                     }
 
-                } else {
+                }else if(response.code() == 409){
+                    finishLoadingDialog();
+                    ToastCommon.makeText(getContext(),R.string.error_api_kid_add_409);
+
+                }else {
                     finishLoadingDialog();
                     ToastCommon.makeText(getContext(),R.string.error_api_unknown);
-                    // TODO: 2017/10/31 show error msg
+
                     LogUtil2.getUtils().d("addKid error code:" + response.code());
 
                     //todo test
@@ -198,8 +203,6 @@ public class WatchProfileFragment extends BaseFragment {
             @Override
             public void onFailure(Call<KidsWithParent> call, Throwable t) {
                 LogUtil2.getUtils().d("addKid onFailure");
-                ToastCommon.makeText(getContext(),R.string.error_api_unknown);
-                t.printStackTrace();
                 finishLoadingDialog();
             }
         });

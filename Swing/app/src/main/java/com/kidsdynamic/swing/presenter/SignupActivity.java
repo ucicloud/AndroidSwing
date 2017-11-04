@@ -47,7 +47,6 @@ public class SignupActivity extends BaseFragmentActivity {
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
 
-        // TODO: 2017/11/4 test
         setFragment(SignupStartFragment.newInstance());
 
         //below test fragment

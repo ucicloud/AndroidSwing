@@ -17,7 +17,6 @@ import android.widget.Toast;
 import com.kidsdynamic.commonlib.utils.ObjectUtils;
 import com.kidsdynamic.commonlib.utils.SoftKeyBoardUtil;
 import com.kidsdynamic.data.net.ApiGen;
-import com.kidsdynamic.data.net.BaseRetrofitCallback;
 import com.kidsdynamic.data.net.event.EventApi;
 import com.kidsdynamic.data.net.event.model.EventWithTodo;
 import com.kidsdynamic.data.net.user.UserApiNeedToken;
@@ -31,6 +30,7 @@ import com.kidsdynamic.swing.BaseFragment;
 import com.kidsdynamic.swing.R;
 import com.kidsdynamic.swing.domain.EventManager;
 import com.kidsdynamic.swing.domain.LoginManager;
+import com.kidsdynamic.swing.net.BaseRetrofitCallback;
 import com.kidsdynamic.swing.utils.ConfigUtil;
 import com.kidsdynamic.swing.utils.SwingFontsCache;
 import com.kidsdynamic.swing.view.ViewUtils;
@@ -277,7 +277,6 @@ public class SignupLoginFragment extends BaseFragment {
                     Log.w("login", " sync data ok, show next UI");
                     new EventManager().saveEventForLogin(getContext(), response.body());
 
-                    //todo 登陆成功后，进入到主界面
                     finishLoadingDialog();
                     loginFlowOK();
                 } else {
@@ -357,7 +356,7 @@ public class SignupLoginFragment extends BaseFragment {
                     ViewUtils.showMsgDialog(getActivity(),
                             getString(R.string.profile_reset_password_note, et_email.getText().toString()));
                 } else {
-                    Toast.makeText(getContext(), R.string.error_api_unknown, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.error_api_unknown + " " + code, Toast.LENGTH_SHORT).show();
                 }
             }
 

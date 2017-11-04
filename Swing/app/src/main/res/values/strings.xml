@@ -414,5 +414,8 @@
     <string name="profile_choose_from_library">Choose from Library</string>
     <string name="profile_cut_pic_note">Use your finger to adjust picture position</string>
     <string name="profile_login_fail">login fail, please try again</string>
+    <string name="token_invalid">Token invalid, please login again</string>
+    <string name="cloud_api_call_net_error">net error, please check and try again</string>
+    <string name="user_register_fail_common">register, please try again</string>
 
 </resources>

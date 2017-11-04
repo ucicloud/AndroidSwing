@@ -31,6 +31,7 @@ import com.kidsdynamic.data.utils.LogUtil2;
 import com.kidsdynamic.swing.BaseFragment;
 import com.kidsdynamic.swing.R;
 import com.kidsdynamic.swing.domain.LoginManager;
+import com.kidsdynamic.swing.net.BaseRetrofitCallback;
 import com.kidsdynamic.swing.utils.ConfigUtil;
 import com.kidsdynamic.swing.utils.SwingFontsCache;
 import com.kidsdynamic.swing.view.BottomPopWindow;
@@ -46,7 +47,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import okhttp3.MultipartBody;
 import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
@@ -197,7 +197,7 @@ public class SignupProfileFragment extends BaseFragment {
 
         final UserApiNoNeedToken userApi = ApiGen.getInstance(getContext().getApplicationContext()).
                 generateApi(UserApiNoNeedToken.class, false);
-        userApi.registerUser(registerEntity).enqueue(new Callback<RegisterFailResponse>() {
+        userApi.registerUser(registerEntity).enqueue(new BaseRetrofitCallback<RegisterFailResponse>() {
             @Override
             public void onResponse(Call<RegisterFailResponse> call, Response<RegisterFailResponse> response) {
                 LogUtil2.getUtils().d("register onResponse");
@@ -209,24 +209,28 @@ public class SignupProfileFragment extends BaseFragment {
                     loginEntity.setEmail(email);
                     loginEntity.setPassword(psw);
                     exeLogin(userApi, loginEntity);
-                } else {
-                    LogUtil2.getUtils().d("register error code: " + code);
+                }if(code == 409){//邮箱已存在
                     finishLoadingDialog();
-                    // TODO: 2017/10/17 show error msg
+                    ToastCommon.makeText(getContext(),R.string.error_api_user_register_409);
+                }else {
+                    LogUtil2.getUtils().d("register error code: " + code);
+
+                    finishLoadingDialog();
+                    ToastCommon.makeText(getContext(),R.string.user_register_fail_common);
                 }
             }
 
             @Override
             public void onFailure(Call<RegisterFailResponse> call, Throwable t) {
                 LogUtil2.getUtils().d("register onFailure");
-                t.printStackTrace();
+
                 finishLoadingDialog();
             }
         });
     }
 
     private void exeLogin(UserApiNoNeedToken userApi, LoginEntity loginEntity) {
-        userApi.login(loginEntity).enqueue(new Callback<LoginSuccessRep>() {
+        userApi.login(loginEntity).enqueue(new BaseRetrofitCallback<LoginSuccessRep>() {
             @Override
             public void onResponse(Call<LoginSuccessRep> call, Response<LoginSuccessRep> response) {
                 if (response.code() == 200) {
@@ -268,7 +272,7 @@ public class SignupProfileFragment extends BaseFragment {
                 generateApi4Avatar(AvatarApi.class);
         MultipartBody.Part filePart =
                 PartUtils.prepareFilePart("upload", profile.getName(), profile);
-        avatarApi.uploadUserAvatar(filePart).enqueue(new Callback<UserInfo>() {
+        avatarApi.uploadUserAvatar(filePart).enqueue(new BaseRetrofitCallback<UserInfo>() {
             @Override
             public void onResponse(Call<UserInfo> call, Response<UserInfo> response) {
                 LogUtil2.getUtils().d("uploadUserAvatar onResponse");

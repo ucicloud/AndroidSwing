@@ -31,6 +31,7 @@ import com.kidsdynamic.swing.ble.IDeviceInitCallback;
 import com.kidsdynamic.swing.ble.IDeviceScanCallback;
 import com.kidsdynamic.swing.ble.SwingBLEService;
 import com.kidsdynamic.swing.domain.DeviceManager;
+import com.kidsdynamic.swing.net.BaseRetrofitCallback;
 import com.kidsdynamic.swing.utils.GlideHelper;
 import com.kidsdynamic.swing.view.ListLinearLayout;
 import com.vise.baseble.model.BluetoothLeDevice;
@@ -45,7 +46,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
@@ -208,7 +208,7 @@ public class WatchSelectFragment extends BaseFragment {
         //业务上的macId不包含":"
         final String watchMacId = DeviceManager.getMacID(scanResult.getAddress());
 //        final String watchMacId = "111111861799";
-        kidsApi.whoRegisteredMacID(watchMacId).enqueue(new Callback<WhoRegisterMacIDResp>() {
+        kidsApi.whoRegisteredMacID(watchMacId).enqueue(new BaseRetrofitCallback<WhoRegisterMacIDResp>() {
             @Override
             public void onResponse(Call<WhoRegisterMacIDResp> call, Response<WhoRegisterMacIDResp> response) {
                 LogUtil2.getUtils().d("whoRegisteredMacID onResponse: " + response.code());
@@ -238,7 +238,6 @@ public class WatchSelectFragment extends BaseFragment {
             @Override
             public void onFailure(Call<WhoRegisterMacIDResp> call, Throwable t) {
                 LogUtil2.getUtils().d("whoRegisteredMacID onFailure");
-                t.printStackTrace();
             }
         });
     }
