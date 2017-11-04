@@ -201,13 +201,13 @@ public class WatchSelectFragment extends BaseFragment {
         if (null == scanResult) {
             return;
         }
-        String watchMacId = scanResult.getAddress();
+
         KidsApi kidsApi = ApiGen.getInstance(getContext().getApplicationContext()).
                 generateApi(KidsApi.class, true);
 
         //业务上的macId不包含":"
-        watchMacId = DeviceManager.getMacID(watchMacId);
-
+        final String watchMacId = DeviceManager.getMacID(scanResult.getAddress());
+//        final String watchMacId = "111111861799";
         kidsApi.whoRegisteredMacID(watchMacId).enqueue(new Callback<WhoRegisterMacIDResp>() {
             @Override
             public void onResponse(Call<WhoRegisterMacIDResp> call, Response<WhoRegisterMacIDResp> response) {
@@ -218,18 +218,21 @@ public class WatchSelectFragment extends BaseFragment {
                     LogUtil2.getUtils().d("watch binder: ");
                     LogUtil2.getUtils().d("watch binder info: " + kidsWithParent.getName());
                     LogUtil2.getUtils().d("watch binder info: " + kidsWithParent.getParent().getFirstName());
+                    //绑定过的设备暂时不显示，二期多设备功能才显示。
                 } else if (response.code() == 404) {
                     kidsWithParent = new KidsWithParent();
                     kidsWithParent.setId(-1);
                     kidsWithParent.setName(scanResult.getName());
-                    kidsWithParent.setMacId(scanResult.getAddress());
+                    kidsWithParent.setMacId(watchMacId);
                     LogUtil2.getUtils().d("watch not bind");
+
+                    //业务上用的macId需要吧address中的":"删除
+                    mDeviceMap.put(watchMacId, scanResult);
+                    dataAdapter.addItem(kidsWithParent);
+                    ll_select.setAdapter(dataAdapter);
                 }
 
-                //业务上用的macId需要吧address中的":"删除
-                mDeviceMap.put(DeviceManager.getMacID(scanResult.getAddress()), scanResult);
-                dataAdapter.addItem(kidsWithParent);
-                ll_select.setAdapter(dataAdapter);
+
             }
 
             @Override
@@ -291,7 +294,7 @@ public class WatchSelectFragment extends BaseFragment {
                 if (-1 == id) {
                     holder.iv_head.setImageResource(R.drawable.ic_icon_profile_);
                     holder.tv_content.setText(String.format("%1$s %2$s", kidsWithParent.getName(),
-                            kidsWithParent.getMacId()));
+                            DeviceManager.getMacAddress(kidsWithParent.getMacId())));
                     holder.iv_action.setImageResource(R.drawable.ic_icon_plus);
                     holder.iv_action.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -322,18 +325,19 @@ public class WatchSelectFragment extends BaseFragment {
     }
 
     private void doPlusClick(final String macId) {
-        showLoadingDialog(R.string.signup_login_wait);
         BluetoothLeDevice device = mDeviceMap.get(macId);
 
         if(device == null){
             ToastCommon.makeText(getActivity(),R.string.error_api_unknown);
             return;
         }
-
+        showLoadingDialog(R.string.signup_login_wait);
         mBluetoothService.connectAndInitDevice(device, new IDeviceInitCallback() {
             @Override
             public void onInitComplete(String mac) {
-
+                finishLoadingDialog();
+                SignupActivity signupActivity = (SignupActivity) getActivity();
+                signupActivity.setFragmentAndAddBackStack(WatchProfileFragment.newInstance(macId));
             }
 
             @Override
@@ -344,18 +348,13 @@ public class WatchSelectFragment extends BaseFragment {
 
             @Override
             public void onDeviceBattery(int battery) {
-                finishLoadingDialog();
                 DeviceManager.saveBindWatchBattery(macId, battery);
-                SignupActivity signupActivity = (SignupActivity) getActivity();
-                signupActivity.setFragmentAndAddBackStack(WatchProfileFragment.newInstance(macId));
             }
         });
 
     }
 
     private void doRequestClick(final String macId) {
-        showLoadingDialog(R.string.signup_login_wait);
-
         BluetoothLeDevice device = mDeviceMap.get(macId);
 
         if(device == null){
@@ -363,6 +362,7 @@ public class WatchSelectFragment extends BaseFragment {
             return;
         }
 
+        showLoadingDialog(R.string.signup_login_wait);
         mBluetoothService.connectAndInitDevice(device, new IDeviceInitCallback() {
             @Override
             public void onInitComplete(String mac) {
