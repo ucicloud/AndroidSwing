@@ -30,8 +30,7 @@ public class GlideHelper {
 
     public static void showSquareImageView(Context context, Object mode, ImageView imageView) {
         try {
-            RequestOptions requestOptions = RequestOptions.fitCenterTransform()
-                    .placeholder(R.drawable.default_avatar);;
+            RequestOptions requestOptions = RequestOptions.fitCenterTransform();
             Glide.with(context)
                     .load(mode)
                     .apply(requestOptions)

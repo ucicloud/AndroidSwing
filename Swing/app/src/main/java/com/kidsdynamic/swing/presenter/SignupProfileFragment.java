@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Point;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -14,6 +15,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -39,6 +41,7 @@ import com.kidsdynamic.swing.view.CropImageView;
 import com.kidsdynamic.swing.view.CropPopWindow;
 import com.kidsdynamic.swing.view.ViewCircle;
 import com.yy.base.utils.ToastCommon;
+import com.yy.base.utils.ViewUtils;
 
 import java.io.File;
 
@@ -154,9 +157,12 @@ public class SignupProfileFragment extends BaseFragment {
             }
         });
         BottomPopWindow bottomPopWindow = builder.create();
+
+        bottomPopWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        Point navigationBarSize = ViewUtils.getNavigationBarSize(getContext());
         bottomPopWindow.showAtLocation(getView(),
                 Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL,
-                0, 0);
+                0, navigationBarSize.y);
     }
 
     @OnClick(R.id.signup_profile_submit)

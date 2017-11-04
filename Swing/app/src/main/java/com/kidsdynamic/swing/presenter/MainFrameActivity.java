@@ -48,10 +48,12 @@ public class MainFrameActivity extends BaseFragmentActivity {
         //初始化fragment对象
         initFragments();
 
-        //默认显示第一项
-        tabViews[0].setSelected(true);
-        addFragment(fragmentHashMap.get(R.id.main_console_device),R.id.main_console_device);
-        currentTabKey = R.id.main_console_device;
+        //默认显示第三项
+        tabViews[2].setSelected(true);
+        addFragment(fragmentHashMap.get(R.id.main_console_dashboard),R.id.main_console_dashboard);
+        currentTabKey = R.id.main_console_dashboard;
+        /*addFragment(fragmentHashMap.get(R.id.main_console_device),R.id.main_console_device);
+        currentTabKey = R.id.main_console_device;*/
 
     }
 

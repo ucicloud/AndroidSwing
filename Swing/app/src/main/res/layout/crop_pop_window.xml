@@ -8,9 +8,9 @@
 
     <com.kidsdynamic.swing.view.CropImageView
         android:id="@+id/cropImageView"
-        android:layout_gravity="center_horizontal"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:adjustViewBounds="true" />
 
     <com.kidsdynamic.swing.view.AvenirTextView
@@ -46,4 +46,8 @@
         android:layout_marginTop="@dimen/base_10"
         android:gravity="center"
         android:text="@string/photo_clip_cancel" />
+
+    <View android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.3"/>
 </LinearLayout>

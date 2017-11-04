@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Point;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -33,6 +34,7 @@ import com.kidsdynamic.swing.view.CropImageView;
 import com.kidsdynamic.swing.view.CropPopWindow;
 import com.kidsdynamic.swing.view.ViewCircle;
 import com.yy.base.utils.ToastCommon;
+import com.yy.base.utils.ViewUtils;
 
 import java.io.File;
 import java.util.HashMap;
@@ -122,7 +124,10 @@ public class WatchProfileFragment extends BaseFragment {
             }
         });
         BottomPopWindow bottomPopWindow = builder.create();
-        bottomPopWindow.showAtLocation(getView(), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
+
+        Point navigationBarSize = ViewUtils.getNavigationBarSize(getContext());
+        bottomPopWindow.showAtLocation(getView(), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL,
+                0, navigationBarSize.y);
     }
 
     @OnClick(R.id.watch_profile_submit)
