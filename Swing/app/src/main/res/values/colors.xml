@@ -59,5 +59,6 @@
     <color name="color_e0">#E0E0E0</color>
     <color name="pop_window_background">#E0A1A9AB</color>
     <color name="profile_logout_confirm_name">#14C0BD</color>
+    <color name="color_edit_hint_color">#9E9E9E</color>
 
 </resources>

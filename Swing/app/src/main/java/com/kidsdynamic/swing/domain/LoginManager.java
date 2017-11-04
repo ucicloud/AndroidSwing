@@ -16,7 +16,7 @@ import com.kidsdynamic.swing.SwingApplication;
  */
 
 public class LoginManager {
-    // TODO: 2017/10/17 登录相关的业务流程处理类
+    // 2017/10/17 登录相关的业务流程处理类
 
     public boolean cacheToken(@NonNull String token){
         return PreferencesUtil.getInstance(SwingApplication.getAppContext()).

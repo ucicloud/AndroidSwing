@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * todo list adapter
+ * to-do list adapter
  * date:   2017/10/31 11:47 <br/>
  */
 

@@ -75,7 +75,7 @@
         <item name="android:textStyle">normal</item>
         <item name="android:background">@drawable/main_edit_text_background</item>
         <item name="android:textAllCaps">false</item>
-        <item name="android:textColorHint">@color/color_gray_deep</item>
+        <item name="android:textColorHint">@color/color_edit_hint_color</item>
         <item name="android:maxLines">1</item>
         <item name="android:ellipsize">end</item>
         <item name="android:gravity">center</item>

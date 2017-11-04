@@ -11,8 +11,6 @@ import android.widget.TextView;
 import com.kidsdynamic.swing.BaseFragment;
 import com.kidsdynamic.swing.R;
 
-import butterknife.ButterKnife;
-
 
 /**
  * Created by Administrator on 2017/4/15.
@@ -44,7 +42,7 @@ public class TestFragment extends BaseFragment {
         View layoutView = inflater.inflate(R.layout.fragment_calendar_main_2, null);
 //        layoutView.findViewById(R.id.)
 
-        ButterKnife.bind(this,layoutView);
+//        ButterKnife.bind(this,layoutView);
 
 
         return layoutView;

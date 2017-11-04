@@ -28,9 +28,9 @@ import com.kidsdynamic.data.net.user.model.RegisterFailResponse;
 import com.kidsdynamic.data.net.user.model.UserInfo;
 import com.kidsdynamic.data.utils.LogUtil2;
 import com.kidsdynamic.swing.BaseFragment;
-import com.kidsdynamic.swing.BuildConfig;
 import com.kidsdynamic.swing.R;
 import com.kidsdynamic.swing.domain.LoginManager;
+import com.kidsdynamic.swing.utils.SwingFontsCache;
 import com.kidsdynamic.swing.view.BottomPopWindow;
 import com.kidsdynamic.swing.view.CropImageView;
 import com.kidsdynamic.swing.view.CropPopWindow;
@@ -90,15 +90,25 @@ public class SignupProfileFragment extends BaseFragment {
                              @Nullable Bundle savedInstanceState) {
         View layout = inflater.inflate(R.layout.fragment_signup_profile, container, false);
         ButterKnife.bind(this, layout);
+
+        initEditTextStyle();
         return layout;
+    }
+
+    private void initEditTextStyle() {
+        et_first.setTypeface(SwingFontsCache.getNormalType(getContext()));
+        et_last.setTypeface(SwingFontsCache.getNormalType(getContext()));
+        et_phone.setTypeface(SwingFontsCache.getNormalType(getContext()));
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        if (BuildConfig.DEBUG) {
+
+        //del 2017年11月4日10:29:02 only_app 不在使用该测试按钮
+        /*if (BuildConfig.DEBUG) {
             tvExit.setVisibility(View.VISIBLE);
-        }
+        }*/
     }
 
     @Override
@@ -145,9 +155,11 @@ public class SignupProfileFragment extends BaseFragment {
 
     @OnClick(R.id.signup_profile_submit)
     public void doSubmit() {
-        if (null == profile || !profile.exists()) {
+        //del 2017年11月4日09:13:23 only_app
+        //头像非必填项
+        /*if (null == profile || !profile.exists()) {
             return;
-        }
+        }*/
         String firstName = et_first.getText().toString().trim();
         if (TextUtils.isEmpty(firstName)) {
             return;
@@ -200,7 +212,6 @@ public class SignupProfileFragment extends BaseFragment {
 
             @Override
             public void onFailure(Call<RegisterFailResponse> call, Throwable t) {
-                //todo fail, show error info
                 LogUtil2.getUtils().d("register onFailure");
                 t.printStackTrace();
                 finishLoadingDialog();
@@ -234,7 +245,6 @@ public class SignupProfileFragment extends BaseFragment {
             public void onFailure(Call<LoginSuccessRep> call, Throwable t) {
                 finishLoadingDialog();
                 t.printStackTrace();
-                // TODO: 2017/10/17 fail, dismiss dialog, show error info
             }
         });
 

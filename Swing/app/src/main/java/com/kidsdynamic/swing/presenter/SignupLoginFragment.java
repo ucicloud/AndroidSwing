@@ -32,6 +32,7 @@ import com.kidsdynamic.swing.R;
 import com.kidsdynamic.swing.domain.EventManager;
 import com.kidsdynamic.swing.domain.LoginManager;
 import com.kidsdynamic.swing.utils.ConfigUtil;
+import com.kidsdynamic.swing.utils.SwingFontsCache;
 import com.kidsdynamic.swing.view.ViewUtils;
 import com.yy.base.utils.Functions;
 
@@ -75,7 +76,14 @@ public class SignupLoginFragment extends BaseFragment {
                              @Nullable Bundle savedInstanceState) {
         View layout = inflater.inflate(R.layout.fragment_signup_login, container, false);
         ButterKnife.bind(this, layout);
+
+        initEditTextStyle();
         return layout;
+    }
+
+    private void initEditTextStyle() {
+        et_email.setTypeface(SwingFontsCache.getNormalType(getContext()));
+        et_password.setTypeface(SwingFontsCache.getNormalType(getContext()));
     }
 
     @Override
@@ -110,6 +118,7 @@ public class SignupLoginFragment extends BaseFragment {
 
         SoftKeyBoardUtil.hideSoftKeyboard(getActivity());
 
+        // TODO: 2017/11/4 test
         //执行登录业务
         exeLoginFlow(email, password);
 //        showRegisterUI(email, password);
@@ -208,7 +217,7 @@ public class SignupLoginFragment extends BaseFragment {
     }
 
     private void syncData() {
-        // TODO: 2017/10/17 同步账户数据 成功后关闭等待对话框，跳转到主界面；失败提醒
+        //2017/10/17 同步账户数据 成功后关闭等待对话框，跳转到主界面；失败提醒
         Log.w("login", "login ok, start sync data");
 
         //登陆成功后，需要获取两个业务数据：
@@ -294,7 +303,7 @@ public class SignupLoginFragment extends BaseFragment {
         getActivity().finish();
         startActivity(new Intent(getActivity(), MainFrameActivity.class));
 
-        // TODO: 2017/10/27 测试阶段，暂不记录状态
+        //记录状态
         PreferencesUtil.getInstance(getContext()).setPreferenceBooleanValue(ConfigUtil.login_state, true);
     }
 
