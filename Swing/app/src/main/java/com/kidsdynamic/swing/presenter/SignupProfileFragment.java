@@ -230,7 +230,9 @@ public class SignupProfileFragment extends BaseFragment {
                     // 缓存token
                     new LoginManager().cacheToken(response.body().getAccess_token());
 
-                    uploadAvatar(profile);
+                    if(profile != null){
+                        uploadAvatar(profile);
+                    }
 
                     //同步数据
 //                    syncData();
@@ -261,6 +263,7 @@ public class SignupProfileFragment extends BaseFragment {
                 LogUtil2.getUtils().d("uploadUserAvatar onResponse");
                 LogUtil2.getUtils().d("uploadUserAvatar code: " + response.code());
                 //code == 200 upload ok
+                //todo 头像上传成功后
             }
 
             @Override

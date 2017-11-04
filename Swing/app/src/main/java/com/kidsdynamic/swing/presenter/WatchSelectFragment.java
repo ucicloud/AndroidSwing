@@ -23,6 +23,7 @@ import android.widget.TextView;
 import com.kidsdynamic.data.net.ApiGen;
 import com.kidsdynamic.data.net.kids.KidsApi;
 import com.kidsdynamic.data.net.kids.model.KidsWithParent;
+import com.kidsdynamic.data.net.kids.model.WhoRegisterMacIDResp;
 import com.kidsdynamic.data.utils.LogUtil2;
 import com.kidsdynamic.swing.BaseFragment;
 import com.kidsdynamic.swing.R;
@@ -33,6 +34,7 @@ import com.kidsdynamic.swing.domain.DeviceManager;
 import com.kidsdynamic.swing.utils.GlideHelper;
 import com.kidsdynamic.swing.view.ListLinearLayout;
 import com.vise.baseble.model.BluetoothLeDevice;
+import com.yy.base.utils.ToastCommon;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -206,13 +208,13 @@ public class WatchSelectFragment extends BaseFragment {
         //业务上的macId不包含":"
         watchMacId = DeviceManager.getMacID(watchMacId);
 
-        kidsApi.whoRegisteredMacID(watchMacId).enqueue(new Callback<KidsWithParent>() {
+        kidsApi.whoRegisteredMacID(watchMacId).enqueue(new Callback<WhoRegisterMacIDResp>() {
             @Override
-            public void onResponse(Call<KidsWithParent> call, Response<KidsWithParent> response) {
+            public void onResponse(Call<WhoRegisterMacIDResp> call, Response<WhoRegisterMacIDResp> response) {
                 LogUtil2.getUtils().d("whoRegisteredMacID onResponse: " + response.code());
                 KidsWithParent kidsWithParent = null;
                 if (response.code() == 200) {
-                    kidsWithParent = response.body();
+                    kidsWithParent = response.body().getKid();
                     LogUtil2.getUtils().d("watch binder: ");
                     LogUtil2.getUtils().d("watch binder info: " + kidsWithParent.getName());
                     LogUtil2.getUtils().d("watch binder info: " + kidsWithParent.getParent().getFirstName());
@@ -223,13 +225,15 @@ public class WatchSelectFragment extends BaseFragment {
                     kidsWithParent.setMacId(scanResult.getAddress());
                     LogUtil2.getUtils().d("watch not bind");
                 }
-                mDeviceMap.put(scanResult.getAddress(), scanResult);
+
+                //业务上用的macId需要吧address中的":"删除
+                mDeviceMap.put(DeviceManager.getMacID(scanResult.getAddress()), scanResult);
                 dataAdapter.addItem(kidsWithParent);
                 ll_select.setAdapter(dataAdapter);
             }
 
             @Override
-            public void onFailure(Call<KidsWithParent> call, Throwable t) {
+            public void onFailure(Call<WhoRegisterMacIDResp> call, Throwable t) {
                 LogUtil2.getUtils().d("whoRegisteredMacID onFailure");
                 t.printStackTrace();
             }
@@ -320,6 +324,12 @@ public class WatchSelectFragment extends BaseFragment {
     private void doPlusClick(final String macId) {
         showLoadingDialog(R.string.signup_login_wait);
         BluetoothLeDevice device = mDeviceMap.get(macId);
+
+        if(device == null){
+            ToastCommon.makeText(getActivity(),R.string.error_api_unknown);
+            return;
+        }
+
         mBluetoothService.connectAndInitDevice(device, new IDeviceInitCallback() {
             @Override
             public void onInitComplete(String mac) {
@@ -337,14 +347,22 @@ public class WatchSelectFragment extends BaseFragment {
                 finishLoadingDialog();
                 DeviceManager.saveBindWatchBattery(macId, battery);
                 SignupActivity signupActivity = (SignupActivity) getActivity();
-                signupActivity.setFragment(WatchProfileFragment.newInstance(macId));
+                signupActivity.setFragmentAndAddBackStack(WatchProfileFragment.newInstance(macId));
             }
         });
 
     }
 
     private void doRequestClick(final String macId) {
+        showLoadingDialog(R.string.signup_login_wait);
+
         BluetoothLeDevice device = mDeviceMap.get(macId);
+
+        if(device == null){
+            ToastCommon.makeText(getActivity(),R.string.error_api_unknown);
+            return;
+        }
+
         mBluetoothService.connectAndInitDevice(device, new IDeviceInitCallback() {
             @Override
             public void onInitComplete(String mac) {
@@ -362,7 +380,7 @@ public class WatchSelectFragment extends BaseFragment {
                 finishLoadingDialog();
                 DeviceManager.saveBindWatchBattery(macId, battery);
                 SignupActivity signupActivity = (SignupActivity) getActivity();
-                signupActivity.setFragment(WatchRegisteredFragment.newInstance());
+                signupActivity.setFragmentAndAddBackStack(WatchRegisteredFragment.newInstance());
             }
         });
     }

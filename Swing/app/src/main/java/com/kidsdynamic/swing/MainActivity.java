@@ -20,6 +20,7 @@ import com.kidsdynamic.data.net.event.model.EventWithTodo;
 import com.kidsdynamic.data.net.kids.KidsApi;
 import com.kidsdynamic.data.net.kids.model.KidsAddRequest;
 import com.kidsdynamic.data.net.kids.model.KidsWithParent;
+import com.kidsdynamic.data.net.kids.model.WhoRegisterMacIDResp;
 import com.kidsdynamic.data.net.user.UserApiNeedToken;
 import com.kidsdynamic.data.net.user.UserApiNoNeedToken;
 import com.kidsdynamic.data.net.user.model.LoginEntity;
@@ -35,8 +36,6 @@ import com.kidsdynamic.data.utils.LogUtil2;
 import com.kidsdynamic.swing.domain.LoginManager;
 import com.kidsdynamic.swing.presenter.ActivityTest;
 import com.kidsdynamic.swing.utils.SwingFontsCache;
-
-import org.w3c.dom.Text;
 
 import java.io.File;
 import java.io.IOException;
@@ -442,22 +441,22 @@ public class MainActivity extends Activity {
         KidsApi kidsApi = ApiGen.getInstance(this.getApplication()).
                 generateApi(KidsApi.class, true);
 
-        kidsApi.whoRegisteredMacID(watchMacId).enqueue(new Callback<KidsWithParent>() {
+        kidsApi.whoRegisteredMacID(watchMacId).enqueue(new Callback<WhoRegisterMacIDResp>() {
             @Override
-            public void onResponse(Call<KidsWithParent> call, Response<KidsWithParent> response) {
+            public void onResponse(Call<WhoRegisterMacIDResp> call, Response<WhoRegisterMacIDResp> response) {
                 LogUtil2.getUtils().d("whoRegisteredMacID onResponse: " + response.code());
 
                 if (response.code() == 200) {
                     LogUtil2.getUtils().d("watch binder: ");
-                    LogUtil2.getUtils().d("watch binder info: " + response.body().getName());
-                    LogUtil2.getUtils().d("watch binder info: " + response.body().getParent().getFirstName());
+                    /*LogUtil2.getUtils().d("watch binder info: " + response.body().getName());
+                    LogUtil2.getUtils().d("watch binder info: " + response.body().getParent().getFirstName());*/
                 }else if(response.code() == 404){
                     LogUtil2.getUtils().d("watch not binde: ");
                 }
             }
 
             @Override
-            public void onFailure(Call<KidsWithParent> call, Throwable t) {
+            public void onFailure(Call<WhoRegisterMacIDResp> call, Throwable t) {
                 LogUtil2.getUtils().d("whoRegisteredMacID onFailure");
                 t.printStackTrace();
             }

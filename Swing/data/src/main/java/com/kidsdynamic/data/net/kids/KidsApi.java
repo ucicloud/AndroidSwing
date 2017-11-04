@@ -4,6 +4,7 @@ import com.kidsdynamic.data.net.kids.model.BatteryStatus;
 import com.kidsdynamic.data.net.kids.model.KidsAddRequest;
 import com.kidsdynamic.data.net.kids.model.KidsInfoUpdateEntity;
 import com.kidsdynamic.data.net.kids.model.KidsWithParent;
+import com.kidsdynamic.data.net.kids.model.WhoRegisterMacIDResp;
 import com.kidsdynamic.data.net.user.model.KidInfo;
 
 import java.util.List;
@@ -52,7 +53,7 @@ public interface KidsApi {
 //400	Bad request. Missing some parameters
 //500	Internal error. Please send me the error. I will fix it
     @GET("v1/kids/whoRegisteredMacID")
-    Call<KidsWithParent> whoRegisteredMacID(@Query("macId") String macId);
+    Call<WhoRegisterMacIDResp> whoRegisteredMacID(@Query("macId") String macId);
 
 //200	Data added successfully
 //400	Bad request. Missing some parameters

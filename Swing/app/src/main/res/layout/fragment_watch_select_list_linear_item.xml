@@ -15,7 +15,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="@+id/tv_content" />
 
-    <TextView
+    <com.kidsdynamic.swing.view.AvenirTextView
         android:id="@+id/tv_content"
         style="@style/textview_hint"
         android:layout_width="0dp"
@@ -27,6 +27,7 @@
         android:paddingBottom="6dp"
         android:paddingTop="6dp"
         android:text=""
+        android:textStyle="bold"
         app:layout_constraintHorizontal_chainStyle="spread"
         app:layout_constraintLeft_toRightOf="@id/iv_head"
         app:layout_constraintRight_toLeftOf="@+id/iv_action" />

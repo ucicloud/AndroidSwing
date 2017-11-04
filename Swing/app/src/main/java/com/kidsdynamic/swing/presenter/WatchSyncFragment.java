@@ -1,5 +1,6 @@
 package com.kidsdynamic.swing.presenter;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -49,7 +50,8 @@ public class WatchSyncFragment extends BaseFragment {
 
     @OnClick(R.id.watch_sync_no)
     public void no() {
-
+        //跳转到主界面
+        startActivity(new Intent(getActivity(),MainFrameActivity.class));
     }
 
     @OnClick(R.id.watch_sync_yes)

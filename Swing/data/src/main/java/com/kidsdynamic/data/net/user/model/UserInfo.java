@@ -16,6 +16,10 @@ public class UserInfo {
      * zipCode : 11111
      * phoneNumber : 3444943214
      * profile ://头像信息
+     * language" "en",
+     "ios_registration_id": "D975DE6114780B4396AB5D1A8D8DA1826035A7AD3C48BA420683E85072ED62FB",
+     "android_registration_id": "",
+     "country": "CN"
      */
 
     private int id;
@@ -28,6 +32,10 @@ public class UserInfo {
     private String phoneNumber;
     private String profile;
     private String registrationId;
+    private String language;
+    private String ios_registration_id;
+    private String android_registration_id;
+    private String country;
 
     public int getId() {
         return id;
@@ -107,5 +115,37 @@ public class UserInfo {
 
     public void setRegistrationId(String registrationId) {
         this.registrationId = registrationId;
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
+    public String getIos_registration_id() {
+        return ios_registration_id;
+    }
+
+    public void setIos_registration_id(String ios_registration_id) {
+        this.ios_registration_id = ios_registration_id;
+    }
+
+    public String getAndroid_registration_id() {
+        return android_registration_id;
+    }
+
+    public void setAndroid_registration_id(String android_registration_id) {
+        this.android_registration_id = android_registration_id;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
     }
 }

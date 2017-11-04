@@ -49,6 +49,8 @@ public class SignupActivity extends BaseFragmentActivity {
 
         // TODO: 2017/11/4 test
         setFragment(SignupStartFragment.newInstance());
+
+        //below test fragment
 //        setFragment(WatchSelectFragment.newInstance());
 //        setFragment(WatchHaveFragment.newInstance());
 //        setFragment(SignupStartFragment.newInstance());

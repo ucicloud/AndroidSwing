@@ -30,6 +30,7 @@ import com.kidsdynamic.swing.view.BottomPopWindow;
 import com.kidsdynamic.swing.view.CropImageView;
 import com.kidsdynamic.swing.view.CropPopWindow;
 import com.kidsdynamic.swing.view.ViewCircle;
+import com.yy.base.utils.ToastCommon;
 
 import java.io.File;
 import java.util.HashMap;
@@ -123,9 +124,10 @@ public class WatchProfileFragment extends BaseFragment {
 
     @OnClick(R.id.watch_profile_submit)
     public void doSubmit() {
-        if (null == profile || !profile.exists()) {
+        //del 2017年11月4日11:32:47 only_app 头像非必填字段
+        /*if (null == profile || !profile.exists()) {
             return;
-        }
+        }*/
         String firstName = et_first.getText().toString().trim();
         if (TextUtils.isEmpty(firstName)) {
             return;
@@ -167,22 +169,30 @@ public class WatchProfileFragment extends BaseFragment {
                     LogUtil2.getUtils().d("addKid rep kid ID: " + kidId);
                     DeviceManager.updateFocusKids(kidId);
 
-                    uploadAvatar(profile, String.valueOf(kidId));
+                    if(profile != null){
+                        uploadAvatar(profile, String.valueOf(kidId));
+                    }
 
                     SignupActivity signupActivity = (SignupActivity) getActivity();
-                    signupActivity.setFragment(WatchHaveFragment.newInstance());
+                    signupActivity.setFragment(WatchSyncFragment.newInstance());
                 } else {
-                    // TODO: 2017/10/31 add error msg
+                    finishLoadingDialog();
+                    ToastCommon.makeText(getContext(),R.string.error_api_unknown);
+                    // TODO: 2017/10/31 show error msg
                     LogUtil2.getUtils().d("addKid error code:" + response.code());
+
+                    //todo test
+                    /*SignupActivity signupActivity = (SignupActivity) getActivity();
+                    signupActivity.setFragment(WatchSyncFragment.newInstance());*/
                 }
             }
 
             @Override
             public void onFailure(Call<KidsWithParent> call, Throwable t) {
                 LogUtil2.getUtils().d("addKid onFailure");
+                ToastCommon.makeText(getContext(),R.string.error_api_unknown);
                 t.printStackTrace();
                 finishLoadingDialog();
-                // TODO: 2017/10/31 add error msg
             }
         });
     }
