@@ -231,6 +231,8 @@ public class WatchSelectFragment extends BaseFragment {
             @Override
             public void onResponse(Call<WhoRegisterMacIDResp> call, Response<WhoRegisterMacIDResp> response) {
                 LogUtil2.getUtils().d("whoRegisteredMacID onResponse: " + response.code());
+                super.onResponse(call, response);
+
                 KidsWithParent kidsWithParent = null;
                 if (response.code() == 200) {
                     kidsWithParent = response.body().getKid();
@@ -257,6 +259,7 @@ public class WatchSelectFragment extends BaseFragment {
             @Override
             public void onFailure(Call<WhoRegisterMacIDResp> call, Throwable t) {
                 LogUtil2.getUtils().d("whoRegisteredMacID onFailure");
+                super.onFailure(call,t);
             }
         });
     }

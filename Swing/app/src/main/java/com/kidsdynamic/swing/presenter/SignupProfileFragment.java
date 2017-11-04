@@ -207,6 +207,8 @@ public class SignupProfileFragment extends BaseFragment {
             @Override
             public void onResponse(Call<RegisterFailResponse> call, Response<RegisterFailResponse> response) {
                 LogUtil2.getUtils().d("register onResponse");
+                super.onResponse(call,response);
+
                 int code = response.code();
                 if (code == 200) {
                     LogUtil2.getUtils().d("register ok and start login");
@@ -215,7 +217,7 @@ public class SignupProfileFragment extends BaseFragment {
                     loginEntity.setEmail(email);
                     loginEntity.setPassword(psw);
                     exeLogin(userApi, loginEntity);
-                }if(code == 409){//邮箱已存在
+                }else if(code == 409){//邮箱已存在
                     finishLoadingDialog();
                     ToastCommon.makeText(getContext(),R.string.error_api_user_register_409);
                 }else {
@@ -229,6 +231,7 @@ public class SignupProfileFragment extends BaseFragment {
             @Override
             public void onFailure(Call<RegisterFailResponse> call, Throwable t) {
                 LogUtil2.getUtils().d("register onFailure");
+                super.onFailure(call,t);
 
                 finishLoadingDialog();
             }
@@ -239,6 +242,8 @@ public class SignupProfileFragment extends BaseFragment {
         userApi.login(loginEntity).enqueue(new BaseRetrofitCallback<LoginSuccessRep>() {
             @Override
             public void onResponse(Call<LoginSuccessRep> call, Response<LoginSuccessRep> response) {
+                super.onResponse(call, response);
+
                 if (response.code() == 200) {
                     LogUtil2.getUtils().d("login success");
                     LogUtil2.getUtils().d(response.body().getAccess_token());
@@ -266,6 +271,8 @@ public class SignupProfileFragment extends BaseFragment {
 
             @Override
             public void onFailure(Call<LoginSuccessRep> call, Throwable t) {
+                super.onFailure(call,t);
+
                 finishLoadingDialog();
                 t.printStackTrace();
             }
@@ -282,14 +289,16 @@ public class SignupProfileFragment extends BaseFragment {
             @Override
             public void onResponse(Call<UserInfo> call, Response<UserInfo> response) {
                 LogUtil2.getUtils().d("uploadUserAvatar onResponse");
-                LogUtil2.getUtils().d("uploadUserAvatar code: " + response.code());
+                super.onResponse(call, response);
+
                 //code == 200 upload ok
                 //todo 头像上传成功后
             }
 
             @Override
             public void onFailure(Call<UserInfo> call, Throwable t) {
-                LogUtil2.getUtils().d("uploadUserAvatar onFailure");
+                super.onFailure(call,t);
+
                 t.printStackTrace();
             }
         });
