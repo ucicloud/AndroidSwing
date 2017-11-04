@@ -59,7 +59,7 @@ public class MainFrameActivity extends BaseFragmentActivity {
 
         fragmentHashMap.put(R.id.main_console_device, new FragmentDevice());
         fragmentHashMap.put(R.id.main_console_calendar,new CalendarContainerFragment());
-        fragmentHashMap.put(R.id.main_console_dashboard,new TestFragment());
+        fragmentHashMap.put(R.id.main_console_dashboard,new DashboardContainerFragment());
         fragmentHashMap.put(R.id.main_control_profile,new ProfileContainerFragment());
     }
 

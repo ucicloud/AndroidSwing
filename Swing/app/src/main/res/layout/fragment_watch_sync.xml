@@ -5,19 +5,31 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <View
+    <include layout="@layout/base_title_bar"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_weight="1"/>
 
-    <com.kidsdynamic.swing.view.ViewCircle
+    <cn.carbs.android.avatarimageview.library.AvatarImageView
         android:id="@+id/watch_sync_photo"
         android:layout_width="124dp"
         android:layout_height="124dp"
         android:layout_gravity="center_horizontal"
         app:crossColor="@color/hex_1b89cd"
+        android:layout_marginTop="@dimen/base_25"
         app:crossWidth="2dp"
         app:strokeColorNormal="@color/hex_1b89cd" />
+
+    <com.kidsdynamic.swing.view.AvenirTextView
+        android:id="@+id/tv_kids_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/base_5"
+        android:gravity="center_horizontal|top"
+        android:textStyle="bold"
+        android:textColor="@color/profile_logout_confirm_name"
+        android:textSize="20sp"
+        android:text="kids Name" />
 
     <com.kidsdynamic.swing.view.AvenirTextView
         style="@style/textview_main"

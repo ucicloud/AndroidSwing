@@ -5,6 +5,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.kidsdynamic.swing.R;
 
 /**
  * GlideHelper
@@ -16,7 +17,8 @@ public class GlideHelper {
 
     public static void showCircleImageView(Context context, Object mode, ImageView imageView) {
         try {
-            RequestOptions requestOptions = RequestOptions.circleCropTransform();
+            RequestOptions requestOptions = RequestOptions.circleCropTransform()
+                    .placeholder(R.drawable.default_avatar);
             Glide.with(context)
                     .load(mode)
                     .apply(requestOptions)
@@ -28,7 +30,8 @@ public class GlideHelper {
 
     public static void showSquareImageView(Context context, Object mode, ImageView imageView) {
         try {
-            RequestOptions requestOptions = RequestOptions.fitCenterTransform();
+            RequestOptions requestOptions = RequestOptions.fitCenterTransform()
+                    .placeholder(R.drawable.default_avatar);;
             Glide.with(context)
                     .load(mode)
                     .apply(requestOptions)
