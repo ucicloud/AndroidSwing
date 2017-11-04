@@ -87,7 +87,21 @@ public class WatchSelectFragment extends BaseFragment {
         super.onActivityCreated(savedInstanceState);
         dataAdapter = new DataAdapter(getContext());
         ll_select.setAdapter(dataAdapter);
+//        checkPermissions();
+    }
+
+    @Override
+    public void onResume() {
+        super.onStop();
         checkPermissions();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (mBluetoothService != null) {
+            mBluetoothService.cancelScan();
+        }
     }
 
     @Override
@@ -170,10 +184,15 @@ public class WatchSelectFragment extends BaseFragment {
     }
 
     private void exec() {
+        if (mBluetoothService == null) {
+            return;
+        }
         mBluetoothService.closeConnect();
-        mBluetoothService.scanDevice(30 * 1000, new IDeviceScanCallback() {
+        //一直扫描，直到该界面被压栈或是被关闭
+        mBluetoothService.scanDevice(0, new IDeviceScanCallback() {
             @Override
             public void onStartScan() {
+                mDeviceMap.clear();
                 dataAdapter.clear();
                 dataAdapter.notifyDataSetChanged();
 //                img_loading.startAnimation(operatingAnim);
@@ -207,7 +226,7 @@ public class WatchSelectFragment extends BaseFragment {
 
         //业务上的macId不包含":"
         final String watchMacId = DeviceManager.getMacID(scanResult.getAddress());
-//        final String watchMacId = "111111861799";
+//        final String watchMacId = "111113871799";//测试用
         kidsApi.whoRegisteredMacID(watchMacId).enqueue(new BaseRetrofitCallback<WhoRegisterMacIDResp>() {
             @Override
             public void onResponse(Call<WhoRegisterMacIDResp> call, Response<WhoRegisterMacIDResp> response) {

@@ -107,7 +107,8 @@ public class WatchProfileFragment extends BaseFragment {
     @OnClick(R.id.ib_back)
     public void back() {
         SignupActivity signupActivity = (SignupActivity) getActivity();
-        signupActivity.setFragment(SignupLoginFragment.newInstance());
+//        signupActivity.setFragment(SignupLoginFragment.newInstance());
+        signupActivity.getSupportFragmentManager().popBackStack();
     }
 
     @OnClick(R.id.watch_profile_photo)
