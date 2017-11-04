@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.kidsdynamic.swing.BaseFragment;
 import com.kidsdynamic.swing.R;
@@ -35,6 +36,10 @@ public class WatchPurchaseFragment extends BaseFragment {
                              @Nullable Bundle savedInstanceState) {
         View layout = inflater.inflate(R.layout.fragment_watch_purchase, container, false);
         ButterKnife.bind(this, layout);
+
+        ((TextView) layout.findViewById(R.id.watch_purchase_request))
+                .setText(R.string.watch_finish_dashboard);
+
         return layout;
     }
 
@@ -45,7 +50,9 @@ public class WatchPurchaseFragment extends BaseFragment {
 
     @OnClick(R.id.watch_purchase_request)
     public void request() {
-
+        getActivity().finish();
+        //跳转到主界面
+        startActivity(new Intent(getActivity(),MainFrameActivity.class));
     }
 
     private void startBrowser(String strUrl) {

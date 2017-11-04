@@ -26,6 +26,7 @@ import com.kidsdynamic.data.utils.LogUtil2;
 import com.kidsdynamic.swing.BaseFragment;
 import com.kidsdynamic.swing.R;
 import com.kidsdynamic.swing.domain.DeviceManager;
+import com.kidsdynamic.swing.domain.UserManager;
 import com.kidsdynamic.swing.view.BottomPopWindow;
 import com.kidsdynamic.swing.view.CropImageView;
 import com.kidsdynamic.swing.view.CropPopWindow;
@@ -162,7 +163,6 @@ public class WatchProfileFragment extends BaseFragment {
             public void onResponse(Call<KidsWithParent> call, Response<KidsWithParent> response) {
                 LogUtil2.getUtils().d("addKid onResponse: " + response.code());
                 if (response.code() == 200) {
-                    finishLoadingDialog();
                     //add successfully
                     KidsWithParent kidsWithParent = response.body();
                     int kidId = kidsWithParent.getId();
@@ -171,10 +171,18 @@ public class WatchProfileFragment extends BaseFragment {
 
                     if(profile != null){
                         uploadAvatar(profile, String.valueOf(kidId));
+                    }else {
+
+                        finishLoadingDialog();
+
+                        Bundle bundle = new Bundle();
+                        bundle.putString(DeviceManager.BUNDLE_KEY_KID_NAME,
+                                kidsName);
+
+                        SignupActivity signupActivity = (SignupActivity) getActivity();
+                        signupActivity.selectFragment(WatchAddSuccessFragment.class.getName(),bundle);
                     }
 
-                    SignupActivity signupActivity = (SignupActivity) getActivity();
-                    signupActivity.setFragment(WatchSyncFragment.newInstance());
                 } else {
                     finishLoadingDialog();
                     ToastCommon.makeText(getContext(),R.string.error_api_unknown);
@@ -215,18 +223,29 @@ public class WatchProfileFragment extends BaseFragment {
                     public void onResponse(Call<UpdateKidAvatarRepEntity> call,
                                            Response<UpdateKidAvatarRepEntity> response) {
                         LogUtil2.getUtils().d("uploadKidAvatar onResponse");
+
+                        finishLoadingDialog();
+
                         //code == 200 upload ok
                         int code = response.code();
-                        if (200 == code) {
+                        if (200 == code) {//上传头像成功后，跳转界面
+                            Bundle bundle = new Bundle();
+                            bundle.putString(DeviceManager.BUNDLE_KEY_KID_NAME,
+                                    response.body().getKid().getName());
+                            bundle.putString(DeviceManager.BUNDLE_KEY_AVATAR,
+                                    UserManager.getProfileRealUri(response.body().getKid().getProfile()));
 
+                            SignupActivity signupActivity = (SignupActivity) getActivity();
+                            signupActivity.selectFragment(WatchAddSuccessFragment.class.getName(),bundle);
                         } else {
-                            // TODO: 2017/10/31  show Error Msg
+                            ToastCommon.makeText(getContext(),R.string.error_api_unknown);
                             LogUtil2.getUtils().d("uploadKidAvatar error code:" + response.code());
                         }
                     }
 
                     @Override
                     public void onFailure(Call<UpdateKidAvatarRepEntity> call, Throwable t) {
+                        finishLoadingDialog();
                         LogUtil2.getUtils().d("uploadKidAvatar onFailure");
                         t.printStackTrace();
                     }

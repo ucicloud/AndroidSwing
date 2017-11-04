@@ -8,9 +8,9 @@
 
     <com.kidsdynamic.swing.view.CropImageView
         android:id="@+id/cropImageView"
+        android:layout_gravity="center_horizontal"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="300dp"
         android:adjustViewBounds="true" />
 
     <com.kidsdynamic.swing.view.AvenirTextView
@@ -19,7 +19,7 @@
         android:layout_marginBottom="@dimen/base_18"
         android:layout_marginTop="@dimen/base_30"
         android:gravity="center"
-        android:text="Use your finger to adjust picture position"
+        android:text="@string/profile_cut_pic_note"
         android:textColor="@color/color_white"
         android:textSize="17sp" />
 
@@ -43,7 +43,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/base_56"
         android:layout_marginRight="@dimen/base_56"
-        android:layout_marginTop="@dimen/base_18"
+        android:layout_marginTop="@dimen/base_10"
         android:gravity="center"
         android:text="@string/photo_clip_cancel" />
 </LinearLayout>

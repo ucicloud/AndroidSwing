@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <cn.carbs.android.avatarimageview.library.AvatarImageView
+        android:id="@+id/watch_sync_photo"
+        android:layout_width="124dp"
+        android:layout_height="124dp"
+        android:layout_gravity="center_horizontal"
+        app:crossColor="@color/hex_1b89cd"
+        app:crossWidth="2dp"
+        app:strokeColorNormal="@color/hex_1b89cd"
+        android:src="@drawable/default_avatar"/>
+
+    <com.kidsdynamic.swing.view.AvenirTextView
+        android:id="@+id/tv_kids_name"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:layout_marginTop="@dimen/base_5"
+        android:gravity="center_horizontal|top"
+        android:textStyle="bold"
+        android:textColor="@color/profile_logout_confirm_name"
+        android:textSize="20sp"
+        android:text="kids Name" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginLeft="@dimen/base_56"
+        android:layout_marginRight="@dimen/base_56"
+        android:layout_weight="6"
+        android:orientation="vertical">
+
+        <com.kidsdynamic.swing.view.AvenirTextView
+            android:id="@+id/watch_sync_yes"
+            style="@style/button_main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="Yes,please"
+            android:visibility="gone"/>
+
+        <com.kidsdynamic.swing.view.AvenirTextView
+            android:id="@+id/watch_go_to_dashboard"
+            style="@style/button_main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="@string/watch_finish_dashboard" />
+
+        <com.kidsdynamic.swing.view.AvenirTextView
+            android:id="@+id/watch_add_other"
+            style="@style/button_main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="@string/watch_finish_another" />
+    </LinearLayout>
+</LinearLayout>

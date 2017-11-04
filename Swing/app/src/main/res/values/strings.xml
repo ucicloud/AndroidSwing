@@ -410,5 +410,9 @@
     <string name="profile_logout_confirmation">Are you sure to log out?</string>
     <string name="profile_logout_confirm_btn">Yes, I am sure</string>
     <string name="profile_logout_cancel_btn">Cancel</string>
+    <string name="profile_take_photo">Take a new picture</string>
+    <string name="profile_choose_from_library">Choose from Library</string>
+    <string name="profile_cut_pic_note">Use your finger to adjust picture position</string>
+    <string name="profile_login_fail">login fail, please try again</string>
 
 </resources>

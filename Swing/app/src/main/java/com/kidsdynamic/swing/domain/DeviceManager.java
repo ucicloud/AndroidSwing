@@ -14,6 +14,8 @@ import com.kidsdynamic.swing.SwingApplication;
  */
 
 public class DeviceManager {
+    public final static String BUNDLE_KEY_AVATAR = "AVATAR";
+    public final static String BUNDLE_KEY_KID_NAME = "KID_NAME";
 
     private final static String key_focus_kids = "focus_kids";
     public static DB_Kids getFocusWatchInfo(Context context){

@@ -54,6 +54,23 @@ public class SignupActivity extends BaseFragmentActivity {
 //        setFragment(WatchSelectFragment.newInstance());
 //        setFragment(WatchHaveFragment.newInstance());
 //        setFragment(SignupStartFragment.newInstance());
+
+        /*Bundle bundle = new Bundle();
+        bundle.putString(DeviceManager.BUNDLE_KEY_KID_NAME,
+                "Mary");
+        bundle.putString(DeviceManager.BUNDLE_KEY_AVATAR,
+                UserManager.getProfileRealUri("kid_avatar_13.jpg"));
+        selectFragment(WatchAddSuccessFragment.class.getName(),bundle);*/
+    }
+
+    public void selectFragment(String className, Bundle args) {
+        Fragment fragment = Fragment.instantiate(this, className, args);
+
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.frameContainer, fragment, className)
+                .addToBackStack(null)
+                .commit();
     }
 
     public void setFragment(Fragment fragment) {

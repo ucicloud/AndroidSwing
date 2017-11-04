@@ -72,7 +72,7 @@ public class WatchSearchFragment extends BaseFragment {
             if (count == destCount && end == random) {
                 SignupActivity signupActivity = (SignupActivity) getActivity();
 //                if (random % 2 == 0) {
-                signupActivity.setFragment(WatchSelectFragment.newInstance());
+                signupActivity.setFragmentAndAddBackStack(WatchSelectFragment.newInstance());
 //                } else {
 //                    signupActivity.setFragment(WatchSorryFragment.newInstance());
 //                }

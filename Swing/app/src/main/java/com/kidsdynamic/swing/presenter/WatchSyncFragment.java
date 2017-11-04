@@ -50,6 +50,8 @@ public class WatchSyncFragment extends BaseFragment {
 
     @OnClick(R.id.watch_sync_no)
     public void no() {
+
+        getActivity().finish();
         //跳转到主界面
         startActivity(new Intent(getActivity(),MainFrameActivity.class));
     }

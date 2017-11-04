@@ -26,15 +26,18 @@ import com.kidsdynamic.data.net.user.model.LoginSuccessRep;
 import com.kidsdynamic.data.net.user.model.RegisterEntity;
 import com.kidsdynamic.data.net.user.model.RegisterFailResponse;
 import com.kidsdynamic.data.net.user.model.UserInfo;
+import com.kidsdynamic.data.persistent.PreferencesUtil;
 import com.kidsdynamic.data.utils.LogUtil2;
 import com.kidsdynamic.swing.BaseFragment;
 import com.kidsdynamic.swing.R;
 import com.kidsdynamic.swing.domain.LoginManager;
+import com.kidsdynamic.swing.utils.ConfigUtil;
 import com.kidsdynamic.swing.utils.SwingFontsCache;
 import com.kidsdynamic.swing.view.BottomPopWindow;
 import com.kidsdynamic.swing.view.CropImageView;
 import com.kidsdynamic.swing.view.CropPopWindow;
 import com.kidsdynamic.swing.view.ViewCircle;
+import com.yy.base.utils.ToastCommon;
 
 import java.io.File;
 
@@ -141,7 +144,8 @@ public class SignupProfileFragment extends BaseFragment {
 
     @OnClick(R.id.signup_profile_photo)
     public void addPhoto() {
-        CharSequence array[] = new CharSequence[]{"Take a new picture", "Choose from Library"};
+        CharSequence array[] = new CharSequence[]{getString(R.string.profile_take_photo),
+                getString(R.string.profile_choose_from_library)};
         BottomPopWindow.Builder builder = new BottomPopWindow.Builder(getContext());
         builder.setItems(array, new BottomPopWindow.Builder.OnWhichClickListener() {
             @Override
@@ -150,7 +154,9 @@ public class SignupProfileFragment extends BaseFragment {
             }
         });
         BottomPopWindow bottomPopWindow = builder.create();
-        bottomPopWindow.showAtLocation(getView(), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
+        bottomPopWindow.showAtLocation(getView(),
+                Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL,
+                0, 0);
     }
 
     @OnClick(R.id.signup_profile_submit)
@@ -229,6 +235,9 @@ public class SignupProfileFragment extends BaseFragment {
                     finishLoadingDialog();
                     // 缓存token
                     new LoginManager().cacheToken(response.body().getAccess_token());
+                    //记录状态
+                    PreferencesUtil.getInstance(getContext()).
+                            setPreferenceBooleanValue(ConfigUtil.login_state, true);
 
                     if(profile != null){
                         uploadAvatar(profile);
@@ -239,6 +248,8 @@ public class SignupProfileFragment extends BaseFragment {
                     SignupActivity signupActivity = (SignupActivity) getActivity();
                     signupActivity.setFragment(WatchHaveFragment.newInstance());
                 } else {
+                    finishLoadingDialog();
+                    ToastCommon.makeText(getContext(),R.string.profile_login_fail);
                     LogUtil2.getUtils().d("login error code: " + response.code());
                 }
             }

@@ -62,6 +62,7 @@
     <dimen name="base_65">65dp</dimen>
     <dimen name="base_88">88dp</dimen>
     <dimen name="base_79">79dp</dimen>
+    <dimen name="base_200">200dp</dimen>
 
 
     <dimen name="news_item_image_width">101dp</dimen>
