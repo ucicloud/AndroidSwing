@@ -5,9 +5,9 @@ import android.support.annotation.NonNull;
 
 import com.bobomee.android.htttp.okhttp.okHttp;
 import com.bobomee.android.htttp.retrofit2.Retrofit2Client;
+import com.kidsdynamic.data.BuildConfig;
 import com.kidsdynamic.data.net.OkhttpInterceptor.HeaderInterceptor;
 import com.kidsdynamic.data.net.avatar.AvatarApi;
-import com.kidsdynamic.data.net.user.UserApiNoNeedToken;
 import com.kidsdynamic.data.persistent.PreferencesUtil;
 
 import java.util.HashMap;
@@ -20,6 +20,7 @@ import okhttp3.OkHttpClient;
  */
 
 public class ApiGen {
+    public static String BASE_URL = BuildConfig.API_BASE_URL;
 
     private Context context;
     private static ApiGen apiGen;
@@ -44,7 +45,7 @@ public class ApiGen {
     public <T> T generateApi(Class<T> service, boolean isNeedToken){
         return Retrofit2Client.INSTANCE.getRetrofitBuilder()
                 .client(getOkHttpClient(isNeedToken))
-                .baseUrl(UserApiNoNeedToken.BASE_URL).build()
+                .baseUrl(BASE_URL).build()
                 .create(service);
     }
 

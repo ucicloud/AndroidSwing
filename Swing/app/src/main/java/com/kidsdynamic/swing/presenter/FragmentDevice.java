@@ -67,18 +67,22 @@ public class FragmentDevice extends BaseFragment {
         super.onResume();
         //获取缓存电量
         String title = getString(R.string.device_owner, "My");
+        int battery = -1;
 
         DB_Kids focusWatchInfo = DeviceManager.getFocusWatchInfo(getContext());
         if(focusWatchInfo != null){
             title = getString(R.string.device_owner, focusWatchInfo.getName());
-            int battery = DeviceManager.getCacheWatchBattery(focusWatchInfo.getMacId());
+            battery = DeviceManager.getCacheWatchBattery(focusWatchInfo.getMacId());
 
             showBattery(battery);
         }
 
         tv_title.setText(title);
+
         //todo test battery show
-        setCapacity(60);
+        if(battery <= 0){
+            setCapacity(60);
+        }
 
         /*if (mActivityMain.mOperator.mFocusBatteryName.equals("")) {
             mHandler.postDelayed(mRunnable, 1000);

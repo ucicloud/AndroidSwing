@@ -14,6 +14,8 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        rootProject.ext.variantRelease = false //default in debug mode
     }
     signingConfigs {
         debug {
@@ -89,6 +91,28 @@ dependencies {
     compile project(path: ':base')
     compile project(':baseble')
 }
+
+//尝试解决根据配置打包地址问题
+//https://stackoverflow.com/questions/20176284/buildconfig-debug-always-false-when-building-library-projects-with-gradle
+/*project.afterEvaluate {
+    tasks.all{task->
+        if(task.name =~/check.*Manifest/){
+            if(task.name =~/[dD]ebug/){
+                task.dependsOn(onDebugTypeTriggered)
+            }else{
+                task.dependsOn(onReleaseTypeTriggered)
+            }
+        }
+    }
+}
+
+task onDebugTypeTriggered << {
+    rootProject.ext.variantRelease = false
+}
+
+task onReleaseTypeTriggered << {
+    rootProject.ext.variantRelease = true
+}*/
 
 // Read signingConfigs
 File proFile = file('signing.properties');

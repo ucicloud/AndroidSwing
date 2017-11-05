@@ -50,7 +50,7 @@
     <!-- FragmentCalendarMain -->
     <string name="calendar_main_today_schedule">Today\'s Schedule</string>
     <string name="calendar_main_monthly_schedule">Monthly Schedule</string>
-    <string name="calendar_main_no_incoming_event">No Event</string>
+    <string name="calendar_main_no_incoming_event">No events</string>
 
     <!-- FragmentCalendarMain -->
     <string name="calendar_month_sync">Sync Now</string>

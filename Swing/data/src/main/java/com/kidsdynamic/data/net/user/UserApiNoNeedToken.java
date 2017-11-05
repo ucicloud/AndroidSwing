@@ -1,7 +1,6 @@
 package com.kidsdynamic.data.net.user;
 
 
-import com.kidsdynamic.data.BuildConfig;
 import com.kidsdynamic.data.net.user.model.LoginEntity;
 import com.kidsdynamic.data.net.user.model.LoginSuccessRep;
 import com.kidsdynamic.data.net.user.model.RegisterEntity;
@@ -19,8 +18,6 @@ import retrofit2.http.Query;
 
 //用户相关接口
 public interface UserApiNoNeedToken {
-
-    String BASE_URL = BuildConfig.API_BASE_URL;
 
 //    200 Success Login
 //    400 Bad Request. Login failed

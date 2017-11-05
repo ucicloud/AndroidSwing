@@ -1,5 +1,7 @@
 ext {
 
+    variantRelease = false
+
     //Libraries
     daggerVersion = '2.1'
     javaXInjectVersion = '1'

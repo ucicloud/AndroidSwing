@@ -172,7 +172,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
-                    <TextView
+                    <com.kidsdynamic.swing.view.AvenirTextView
                         android:id="@+id/calendar_event_color_title"
                         style="@style/textview_calendar_event"
                         android:layout_width="0dp"
@@ -237,7 +237,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
-                    <TextView
+                    <com.kidsdynamic.swing.view.AvenirTextView
                         style="@style/textview_calendar_event"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
@@ -246,7 +246,7 @@
                         android:paddingTop="10dp"
                         android:text="@string/calendar_event_repeat" />
 
-                    <TextView
+                    <com.kidsdynamic.swing.view.AvenirTextView
                         android:id="@+id/calendar_event_repeat"
                         style="@style/textview_calendar_hint"
                         android:layout_width="match_parent"
@@ -296,7 +296,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
-                    <TextView
+                    <com.kidsdynamic.swing.view.AvenirTextView
                         style="@style/textview_calendar_event"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -306,7 +306,7 @@
                         android:paddingTop="10dp"
                         android:text="@string/calendar_event_assign" />
 
-                    <TextView
+                    <com.kidsdynamic.swing.view.AvenirTextView
                         android:id="@+id/calendar_event_assign_name"
                         style="@style/textview_calendar_hint"
                         android:layout_width="0dp"
@@ -361,13 +361,13 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/calendar_event_repeat_line"
                 android:layout_marginEnd="@dimen/base_10"
-                android:layout_marginStart="@dimen/base_10"
+                android:layout_marginStart="@dimen/base_20"
                 android:layout_marginTop="5dp"
                 android:background="@drawable/contact_background"
                 android:orientation="horizontal"
                 android:paddingEnd="10dp"
                 android:paddingStart="10dp"
-                android:visibility="invisible">
+                android:visibility="visible">
 
                 <EditText
                     android:id="@+id/calendar_event_description"
@@ -388,13 +388,13 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/calendar_event_description_line"
                 android:layout_marginEnd="@dimen/base_10"
-                android:layout_marginStart="@dimen/base_10"
+                android:layout_marginStart="@dimen/base_20"
                 android:layout_marginTop="5dp"
                 android:background="@drawable/contact_background"
                 android:orientation="vertical"
                 android:paddingEnd="10dp"
                 android:paddingStart="10dp"
-                android:visibility="invisible">
+                android:visibility="visible">
 
                 <View
                     android:layout_width="wrap_content"
@@ -428,7 +428,7 @@
                     android:paddingBottom="10dp"
                     android:paddingTop="10dp">
 
-                    <TextView
+                    <com.kidsdynamic.swing.view.AvenirTextView
                         style="@style/textview_calendar_event"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
@@ -454,9 +454,9 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/calendar_event_todo_line"
                 android:layout_marginBottom="15dp"
-                android:layout_marginEnd="@dimen/base_10"
-                android:layout_marginStart="@dimen/base_10"
-                android:layout_marginTop="5dp"
+                android:layout_marginEnd="@dimen/base_40"
+                android:layout_marginStart="@dimen/base_40"
+                android:layout_marginTop="15dp"
                 android:paddingBottom="@dimen/base_5"
                 android:orientation="horizontal">
 
