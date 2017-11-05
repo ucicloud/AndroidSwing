@@ -384,9 +384,11 @@
     <string name="error_subhost_remove_kid_400">Solicitud incorrecta. Faltan algunos parámetros o el tipo es incorrecto</string>
     <string name="error_subhost_remove_kid_403">No autorizado. El usuario no tiene permiso</string>
 
-    <!-- API Error -->
     <string name="dialog_sync_content">Sincroniza después de editar el evento</string>
     <string name="dialog_sync_header">Sync Data</string>
     <string name="dialog_sync_skip_button">Skip</string>
     <string name="dialog_sync_sync_button">Sincronizar</string>
+    <string name="event_alarm_lesson_time">Время урока</string>
+    <string name="event_alarm_time_to_go_home">Пора домой</string>
+    <string name="dashboard_progress_enable_gps">por favor active su GPS</string>
 </resources>

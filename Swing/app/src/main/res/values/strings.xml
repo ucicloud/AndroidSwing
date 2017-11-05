@@ -50,7 +50,7 @@
     <!-- FragmentCalendarMain -->
     <string name="calendar_main_today_schedule">Today\'s Schedule</string>
     <string name="calendar_main_monthly_schedule">Monthly Schedule</string>
-    <string name="calendar_main_no_incoming_event">No events</string>
+    <string name="calendar_main_no_incoming_event">No Event</string>
 
     <!-- FragmentCalendarMain -->
     <string name="calendar_month_sync">Sync Now</string>
@@ -96,6 +96,7 @@
     <string name="dashboard_progress_again">Try Again</string>
     <string name="dashboard_progress_last">Go to Last Synced Data</string>
     <string name="dashboard_progress_server_not_reach">Can\'t Reach Server!</string>
+    <string name="dashboard_progress_enable_gps">Please enable your GPS?</string>
 
     <!-- FragmentDashboardRequest -->
     <string name="dashboard_request_request">Request Access</string>
@@ -346,6 +347,8 @@
     <string name="event_alarm_dinner_time">Dinner Time</string>
     <string name="event_alarm_afternoon_snack_time">Afternoon Snack Time</string>
     <string name="event_alarm_review_the_backpack">Review the Backpack</string>
+    <string name="event_alarm_lesson_time">Lesson Time</string>
+    <string name="event_alarm_time_to_go_home">Time to go Home</string>
 
     <!-- Events Repeat -->
     <string name="event_repeat_monthly">Monthly</string>

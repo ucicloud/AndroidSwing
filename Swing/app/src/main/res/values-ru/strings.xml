@@ -384,11 +384,13 @@
     <string name="error_subhost_remove_kid_400">Неверный запрос. Отсутствуют некоторые параметры, или тип является неверным</string>
     <string name="error_subhost_remove_kid_403">Отсутствует разрешение. У пользователя нет разрешения</string>
 
-    <!-- API Error -->
     <string name="dialog_sync_content">Синхронизация после редактирования события</string>
     <string name="dialog_sync_header">Sync Data</string>
     <string name="dialog_sync_skip_button">Skip</string>
     <string name="dialog_sync_sync_button">Синхронизация</string>
+    <string name="event_alarm_lesson_time">Tiempo de la lección</string>
+    <string name="event_alarm_time_to_go_home">Tiempo de ir a casa</string>
+    <string name="dashboard_progress_enable_gps">включите GPS</string>
 
 
     <!--new string 20171027-->

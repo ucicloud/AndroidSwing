@@ -91,7 +91,7 @@
 
     <!-- FragmentDashboardRequest -->
     <string name="dashboard_request_request">"发出请求"</string>
-    <string name="dashboard_add_watch">加我的手錶</string>
+    <string name="dashboard_add_watch">加我的手表</string>
     <string name="dashboard_request_profile">"编辑个人信息"</string>
     <string name="dashboard_request_process">"处理中"</string>
     <string name="dashboard_request_waiting">"请稍候&#8230;"</string>
@@ -384,12 +384,15 @@
     <string name="error_subhost_remove_kid_400">Bad Request. Missing some parameters, or the Type is Wrong</string>
     <string name="error_subhost_remove_kid_403">Forbidden. The User Doesn\'t Have Permission</string>
 
-    <!-- API Error -->
-    <string name="dialog_sync_content">編輯事件後請重新同步手錶</string>
+    <string name="dialog_sync_content">编辑事件后请重新同步手表</string>
     <string name="dialog_sync_header">Sync Data</string>
     <string name="dialog_sync_skip_button">Skip</string>
     <string name="dialog_sync_sync_button">同步</string>
 
+    <string name="event_alarm_lesson_time">课程时间</string>
+    <string name="event_alarm_time_to_go_home">回家喽</string>
+    <string name="dashboard_progress_enable_gps">" 请启动GPS"</string>
+    
     <!--new string 20171027-->
     <string name="net_err">Net Error</string>
     <string name="ok_str">OK</string>

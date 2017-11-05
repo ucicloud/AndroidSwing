@@ -60,14 +60,9 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/calendar_event_user_line">
 
-                <View
+                <TextView
                     android:id="@+id/label"
-                    android:layout_width="10dp"
-                    android:layout_height="10dp"
-                    android:layout_alignParentStart="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginStart="@dimen/base_5"
-                    android:background="@drawable/ic_icon_check" />
+                    style="@style/calendar_red_star"/>
 
                 <com.kidsdynamic.swing.view.AvenirTextView
                     android:id="@+id/calendar_event_alarm_name_2"
@@ -79,10 +74,10 @@
                     android:layout_marginTop="5dp"
                     android:layout_toEndOf="@id/label"
                     android:background="@drawable/contact_background"
-                    android:drawableEnd="@drawable/ic_icon_edit"
+                    android:drawableEnd="@drawable/icon_arrow_bottom"
                     android:gravity="start|center_vertical"
                     android:hint="@string/calendar_event_event"
-                    android:paddingEnd="@dimen/base_5"
+                    android:paddingEnd="@dimen/base_10"
                     android:paddingStart="@dimen/base_10" />
             </RelativeLayout>
 
@@ -93,14 +88,9 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/calendar_event_alarm_name_layout">
 
-                <View
+                <TextView
                     android:id="@+id/label_1"
-                    android:layout_width="10dp"
-                    android:layout_height="10dp"
-                    android:layout_alignParentStart="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginStart="@dimen/base_5"
-                    android:background="@drawable/ic_icon_check" />
+                    style="@style/calendar_red_star" />
 
                 <com.kidsdynamic.swing.view.AvenirTextView
                     android:id="@+id/calendar_event_start"
@@ -112,10 +102,10 @@
                     android:layout_marginTop="5dp"
                     android:layout_toEndOf="@id/label_1"
                     android:background="@drawable/contact_background"
-                    android:drawableEnd="@drawable/ic_icon_edit"
+                    android:drawableEnd="@drawable/icon_arrow_bottom"
                     android:gravity="start|center_vertical"
                     android:hint="@string/calendar_event_start"
-                    android:paddingEnd="@dimen/base_5"
+                    android:paddingEnd="@dimen/base_10"
                     android:paddingStart="@dimen/base_10" />
             </RelativeLayout>
 
@@ -126,14 +116,10 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/calendar_event_start_time_layout">
 
-                <View
+                <TextView
                     android:id="@+id/label_2"
-                    android:layout_width="10dp"
-                    android:layout_height="10dp"
-                    android:layout_alignParentStart="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginStart="@dimen/base_5"
-                    android:background="@drawable/ic_icon_check" />
+                    style="@style/calendar_red_star"
+                    android:gravity="end"/>
 
                 <com.kidsdynamic.swing.view.AvenirTextView
                     android:id="@+id/calendar_event_end"
@@ -145,10 +131,10 @@
                     android:layout_marginTop="5dp"
                     android:layout_toEndOf="@id/label_2"
                     android:background="@drawable/contact_background"
-                    android:drawableEnd="@drawable/ic_icon_edit"
+                    android:drawableEnd="@drawable/icon_arrow_bottom"
                     android:gravity="start|center_vertical"
                     android:hint="@string/calendar_event_end"
-                    android:paddingEnd="@dimen/base_5"
+                    android:paddingEnd="@dimen/base_10"
                     android:paddingStart="@dimen/base_10" />
             </RelativeLayout>
 
@@ -252,6 +238,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center_vertical|end" />
+
                 </LinearLayout>
 
                 <LinearLayout
@@ -423,7 +410,7 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="45dp"
                     android:orientation="horizontal"
                     android:paddingBottom="10dp"
                     android:paddingTop="10dp">
@@ -447,6 +434,7 @@
                         android:src="@drawable/iconbutton_add" />
                 </LinearLayout>
             </LinearLayout>
+
 
             <LinearLayout
                 android:id="@+id/calendar_event_button_line"

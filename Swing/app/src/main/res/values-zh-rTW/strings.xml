@@ -384,12 +384,15 @@
     <string name="error_subhost_remove_kid_400">Bad Request. Missing some parameters, or the Type is Wrong</string>
     <string name="error_subhost_remove_kid_403">Forbidden. The User Doesn\'t Have Permission</string>
 
-    <!-- API Error -->
     <string name="dialog_sync_content">編輯事件後請重新同步手錶</string>
     <string name="dialog_sync_header">Sync Data</string>
     <string name="dialog_sync_skip_button">Skip</string>
     <string name="dialog_sync_sync_button">同步</string>
 
+    <string name="event_alarm_lesson_time">課程時間</string>
+    <string name="event_alarm_time_to_go_home">回家囉</string>
+    <string name="dashboard_progress_enable_gps">" 請啟動GPS"</string>
+    
     <!--new string 20171027-->
     <string name="net_err">Net Error</string>
     <string name="ok_str">OK</string>

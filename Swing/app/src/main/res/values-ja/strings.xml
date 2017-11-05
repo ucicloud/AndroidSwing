@@ -383,12 +383,13 @@
     <string name="error_subhost_deny_400">パラメータエラーかタイプミスです</string>
     <string name="error_subhost_remove_kid_400">パラメータエラーかタイプミスです</string>
     <string name="error_subhost_remove_kid_403">ユーザーが許可されていません</string>
-
-    <!-- API Error -->
     <string name="dialog_sync_content">イベントを編集すると、時計のシンクロをして下さい。</string>
     <string name="dialog_sync_header">Sync Data</string>
     <string name="dialog_sync_skip_button">Skip</string>
     <string name="dialog_sync_sync_button">接続</string>
+    <string name="event_alarm_lesson_time">習い事の時間です</string>
+    <string name="event_alarm_time_to_go_home">お家に帰る時間です</string>
+    <string name="dashboard_progress_enable_gps">あなたのGPSを有効にしてください</string>
 
     <!--new string 20171027-->
     <string name="net_err">Net Error</string>
