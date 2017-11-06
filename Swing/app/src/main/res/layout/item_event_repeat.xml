@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingStart="@dimen/base_5"
+    android:paddingEnd="@dimen/base_5">
+
+    <com.kidsdynamic.swing.view.AvenirTextView
+        android:id="@+id/tv_event_repeat"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/base_40"
+        android:layout_marginStart="@dimen/base_5"
+        android:textColor="@color/color_gray_main"
+        android:textStyle="bold"
+        android:textSize="14sp"
+        android:gravity="center_vertical|start"
+        android:lines="1"
+        android:text="Never"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/base_1"
+        android:background="#F1F1F2"/>
+
+</LinearLayout>

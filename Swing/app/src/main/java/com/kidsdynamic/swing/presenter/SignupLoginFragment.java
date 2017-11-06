@@ -24,21 +24,18 @@ import com.kidsdynamic.data.net.user.UserApiNoNeedToken;
 import com.kidsdynamic.data.net.user.model.LoginEntity;
 import com.kidsdynamic.data.net.user.model.LoginSuccessRep;
 import com.kidsdynamic.data.net.user.model.UserProfileRep;
-import com.kidsdynamic.data.persistent.PreferencesUtil;
 import com.kidsdynamic.data.utils.LogUtil2;
 import com.kidsdynamic.swing.BaseFragment;
 import com.kidsdynamic.swing.R;
 import com.kidsdynamic.swing.domain.EventManager;
 import com.kidsdynamic.swing.domain.LoginManager;
 import com.kidsdynamic.swing.net.BaseRetrofitCallback;
-import com.kidsdynamic.swing.utils.ConfigUtil;
 import com.kidsdynamic.swing.utils.SwingFontsCache;
 import com.kidsdynamic.swing.view.ViewUtils;
 import com.yy.base.utils.Functions;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.logging.LogManager;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

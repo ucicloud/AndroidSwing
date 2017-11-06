@@ -3,12 +3,14 @@ package com.kidsdynamic.swing.domain;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
-import com.kidsdynamic.data.dao.EventDao;
 import com.kidsdynamic.data.net.event.model.EventWithTodo;
 import com.kidsdynamic.data.persistent.DbUtil;
 import com.kidsdynamic.data.repository.disk.EventDataStore;
 import com.kidsdynamic.data.repository.disk.TodoItemDataStore;
+import com.kidsdynamic.swing.R;
+import com.kidsdynamic.swing.model.WatchEvent;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -16,6 +18,13 @@ import java.util.List;
  */
 
 public class EventManager {
+    public static HashMap<String, Integer> eventOptionMap = new HashMap<>(4);
+    static {
+        eventOptionMap.put(WatchEvent.REPEAT_NEVER, R.string.event_repeat_never);
+        eventOptionMap.put(WatchEvent.REPEAT_DAILY, R.string.event_repeat_daily);
+        eventOptionMap.put(WatchEvent.REPEAT_WEEKLY, R.string.event_repeat_weekly);
+        eventOptionMap.put(WatchEvent.REPEAT_MONTHLY, R.string.event_repeat_monthly);
+    }
 
     public void saveEventForLogin(@NonNull Context context, @NonNull List<EventWithTodo> eventWithTodoList){
         DbUtil dbUtil = DbUtil.getInstance(context.getApplicationContext());

@@ -27,13 +27,11 @@ import com.kidsdynamic.data.net.user.model.RegisterEntity;
 import com.kidsdynamic.data.net.user.model.RegisterFailResponse;
 import com.kidsdynamic.data.net.user.model.UserInfo;
 import com.kidsdynamic.data.net.user.model.UserProfileRep;
-import com.kidsdynamic.data.persistent.PreferencesUtil;
 import com.kidsdynamic.data.utils.LogUtil2;
 import com.kidsdynamic.swing.BaseFragment;
 import com.kidsdynamic.swing.R;
 import com.kidsdynamic.swing.domain.LoginManager;
 import com.kidsdynamic.swing.net.BaseRetrofitCallback;
-import com.kidsdynamic.swing.utils.ConfigUtil;
 import com.kidsdynamic.swing.utils.SwingFontsCache;
 import com.kidsdynamic.swing.view.BottomPopWindow;
 import com.kidsdynamic.swing.view.CropImageView;
@@ -250,6 +248,8 @@ public class SignupProfileFragment extends BaseFragment {
                 } else {
                     finishLoadingDialog();
                     ToastCommon.makeText(getContext(), R.string.profile_login_fail);
+
+                    gotoLoginFragment();
                     LogUtil2.getUtils().d("login error code: " + response.code());
                 }
             }
@@ -258,8 +258,9 @@ public class SignupProfileFragment extends BaseFragment {
             public void onFailure(Call<LoginSuccessRep> call, Throwable t) {
                 super.onFailure(call, t);
 
+                ToastCommon.makeText(getContext(), R.string.cloud_api_call_net_error);
                 finishLoadingDialog();
-                t.printStackTrace();
+                gotoLoginFragment();
             }
         });
 
@@ -290,12 +291,8 @@ public class SignupProfileFragment extends BaseFragment {
     }
 
     private void syncUserData() {
-        //2017/10/17 同步账户数据 成功后关闭等待对话框，跳转到主界面；失败提醒
-        Log.w("login", "register login ok, start sync data");
-
         //登陆成功后，需要获取两个业务数据：
         //“/v1/user/retrieveUserProfile”
-        //“/v1/event/retrieveAllEventsWithTodo”
 
         final UserApiNeedToken userApiNeedToken = ApiGen.getInstance(getActivity().getApplicationContext()).
                 generateApi(UserApiNeedToken.class, true);
@@ -322,7 +319,7 @@ public class SignupProfileFragment extends BaseFragment {
 
                 } else {
                     finishLoadingDialog();
-
+                    gotoLoginFragment();
                     ToastCommon.makeText(getContext(),R.string.profile_login_fail);
                 }
             }
@@ -332,10 +329,18 @@ public class SignupProfileFragment extends BaseFragment {
                 Log.d("syncData", "retrieveUserProfile error, ");
                 super.onFailure(call, t);
 
-                ToastCommon.makeText(getContext(),R.string.profile_login_fail);
+                ToastCommon.makeText(getContext(),R.string.cloud_api_call_net_error);
                 finishLoadingDialog();
+
+                gotoLoginFragment();
             }
         });
+    }
+
+    //如果注册成功，但是登录失败，则跳转到login
+    private void gotoLoginFragment(){
+        SignupActivity signupActivity = (SignupActivity) getActivity();
+        signupActivity.setFragment(SignupLoginFragment.newInstance());
     }
 
     private void doWhichClick(int position) {

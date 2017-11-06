@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 //apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'com.jakewharton.butterknife'
 
-def supportVersion = "25.0.0"
+def supportVersion = "25.3.0"
 
 android {
     compileSdkVersion 26
@@ -85,11 +85,25 @@ dependencies {
     compile 'com.github.alamkanak:android-week-view:1.2.6'
     compile 'com.github.bumptech.glide:glide:4.2.0'
     compile 'cn.carbs.android:AvatarImageView:1.0.4'
+    compile 'com.wdullaer:materialdatetimepicker:3.2.2'
 
     compile project(':data')
     compile project(':htttp')
     compile project(path: ':base')
     compile project(':baseble')
+}
+
+//强制所有lib使用相同的support库
+//https://stackoverflow.com/questions/42949974/android-support-repo-46-0-0-with-android-studio-2-3/42957234#42957234
+configurations.all {
+    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+        def requested = details.requested
+        if (requested.group == 'com.android.support') {
+            if (!requested.name.startsWith("multidex")) {
+                details.useVersion supportVersion
+            }
+        }
+    }
 }
 
 //尝试解决根据配置打包地址问题
