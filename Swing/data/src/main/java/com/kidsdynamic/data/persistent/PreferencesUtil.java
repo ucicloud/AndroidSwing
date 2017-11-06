@@ -105,6 +105,23 @@ public class PreferencesUtil {
         }
     }
 
+    /**
+     * Set a preference long value
+     *
+     * @param key   the preference key to set
+     * @param value the value for this key
+     */
+    public boolean setPreferenceLongValue(String key, long value) {
+        if (sharedEditor == null) {
+            Editor editor = sp.edit();
+            editor.putLong(key, value);
+            return editor.commit();
+        } else {
+            sharedEditor.putLong(key, value);
+            return sharedEditor.commit();
+        }
+    }
+
     //Private static getters
     // For string
     @Nullable
@@ -120,6 +137,11 @@ public class PreferencesUtil {
     // For int
     public int gPrefIntValue(String key) {
         return sp.getInt(key, 0);
+    }
+
+    // For long
+    public long gPrefLongValue(String key) {
+        return sp.getLong(key,0);
     }
 
     // For float
