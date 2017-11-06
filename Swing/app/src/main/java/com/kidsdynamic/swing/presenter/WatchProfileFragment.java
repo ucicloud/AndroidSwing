@@ -1,13 +1,9 @@
 package com.kidsdynamic.swing.presenter;
 
 import android.app.Activity;
-import android.content.ContentResolver;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Point;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.Gravity;
@@ -29,6 +25,7 @@ import com.kidsdynamic.swing.R;
 import com.kidsdynamic.swing.domain.DeviceManager;
 import com.kidsdynamic.swing.domain.UserManager;
 import com.kidsdynamic.swing.net.BaseRetrofitCallback;
+import com.kidsdynamic.swing.utils.SwingFontsCache;
 import com.kidsdynamic.swing.view.BottomPopWindow;
 import com.kidsdynamic.swing.view.CropImageView;
 import com.kidsdynamic.swing.view.CropPopWindow;
@@ -91,6 +88,14 @@ public class WatchProfileFragment extends BaseFragment {
     }
 
     @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        et_first.setTypeface(SwingFontsCache.getNormalType(getContext()));
+        et_last.setTypeface(SwingFontsCache.getNormalType(getContext()));
+//        et_zip.setTypeface(SwingFontsCache.getNormalType(getContext()));
+    }
+
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (Activity.RESULT_OK != resultCode) {
@@ -115,7 +120,8 @@ public class WatchProfileFragment extends BaseFragment {
 
     @OnClick(R.id.watch_profile_photo)
     public void addPhoto() {
-        CharSequence array[] = new CharSequence[]{"Take a new picture", "Choose from Library"};
+        CharSequence array[] = new CharSequence[]{getString(R.string.profile_take_photo),
+                getString(R.string.profile_choose_from_library)};
         BottomPopWindow.Builder builder = new BottomPopWindow.Builder(getContext());
         builder.setItems(array, new BottomPopWindow.Builder.OnWhichClickListener() {
             @Override
@@ -138,10 +144,12 @@ public class WatchProfileFragment extends BaseFragment {
         }*/
         String firstName = et_first.getText().toString().trim();
         if (TextUtils.isEmpty(firstName)) {
+            ToastCommon.makeText(getContext(), R.string.error_api_unknown);
             return;
         }
         String lastName = et_last.getText().toString().trim();
         if (TextUtils.isEmpty(lastName)) {
+            ToastCommon.makeText(getContext(), R.string.error_api_unknown);
             return;
         }
         Bundle args = getArguments();
@@ -178,9 +186,9 @@ public class WatchProfileFragment extends BaseFragment {
                     LogUtil2.getUtils().d("addKid rep kid ID: " + kidId);
                     DeviceManager.updateFocusKids(kidId);
 
-                    if(profile != null){
+                    if (profile != null) {
                         uploadAvatar(profile, String.valueOf(kidId));
-                    }else {
+                    } else {
 
                         finishLoadingDialog();
 
@@ -189,16 +197,16 @@ public class WatchProfileFragment extends BaseFragment {
                                 kidsName);
 
                         SignupActivity signupActivity = (SignupActivity) getActivity();
-                        signupActivity.selectFragment(WatchAddSuccessFragment.class.getName(),bundle);
+                        signupActivity.selectFragment(WatchAddSuccessFragment.class.getName(), bundle);
                     }
 
-                }else if(response.code() == 409){
+                } else if (response.code() == 409) {
                     finishLoadingDialog();
-                    ToastCommon.makeText(getContext(),R.string.error_api_kid_add_409);
+                    ToastCommon.makeText(getContext(), R.string.error_api_kid_add_409);
 
-                }else {
+                } else {
                     finishLoadingDialog();
-                    ToastCommon.makeText(getContext(),R.string.error_api_unknown);
+                    ToastCommon.makeText(getContext(), R.string.error_api_unknown);
 
                     LogUtil2.getUtils().d("addKid error code:" + response.code());
 
@@ -210,7 +218,7 @@ public class WatchProfileFragment extends BaseFragment {
 
             @Override
             public void onFailure(Call<KidsWithParent> call, Throwable t) {
-                super.onFailure(call,t);
+                super.onFailure(call, t);
 
                 finishLoadingDialog();
             }
@@ -248,9 +256,9 @@ public class WatchProfileFragment extends BaseFragment {
                                     UserManager.getProfileRealUri(response.body().getKid().getProfile()));
 
                             SignupActivity signupActivity = (SignupActivity) getActivity();
-                            signupActivity.selectFragment(WatchAddSuccessFragment.class.getName(),bundle);
+                            signupActivity.selectFragment(WatchAddSuccessFragment.class.getName(), bundle);
                         } else {
-                            ToastCommon.makeText(getContext(),R.string.error_api_unknown);
+                            ToastCommon.makeText(getContext(), R.string.error_api_unknown);
                             LogUtil2.getUtils().d("uploadKidAvatar error code:" + response.code());
                         }
                     }
@@ -273,11 +281,9 @@ public class WatchProfileFragment extends BaseFragment {
     private void doWhichClick(int position) {
         switch (position) {
             case 0:
-                // TODO: 2017/10/25 add Camera permission
                 startCameraActivity();
                 break;
             case 1:
-                // TODO: 2017/10/25 add reading storage permission
                 startAlbumActivity();
                 break;
         }
@@ -306,10 +312,11 @@ public class WatchProfileFragment extends BaseFragment {
     }
 
     /**
-     * Start album
+     * Start virtual album
      */
     private void startAlbumActivity() {
-        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        Intent intent = new Intent();
+        intent.setClass(getContext(), VirtualAlbumActivity.class);
         startActivityForResult(intent, REQUEST_CODE_ALBUM);
     }
 
@@ -320,39 +327,10 @@ public class WatchProfileFragment extends BaseFragment {
      */
     private void doAlbumResult(Intent data) {
         if (data == null) return;
-        Uri uri = data.getData();
-        if (uri != null) {
-            File file = getRealPathFromUri(uri);
+        File file = (File) data.getSerializableExtra(VirtualAlbumActivity.FILE);
+        if (file != null && file.exists()) {
             showCropPopWindow(file);
         }
-    }
-
-    private File getRealPathFromUri(Uri contentUri) {
-        Cursor cursor = null;
-        String[] project = {MediaStore.Images.Media.DATA};
-
-        try {
-            ContentResolver contentResolver = getContext().getContentResolver();
-            if (null == contentResolver) {
-                return null;
-            }
-            cursor = contentResolver.query(contentUri, project, null, null, null);
-            if (cursor != null) {
-                cursor.moveToFirst();
-                int columnIndex = cursor.getColumnIndex(project[0]);
-                String path = cursor.getString(columnIndex);
-                if (!TextUtils.isEmpty(path)) {
-                    return new File(path);
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
-        }
-        return null;
     }
 
     private void showCropPopWindow(final File file) {

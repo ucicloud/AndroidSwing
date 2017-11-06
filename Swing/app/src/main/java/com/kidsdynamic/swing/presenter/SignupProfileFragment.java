@@ -1,13 +1,9 @@
 package com.kidsdynamic.swing.presenter;
 
 import android.app.Activity;
-import android.content.ContentResolver;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Point;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -18,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.kidsdynamic.data.net.ApiGen;
 import com.kidsdynamic.data.net.avatar.AvatarApi;
@@ -69,8 +64,6 @@ public class SignupProfileFragment extends BaseFragment {
     private static final String EMAIL = "email";
     public static final String PASSWORD = "password";
 
-    @BindView(R.id.signup_profile_exit)
-    TextView tvExit;
     @BindView(R.id.signup_profile_photo)
     ViewCircle vc_photo;
     @BindView(R.id.signup_profile_first)
@@ -99,25 +92,20 @@ public class SignupProfileFragment extends BaseFragment {
                              @Nullable Bundle savedInstanceState) {
         View layout = inflater.inflate(R.layout.fragment_signup_profile, container, false);
         ButterKnife.bind(this, layout);
-
-        initEditTextStyle();
         return layout;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        initEditTextStyle();
     }
 
     private void initEditTextStyle() {
         et_first.setTypeface(SwingFontsCache.getNormalType(getContext()));
         et_last.setTypeface(SwingFontsCache.getNormalType(getContext()));
         et_phone.setTypeface(SwingFontsCache.getNormalType(getContext()));
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        //del 2017年11月4日10:29:02 only_app 不在使用该测试按钮
-        /*if (BuildConfig.DEBUG) {
-            tvExit.setVisibility(View.VISIBLE);
-        }*/
+//        et_zip.setTypeface(SwingFontsCache.getNormalType(getContext()));
     }
 
     @Override
@@ -140,12 +128,6 @@ public class SignupProfileFragment extends BaseFragment {
     public void back() {
         SignupActivity signupActivity = (SignupActivity) getActivity();
         signupActivity.setFragment(SignupLoginFragment.newInstance());
-    }
-
-    @OnClick(R.id.signup_profile_exit)
-    public void exit() {
-        SignupActivity signupActivity = (SignupActivity) getActivity();
-        signupActivity.finish();
     }
 
     @OnClick(R.id.signup_profile_photo)
@@ -177,10 +159,12 @@ public class SignupProfileFragment extends BaseFragment {
         }*/
         String firstName = et_first.getText().toString().trim();
         if (TextUtils.isEmpty(firstName)) {
+            ToastCommon.makeText(getContext(), R.string.error_api_unknown);
             return;
         }
         String lastName = et_last.getText().toString().trim();
         if (TextUtils.isEmpty(lastName)) {
+            ToastCommon.makeText(getContext(), R.string.error_api_unknown);
             return;
         }
         String phoneNumber = et_phone.getText().toString().trim();
@@ -210,7 +194,7 @@ public class SignupProfileFragment extends BaseFragment {
             @Override
             public void onResponse(Call<RegisterFailResponse> call, Response<RegisterFailResponse> response) {
                 LogUtil2.getUtils().d("register onResponse");
-                super.onResponse(call,response);
+                super.onResponse(call, response);
 
                 int code = response.code();
                 if (code == 200) {
@@ -220,21 +204,21 @@ public class SignupProfileFragment extends BaseFragment {
                     loginEntity.setEmail(email);
                     loginEntity.setPassword(psw);
                     exeLogin(userApi, loginEntity);
-                }else if(code == 409){//邮箱已存在
+                } else if (code == 409) {//邮箱已存在
                     finishLoadingDialog();
-                    ToastCommon.makeText(getContext(),R.string.error_api_user_register_409);
-                }else {
+                    ToastCommon.makeText(getContext(), R.string.error_api_user_register_409);
+                } else {
                     LogUtil2.getUtils().d("register error code: " + code);
 
                     finishLoadingDialog();
-                    ToastCommon.makeText(getContext(),R.string.user_register_fail_common);
+                    ToastCommon.makeText(getContext(), R.string.user_register_fail_common);
                 }
             }
 
             @Override
             public void onFailure(Call<RegisterFailResponse> call, Throwable t) {
                 LogUtil2.getUtils().d("register onFailure");
-                super.onFailure(call,t);
+                super.onFailure(call, t);
 
                 finishLoadingDialog();
             }
@@ -254,7 +238,7 @@ public class SignupProfileFragment extends BaseFragment {
                     // 缓存token
                     new LoginManager().cacheToken(response.body().getAccess_token());
 
-                    if(profile != null){
+                    if (profile != null) {
                         uploadAvatar(profile);
                     }
 
@@ -263,14 +247,14 @@ public class SignupProfileFragment extends BaseFragment {
 
                 } else {
                     finishLoadingDialog();
-                    ToastCommon.makeText(getContext(),R.string.profile_login_fail);
+                    ToastCommon.makeText(getContext(), R.string.profile_login_fail);
                     LogUtil2.getUtils().d("login error code: " + response.code());
                 }
             }
 
             @Override
             public void onFailure(Call<LoginSuccessRep> call, Throwable t) {
-                super.onFailure(call,t);
+                super.onFailure(call, t);
 
                 finishLoadingDialog();
                 t.printStackTrace();
@@ -296,7 +280,7 @@ public class SignupProfileFragment extends BaseFragment {
 
             @Override
             public void onFailure(Call<UserInfo> call, Throwable t) {
-                super.onFailure(call,t);
+                super.onFailure(call, t);
 
                 t.printStackTrace();
             }
@@ -355,11 +339,9 @@ public class SignupProfileFragment extends BaseFragment {
     private void doWhichClick(int position) {
         switch (position) {
             case 0:
-                // TODO: 2017/10/25 add Camera permission 
                 startCameraActivity();
                 break;
             case 1:
-                // TODO: 2017/10/25 add reading storage permission
                 startAlbumActivity();
                 break;
         }
@@ -388,10 +370,11 @@ public class SignupProfileFragment extends BaseFragment {
     }
 
     /**
-     * Start album
+     * Start virtual album
      */
     private void startAlbumActivity() {
-        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        Intent intent = new Intent();
+        intent.setClass(getContext(), VirtualAlbumActivity.class);
         startActivityForResult(intent, REQUEST_CODE_ALBUM);
     }
 
@@ -402,40 +385,10 @@ public class SignupProfileFragment extends BaseFragment {
      */
     private void doAlbumResult(Intent data) {
         if (data == null) return;
-        Uri uri = data.getData();
-        if (uri != null) {
-            File file = getRealPathFromUri(uri);
+        File file = (File) data.getSerializableExtra(VirtualAlbumActivity.FILE);
+        if (file != null && file.exists()) {
             showCropPopWindow(file);
         }
-    }
-
-    @Nullable
-    private File getRealPathFromUri(Uri contentUri) {
-        Cursor cursor = null;
-        String[] project = {MediaStore.Images.Media.DATA};
-
-        try {
-            ContentResolver contentResolver = getContext().getContentResolver();
-            if (null == contentResolver) {
-                return null;
-            }
-            cursor = contentResolver.query(contentUri, project, null, null, null);
-            if (cursor != null) {
-                cursor.moveToFirst();
-                int columnIndex = cursor.getColumnIndex(project[0]);
-                String path = cursor.getString(columnIndex);
-                if (!TextUtils.isEmpty(path)) {
-                    return new File(path);
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
-        }
-        return null;
     }
 
     private void showCropPopWindow(final File file) {
