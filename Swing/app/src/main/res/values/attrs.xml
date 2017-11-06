@@ -4,6 +4,7 @@
         <attr name="shrinkWidth" format="float" />
         <attr name="shrinkHeight" format="float" />
     </declare-styleable>
+
     <declare-styleable name="ViewCircle">
         <attr name="android:src" />
         <attr name="strokeWidth" format="dimension" />
@@ -22,6 +23,7 @@
         <attr name="crossColor" format="color" />
         <attr name="crossRatio" format="float" />
     </declare-styleable>
+
     <declare-styleable name="ListLinearLayout">
         <attr name="divideLine" format="reference|color" />
         <attr name="listSelector" format="reference|color" />
@@ -72,5 +74,26 @@
             <enum name="triangle_right" value="5" />
         </attr>
         <attr name="desiredSize" format="dimension" />
+    </declare-styleable>
+
+    <declare-styleable name="ProgressWheel">
+        <attr name="pwTextStyle">
+            <enum name="normal" value="0" />
+            <enum name="bold" value="1" />
+        </attr>
+        <attr name="pwText" format="string" />
+        <attr name="pwTextColor" format="color" />
+        <attr name="pwTextSize" format="dimension" />
+        <attr name="pwBarColor" format="color" />
+        <attr name="pwRimColor" format="color" />
+        <attr name="pwRimWidth" format="dimension" />
+        <attr name="pwSpinSpeed" format="dimension" />
+        <attr name="pwDelayMillis" format="integer" />
+        <attr name="pwCircleColor" format="color" />
+        <attr name="pwRadius" format="dimension" />
+        <attr name="pwBarWidth" format="dimension" />
+        <attr name="pwBarLength" format="dimension" />
+        <attr name="pwContourColor" format="color" />
+        <attr name="pwContourSize" format="dimension" />
     </declare-styleable>
 </resources>

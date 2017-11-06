@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.EditText;
 
+import com.kidsdynamic.commonlib.utils.SoftKeyBoardUtil;
 import com.kidsdynamic.data.net.ApiGen;
 import com.kidsdynamic.data.net.avatar.AvatarApi;
 import com.kidsdynamic.data.net.avatar.PartUtils;
@@ -164,6 +165,7 @@ public class SignupProfileFragment extends BaseFragment {
             ToastCommon.makeText(getContext(), R.string.error_api_unknown);
             return;
         }
+        SoftKeyBoardUtil.hideSoftKeyboard(getActivity());
         String phoneNumber = et_phone.getText().toString().trim();
 //        String zipCode = et_zip.getText().toString().trim();
         Bundle args = getArguments();

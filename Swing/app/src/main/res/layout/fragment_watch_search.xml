@@ -8,30 +8,30 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="2" />
+        android:layout_weight="1" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginLeft="@dimen/base_56"
-        android:layout_marginRight="@dimen/base_56"
-        android:layout_weight="6">
+        android:layout_weight="4">
 
-        <com.kidsdynamic.swing.view.AvenirTextView
-            style="@style/textview_main"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="@string/watch_search_searching" />
-
-        <com.kidsdynamic.swing.view.ViewCircle
+        <com.kidsdynamic.swing.view.ProgressWheel
             android:id="@+id/watch_search_progress"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:strokeColorActive="@color/color_white_snow"
-            app:strokeColorNormal="@color/color_gray_light"
-            app:strokeType="dot"
-            app:strokeWidth="12dp" />
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="@dimen/base_56"
+            android:layout_marginRight="@dimen/base_56"
+            app:pwBarColor="@color/color_orange_main"
+            app:pwBarLength="18dp"
+            app:pwBarWidth="12dp"
+            app:pwRimColor="@color/color_white"
+            app:pwRimWidth="12dp"
+            app:pwSpinSpeed="3dp"
+            app:pwText="@string/watch_search_searching"
+            app:pwTextColor="@color/color_orange_main"
+            app:pwTextSize="28sp"
+            app:pwTextStyle="bold" />
     </RelativeLayout>
 
     <View

@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 
 import com.kidsdynamic.swing.BaseFragment;
 import com.kidsdynamic.swing.R;
-import com.kidsdynamic.swing.view.ViewCircle;
+import com.kidsdynamic.swing.view.ProgressWheel;
 
 import java.util.Random;
 
@@ -24,7 +24,7 @@ import butterknife.ButterKnife;
 public class WatchSearchFragment extends BaseFragment {
 
     @BindView(R.id.watch_search_progress)
-    ViewCircle vc_progress;
+    ProgressWheel progressWheel;
 
     public static WatchSearchFragment newInstance() {
         Bundle args = new Bundle();
@@ -45,37 +45,40 @@ public class WatchSearchFragment extends BaseFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        vc_progress.setOnProgressListener(new OnCircleProgressListener(1, vc_progress.getStrokeCount()));
-        vc_progress.setStrokeBeginEnd(0, 0);
-        vc_progress.startProgress(250, -1, -1);
+        progressWheel.setOnProgressListener(new OnCircleProgressListener());
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        progressWheel.startSpinning();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        progressWheel.stopSpinning();
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        vc_progress.stopProgress();
+        progressWheel.stopSpinning();
     }
 
-    private class OnCircleProgressListener implements ViewCircle.OnProgressListener {
+    private class OnCircleProgressListener implements ProgressWheel.OnProgressListener {
 
-        private int destCount, bound, random, count;
+        private int random;
 
-        private OnCircleProgressListener(int destCount, int bound) {
-            this.destCount = destCount;
-            this.bound = bound;
-            random = new Random().nextInt(bound);
+        public OnCircleProgressListener() {
+            random = new Random().nextInt(360);
         }
 
         @Override
-        public void onProgress(ViewCircle view, int begin, int end) {
-            if (begin == bound - 1) count += 1;
-            if (count == destCount && end == random) {
+        public void onProgress(int repeatCount, float progress) {
+            if (repeatCount >= 1 && progress > random) {
                 SignupActivity signupActivity = (SignupActivity) getActivity();
-//                if (random % 2 == 0) {
                 signupActivity.setFragmentAndAddBackStack(WatchSelectFragment.newInstance());
-//                } else {
-//                    signupActivity.setFragment(WatchSorryFragment.newInstance());
-//                }
             }
         }
     }
