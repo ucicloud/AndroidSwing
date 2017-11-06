@@ -38,6 +38,7 @@ import com.yy.base.utils.Functions;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.LogManager;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -239,7 +240,7 @@ public class SignupLoginFragment extends BaseFragment {
                     //先清除本地数据，然后再保存
                     new LoginManager().saveLoginData(getContext(), response.body());
                     //继续获取信息: 获取event信息
-                    getEventInfos();
+                    getEventInfos(response.body().getUser());
 
                 } else {
                     finishLoadingDialog();
@@ -261,7 +262,7 @@ public class SignupLoginFragment extends BaseFragment {
     }
 
 
-    private void getEventInfos() {
+    private void getEventInfos(final UserProfileRep.UserEntity userEntity) {
         LogUtil2.getUtils().d("getEventInfo");
         final EventApi eventApi = ApiGen.getInstance(getActivity().getApplicationContext()).
                 generateApi(EventApi.class, true);
@@ -278,7 +279,7 @@ public class SignupLoginFragment extends BaseFragment {
                     new EventManager().saveEventForLogin(getContext(), response.body());
 
                     finishLoadingDialog();
-                    loginFlowOK();
+                    loginFlowOK(userEntity);
                 } else {
                     LogUtil2.getUtils().d("login error, code: " + response.code());
 
@@ -298,12 +299,12 @@ public class SignupLoginFragment extends BaseFragment {
         });
     }
 
-    private void loginFlowOK() {
+    private void loginFlowOK(UserProfileRep.UserEntity userEntity) {
         getActivity().finish();
         startActivity(new Intent(getActivity(), MainFrameActivity.class));
 
         //记录状态
-        PreferencesUtil.getInstance(getContext()).setPreferenceBooleanValue(ConfigUtil.login_state, true);
+        new LoginManager().cacheLoginOK(getContext(),userEntity);
     }
 
     @OnClick(R.id.signup_login_reset_pwd)

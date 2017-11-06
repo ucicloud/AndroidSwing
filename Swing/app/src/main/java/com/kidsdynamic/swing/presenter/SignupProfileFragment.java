@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,12 +19,14 @@ import com.kidsdynamic.commonlib.utils.SoftKeyBoardUtil;
 import com.kidsdynamic.data.net.ApiGen;
 import com.kidsdynamic.data.net.avatar.AvatarApi;
 import com.kidsdynamic.data.net.avatar.PartUtils;
+import com.kidsdynamic.data.net.user.UserApiNeedToken;
 import com.kidsdynamic.data.net.user.UserApiNoNeedToken;
 import com.kidsdynamic.data.net.user.model.LoginEntity;
 import com.kidsdynamic.data.net.user.model.LoginSuccessRep;
 import com.kidsdynamic.data.net.user.model.RegisterEntity;
 import com.kidsdynamic.data.net.user.model.RegisterFailResponse;
 import com.kidsdynamic.data.net.user.model.UserInfo;
+import com.kidsdynamic.data.net.user.model.UserProfileRep;
 import com.kidsdynamic.data.persistent.PreferencesUtil;
 import com.kidsdynamic.data.utils.LogUtil2;
 import com.kidsdynamic.swing.BaseFragment;
@@ -233,21 +236,17 @@ public class SignupProfileFragment extends BaseFragment {
                 if (response.code() == 200) {
                     LogUtil2.getUtils().d("login success");
                     LogUtil2.getUtils().d(response.body().getAccess_token());
-                    finishLoadingDialog();
+
                     // 缓存token
                     new LoginManager().cacheToken(response.body().getAccess_token());
-                    //记录状态
-                    PreferencesUtil.getInstance(getContext()).
-                            setPreferenceBooleanValue(ConfigUtil.login_state, true);
 
                     if (profile != null) {
                         uploadAvatar(profile);
                     }
 
                     //同步数据
-//                    syncData();
-                    SignupActivity signupActivity = (SignupActivity) getActivity();
-                    signupActivity.setFragment(WatchHaveFragment.newInstance());
+                    syncUserData();
+
                 } else {
                     finishLoadingDialog();
                     ToastCommon.makeText(getContext(), R.string.profile_login_fail);
@@ -286,6 +285,55 @@ public class SignupProfileFragment extends BaseFragment {
                 super.onFailure(call, t);
 
                 t.printStackTrace();
+            }
+        });
+    }
+
+    private void syncUserData() {
+        //2017/10/17 同步账户数据 成功后关闭等待对话框，跳转到主界面；失败提醒
+        Log.w("login", "register login ok, start sync data");
+
+        //登陆成功后，需要获取两个业务数据：
+        //“/v1/user/retrieveUserProfile”
+        //“/v1/event/retrieveAllEventsWithTodo”
+
+        final UserApiNeedToken userApiNeedToken = ApiGen.getInstance(getActivity().getApplicationContext()).
+                generateApi(UserApiNeedToken.class, true);
+
+        userApiNeedToken.retrieveUserProfile().enqueue(new BaseRetrofitCallback<UserProfileRep>() {
+            @Override
+            public void onResponse(Call<UserProfileRep> call, Response<UserProfileRep> response) {
+                LogUtil2.getUtils().d("retrieveUserProfile onResponse");
+                super.onResponse(call, response);
+
+                if (response.code() == 200) {//获取到用户信息
+                    LogUtil2.getUtils().d("onResponse: " + response.body());
+
+                    //先清除本地数据，然后再保存
+                    new LoginManager().saveLoginData(getContext(), response.body());
+
+                    //记录状态
+                    new LoginManager().cacheLoginOK(getContext(),response.body().getUser());
+
+                    finishLoadingDialog();
+
+                    SignupActivity signupActivity = (SignupActivity) getActivity();
+                    signupActivity.setFragment(WatchHaveFragment.newInstance());
+
+                } else {
+                    finishLoadingDialog();
+
+                    ToastCommon.makeText(getContext(),R.string.profile_login_fail);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserProfileRep> call, Throwable t) {
+                Log.d("syncData", "retrieveUserProfile error, ");
+                super.onFailure(call, t);
+
+                ToastCommon.makeText(getContext(),R.string.profile_login_fail);
+                finishLoadingDialog();
             }
         });
     }
