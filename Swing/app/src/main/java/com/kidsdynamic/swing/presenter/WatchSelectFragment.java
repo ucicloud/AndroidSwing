@@ -56,6 +56,8 @@ import retrofit2.Response;
 
 public class WatchSelectFragment extends BaseFragment {
 
+    private static final int REQUEST_CODE_BLE = 12;
+
     @BindView(R.id.watch_select_container)
     ListLinearLayout ll_select;
 
@@ -92,7 +94,7 @@ public class WatchSelectFragment extends BaseFragment {
 
     @Override
     public void onResume() {
-        super.onStop();
+        super.onResume();
         checkPermissions();
     }
 
@@ -141,7 +143,7 @@ public class WatchSelectFragment extends BaseFragment {
                                                  @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
-            case 12:
+            case REQUEST_CODE_BLE:
                 if (grantResults.length > 0) {
                     for (int i = 0; i < grantResults.length; i++) {
                         if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
@@ -167,7 +169,7 @@ public class WatchSelectFragment extends BaseFragment {
         }
         if (!permissionDeniedList.isEmpty()) {
             String[] deniedPermissions = permissionDeniedList.toArray(new String[permissionDeniedList.size()]);
-            ActivityCompat.requestPermissions(getActivity(), deniedPermissions, 12);
+            ActivityCompat.requestPermissions(getActivity(), deniedPermissions, REQUEST_CODE_BLE);
         }
     }
 
@@ -195,22 +197,15 @@ public class WatchSelectFragment extends BaseFragment {
                 mDeviceMap.clear();
                 dataAdapter.clear();
                 dataAdapter.notifyDataSetChanged();
-//                img_loading.startAnimation(operatingAnim);
-//                btn_start.setEnabled(false);
-//                btn_stop.setVisibility(View.VISIBLE);
             }
 
             @Override
             public void onScanTimeOut() {
-//                img_loading.clearAnimation();
-//                btn_start.setEnabled(true);
-//                btn_stop.setVisibility(View.INVISIBLE);
+
             }
 
             @Override
             public void onScanning(BluetoothLeDevice scanResult) {
-//                dataAdapter.addResult(scanResult);
-//                dataAdapter.notifyDataSetChanged();
                 checkWatchBindStatus(scanResult);
             }
         });
@@ -259,7 +254,7 @@ public class WatchSelectFragment extends BaseFragment {
             @Override
             public void onFailure(Call<WhoRegisterMacIDResp> call, Throwable t) {
                 LogUtil2.getUtils().d("whoRegisteredMacID onFailure");
-                super.onFailure(call,t);
+                super.onFailure(call, t);
             }
         });
     }
@@ -348,8 +343,8 @@ public class WatchSelectFragment extends BaseFragment {
     private void doPlusClick(final String macId) {
         BluetoothLeDevice device = mDeviceMap.get(macId);
 
-        if(device == null){
-            ToastCommon.makeText(getActivity(),R.string.error_api_unknown);
+        if (device == null) {
+            ToastCommon.makeText(getActivity(), R.string.error_api_unknown);
             return;
         }
         showLoadingDialog(R.string.signup_login_wait);
@@ -378,8 +373,8 @@ public class WatchSelectFragment extends BaseFragment {
     private void doRequestClick(final String macId) {
         BluetoothLeDevice device = mDeviceMap.get(macId);
 
-        if(device == null){
-            ToastCommon.makeText(getActivity(),R.string.error_api_unknown);
+        if (device == null) {
+            ToastCommon.makeText(getActivity(), R.string.error_api_unknown);
             return;
         }
 
@@ -421,8 +416,8 @@ public class WatchSelectFragment extends BaseFragment {
     }
 
     @OnClick(R.id.watch_select_dashboard)
-    protected void gotoDashboard(){
-        startActivity(new Intent(getActivity(),MainFrameActivity.class));
+    protected void gotoDashboard() {
+        startActivity(new Intent(getActivity(), MainFrameActivity.class));
         getActivity().finish();
     }
 

@@ -5,7 +5,9 @@
     <uses-feature
         android:name="android.hardware.bluetooth_le"
         android:required="true" />
-    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
 
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
@@ -14,6 +16,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:name=".SwingApplication"
@@ -40,8 +43,12 @@
         <activity
             android:name=".presenter.VirtualResultActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".presenter.VirtualAlbumActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/ThemeTranslucent" />
 
-        <activity android:name=".MainActivity" >
+        <activity android:name=".MainActivity">
             <!--<intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -49,13 +56,16 @@
             </intent-filter>-->
         </activity>
 
-        <activity android:name=".presenter.MainFrameActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".presenter.MainFrameActivity"
+            android:screenOrientation="portrait" />
 
-        <activity android:name="com.kidsdynamic.swing.bletest.SwingLogActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name="com.kidsdynamic.swing.bletest.SwingScanActivity"
-            android:screenOrientation="portrait" >
+        <activity
+            android:name="com.kidsdynamic.swing.bletest.SwingLogActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.kidsdynamic.swing.bletest.SwingScanActivity"
+            android:screenOrientation="portrait">
             <!--<intent-filter>
                     <action android:name="android.intent.action.MAIN" />
 

@@ -401,6 +401,22 @@
     <string name="dialog_sync_sync_button">Sync</string>
     <string name="dialog_sync_skip_button">Skip</string>
 
+    <!-- Sign-in/Singup new words -->
+    <!--
+    1) fragment_signup_login
+    Enter
+    Reset password
+    2) fragment_watch_have
+    Please have your watch nearby
+    3) fragment_watch_request
+    Request access
+    Request access pending
+    Cancel & go to dashboard
+    4) fragment_watch_profile
+    Kid's first name
+    Kid's last name
+    -->
+
     <!--new string 20171027-->
     <string name="net_err">Net Error</string>
     <string name="ok_str">OK</string>

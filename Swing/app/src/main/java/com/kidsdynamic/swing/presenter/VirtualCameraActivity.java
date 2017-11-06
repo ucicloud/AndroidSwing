@@ -3,6 +3,7 @@ package com.kidsdynamic.swing.presenter;
 import android.Manifest;
 import android.app.Activity;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -19,7 +20,9 @@ import com.yy.base.BaseActivity;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 public class VirtualCameraActivity extends BaseActivity {
@@ -27,8 +30,8 @@ public class VirtualCameraActivity extends BaseActivity {
     public static final String FILE = "file";
     private static final String STATE = "state";
 
-    private static final int REQUEST_CODE_CAMERA = 0x00;
-    private static final int REQUEST_CODE_VIRTUAL_RESULT = 0x01;
+    private static final int REQUEST_CODE_CAMERA = 1;
+    private static final int REQUEST_CODE_VIRTUAL_RESULT = 2;
 
     private static final int REQUEST_STORAGE_WRITE_ACCESS_PERMISSION = 1;
 
@@ -39,7 +42,8 @@ public class VirtualCameraActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (savedInstanceState == null) {
-            startCameraActivity();
+//            startCameraActivity();
+            checkPermissions();
         } else {
             saveState = savedInstanceState.getBoolean(STATE, true);
             mCurPhotoFile = (File) savedInstanceState.getSerializable(FILE);
@@ -73,6 +77,49 @@ public class VirtualCameraActivity extends BaseActivity {
         super.onSaveInstanceState(outState);
         outState.putBoolean(STATE, true);
         outState.putSerializable(FILE, mCurPhotoFile);
+    }
+
+    @Override
+    public final void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                                 @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case REQUEST_CODE_CAMERA:
+                if (grantResults.length > 0) {
+                    for (int i = 0; i < grantResults.length; i++) {
+                        if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
+                            onPermissionGranted(permissions[i]);
+                        }
+                    }
+                }
+                break;
+        }
+    }
+
+    private void checkPermissions() {
+        Context context = getApplicationContext();
+        String[] permissions = {Manifest.permission.CAMERA};
+        List<String> permissionDeniedList = new ArrayList<>();
+        for (String permission : permissions) {
+            int permissionCheck = ContextCompat.checkSelfPermission(context, permission);
+            if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
+                onPermissionGranted(permission);
+            } else {
+                permissionDeniedList.add(permission);
+            }
+        }
+        if (!permissionDeniedList.isEmpty()) {
+            String[] deniedPermissions = permissionDeniedList.toArray(new String[permissionDeniedList.size()]);
+            ActivityCompat.requestPermissions(this, deniedPermissions, REQUEST_CODE_CAMERA);
+        }
+    }
+
+    private void onPermissionGranted(String permission) {
+        switch (permission) {
+            case Manifest.permission.CAMERA:
+                startCameraActivity();
+                break;
+        }
     }
 
     private void startCameraActivity() {
@@ -117,7 +164,6 @@ public class VirtualCameraActivity extends BaseActivity {
         } catch (Exception e) {
             e.printStackTrace();
             if (e instanceof SecurityException) {
-                Toast.makeText(this, "", Toast.LENGTH_SHORT).show();
                 finish();
             }
         }
