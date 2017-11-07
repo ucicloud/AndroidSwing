@@ -11,6 +11,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.kidsdynamic.swing.R;
+import com.kidsdynamic.swing.domain.CalendarManager;
 import com.kidsdynamic.swing.model.WatchEvent;
 
 import java.util.ArrayList;
@@ -30,6 +31,9 @@ public class EventRepeatOptionFragment extends CalendarBaseFragment {
     @BindView(R.id.listview_repeat)
     protected ListView listView_event_option;
 
+    private WatchEvent watchEvent;
+    private EventRepeatListAdapter eventRepeatListAdapter;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -39,7 +43,13 @@ public class EventRepeatOptionFragment extends CalendarBaseFragment {
         initTitleBar();
 
         initView();
+
+        initValue();
         return mView;
+    }
+
+    private void initValue() {
+//        mainFrameActivity.mEventStack.pop();
     }
 
     private void initTitleBar() {
@@ -55,11 +65,17 @@ public class EventRepeatOptionFragment extends CalendarBaseFragment {
     }
 
     private void initView() {
-        listView_event_option.setAdapter(new EventRepeatListAdapter(getEventOptions()));
+        eventRepeatListAdapter = new EventRepeatListAdapter(getEventOptions());
+        listView_event_option.setAdapter(eventRepeatListAdapter);
         listView_event_option.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                // TODO: 2017/11/6
+                Bundle bundle = new Bundle();
+                bundle.putString(CalendarManager.ARG_DATA_TYPE,CalendarManager.VALUE_DATA_TYPE_REPEAT);
+                bundle.putString(CalendarManager.VALUE_DATA_TYPE_REPEAT,
+                        eventRepeatListAdapter.getItem(i));
+
+                mainFrameActivity.mCalendarBundleStack.push(bundle);
             }
         });
     }

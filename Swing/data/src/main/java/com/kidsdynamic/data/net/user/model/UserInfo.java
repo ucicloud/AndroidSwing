@@ -22,7 +22,7 @@ public class UserInfo {
      "country": "CN"
      */
 
-    private int id;
+    private long id;
     private String email;
     private String firstName;
     private String lastName;
@@ -37,11 +37,11 @@ public class UserInfo {
     private String android_registration_id;
     private String country;
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

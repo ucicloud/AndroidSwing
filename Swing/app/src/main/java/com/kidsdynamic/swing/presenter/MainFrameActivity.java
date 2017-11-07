@@ -7,9 +7,11 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 
 import com.kidsdynamic.swing.R;
+import com.kidsdynamic.swing.model.WatchEvent;
 import com.yy.base.BaseFragmentActivity;
 
 import java.util.HashMap;
+import java.util.Stack;
 
 /**
  * 主界面
@@ -31,6 +33,10 @@ public class MainFrameActivity extends BaseFragmentActivity {
 
     private int currentTabKey; // 当前Tab页面索引
 
+
+    //用于CalendarFragment间的数据交换
+//    public Stack<WatchContact> mContactStack;
+    public Stack<Bundle> mCalendarBundleStack;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
