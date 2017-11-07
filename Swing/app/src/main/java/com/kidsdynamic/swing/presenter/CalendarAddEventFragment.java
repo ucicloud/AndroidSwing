@@ -16,6 +16,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.kidsdynamic.swing.R;
+import com.kidsdynamic.swing.domain.CalendarManager;
 import com.kidsdynamic.swing.model.WatchEvent;
 import com.kidsdynamic.swing.model.WatchTodo;
 import com.kidsdynamic.swing.utils.SwingFontsCache;
@@ -93,6 +94,7 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
     private boolean isStarDate = false;
     private Calendar mCalendarDate;
 
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -102,16 +104,43 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
         initTitleBar();
 
         initView();
-        return mView;
 
+        initValue();
+
+        return mView;
+    }
+
+    private void initValue() {
+        mEvent = new WatchEvent(mDefaultDate);
+        mEvent.mUserId = 123;
     }
 
     @Override
     public void onResume() {
         super.onResume();
         // TODO: 2017/11/5
-        mEvent = new WatchEvent(mDefaultDate);
-        mEvent.mUserId = 123;
+        //如果stack不为空，则表示stack保存当前编辑的event；
+        //如果为空，则表示需要新增一个新的event
+        if (!mainFrameActivity.mCalendarBundleStack.isEmpty()) {
+            //如果bundle不为空，则认为有业务数据
+            updateEventByFragmentBundle(mainFrameActivity.mCalendarBundleStack.pop());
+        }
+    }
+
+    private void updateEventByFragmentBundle(Bundle fragmentBundle) {
+        if(fragmentBundle == null){
+            return;
+        }
+
+        String dataType = fragmentBundle.getString(CalendarManager.ARG_DATA_TYPE);
+        if(CalendarManager.ARG_DATA_TYPE_REPEAT.equals(dataType)){
+            mEvent.mRepeat = fragmentBundle.getString(CalendarManager.VALUE_DATA_TYPE_REPEAT);
+        }else if(CalendarManager.ARG_DATA_TYPE_EVENT.equals(dataType)){
+            //选择的event 事件
+
+        }
+
+
     }
 
     private void initView() {
@@ -136,7 +165,7 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
 
     @OnClick(R.id.calendar_event_alarm_name_layout)
    protected void onClickSelectEvent(){
-//       mActivityMain.mEventStack.push(mEvent);
+//       mainFrameActivity.mEventStack.push(mEvent);
 
        Bundle bundle = new Bundle();
 //       bundle.putInt("kidId", mEvent.mKids.get(0));
@@ -239,6 +268,7 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
     //repeat
     @OnClick(R.id.calendar_event_repeat_line)
     protected void onClickEventRepeat(){
+//        mainFrameActivity.mEventStack.push(mEvent);
         selectFragment(EventRepeatOptionFragment.class.getName(),null,true);
     }
 

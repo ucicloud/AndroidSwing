@@ -184,7 +184,10 @@ public class WatchProfileFragment extends BaseFragment {
                     KidsWithParent kidsWithParent = response.body();
                     int kidId = kidsWithParent.getId();
                     LogUtil2.getUtils().d("addKid rep kid ID: " + kidId);
+
                     DeviceManager.updateFocusKids(kidId);
+                    //add 2017年11月7日13:45:21 only_app save kids info to db
+                    new DeviceManager().saveKidsData(getContext(),kidsWithParent);
 
                     if (profile != null) {
                         uploadAvatar(profile, String.valueOf(kidId));

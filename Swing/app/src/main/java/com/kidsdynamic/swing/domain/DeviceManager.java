@@ -1,13 +1,18 @@
 package com.kidsdynamic.swing.domain;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import com.kidsdynamic.data.dao.DB_Kids;
+import com.kidsdynamic.data.net.kids.model.KidsWithParent;
 import com.kidsdynamic.data.persistent.DbUtil;
 import com.kidsdynamic.data.persistent.PreferencesUtil;
 import com.kidsdynamic.data.repository.disk.KidsDataStore;
 import com.kidsdynamic.swing.SwingApplication;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Administrator on 2017/10/27.
@@ -77,5 +82,20 @@ public class DeviceManager {
     public static int getFocusKidsId(){
         PreferencesUtil preferencesUtil = PreferencesUtil.getInstance(SwingApplication.getAppContext());
         return preferencesUtil.gPrefIntValue(key_focus_kids);
+    }
+
+    public boolean saveKidsData(@NonNull Context context, KidsWithParent kidsWithParent){
+        //首先清除；然后保存
+        DbUtil dbUtil = DbUtil.getInstance(context.getApplicationContext());
+
+        KidsDataStore kidsDataStore = new KidsDataStore(dbUtil);
+        kidsDataStore.clearAllData();
+
+        //开始保存
+        List<DB_Kids> db_kidsList = new ArrayList<>(1);
+        db_kidsList.add(BeanConvertor.getDBKidsInfo(kidsWithParent));
+        kidsDataStore.save(db_kidsList);
+
+        return true;
     }
 }

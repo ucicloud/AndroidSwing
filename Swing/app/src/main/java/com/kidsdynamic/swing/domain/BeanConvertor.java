@@ -9,6 +9,7 @@ import com.kidsdynamic.data.dao.DB_Todo;
 import com.kidsdynamic.data.dao.DB_User;
 import com.kidsdynamic.data.net.event.model.EventWithTodo;
 import com.kidsdynamic.data.net.event.model.TodoEntity;
+import com.kidsdynamic.data.net.kids.model.KidsWithParent;
 import com.kidsdynamic.data.net.user.model.KidInfo;
 import com.kidsdynamic.data.net.user.model.UserProfileRep;
 
@@ -123,6 +124,20 @@ public class BeanConvertor {
         }
 
         return db_todoList;
+    }
+
+    public static DB_Kids getDBKidsInfo(@NonNull KidsWithParent kidsWithParent){
+
+            DB_Kids db_kids = new DB_Kids();
+
+            db_kids.setKidsId(kidsWithParent.getId());
+            db_kids.setName(kidsWithParent.getName());
+            db_kids.setDateCreated(kidsWithParent.getDateCreated());
+            db_kids.setMacId(kidsWithParent.getMacId());
+            db_kids.setProfile(kidsWithParent.getProfile());
+            db_kids.setParentId(kidsWithParent.getParent().getId());
+
+        return db_kids;
     }
 
 }

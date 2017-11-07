@@ -15,6 +15,13 @@ import java.util.List;
  */
 
 public class CalendarManager {
+    public final static String ARG_DATA_TYPE = "data_type";
+    public final static String ARG_DATA_TYPE_EVENT = "data_type_event";
+    public final static String VALUE_DATA_TYPE_EVENT = "event";
+
+    public final static String ARG_DATA_TYPE_REPEAT = "data_type_repeat";
+    public final static String VALUE_DATA_TYPE_REPEAT = "repeat";
+
     public static SparseArray<String> MonthLabelMap = new SparseArray<>(12);
     static {
         MonthLabelMap.put(0,"Jan");
