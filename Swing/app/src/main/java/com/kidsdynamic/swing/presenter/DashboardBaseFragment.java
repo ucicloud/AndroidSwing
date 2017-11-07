@@ -38,12 +38,23 @@ public class DashboardBaseFragment extends BaseFragment {
                 .beginTransaction()
                 .replace(R.id.dashboard_fragment_container, fragment, className);
 
-        if(isAddToBackStack){
+        if (isAddToBackStack) {
             fragmentTransaction
                     .addToBackStack(null);
         }
 
-        fragmentTransaction .commit();
+        fragmentTransaction.commit();
 
     }
+
+    public void setFragment(Fragment fragment, boolean isAddBackStack) {
+        FragmentTransaction fragmentTransaction = getFragmentManager()
+                .beginTransaction()
+                .replace(R.id.dashboard_fragment_container, fragment);
+        if (isAddBackStack) {
+            fragmentTransaction.addToBackStack(null);
+        }
+        fragmentTransaction.commit();
+    }
+
 }

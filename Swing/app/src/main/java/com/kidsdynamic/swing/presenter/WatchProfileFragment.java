@@ -212,7 +212,7 @@ public class WatchProfileFragment extends BaseFragment {
 
                     //todo test
                     /*SignupActivity signupActivity = (SignupActivity) getActivity();
-                    signupActivity.setFragment(WatchSyncFragment.newInstance());*/
+                    signupActivity.setFragment(DashboardMainFragment.newInstance());*/
                 }
             }
 

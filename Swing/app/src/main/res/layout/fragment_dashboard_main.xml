@@ -5,18 +5,19 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <include layout="@layout/base_title_bar"
+    <include
+        layout="@layout/base_title_bar"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"/>
+        android:layout_weight="1" />
 
     <cn.carbs.android.avatarimageview.library.AvatarImageView
         android:id="@+id/watch_sync_photo"
         android:layout_width="124dp"
         android:layout_height="124dp"
         android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/base_30"
         app:crossColor="@color/hex_1b89cd"
-        android:layout_marginTop="@dimen/base_25"
         app:crossWidth="2dp"
         app:strokeColorNormal="@color/hex_1b89cd" />
 
@@ -26,18 +27,20 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/base_5"
         android:gravity="center_horizontal|top"
-        android:textStyle="bold"
+        android:text=""
         android:textColor="@color/profile_logout_confirm_name"
         android:textSize="20sp"
-        android:text="kids Name" />
+        android:textStyle="bold" />
 
     <com.kidsdynamic.swing.view.AvenirTextView
         style="@style/textview_main"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginLeft="@dimen/base_56"
+        android:layout_marginRight="@dimen/base_56"
         android:layout_weight="2"
         android:gravity="center"
-        android:text="Would you like to sync now?" />
+        android:text="@string/dashboard_main_message" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -53,7 +56,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:text="Yes,please" />
+            android:text="@string/dashboard_main_yes" />
 
         <com.kidsdynamic.swing.view.AvenirTextView
             android:id="@+id/watch_sync_no"
@@ -61,7 +64,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:text="No,go to dashboard" />
+            android:text="@string/dashboard_main_dashboard" />
 
         <com.kidsdynamic.swing.view.AvenirTextView
             android:id="@+id/watch_sync_add"
@@ -69,6 +72,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:text="Add other watch" />
+            android:text="@string/dashboard_main_another" />
     </LinearLayout>
 </LinearLayout>

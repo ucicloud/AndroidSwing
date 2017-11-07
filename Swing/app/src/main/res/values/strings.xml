@@ -92,7 +92,7 @@
     <string name="dashboard_progress_syncing">Syncing</string>
     <string name="dashboard_progress_completed">Sync\nCompleted</string>
     <string name="dashboard_progress_dashboard">Go to Dashboard</string>
-    <string name="dashboard_progress_not_found">We can\'t\nfind your\nWatch!</string>
+    <string name="dashboard_progress_not_found">We can\'t find\nyour Watch!</string>
     <string name="dashboard_progress_again">Try Again</string>
     <string name="dashboard_progress_last">Go to Last Synced Data</string>
     <string name="dashboard_progress_server_not_reach">Can\'t Reach Server!</string>
@@ -436,5 +436,6 @@
     <string name="token_invalid">Token invalid, please login again</string>
     <string name="cloud_api_call_net_error">net error, please check and try again</string>
     <string name="user_register_fail_common">register, please try again</string>
+    <string name="dashboard_completed">completed</string>
 
 </resources>

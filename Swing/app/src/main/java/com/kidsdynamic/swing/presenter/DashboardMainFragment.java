@@ -17,12 +17,12 @@ import butterknife.OnClick;
 import cn.carbs.android.avatarimageview.library.AvatarImageView;
 
 /**
- * WatchSyncFragment
+ * DashboardMainFragment
  * <p>
  * Created by Stefan on 2017/10/26.
  */
 
-public class WatchSyncFragment extends DashboardBaseFragment {
+public class DashboardMainFragment extends DashboardBaseFragment {
 
     @BindView(R.id.watch_sync_photo)
     AvatarImageView vc_photo;
@@ -31,11 +31,11 @@ public class WatchSyncFragment extends DashboardBaseFragment {
     TextView tv_kids_name;
 
     private String mAvatarFilename = "";
-    private String deviceName;
+    private String kidName;
 
-    public static WatchSyncFragment newInstance() {
+    public static DashboardMainFragment newInstance() {
         Bundle args = new Bundle();
-        WatchSyncFragment fragment = new WatchSyncFragment();
+        DashboardMainFragment fragment = new DashboardMainFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -46,7 +46,7 @@ public class WatchSyncFragment extends DashboardBaseFragment {
         Bundle arg = getArguments();
         if (arg != null) {
             mAvatarFilename = getArguments().getString(DeviceManager.BUNDLE_KEY_AVATAR, "");
-            deviceName = getArguments().getString(DeviceManager.BUNDLE_KEY_KID_NAME, "");
+            kidName = getArguments().getString(DeviceManager.BUNDLE_KEY_KID_NAME, "");
         }
     }
 
@@ -54,19 +54,19 @@ public class WatchSyncFragment extends DashboardBaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View layout = inflater.inflate(R.layout.fragment_watch_sync, container, false);
+        View layout = inflater.inflate(R.layout.fragment_dashboard_main, container, false);
         ButterKnife.bind(this, layout);
-
-        initTitleBar();
-
-        /*tv_kids_name.setText(deviceName);
-        GlideHelper.showCircleImageView(getContext(), mAvatarFilename, vc_photo);*/
-
-        //just test
-        tv_kids_name.setText("Alex Smith");
-        GlideHelper.showCircleImageView(getContext(), mAvatarFilename, vc_photo);
-
         return layout;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        initTitleBar();
+        //just test
+        kidName = "Alex Smith";
+        tv_kids_name.setText(kidName);
+        GlideHelper.showCircleImageView(getContext(), mAvatarFilename, vc_photo);
     }
 
     private void initTitleBar() {
@@ -76,13 +76,11 @@ public class WatchSyncFragment extends DashboardBaseFragment {
 
         /*view_right_action.setImageResource(R.drawable.icon_add);
         view_right_action.setTag(R.drawable.icon_add);*/
-
     }
-
 
     @OnClick(R.id.watch_sync_yes)
     public void yes() {
-
+        setFragment(DashboardProgressFragment.newInstance(), true);
     }
 
     @OnClick(R.id.watch_sync_no)

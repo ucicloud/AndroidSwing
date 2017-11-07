@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/title_bar"
+        layout="@layout/base_title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginLeft="@dimen/base_56"
+        android:layout_marginRight="@dimen/base_56"
+        android:layout_marginTop="@dimen/base_35"
+        android:layout_weight="5">
+
+        <com.kidsdynamic.swing.view.AvenirTextView
+            android:id="@+id/tv_message"
+            style="@style/textview_main"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/dashboard_progress_searching" />
+
+        <com.kidsdynamic.swing.view.ViewCircle
+            android:id="@+id/dashboard_progress_circle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:strokeBegin="100"
+            app:strokeColorActive="@color/color_orange_main"
+            app:strokeColorNormal="@color/color_white_snow"
+            app:strokeCount="100"
+            app:strokeEnd="-1"
+            app:strokeType="arc"
+            app:strokeWidth="10dp" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginLeft="@dimen/base_56"
+        android:layout_marginRight="@dimen/base_56"
+        android:layout_weight="5"
+        android:orientation="vertical">
+
+        <com.kidsdynamic.swing.view.AvenirTextView
+            android:id="@+id/dashboard_progress_button_first"
+            style="@style/button_main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@string/dashboard_progress_dashboard"
+            android:visibility="invisible" />
+
+        <com.kidsdynamic.swing.view.AvenirTextView
+            android:id="@+id/dashboard_progress_button_second"
+            style="@style/button_main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@string/dashboard_progress_last"
+            android:visibility="invisible" />
+    </LinearLayout>
+</LinearLayout>

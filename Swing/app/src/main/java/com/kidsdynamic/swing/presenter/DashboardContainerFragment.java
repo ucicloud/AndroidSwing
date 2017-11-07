@@ -34,7 +34,7 @@ public class DashboardContainerFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View layoutView = inflater.inflate(R.layout.fragment_dashboard_container, null);
 
-        ButterKnife.bind(this,layoutView);
+        ButterKnife.bind(this, layoutView);
 
 
         return layoutView;
@@ -48,7 +48,7 @@ public class DashboardContainerFragment extends BaseFragment {
 
         registerUIReceiver();
 
-        selectFragment(WatchSyncFragment.class.getName(),null,false);
+        selectFragment(DashboardMainFragment.class.getName(), null, false);
 
     }
 
@@ -92,11 +92,11 @@ public class DashboardContainerFragment extends BaseFragment {
             Object tag = view.getTag();
             if (tag instanceof Integer) {
                 Integer intTag = (Integer) tag;
-                if(intTag == R.drawable.icon_add){
+                if (intTag == R.drawable.icon_add) {
                     //添加新event
-                }else if(intTag == R.drawable.icon_pen){
+                } else if (intTag == R.drawable.icon_pen) {
                     //修改event详情
-                    Toast.makeText(getContext(),"modify event detail",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "modify event detail", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -116,13 +116,23 @@ public class DashboardContainerFragment extends BaseFragment {
                 .beginTransaction()
                 .replace(R.id.dashboard_fragment_container, fragment, className);
 
-        if(isAddToBackStack){
+        if (isAddToBackStack) {
             fragmentTransaction
                     .addToBackStack(null);
         }
 
-        fragmentTransaction .commit();
+        fragmentTransaction.commit();
 
+    }
+
+    public void setFragment(Fragment fragment, boolean isAddBackStack) {
+        FragmentTransaction fragmentTransaction = getFragmentManager()
+                .beginTransaction()
+                .replace(R.id.dashboard_fragment_container, fragment);
+        if (isAddBackStack) {
+            fragmentTransaction.addToBackStack(null);
+        }
+        fragmentTransaction.commit();
     }
 
     @Override
