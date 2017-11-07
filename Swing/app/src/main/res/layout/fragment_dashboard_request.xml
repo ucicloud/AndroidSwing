@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/title_bar"
+        layout="@layout/base_title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginLeft="@dimen/base_40"
+        android:layout_marginRight="@dimen/base_40"
+        android:layout_weight="4"
+        android:adjustViewBounds="false"
+        android:contentDescription="@null"
+        android:cropToPadding="false"
+        android:scaleType="fitCenter"
+        android:src="@drawable/monster_all" />
+
+    <com.kidsdynamic.swing.view.AvenirTextView
+        android:id="@+id/dashboard_request_message"
+        style="@style/textview_main"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:gravity="center"
+        android:paddingEnd="@dimen/base_56"
+        android:paddingStart="@dimen/base_56" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginLeft="@dimen/base_56"
+        android:layout_marginRight="@dimen/base_56"
+        android:layout_weight="4"
+        android:orientation="vertical">
+
+        <com.kidsdynamic.swing.view.AvenirTextView
+            android:id="@+id/dashboard_request_access"
+            style="@style/button_main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="@string/dashboard_request_request"
+            android:visibility="gone" />
+
+        <com.kidsdynamic.swing.view.AvenirTextView
+            android:id="@+id/dashboard_request_profile"
+            style="@style/button_main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/dashboard_request_profile" />
+    </LinearLayout>
+
+</LinearLayout>
+

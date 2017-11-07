@@ -106,9 +106,11 @@ public class DashboardProgressFragment extends DashboardBaseFragment {
         public void onProgress(ViewCircle view, int begin, int end) {
             if (begin == bound - 1) count += 1;
             if (count == 1 && end == random) {
+                // Syncing
                 if (end % 2 == 0) {
                     tvMessage.setText(R.string.dashboard_progress_syncing);
                 } else {
+                    // We can't find your watch
                     progressCircle.stopProgress();
                     progressCircle.setStrokeBegin(-1);
                     progressCircle.setStrokeEnd(0);
@@ -122,6 +124,7 @@ public class DashboardProgressFragment extends DashboardBaseFragment {
                     tvSecond.setVisibility(View.VISIBLE);
                 }
             } else if (count == 2 && end == random) {
+                // completed
                 progressCircle.stopProgress();
                 progressCircle.setStrokeBegin(0);
                 progressCircle.setStrokeEnd(100);
