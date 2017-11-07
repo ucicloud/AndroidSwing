@@ -353,7 +353,7 @@ public class WatchSelectFragment extends BaseFragment {
             public void onInitComplete(String mac) {
                 finishLoadingDialog();
                 SignupActivity signupActivity = (SignupActivity) getActivity();
-                signupActivity.setFragmentAndAddBackStack(WatchProfileFragment.newInstance(macId));
+                signupActivity.setFragment(WatchProfileFragment.newInstance(macId), true);
             }
 
             @Override
@@ -396,7 +396,7 @@ public class WatchSelectFragment extends BaseFragment {
                 finishLoadingDialog();
                 DeviceManager.saveBindWatchBattery(macId, battery);
                 SignupActivity signupActivity = (SignupActivity) getActivity();
-                signupActivity.setFragmentAndAddBackStack(WatchRegisteredFragment.newInstance());
+                signupActivity.setFragment(WatchRegisteredFragment.newInstance(), true);
             }
         });
     }

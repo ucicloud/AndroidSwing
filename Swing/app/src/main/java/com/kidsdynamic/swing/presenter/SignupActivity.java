@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 
 import com.kidsdynamic.swing.R;
 import com.kidsdynamic.swing.utils.ConfigUtil;
@@ -27,7 +28,7 @@ public class SignupActivity extends BaseFragmentActivity {
 
         // TODO: 2017/11/4  测试界面
         //读取配置，是否已经登陆成功，如果是，则不显示登陆界面，直接进入主界面
-        if(ConfigUtil.isLoginState(this)){
+        if (ConfigUtil.isLoginState(this)) {
             loginSuccess();
             return;
         }
@@ -37,7 +38,7 @@ public class SignupActivity extends BaseFragmentActivity {
     private void loginSuccess() {
         //如果登录成功，则跳转到主界面
         //关闭当前界面，进入主界面
-        startActivity(new Intent(this,MainFrameActivity.class));
+        startActivity(new Intent(this, MainFrameActivity.class));
 
         this.finish();
     }
@@ -67,25 +68,23 @@ public class SignupActivity extends BaseFragmentActivity {
 
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.frameContainer, fragment, className)
+                .replace(R.id.signup_activity_container, fragment, className)
                 .addToBackStack(null)
                 .commit();
     }
 
     public void setFragment(Fragment fragment) {
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.frameContainer, fragment)
-//                .addToBackStack(null)
-                .commit();
+        setFragment(fragment, false);
     }
 
-    public void setFragmentAndAddBackStack(Fragment fragment) {
-        getSupportFragmentManager()
+    public void setFragment(Fragment fragment, boolean isAddBackStack) {
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.frameContainer, fragment)
-                .addToBackStack(null)
-                .commit();
+                .replace(R.id.signup_activity_container, fragment);
+        if (isAddBackStack) {
+            fragmentTransaction.addToBackStack(null);
+        }
+        fragmentTransaction.commit();
     }
 
 }

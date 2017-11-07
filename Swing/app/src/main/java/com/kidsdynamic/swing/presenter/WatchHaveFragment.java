@@ -41,7 +41,7 @@ public class WatchHaveFragment extends BaseFragment {
         SignupActivity signupActivity = (SignupActivity) getActivity();
         switch (v.getId()) {
             case R.id.watch_have_yes:
-                signupActivity.setFragmentAndAddBackStack(WatchSearchFragment.newInstance());
+                signupActivity.setFragment(WatchSearchFragment.newInstance(), true);
                 break;
             case R.id.watch_have_no:
                 signupActivity.setFragment(WatchPurchaseFragment.newInstance());
