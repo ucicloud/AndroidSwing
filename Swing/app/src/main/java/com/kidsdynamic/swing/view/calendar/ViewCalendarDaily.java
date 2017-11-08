@@ -97,7 +97,7 @@ public class ViewCalendarDaily extends ViewCalendar {
         delEvent(event.mId);
     }
 
-    public void delEvent(int id) {
+    public void delEvent(long id) {
         while (true) {
             int idx, count = getChildCount();
             for (idx = 0; idx < count; idx++) {

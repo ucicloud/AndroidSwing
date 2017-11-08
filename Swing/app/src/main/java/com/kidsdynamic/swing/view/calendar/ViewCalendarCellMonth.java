@@ -56,7 +56,7 @@ public class ViewCalendarCellMonth extends ViewCalendarCell {
         delEvent(event.mId);
     }
 
-    public void delEvent(int id) {
+    public void delEvent(long id) {
         while (true) {
             int idx, count = mEventList.size();
             for (idx = 0; idx < count; idx++) {

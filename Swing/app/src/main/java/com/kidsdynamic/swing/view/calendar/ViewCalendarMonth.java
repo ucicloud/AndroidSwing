@@ -137,7 +137,7 @@ public class ViewCalendarMonth extends ViewCalendar implements View.OnClickListe
         delEvent(event.mId);
     }
 
-    public void delEvent(int id) {
+    public void delEvent(long id) {
         for (ViewCalendarCellMonth cell : mViewCellList)
             cell.delEvent(id);
     }

@@ -15,6 +15,7 @@ import com.kidsdynamic.swing.view.calendar.ViewCalendarCellMonth;
 import com.kidsdynamic.swing.view.calendar.ViewCalendarMonth;
 import com.kidsdynamic.swing.view.calendar.ViewCalendarSelector;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -105,7 +106,9 @@ public class CalendarMonthFragment extends CalendarBaseFragment {
     private void loadEventList(long start, long end) {
         mViewCalendar.delAllEvent();
 
-        List<WatchEvent> list = CalendarManager.getEventList(start, end);
+        // TODO: 2017/11/8
+//        List<WatchEvent> list = CalendarManager.getEventList(start, end);
+        List<WatchEvent> list = new ArrayList<>();
 
         for (WatchEvent event : list) {
 /*

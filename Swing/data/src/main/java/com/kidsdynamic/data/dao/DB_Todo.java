@@ -12,8 +12,8 @@ public class DB_Todo {
     private long todoId;
     private String text;
     private String status;
-    private String dateCreated;
-    private String lastUpdated;
+    private Long dateCreated;
+    private Long lastUpdated;
     private Long eventId;
 
     /** Used to resolve relations */
@@ -33,7 +33,7 @@ public class DB_Todo {
         this.todoId = todoId;
     }
 
-    public DB_Todo(long todoId, String text, String status, String dateCreated, String lastUpdated, Long eventId) {
+    public DB_Todo(long todoId, String text, String status, Long dateCreated, Long lastUpdated, Long eventId) {
         this.todoId = todoId;
         this.text = text;
         this.status = status;
@@ -72,19 +72,19 @@ public class DB_Todo {
         this.status = status;
     }
 
-    public String getDateCreated() {
+    public Long getDateCreated() {
         return dateCreated;
     }
 
-    public void setDateCreated(String dateCreated) {
+    public void setDateCreated(Long dateCreated) {
         this.dateCreated = dateCreated;
     }
 
-    public String getLastUpdated() {
+    public Long getLastUpdated() {
         return lastUpdated;
     }
 
-    public void setLastUpdated(String lastUpdated) {
+    public void setLastUpdated(Long lastUpdated) {
         this.lastUpdated = lastUpdated;
     }
 

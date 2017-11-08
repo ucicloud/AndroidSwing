@@ -17,6 +17,7 @@ import com.kidsdynamic.data.net.event.model.TodoEntity;
 import com.kidsdynamic.swing.R;
 import com.kidsdynamic.swing.adapter.TodoListAdapter;
 import com.kidsdynamic.swing.domain.CalendarManager;
+import com.kidsdynamic.swing.domain.EventManager;
 import com.kidsdynamic.swing.model.WatchEvent;
 import com.kidsdynamic.swing.view.ViewCircle;
 import com.kidsdynamic.swing.view.calendar.ViewCalendar;
@@ -244,7 +245,10 @@ public class CalendarMainFragment extends CalendarBaseFragment {
 
         long start = ViewCalendar.stripTime(mDefaultDate);
         long end = start + 86400000 - 1;
-        mEventList = CalendarManager.getEventList(start, end);
+
+        //todo 从cache中读取当前userid
+        long userId = 123;
+        mEventList = EventManager.getEventList(userId, start, end);
 
         updateAlert();
 

@@ -15,8 +15,8 @@ public class DB_User {
     private String email;
     private String firstName;
     private String lastName;
-    private String lastUpdate;
-    private String dataCreate;
+    private Long lastUpdate;
+    private Long dataCreate;
     private String zipCode;
     private String phoneNum;
     private String profile;
@@ -39,7 +39,7 @@ public class DB_User {
         this.userId = userId;
     }
 
-    public DB_User(long userId, String email, String firstName, String lastName, String lastUpdate, String dataCreate, String zipCode, String phoneNum, String profile, Integer focusID, Integer focusPID, String registrationId) {
+    public DB_User(long userId, String email, String firstName, String lastName, Long lastUpdate, Long dataCreate, String zipCode, String phoneNum, String profile, Integer focusID, Integer focusPID, String registrationId) {
         this.userId = userId;
         this.email = email;
         this.firstName = firstName;
@@ -94,19 +94,19 @@ public class DB_User {
         this.lastName = lastName;
     }
 
-    public String getLastUpdate() {
+    public Long getLastUpdate() {
         return lastUpdate;
     }
 
-    public void setLastUpdate(String lastUpdate) {
+    public void setLastUpdate(Long lastUpdate) {
         this.lastUpdate = lastUpdate;
     }
 
-    public String getDataCreate() {
+    public Long getDataCreate() {
         return dataCreate;
     }
 
-    public void setDataCreate(String dataCreate) {
+    public void setDataCreate(Long dataCreate) {
         this.dataCreate = dataCreate;
     }
 

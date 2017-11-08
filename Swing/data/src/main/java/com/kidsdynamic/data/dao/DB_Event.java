@@ -11,15 +11,19 @@ import de.greenrobot.dao.DaoException;
 public class DB_Event {
 
     private long eventId;
+    private Long userId;
     private String kidIds;
     private String name;
-    private String startDate;
-    private String endDate;
+    private Long startDate;
+    private Long endDate;
     private String color;
     private String description;
     private Integer alert;
     private String repeat;
     private Integer timezoneOffset;
+    private Long dateCreated;
+    private Long lastUpdate;
+    private String status;
 
     /** Used to resolve relations */
     private transient DaoSession daoSession;
@@ -36,8 +40,9 @@ public class DB_Event {
         this.eventId = eventId;
     }
 
-    public DB_Event(long eventId, String kidIds, String name, String startDate, String endDate, String color, String description, Integer alert, String repeat, Integer timezoneOffset) {
+    public DB_Event(long eventId, Long userId, String kidIds, String name, Long startDate, Long endDate, String color, String description, Integer alert, String repeat, Integer timezoneOffset, Long dateCreated, Long lastUpdate, String status) {
         this.eventId = eventId;
+        this.userId = userId;
         this.kidIds = kidIds;
         this.name = name;
         this.startDate = startDate;
@@ -47,6 +52,9 @@ public class DB_Event {
         this.alert = alert;
         this.repeat = repeat;
         this.timezoneOffset = timezoneOffset;
+        this.dateCreated = dateCreated;
+        this.lastUpdate = lastUpdate;
+        this.status = status;
     }
 
     /** called by internal mechanisms, do not call yourself. */
@@ -61,6 +69,14 @@ public class DB_Event {
 
     public void setEventId(long eventId) {
         this.eventId = eventId;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public String getKidIds() {
@@ -79,19 +95,19 @@ public class DB_Event {
         this.name = name;
     }
 
-    public String getStartDate() {
+    public Long getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(String startDate) {
+    public void setStartDate(Long startDate) {
         this.startDate = startDate;
     }
 
-    public String getEndDate() {
+    public Long getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(String endDate) {
+    public void setEndDate(Long endDate) {
         this.endDate = endDate;
     }
 
@@ -133,6 +149,30 @@ public class DB_Event {
 
     public void setTimezoneOffset(Integer timezoneOffset) {
         this.timezoneOffset = timezoneOffset;
+    }
+
+    public Long getDateCreated() {
+        return dateCreated;
+    }
+
+    public void setDateCreated(Long dateCreated) {
+        this.dateCreated = dateCreated;
+    }
+
+    public Long getLastUpdate() {
+        return lastUpdate;
+    }
+
+    public void setLastUpdate(Long lastUpdate) {
+        this.lastUpdate = lastUpdate;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     /** To-many relationship, resolved on first access (and after reset). Changes to to-many relations are not persisted, make changes to the target entity. */

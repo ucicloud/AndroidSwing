@@ -31,8 +31,8 @@ public class TodoDao extends AbstractDao<DB_Todo, Long> {
         public final static Property TodoId = new Property(0, long.class, "todoId", true, "todo_id");
         public final static Property Text = new Property(1, String.class, "text", false, "text");
         public final static Property Status = new Property(2, String.class, "status", false, "status");
-        public final static Property DateCreated = new Property(3, String.class, "dateCreated", false, "date_created");
-        public final static Property LastUpdated = new Property(4, String.class, "lastUpdated", false, "last_updated");
+        public final static Property DateCreated = new Property(3, Long.class, "dateCreated", false, "date_created");
+        public final static Property LastUpdated = new Property(4, Long.class, "lastUpdated", false, "last_updated");
         public final static Property EventId = new Property(5, Long.class, "eventId", false, "event_id");
     };
 
@@ -56,8 +56,8 @@ public class TodoDao extends AbstractDao<DB_Todo, Long> {
                 "\"todo_id\" INTEGER PRIMARY KEY NOT NULL ," + // 0: todoId
                 "\"text\" TEXT," + // 1: text
                 "\"status\" TEXT," + // 2: status
-                "\"date_created\" TEXT," + // 3: dateCreated
-                "\"last_updated\" TEXT," + // 4: lastUpdated
+                "\"date_created\" INTEGER," + // 3: dateCreated
+                "\"last_updated\" INTEGER," + // 4: lastUpdated
                 "\"event_id\" INTEGER);"); // 5: eventId
     }
 
@@ -83,14 +83,14 @@ public class TodoDao extends AbstractDao<DB_Todo, Long> {
             stmt.bindString(3, status);
         }
  
-        String dateCreated = entity.getDateCreated();
+        Long dateCreated = entity.getDateCreated();
         if (dateCreated != null) {
-            stmt.bindString(4, dateCreated);
+            stmt.bindLong(4, dateCreated);
         }
  
-        String lastUpdated = entity.getLastUpdated();
+        Long lastUpdated = entity.getLastUpdated();
         if (lastUpdated != null) {
-            stmt.bindString(5, lastUpdated);
+            stmt.bindLong(5, lastUpdated);
         }
  
         Long eventId = entity.getEventId();
@@ -118,8 +118,8 @@ public class TodoDao extends AbstractDao<DB_Todo, Long> {
             cursor.getLong(offset + 0), // todoId
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // text
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // status
-            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // dateCreated
-            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // lastUpdated
+            cursor.isNull(offset + 3) ? null : cursor.getLong(offset + 3), // dateCreated
+            cursor.isNull(offset + 4) ? null : cursor.getLong(offset + 4), // lastUpdated
             cursor.isNull(offset + 5) ? null : cursor.getLong(offset + 5) // eventId
         );
         return entity;
@@ -131,8 +131,8 @@ public class TodoDao extends AbstractDao<DB_Todo, Long> {
         entity.setTodoId(cursor.getLong(offset + 0));
         entity.setText(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
         entity.setStatus(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
-        entity.setDateCreated(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
-        entity.setLastUpdated(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
+        entity.setDateCreated(cursor.isNull(offset + 3) ? null : cursor.getLong(offset + 3));
+        entity.setLastUpdated(cursor.isNull(offset + 4) ? null : cursor.getLong(offset + 4));
         entity.setEventId(cursor.isNull(offset + 5) ? null : cursor.getLong(offset + 5));
      }
     

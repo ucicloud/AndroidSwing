@@ -20,6 +20,14 @@ public class EventDataStore {
         this.dbUtil = dbUtil;
     }
 
+    public DbUtil getDbUtil() {
+        return dbUtil;
+    }
+
+    public void setDbUtil(DbUtil dbUtil) {
+        this.dbUtil = dbUtil;
+    }
+
     public void dealAll(){
         EventDao eventDao = dbUtil.getDaoSession().getEventDao();
         eventDao.deleteAll();

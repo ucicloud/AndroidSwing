@@ -17,15 +17,19 @@ public class EventMaker implements Maker {
         event.setClassNameDao("EventDao");
 //        entity.addIdProperty().primaryKey().autoincrement().unique();
         event.addLongProperty("eventId").columnName("event_id").notNull().primaryKey();
+        event.addLongProperty("userId").columnName("user_id");
         event.addStringProperty("kidIds").columnName("kid_ids");
         event.addStringProperty("name").columnName("event_name");
-        event.addStringProperty("startDate").columnName("start_date");
-        event.addStringProperty("endDate").columnName("end_date");
+        event.addLongProperty("startDate").columnName("start_date");
+        event.addLongProperty("endDate").columnName("end_date");
         event.addStringProperty("color").columnName("color");
         event.addStringProperty("description").columnName("description");
         event.addIntProperty("alert").columnName("alert");
         event.addStringProperty("repeat").columnName("repeat");//DAILY, MONTHLY
         event.addIntProperty("timezoneOffset").columnName("timezoneOffset");
+        event.addLongProperty("dateCreated").columnName("date_created");
+        event.addLongProperty("lastUpdate").columnName("last_update");
+        event.addStringProperty("status").columnName("status");
 
 
         //event to-do list table
@@ -35,8 +39,8 @@ public class EventMaker implements Maker {
         todo.addLongProperty("todoId").columnName("todo_id").notNull().primaryKey();
         todo.addStringProperty("text").columnName("text");
         todo.addStringProperty("status").columnName("status");
-        todo.addStringProperty("dateCreated").columnName("date_created");
-        todo.addStringProperty("lastUpdated").columnName("last_updated");
+        todo.addLongProperty("dateCreated").columnName("date_created");
+        todo.addLongProperty("lastUpdated").columnName("last_updated");
 
 
         //建立event表与todo表一对多关系

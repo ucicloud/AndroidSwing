@@ -20,9 +20,9 @@ public class WatchEvent implements Serializable {
     public final static String REPEAT_WEEKLY = "WEEKLY";
     public final static String REPEAT_MONTHLY = "MONTHLY";
 
-    public int mId;
-    public int mUserId;
-    public List<Integer> mKids;
+    public long mId;
+    public long mUserId;
+    public List<Long> mKids;
     public String mName;
     public long mStartDate;
     public long mEndDate;
@@ -52,7 +52,7 @@ public class WatchEvent implements Serializable {
 
         int color = ColorList[4];
 
-        init(0, 0, new ArrayList<Integer>(), "", start, end, colorToString(color), "", "", ALARM_INVALID, REPEAT_NEVER, 0, now, now);
+        init(0, 0, new ArrayList<Long>(), "", start, end, colorToString(color), "", "", ALARM_INVALID, REPEAT_NEVER, 0, now, now);
     }
 
     public WatchEvent(long date) {
@@ -73,7 +73,7 @@ public class WatchEvent implements Serializable {
 
         int color = ColorList[4];
 
-        init(0, 0, new ArrayList<Integer>(), "", start, end, colorToString(color), "", "", ALARM_INVALID, REPEAT_NEVER, 0, now, now);
+        init(0, 0, new ArrayList<Long>(), "", start, end, colorToString(color), "", "", ALARM_INVALID, REPEAT_NEVER, 0, now, now);
     }
 
     public WatchEvent(long startDate, long endDate) {
@@ -81,10 +81,10 @@ public class WatchEvent implements Serializable {
 
         int color = ColorList[4];
 
-        init(0, 0, new ArrayList<Integer>(), "", startDate, endDate, colorToString(color), "", "", ALARM_INVALID, REPEAT_NEVER, 0, now, now);
+        init(0, 0, new ArrayList<Long>(), "", startDate, endDate, colorToString(color), "", "", ALARM_INVALID, REPEAT_NEVER, 0, now, now);
     }
 
-    public WatchEvent(int id, int userId, String name,
+    public WatchEvent(long id, long userId, String name,
                       int startYear, int startMonth, int startDay, int startHour, int startMinute,
                       int endYear, int endMonth, int endDay, int endHour, int endMinute,
                       int color, String description, int alert, String repeat, int... kids) {
@@ -109,15 +109,15 @@ public class WatchEvent implements Serializable {
         cale.set(Calendar.MILLISECOND, 0);
         long end = cale.getTimeInMillis();
 
-        List<Integer> list = new ArrayList<>();
-        for (int kid : kids)
+        List<Long> list = new ArrayList<>();
+        for (long kid : kids)
             list.add(kid);
 
         init(id, userId, list, name, start, end, colorToString(color), "",
                 description, alert, repeat, 0, now, now);
     }
 
-    public WatchEvent(int id, int userId, List<Integer> kids, String name, long startDate,
+    public WatchEvent(int id, int userId, List<Long> kids, String name, long startDate,
                       long endDate, String color, String status, String description,
                       int alert, String repeat, int timezoneOffset, long dateCreated, long lastUpdated) {
         init(id, userId, kids, name, startDate, endDate, color, status, description,
@@ -133,7 +133,7 @@ public class WatchEvent implements Serializable {
             mTodoList.add(new WatchTodo(todo));
     }
 
-    private void init(int id, int userId, List<Integer> kids, String name, long startDate,
+    private void init(long id, long userId, List<Long> kids, String name, long startDate,
                       long endDate, String color, String status, String description,
                       int alert, String repeat, int timezoneOffset, long dateCreated, long lastUpdated) {
         mId = id;
@@ -202,8 +202,8 @@ public class WatchEvent implements Serializable {
         return false;
     }
 
-    public boolean containsKid(int id) {
-        for (Integer kid : mKids)
+    public boolean containsKid(long id) {
+        for (Long kid : mKids)
             if (kid == id)
                 return true;
         return false;
@@ -220,7 +220,7 @@ public class WatchEvent implements Serializable {
         }
     }
 
-    public void insertKid(int id, int position) {
+    public void insertKid(long id, int position) {
         if (!containsKid(id))
             mKids.add(position, id);
     }

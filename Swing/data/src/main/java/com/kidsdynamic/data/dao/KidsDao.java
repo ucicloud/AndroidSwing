@@ -30,7 +30,7 @@ public class KidsDao extends AbstractDao<DB_Kids, Long> {
     public static class Properties {
         public final static Property KidsId = new Property(0, long.class, "kidsId", true, "kids_id");
         public final static Property Name = new Property(1, String.class, "name", false, "name");
-        public final static Property DateCreated = new Property(2, String.class, "dateCreated", false, "dateCreated");
+        public final static Property DateCreated = new Property(2, Long.class, "dateCreated", false, "dateCreated");
         public final static Property MacId = new Property(3, String.class, "macId", false, "macId");
         public final static Property FirmwareVersion = new Property(4, String.class, "firmwareVersion", false, "firmwareVersion");
         public final static Property Profile = new Property(5, String.class, "profile", false, "profile");
@@ -57,7 +57,7 @@ public class KidsDao extends AbstractDao<DB_Kids, Long> {
         db.execSQL("CREATE TABLE " + constraint + "\"t_kids\" (" + //
                 "\"kids_id\" INTEGER PRIMARY KEY NOT NULL ," + // 0: kidsId
                 "\"name\" TEXT," + // 1: name
-                "\"dateCreated\" TEXT," + // 2: dateCreated
+                "\"dateCreated\" INTEGER," + // 2: dateCreated
                 "\"macId\" TEXT," + // 3: macId
                 "\"firmwareVersion\" TEXT," + // 4: firmwareVersion
                 "\"profile\" TEXT," + // 5: profile
@@ -82,9 +82,9 @@ public class KidsDao extends AbstractDao<DB_Kids, Long> {
             stmt.bindString(2, name);
         }
  
-        String dateCreated = entity.getDateCreated();
+        Long dateCreated = entity.getDateCreated();
         if (dateCreated != null) {
-            stmt.bindString(3, dateCreated);
+            stmt.bindLong(3, dateCreated);
         }
  
         String macId = entity.getMacId();
@@ -131,7 +131,7 @@ public class KidsDao extends AbstractDao<DB_Kids, Long> {
         DB_Kids entity = new DB_Kids( //
             cursor.getLong(offset + 0), // kidsId
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // name
-            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // dateCreated
+            cursor.isNull(offset + 2) ? null : cursor.getLong(offset + 2), // dateCreated
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // macId
             cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // firmwareVersion
             cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // profile
@@ -146,7 +146,7 @@ public class KidsDao extends AbstractDao<DB_Kids, Long> {
     public void readEntity(Cursor cursor, DB_Kids entity, int offset) {
         entity.setKidsId(cursor.getLong(offset + 0));
         entity.setName(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
-        entity.setDateCreated(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
+        entity.setDateCreated(cursor.isNull(offset + 2) ? null : cursor.getLong(offset + 2));
         entity.setMacId(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
         entity.setFirmwareVersion(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
         entity.setProfile(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));

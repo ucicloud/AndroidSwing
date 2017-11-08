@@ -21,8 +21,8 @@ public class UserMaker implements Maker {
         entity.addStringProperty("email").columnName("email").notNull();
         entity.addStringProperty("firstName").columnName("first_name");
         entity.addStringProperty("lastName").columnName("last_name");
-        entity.addStringProperty("lastUpdate").columnName("last_update");
-        entity.addStringProperty("dataCreate").columnName("data_create");
+        entity.addLongProperty("lastUpdate").columnName("last_update");
+        entity.addLongProperty("dataCreate").columnName("data_create");
         entity.addStringProperty("zipCode").columnName("zip_code");
         entity.addStringProperty("phoneNum").columnName("phone_number");
         entity.addStringProperty("profile").columnName("profile");
@@ -36,7 +36,7 @@ public class UserMaker implements Maker {
         kids.setClassNameDao("KidsDao");
         kids.addLongProperty("kidsId").columnName("kids_id").notNull().primaryKey();
         kids.addStringProperty("name").columnName("name");
-        kids.addStringProperty("dateCreated").columnName("dateCreated");
+        kids.addLongProperty("dateCreated").columnName("dateCreated");
         kids.addStringProperty("macId").columnName("macId");
         kids.addStringProperty("firmwareVersion").columnName("firmwareVersion");
         kids.addStringProperty("profile").columnName("profile");

@@ -134,7 +134,7 @@ public class ViewCalendarWeek extends ViewCalendar implements View.OnClickListen
         delEvent(event.mId);
     }
 
-    public void delEvent(int id) {
+    public void delEvent(long id) {
         for (ViewCalendarCellWeek cell : mViewCellList)
             cell.delEvent(id);
     }

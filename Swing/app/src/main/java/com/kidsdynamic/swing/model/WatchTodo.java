@@ -11,9 +11,9 @@ public class WatchTodo implements Serializable {
     public final static String STATUS_DONE = "DONE";
     public final static String STATUS_PENDING = "PENDING";
 
-    public int mId;
-    public int mUserId;
-    public int mEventId;
+    public long mId;
+    public long mUserId;
+    public long mEventId;
     public String mText;
     public String mStatus;
     public long mDateCreated;
@@ -40,7 +40,7 @@ public class WatchTodo implements Serializable {
         init(src.mId, src.mUserId, src.mEventId, src.mText, src.mStatus, src.mDateCreated, src.mLastUpdated);
     }
 
-    private void init(int id, int userId, int eventId, String text, String status,
+    private void init(long id, long userId, long eventId, String text, String status,
                       long dateCreated, long lastUpdated) {
         mId = id;
         mUserId = userId;

@@ -11,7 +11,7 @@ public class DB_Kids {
 
     private long kidsId;
     private String name;
-    private String dateCreated;
+    private Long dateCreated;
     private String macId;
     private String firmwareVersion;
     private String profile;
@@ -35,7 +35,7 @@ public class DB_Kids {
         this.kidsId = kidsId;
     }
 
-    public DB_Kids(long kidsId, String name, String dateCreated, String macId, String firmwareVersion, String profile, String state, Long parentId) {
+    public DB_Kids(long kidsId, String name, Long dateCreated, String macId, String firmwareVersion, String profile, String state, Long parentId) {
         this.kidsId = kidsId;
         this.name = name;
         this.dateCreated = dateCreated;
@@ -68,11 +68,11 @@ public class DB_Kids {
         this.name = name;
     }
 
-    public String getDateCreated() {
+    public Long getDateCreated() {
         return dateCreated;
     }
 
-    public void setDateCreated(String dateCreated) {
+    public void setDateCreated(Long dateCreated) {
         this.dateCreated = dateCreated;
     }
 

@@ -27,8 +27,8 @@ public class UserDao extends AbstractDao<DB_User, Long> {
         public final static Property Email = new Property(1, String.class, "email", false, "email");
         public final static Property FirstName = new Property(2, String.class, "firstName", false, "first_name");
         public final static Property LastName = new Property(3, String.class, "lastName", false, "last_name");
-        public final static Property LastUpdate = new Property(4, String.class, "lastUpdate", false, "last_update");
-        public final static Property DataCreate = new Property(5, String.class, "dataCreate", false, "data_create");
+        public final static Property LastUpdate = new Property(4, Long.class, "lastUpdate", false, "last_update");
+        public final static Property DataCreate = new Property(5, Long.class, "dataCreate", false, "data_create");
         public final static Property ZipCode = new Property(6, String.class, "zipCode", false, "zip_code");
         public final static Property PhoneNum = new Property(7, String.class, "phoneNum", false, "phone_number");
         public final static Property Profile = new Property(8, String.class, "profile", false, "profile");
@@ -57,8 +57,8 @@ public class UserDao extends AbstractDao<DB_User, Long> {
                 "\"email\" TEXT NOT NULL ," + // 1: email
                 "\"first_name\" TEXT," + // 2: firstName
                 "\"last_name\" TEXT," + // 3: lastName
-                "\"last_update\" TEXT," + // 4: lastUpdate
-                "\"data_create\" TEXT," + // 5: dataCreate
+                "\"last_update\" INTEGER," + // 4: lastUpdate
+                "\"data_create\" INTEGER," + // 5: dataCreate
                 "\"zip_code\" TEXT," + // 6: zipCode
                 "\"phone_number\" TEXT," + // 7: phoneNum
                 "\"profile\" TEXT," + // 8: profile
@@ -90,14 +90,14 @@ public class UserDao extends AbstractDao<DB_User, Long> {
             stmt.bindString(4, lastName);
         }
  
-        String lastUpdate = entity.getLastUpdate();
+        Long lastUpdate = entity.getLastUpdate();
         if (lastUpdate != null) {
-            stmt.bindString(5, lastUpdate);
+            stmt.bindLong(5, lastUpdate);
         }
  
-        String dataCreate = entity.getDataCreate();
+        Long dataCreate = entity.getDataCreate();
         if (dataCreate != null) {
-            stmt.bindString(6, dataCreate);
+            stmt.bindLong(6, dataCreate);
         }
  
         String zipCode = entity.getZipCode();
@@ -151,8 +151,8 @@ public class UserDao extends AbstractDao<DB_User, Long> {
             cursor.getString(offset + 1), // email
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // firstName
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // lastName
-            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // lastUpdate
-            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // dataCreate
+            cursor.isNull(offset + 4) ? null : cursor.getLong(offset + 4), // lastUpdate
+            cursor.isNull(offset + 5) ? null : cursor.getLong(offset + 5), // dataCreate
             cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // zipCode
             cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // phoneNum
             cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8), // profile
@@ -170,8 +170,8 @@ public class UserDao extends AbstractDao<DB_User, Long> {
         entity.setEmail(cursor.getString(offset + 1));
         entity.setFirstName(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setLastName(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
-        entity.setLastUpdate(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
-        entity.setDataCreate(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
+        entity.setLastUpdate(cursor.isNull(offset + 4) ? null : cursor.getLong(offset + 4));
+        entity.setDataCreate(cursor.isNull(offset + 5) ? null : cursor.getLong(offset + 5));
         entity.setZipCode(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
         entity.setPhoneNum(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
         entity.setProfile(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
