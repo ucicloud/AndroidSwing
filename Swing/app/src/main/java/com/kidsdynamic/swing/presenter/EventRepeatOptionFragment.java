@@ -70,14 +70,25 @@ public class EventRepeatOptionFragment extends CalendarBaseFragment {
         listView_event_option.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Bundle bundle = new Bundle();
-                bundle.putString(CalendarManager.ARG_DATA_TYPE,CalendarManager.VALUE_DATA_TYPE_REPEAT);
-                bundle.putString(CalendarManager.VALUE_DATA_TYPE_REPEAT,
-                        eventRepeatListAdapter.getItem(i));
-
-                mainFrameActivity.mCalendarBundleStack.push(bundle);
+                handleOnItemClick(i);
             }
         });
+    }
+
+    private void handleOnItemClick(int i) {
+        Bundle bundle = new Bundle();
+        bundle.putString(CalendarManager.KEY_DATA_TYPE,CalendarManager.VALUE_DATA_TYPE_REPEAT);
+        bundle.putString(CalendarManager.KEY_DATA_TYPE_REPEAT_VALUE,
+                eventRepeatListAdapter.getItem(i));
+
+        String optionShowStr = getContext().getString(
+                eventOptionMap.get(eventRepeatListAdapter.getItem(i)));
+        bundle.putString(CalendarManager.KEY_DATA_TYPE_REPEAT_STR,
+                optionShowStr);
+
+        mainFrameActivity.mCalendarBundleStack.push(bundle);
+
+        getActivity().getSupportFragmentManager().popBackStack();
     }
 
     private List<String> getEventOptions(){

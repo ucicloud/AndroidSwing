@@ -3,6 +3,8 @@ package com.kidsdynamic.swing.presenter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -58,12 +60,16 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
     @BindView(R.id.calendar_event_repeat)
     protected TextView mViewRepeat;
 
-
+    //to-do
+    @BindView(R.id.calendar_event_todo_line)
+    protected View mViewTodoLine;
+    @BindView(R.id.calendar_event_todo_add)
+    protected View mViewTodoAdd;
+    @BindView(R.id.calendar_event_todo_option)
+    protected LinearLayout mViewTodoOption;
     @BindView(R.id.calendar_event_todo_container)
     protected LinearLayout mViewTodoContainer;
 
-    @BindView(R.id.calendar_event_todo_option)
-    protected LinearLayout mViewTodoOption;
 
     @BindView(R.id.calendar_event_advance)
     protected Button mViewAdvance;
@@ -74,9 +80,8 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
     @BindView(R.id.calendar_event_description_line)
     protected View mViewDescriptionLine;
 
-    @BindView(R.id.calendar_event_todo_line)
-    protected View mViewTodoLine;
 
+    //description
     @BindView(R.id.calendar_event_description)
     protected EditText mViewDescription;
 
@@ -132,10 +137,12 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
             return;
         }
 
-        String dataType = fragmentBundle.getString(CalendarManager.ARG_DATA_TYPE);
-        if(CalendarManager.ARG_DATA_TYPE_REPEAT.equals(dataType)){
-            mEvent.mRepeat = fragmentBundle.getString(CalendarManager.VALUE_DATA_TYPE_REPEAT);
-        }else if(CalendarManager.ARG_DATA_TYPE_EVENT.equals(dataType)){
+        String dataType = fragmentBundle.getString(CalendarManager.KEY_DATA_TYPE);
+        if(CalendarManager.VALUE_DATA_TYPE_REPEAT.equals(dataType)){
+            //event repeat
+            mEvent.mRepeat = fragmentBundle.getString(CalendarManager.KEY_DATA_TYPE_REPEAT_VALUE);
+            mViewRepeat.setText(fragmentBundle.getString(CalendarManager.KEY_DATA_TYPE_REPEAT_STR));
+        }else if(CalendarManager.VALUE_DATA_TYPE_EVENT.equals(dataType)){
             //选择的event 事件
 
         }
@@ -147,12 +154,30 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
         mViewAdvance.setTypeface(SwingFontsCache.getBoldType(getContext()));
         mViewSave.setTypeface(SwingFontsCache.getBoldType(getContext()));
         mViewDescription.setTypeface(SwingFontsCache.getNormalType(getContext()));
+        mViewDescription.addTextChangedListener(mDescriptionWatcher);
 
         //init event color list
         for (int color : WatchEvent.ColorList){
             addColor(color);
         }
     }
+
+    private TextWatcher mDescriptionWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            mEvent.mDescription = s.toString();
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+
+        }
+    };
 
     private void initTitleBar() {
         tv_title.setTextColor(getResources().getColor(R.color.colorAccent));
@@ -314,6 +339,13 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
             params.height = 0;
 
         mViewColorOption.setLayoutParams(params);
+    }
+
+    @OnClick(R.id.calendar_event_todo_add)
+    protected void onToDoListAddClick(){
+        WatchTodo todo = new WatchTodo();
+        mEvent.mTodoList.add(todo);
+        addTodoView(todo);
     }
 
     // Advance模式.

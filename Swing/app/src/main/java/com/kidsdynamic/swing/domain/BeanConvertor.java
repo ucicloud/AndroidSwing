@@ -17,7 +17,6 @@ import com.kidsdynamic.swing.model.WatchTodo;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -29,6 +28,7 @@ import java.util.TimeZone;
  */
 
 public class BeanConvertor {
+    public static final String db_kids_split = "#";
 
     public static DB_User getDBUser(@NonNull UserProfileRep userProfileRep){
         DB_User db_user = new DB_User();
@@ -107,7 +107,7 @@ public class BeanConvertor {
         for (int i = 0; i < kidInfoList.size(); i++) {
             stringBuilder.append(kidInfoList.get(i).getId());
             if(i != (kidInfoList.size() -1)){
-                stringBuilder.append("#");
+                stringBuilder.append(db_kids_split);
             }
         }
 
@@ -224,7 +224,7 @@ public class BeanConvertor {
         watchEvent.mName = db_event.getName();
         watchEvent.mStartDate = db_event.getStartDate();
         watchEvent.mEndDate = db_event.getEndDate();
-        watchEvent.mKids = new ArrayList<Long>();//todo
+        watchEvent.mKids = getEventKidsList(db_event);
         watchEvent.mColor = db_event.getColor();
         watchEvent.mStatus = db_event.getStatus();
         watchEvent.mDescription = db_event.getDescription();
@@ -238,6 +238,18 @@ public class BeanConvertor {
 
         return watchEvent;
 
+    }
+
+    private static List<Long> getEventKidsList(DB_Event db_event){
+        List<Long> kidsList = new ArrayList<>();
+        String kidIds = db_event.getKidIds();
+        String[] kidsArray = kidIds.split(db_kids_split);
+        for (String kids :
+                kidsArray) {
+            kidsList.add(Long.valueOf(kids));
+        }
+
+        return kidsList;
     }
 
     public static List<WatchTodo> getWatchTodos(long userId, List<DB_Todo> dbTodos){

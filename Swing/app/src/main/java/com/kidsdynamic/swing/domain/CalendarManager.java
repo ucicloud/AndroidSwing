@@ -2,12 +2,9 @@ package com.kidsdynamic.swing.domain;
 
 import android.util.SparseArray;
 
-import com.kidsdynamic.swing.model.WatchEvent;
-import com.kidsdynamic.swing.model.WatchTodo;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -15,12 +12,14 @@ import java.util.List;
  */
 
 public class CalendarManager {
-    public final static String ARG_DATA_TYPE = "data_type";
-    public final static String ARG_DATA_TYPE_EVENT = "data_type_event";
-    public final static String VALUE_DATA_TYPE_EVENT = "event";
+    public final static String KEY_DATA_TYPE = "data_type";
 
-    public final static String ARG_DATA_TYPE_REPEAT = "data_type_repeat";
-    public final static String VALUE_DATA_TYPE_REPEAT = "repeat";
+    public final static String VALUE_DATA_TYPE_EVENT = "data_type_event";
+    public final static String KEY_DATA_TYPE_EVENT = "event";
+
+    public final static String VALUE_DATA_TYPE_REPEAT = "data_type_repeat";
+    public final static String KEY_DATA_TYPE_REPEAT_VALUE = "repeat";
+    public final static String KEY_DATA_TYPE_REPEAT_STR = "repeat_str";
 
     public static SparseArray<String> MonthLabelMap = new SparseArray<>(12);
     static {
