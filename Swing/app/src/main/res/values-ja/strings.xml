@@ -76,13 +76,14 @@
     <string name="dashboard_emotion_excellent">目標を達成しました</string>
     <string name="dashboard_emotion_almost">もうすぐ目標達成です</string>
     <string name="dashboard_emotion_below">平均以下です</string>
+    <string name="dashboard_emotion_steps">歩数</string>
 
     <!-- FragmentDashboardProgress -->
     <string name="dashboard_progress_searching">貴方の時計を\n検索しています</string>
     <string name="dashboard_progress_found">貴方の時計\n見つけました。</string>
     <string name="dashboard_progress_sync_now">接続を始めます</string>
     <string name="dashboard_progress_syncing">接続ています</string>
-    <string name="dashboard_progress_completed">接続しました</string>
+    <string name="dashboard_progress_completed">完成した</string>
     <string name="dashboard_progress_dashboard">イベント・レコードを開きます</string>
     <string name="dashboard_progress_not_found">あなたの時計が\n見つかりません</string>
     <string name="dashboard_progress_again">もう一度試してみてください</string>

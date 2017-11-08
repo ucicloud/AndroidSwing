@@ -72,17 +72,18 @@
     <string name="dashboard_main_no_device">Часы еще не связаны с устройством</string>
 
     <!-- FragmentDashboardEmotion -->
-    <string name="dashboard_emotion_hello">Как дела у тебя\nсегодня?</string>
+    <string name="dashboard_emotion_hello">Как дела у тебя сегодня?</string>
     <string name="dashboard_emotion_excellent">Замечательно!</string>
     <string name="dashboard_emotion_almost">Почти на среднем уровне</string>
     <string name="dashboard_emotion_below">Ниже среднего</string>
+    <string name="dashboard_emotion_steps">шаги</string>
 
     <!-- FragmentDashboardProgress -->
     <string name="dashboard_progress_searching">Идет\nпоиск\nчасов</string>
     <string name="dashboard_progress_found">Часы найдены </string>
     <string name="dashboard_progress_sync_now">Синхронизировать\nсейчас</string>
     <string name="dashboard_progress_syncing">Идет синхронизация</string>
-    <string name="dashboard_progress_completed">Синхронизация\nзавершена</string>
+    <string name="dashboard_progress_completed">завершена</string>
     <string name="dashboard_progress_dashboard">Вернуться к началу</string>
     <string name="dashboard_progress_not_found">Часы не\nнайдены</string>
     <string name="dashboard_progress_again">Попытайся еще раз</string>
