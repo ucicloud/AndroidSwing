@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/content"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:id="@+id/dashboard_fragment_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_blue_sky"
     android:clipToPadding="false"
-    android:fitsSystemWindows="true"
-    android:background="@color/color_blue_sky">
+    android:fitsSystemWindows="true">
 
-   <!-- <include layout="@layout/base_title_bar"
-        android:id="@+id/title_bar"
-        android:visibility="invisible"/>-->
+    <!-- <include layout="@layout/base_title_bar"
+         android:id="@+id/title_bar"
+         android:visibility="invisible"/>-->
 
     <ImageView
-        android:id="@+id/main_background"
+        android:id="@+id/dashboard_fragment_bottom_banner"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:contentDescription="@null"
         android:scaleType="fitEnd"
         android:src="@drawable/city_california"
-        android:visibility="visible"/>
+        android:visibility="visible" />
 
     <FrameLayout
         android:id="@+id/dashboard_fragment_container"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:fitsSystemWindows="true"/>
-
+        android:fitsSystemWindows="true" />
 
 </RelativeLayout>

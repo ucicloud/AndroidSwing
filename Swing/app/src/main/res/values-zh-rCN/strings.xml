@@ -76,13 +76,14 @@
     <string name="dashboard_emotion_excellent">"棒极了!"</string>
     <string name="dashboard_emotion_almost">"快完成了!"</string>
     <string name="dashboard_emotion_below">"再多加油!"</string>
+    <string name="dashboard_emotion_steps">腳步</string>
 
     <!-- FragmentDashboardProgress -->
     <string name="dashboard_progress_searching">"寻找装置!"</string>
     <string name="dashboard_progress_found">"寻获你的装置!"</string>
     <string name="dashboard_progress_sync_now">"立即同步"</string>
     <string name="dashboard_progress_syncing">"同步中"</string>
-    <string name="dashboard_progress_completed">"同步完成"</string>
+    <string name="dashboard_progress_completed">"完成"</string>
     <string name="dashboard_progress_dashboard">"开启活动记录"</string>
     <string name="dashboard_progress_not_found">"无法找到装置!"</string>
     <string name="dashboard_progress_again">"重试"</string>

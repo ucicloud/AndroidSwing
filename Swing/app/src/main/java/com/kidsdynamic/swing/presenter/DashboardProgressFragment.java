@@ -129,7 +129,7 @@ public class DashboardProgressFragment extends DashboardBaseFragment {
                 progressCircle.setStrokeBegin(0);
                 progressCircle.setStrokeEnd(100);
                 tvMessage.setGravity(Gravity.CENTER);
-                tvMessage.setText(R.string.dashboard_completed);
+                tvMessage.setText(R.string.dashboard_progress_completed);
                 tvMessage.setCompoundDrawablesWithIntrinsicBounds(
                         0, 0, 0, R.drawable.monster_yellow);
                 tvFirst.setVisibility(View.VISIBLE);

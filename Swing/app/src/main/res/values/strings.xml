@@ -80,17 +80,18 @@
     <string name="dashboard_main_no_device">You have not bind device yet.</string>
 
     <!-- FragmentDashboardEmotion -->
-    <string name="dashboard_emotion_hello">How Are You Doing\nToday?</string>
+    <string name="dashboard_emotion_hello">How Are You Doing Today?</string>
     <string name="dashboard_emotion_excellent">Excellent!</string>
     <string name="dashboard_emotion_almost">Almost There!</string>
     <string name="dashboard_emotion_below">Below Average!</string>
+    <string name="dashboard_emotion_steps">steps</string>
 
     <!-- FragmentDashboardProgress -->
     <string name="dashboard_progress_searching">Searching\nfor your\nWatch</string>
     <string name="dashboard_progress_found">Found\nYour\nWatch</string>
     <string name="dashboard_progress_sync_now">Sync Now</string>
     <string name="dashboard_progress_syncing">Syncing</string>
-    <string name="dashboard_progress_completed">Sync\nCompleted</string>
+    <!--<string name="dashboard_progress_completed">Completed</string>-->
     <string name="dashboard_progress_dashboard">Go to Dashboard</string>
     <string name="dashboard_progress_not_found">We can\'t find\nyour Watch!</string>
     <string name="dashboard_progress_again">Try Again</string>
@@ -402,20 +403,16 @@
     <string name="dialog_sync_skip_button">Skip</string>
 
     <!-- Sign-in/Singup new words -->
-    <!--
-    1) fragment_signup_login
-    Enter
-    Reset password
-    2) fragment_watch_have
-    Please have your watch nearby
-    3) fragment_watch_request
-    Request access
-    Request access pending
-    Cancel & go to dashboard
-    4) fragment_watch_profile
-    Kid's first name
-    Kid's last name
-    -->
+
+    <!--<string name="signup_login_enter">Enter</string>-->
+    <!--<string name="signup_login_reset_password">Reset password</string>-->
+    <!--<string name="watch_have_message">Please have your watch nearby</string>-->
+    <!--<string name="watch_request_access">Request access</string>-->
+    <!--<string name="watch_request_access_pending">Request access pending</string>-->
+    <!--<string name="watch_request_cancel_and_dashboard">Cancel &amp; go to Dashboard</string>-->
+    <!--<string name="watch_profile_first_name">Kid\'s first name</string>-->
+    <!--<string name="watch_profile_last_name">Kid\'s last name</string>-->
+    <!--<string name="watch_profile_save">Save</string>-->
 
     <!--new string 20171027-->
     <string name="net_err">Net Error</string>
@@ -436,6 +433,14 @@
     <string name="token_invalid">Token invalid, please login again</string>
     <string name="cloud_api_call_net_error">net error, please check and try again</string>
     <string name="user_register_fail_common">register, please try again</string>
-    <string name="dashboard_completed">Completed</string>
+    <string name="dashboard_progress_completed">Completed</string>
+    <string name="dashboard_emotion_today_summary">Today\'s Summary</string>
+    <string name="dashboard_emotion_indoor_steps">Indoor\nsteps</string>
+    <string name="dashboard_emotion_outdoor_steps">Outdoor\nsteps</string>
+    <string name="dashboard_emotion_uv_explosure">UV\nexplosure</string>
+    <string name="dashboard_emotion_hours">hours</string>
+    <string name="dashboard_emotion_mins">mins</string>
+    <string name="dashboard_emotion_activity">Activity</string>
+    <string name="dashboard_emotion_uv_detection">UV Detection</string>
 
 </resources>

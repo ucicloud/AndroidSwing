@@ -72,17 +72,18 @@
     <string name="dashboard_main_no_device">No has enlazado el reloj todavía</string>
 
     <!-- FragmentDashboardEmotion -->
-    <string name="dashboard_emotion_hello">¿Cómo estás\nhoy?</string>
+    <string name="dashboard_emotion_hello">¿Cómo estás hoy?</string>
     <string name="dashboard_emotion_excellent">¡Excelente!</string>
     <string name="dashboard_emotion_almost">Casi en la media</string>
     <string name="dashboard_emotion_below">Por debajo de la media</string>
+    <string name="dashboard_emotion_steps">pasos</string>
 
     <!-- FragmentDashboardProgress -->
     <string name="dashboard_progress_searching">Buscando\ntu\nreloj</string>
     <string name="dashboard_progress_found">Relojencontrado </string>
     <string name="dashboard_progress_sync_now">Sincronizar\nahora</string>
     <string name="dashboard_progress_syncing">Sincronizando</string>
-    <string name="dashboard_progress_completed">Sincronización\nfinalizada</string>
+    <string name="dashboard_progress_completed">finalizada</string>
     <string name="dashboard_progress_dashboard">Volver al inicio</string>
     <string name="dashboard_progress_not_found">Reloj no\nencontrado</string>
     <string name="dashboard_progress_again">Inténtalo de nuevo</string>
