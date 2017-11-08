@@ -43,6 +43,7 @@ public class MainFrameActivity extends BaseFragmentActivity {
 
         setContentView(R.layout.activity_frame_main);
 
+        initValue();
 
         //初始化4个fragemnt：
         //主界面中底部按钮，关联到fragment的切换加载
@@ -61,6 +62,10 @@ public class MainFrameActivity extends BaseFragmentActivity {
         /*addFragment(fragmentHashMap.get(R.id.main_console_device),R.id.main_console_device);
         currentTabKey = R.id.main_console_device;*/
 
+    }
+
+    private void initValue() {
+        mCalendarBundleStack = new Stack<>();
     }
 
     private void initFragments(){

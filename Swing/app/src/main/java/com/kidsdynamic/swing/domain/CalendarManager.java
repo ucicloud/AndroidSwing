@@ -77,8 +77,11 @@ public class CalendarManager {
 
         List<WatchEvent> list = new ArrayList<>();
             list.add(new WatchEvent(0, 452, "Name",
-                    2017, 9, 28, 8, 30, 2017, 9, 28, 9, 10, WatchEvent.ColorList[0],
-                    "Deacription 1234567890 abcdefghijklmnopqrstuvwxyz", WatchEvent.AlarmList[0].mId, WatchEvent.REPEAT_NEVER));
+                    2017, 9, 28, 8, 30,
+                    2017, 9, 28, 9, 10,
+                    WatchEvent.ColorList[0],
+                    "Deacription 1234567890 abcdefghijklmnopqrstuvwxyz",
+                    WatchEvent.AlarmList[0].mId, WatchEvent.REPEAT_NEVER));
             list.get(list.size() - 1).mKids = Arrays.asList(8);
             list.get(list.size() - 1).mTodoList = Arrays.asList(
                     new WatchTodo(1, 452, 0, "1 Todo todo todo todo", WatchTodo.STATUS_DONE),
