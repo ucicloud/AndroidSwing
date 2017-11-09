@@ -4,12 +4,14 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
+import com.kidsdynamic.commonlib.utils.ObjectUtils;
 import com.kidsdynamic.data.dao.DB_Kids;
 import com.kidsdynamic.data.net.kids.model.KidsWithParent;
 import com.kidsdynamic.data.persistent.DbUtil;
 import com.kidsdynamic.data.persistent.PreferencesUtil;
 import com.kidsdynamic.data.repository.disk.KidsDataStore;
 import com.kidsdynamic.swing.SwingApplication;
+import com.kidsdynamic.swing.model.KidsEntityBean;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +23,8 @@ import java.util.List;
 public class DeviceManager {
     public final static String BUNDLE_KEY_AVATAR = "AVATAR";
     public final static String BUNDLE_KEY_KID_NAME = "KID_NAME";
+    public final static String BUNDLE_KEY_KID_ID = "KID_ID";
+    public final static String BUNDLE_KEY_USER_ID = "USER_ID";
 
     private final static String key_focus_kids = "focus_kids";
     public static DB_Kids getFocusWatchInfo(Context context){
@@ -97,5 +101,23 @@ public class DeviceManager {
         kidsDataStore.save(db_kidsList);
 
         return true;
+    }
+
+    public List<KidsEntityBean>  getAllKidsByUserId(Context context, long parentId){
+        DbUtil dbUtil = DbUtil.getInstance(context.getApplicationContext());
+
+        KidsDataStore kidsDataStore = new KidsDataStore(dbUtil);
+        List<DB_Kids> dbKids = kidsDataStore.getKidsInfoByParentId(parentId);
+
+        List<KidsEntityBean> kidsEntityBeanList = new ArrayList<>();
+        if(ObjectUtils.isListEmpty(dbKids)){
+            return kidsEntityBeanList;
+        }else {
+            for (DB_Kids dbKidBean :dbKids) {
+                kidsEntityBeanList.add(BeanConvertor.convert(dbKidBean));
+            }
+        }
+
+        return kidsEntityBeanList;
     }
 }

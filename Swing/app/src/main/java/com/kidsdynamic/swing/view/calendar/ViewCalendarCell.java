@@ -2,7 +2,6 @@ package com.kidsdynamic.swing.view.calendar;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.ViewParent;
 import android.widget.TextView;
 
@@ -49,8 +48,8 @@ public class ViewCalendarCell extends TextView {
         Calendar calcDate = ViewCalendar.getInstance();
         calcDate.setTimeInMillis(date);
 
-        Log.w("calendar", "calendar1: " + calcThis.toString());
-        Log.w("calendar", "calendar2: " + calcDate.toString());
+        /*Log.w("calendar", "calendar1: " + calcThis.toString());
+        Log.w("calendar", "calendar2: " + calcDate.toString());*/
 
         if (calcThis.get(Calendar.YEAR) != calcDate.get(Calendar.YEAR))
             return false;

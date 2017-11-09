@@ -62,4 +62,5 @@
     <color name="color_edit_hint_color">#9E9E9E</color>
     <color name="emotion_mask_color">#99FFFFFF</color>
 
+    <color name="ik_common_line_c">#F1F1F2</color>
 </resources>

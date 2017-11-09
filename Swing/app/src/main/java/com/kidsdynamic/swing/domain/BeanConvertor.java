@@ -12,6 +12,7 @@ import com.kidsdynamic.data.net.event.model.TodoEntity;
 import com.kidsdynamic.data.net.kids.model.KidsWithParent;
 import com.kidsdynamic.data.net.user.model.KidInfo;
 import com.kidsdynamic.data.net.user.model.UserProfileRep;
+import com.kidsdynamic.swing.model.KidsEntityBean;
 import com.kidsdynamic.swing.model.WatchEvent;
 import com.kidsdynamic.swing.model.WatchTodo;
 
@@ -271,6 +272,21 @@ public class BeanConvertor {
         watchTodo.mStatus = db_todo.getStatus();
 
         return watchTodo;
+    }
+
+    public static KidsEntityBean convert(@NonNull DB_Kids db_kids){
+
+        KidsEntityBean kidsEntityBean = new KidsEntityBean();
+        kidsEntityBean.setKidsId(db_kids.getKidsId());
+        kidsEntityBean.setName(db_kids.getName());
+        kidsEntityBean.setDateCreated(db_kids.getDateCreated());
+        kidsEntityBean.setMacId(db_kids.getMacId());
+        kidsEntityBean.setFirmwareVersion(db_kids.getFirmwareVersion());
+        kidsEntityBean.setProfile(db_kids.getProfile());
+        kidsEntityBean.setState(db_kids.getState());
+        kidsEntityBean.setParentId(db_kids.getParentId());
+
+        return kidsEntityBean;
     }
 
 }

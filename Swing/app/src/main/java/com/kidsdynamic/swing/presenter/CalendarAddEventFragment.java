@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.kidsdynamic.swing.R;
 import com.kidsdynamic.swing.domain.CalendarManager;
+import com.kidsdynamic.swing.domain.DeviceManager;
 import com.kidsdynamic.swing.model.WatchEvent;
 import com.kidsdynamic.swing.model.WatchTodo;
 import com.kidsdynamic.swing.utils.SwingFontsCache;
@@ -62,6 +63,9 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
 
     @BindView(R.id.calendar_event_repeat)
     protected TextView mViewRepeat;
+
+    @BindView(R.id.calendar_event_assign_name)
+    protected TextView mViewAssignName;
 
     //to-do
     @BindView(R.id.calendar_event_todo_line)
@@ -326,6 +330,18 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
     protected void onClickEventRepeat(){
 //        mainFrameActivity.mEventStack.push(mEvent);
         selectFragment(EventRepeatOptionFragment.class.getName(),null,true);
+    }
+
+    //assign to
+    @OnClick(R.id.calendar_event_assign_line)
+    protected void onClickAssignLine(){
+
+        //todo kids test
+
+        Bundle args = new Bundle();
+        args.putLong(DeviceManager.BUNDLE_KEY_USER_ID,mEvent.mUserId);
+        args.putLong(DeviceManager.BUNDLE_KEY_KID_ID,123);
+        selectFragment(EventAssignToFragment.class.getName(),null,true);
     }
 
     //event color layout

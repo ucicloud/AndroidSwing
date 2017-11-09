@@ -39,4 +39,16 @@ public class KidsDataStore {
 
         return null;
     }
+
+    public List<DB_Kids> getKidsInfoByParentId(long parentId){
+        KidsDao kidsDao = dbUtil.getDaoSession().getKidsDao();
+        List<DB_Kids> kidsList = kidsDao.queryBuilder().where(KidsDao.Properties.ParentId.eq(parentId)).list();
+        if(!ObjectUtils.isListEmpty(kidsList)){
+            return kidsList;
+        }
+
+        return null;
+    }
+
+
 }

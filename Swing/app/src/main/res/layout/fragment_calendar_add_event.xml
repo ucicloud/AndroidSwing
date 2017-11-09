@@ -224,8 +224,9 @@
 
                     <com.kidsdynamic.swing.view.AvenirTextView
                         style="@style/textview_calendar_event"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3"
                         android:gravity="center_vertical"
                         android:paddingBottom="10dp"
                         android:paddingTop="10dp"
@@ -234,9 +235,18 @@
                     <com.kidsdynamic.swing.view.AvenirTextView
                         android:id="@+id/calendar_event_repeat"
                         style="@style/textview_calendar_hint"
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="5dp"
+                        android:layout_weight="6"
+                        android:gravity="end|center_vertical" />
+
+                    <TextView
+                        android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:gravity="center_vertical|end" />
+                        android:layout_weight="1"
+                        android:padding="1dp"
+                        android:drawableEnd="@drawable/icon_arrow_bottom"/>
 
                 </LinearLayout>
 
@@ -301,14 +311,20 @@
                         android:layout_weight="6"
                         android:gravity="end|center_vertical" />
 
-                    <com.kidsdynamic.swing.view.ViewCircle
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:padding="1dp"
+                        android:drawableEnd="@drawable/icon_arrow_bottom"/>
+                    <!--<com.kidsdynamic.swing.view.ViewCircle
                         android:id="@+id/calendar_event_assign_photo"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:padding="1dp"
                         app:strokeColorNormal="@color/color_orange_main"
-                        app:strokeWidth="1dp" />
+                        app:strokeWidth="1dp" />-->
                 </LinearLayout>
 
                 <LinearLayout
@@ -345,7 +361,7 @@
                 android:id="@+id/calendar_event_description_line"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/calendar_event_repeat_line"
+                android:layout_below="@+id/calendar_event_assign_line"
                 android:layout_marginEnd="@dimen/base_10"
                 android:layout_marginStart="@dimen/base_20"
                 android:layout_marginTop="5dp"
