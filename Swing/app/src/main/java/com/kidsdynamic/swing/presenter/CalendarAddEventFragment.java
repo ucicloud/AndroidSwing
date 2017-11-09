@@ -45,6 +45,9 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
     @BindView(R.id.calendar_event_alarm_name_layout)
     protected RelativeLayout mViewAlarmLine;
 
+    @BindView(R.id.calendar_event_alarm_name_2)
+    protected TextView mEventAlarmName;
+
     @BindView(R.id.calendar_event_start_time_layout)
     protected RelativeLayout mViewStartLine;
 
@@ -143,11 +146,34 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
             mEvent.mRepeat = fragmentBundle.getString(CalendarManager.KEY_DATA_TYPE_REPEAT_VALUE);
             mViewRepeat.setText(fragmentBundle.getString(CalendarManager.KEY_DATA_TYPE_REPEAT_STR));
         }else if(CalendarManager.VALUE_DATA_TYPE_EVENT.equals(dataType)){
-            //选择的event 事件
+            //选择的event 事件 -- which alarm selected
+            mEvent.mAlert = fragmentBundle.getInt(CalendarManager.KEY_SELECT_EVENT);
 
+            loadAlarm();
         }
 
 
+    }
+
+    private boolean loadAlarm() {
+        WatchEvent.Alarm[] alertList = WatchEvent.AlarmList_new;
+        /*if(mActivityMain.language.equals(Locale.JAPAN.getLanguage())) {
+            alertList = WatchEvent.AlarmList_ja;
+        } else {
+            alertList = WatchEvent.AlarmList;
+        }*/
+
+
+        for (WatchEvent.Alarm target : alertList) {
+            if (target.mId == mEvent.mAlert) {
+                mEvent.mAlert = target.mId;
+                mEvent.mName = getResources().getString(target.mName);   // multi-dependence issue, cause from KD.
+                mEventAlarmName.setText(mEvent.mName);
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private void initView() {
@@ -186,6 +212,11 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
 
         /*view_right_action.setImageResource(R.drawable.icon_add);
         view_right_action.setTag(R.drawable.icon_add);*/
+    }
+
+    @OnClick(R.id.main_toolbar_action1)
+    protected void onTopLeftBtnClick(){
+        getActivity().getSupportFragmentManager().popBackStack();
     }
 
     @OnClick(R.id.calendar_event_alarm_name_layout)

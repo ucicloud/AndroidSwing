@@ -16,6 +16,7 @@ public class CalendarManager {
 
     public final static String VALUE_DATA_TYPE_EVENT = "data_type_event";
     public final static String KEY_DATA_TYPE_EVENT = "event";
+    public final static String KEY_SELECT_EVENT = "event_select";
 
     public final static String VALUE_DATA_TYPE_REPEAT = "data_type_repeat";
     public final static String KEY_DATA_TYPE_REPEAT_VALUE = "repeat";

@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.kidsdynamic.data.net.kids.model.KidsWithParent;
 import com.kidsdynamic.swing.R;
+import com.kidsdynamic.swing.domain.CalendarManager;
 import com.kidsdynamic.swing.model.WatchEvent;
 import com.kidsdynamic.swing.view.AvenirTextView;
 
@@ -24,6 +25,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static android.util.TypedValue.COMPLEX_UNIT_SP;
+import static com.kidsdynamic.swing.domain.EventManager.eventOptionMap;
 
 /**
  * CalendarAlarmListFragment
@@ -252,6 +254,13 @@ public class CalendarAlarmListFragment extends CalendarBaseFragment {
             mEvent.mAlert = (int) view.getTag();
             Log.d("On CLicked", String.valueOf(mEvent.mAlert));
 //            getActivity().mEventStack.push(mEvent);
+
+            Bundle bundle = new Bundle();
+            bundle.putString(CalendarManager.KEY_DATA_TYPE,CalendarManager.VALUE_DATA_TYPE_EVENT);
+            bundle.putInt(CalendarManager.KEY_SELECT_EVENT,(int) view.getTag());
+
+            mainFrameActivity.mCalendarBundleStack.push(bundle);
+
             getActivity().getSupportFragmentManager().popBackStack();
         }
     };
