@@ -8,7 +8,7 @@
     <ImageView
         android:id="@+id/iv_head"
         android:layout_width="@dimen/base_25"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/base_25"
         android:layout_marginLeft="16dp"
         android:layout_marginStart="16dp"
         android:contentDescription="@null"
@@ -37,7 +37,7 @@
     <ImageView
         android:id="@+id/iv_action"
         android:layout_width="@dimen/base_25"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/base_25"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:contentDescription="@null"

@@ -58,11 +58,11 @@ public class WatchRequestFragment extends BaseFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        List<KidInfo> list = new ArrayList<>();
-        for (int i = 0; i < 1; i++) {
-            list.add(new KidInfo());
-        }
-        setDataAdapter(list);
+//        List<KidInfo> list = new ArrayList<>();
+//        for (int i = 0; i < 1; i++) {
+//            list.add(new KidInfo());
+//        }
+//        setDataAdapter(list);
     }
 
     @OnClick(R.id.watch_request_search)
@@ -129,9 +129,9 @@ public class WatchRequestFragment extends BaseFragment {
 
             KidInfo kidInfo = getItem(position);
             if (null != kidInfo) {
-                holder.iv_head.setImageResource(android.R.drawable.ic_menu_compass);
+                holder.iv_head.setImageResource(R.drawable.ic_icon_profile_);
                 holder.tv_content.setText(String.valueOf(position));
-                holder.iv_action.setImageResource(android.R.drawable.ic_menu_add);
+                holder.iv_action.setImageResource(R.drawable.ic_icon_add_orange);
                 holder.iv_action.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -145,9 +145,9 @@ public class WatchRequestFragment extends BaseFragment {
     }
 
     private void doPlusClick(ImageView iv_action) {
-        tv_title.setText("Request access pending");
-        tv_dashboard.setText("Go to Dashboard");
-        iv_action.setImageResource(android.R.drawable.ic_media_next);
+//        tv_title.setText("Request access pending");
+//        tv_dashboard.setText("Go to Dashboard");
+//        iv_action.setImageResource(android.R.drawable.ic_media_next);
     }
 
 //    private void doRequestClick() {

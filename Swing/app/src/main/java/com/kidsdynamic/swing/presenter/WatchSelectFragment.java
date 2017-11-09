@@ -309,9 +309,10 @@ public class WatchSelectFragment extends BaseFragment {
                 long id = kidsWithParent.getId();
                 if (-1 == id) {
                     holder.iv_head.setImageResource(R.drawable.ic_icon_profile_);
+                    holder.iv_head.setBackgroundResource(R.color.color_white);
                     holder.tv_content.setText(String.format("%1$s %2$s", kidsWithParent.getName(),
                             DeviceManager.getMacAddress(kidsWithParent.getMacId())));
-                    holder.iv_action.setImageResource(R.drawable.ic_icon_plus);
+                    holder.iv_action.setImageResource(R.drawable.ic_icon_add_orange);
                     holder.iv_action.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -322,11 +323,13 @@ public class WatchSelectFragment extends BaseFragment {
                     String profile = kidsWithParent.getProfile();
                     if (!TextUtils.isEmpty(profile)) {
                         GlideHelper.showCircleImageView(mContext, profile, holder.iv_head);
+                        holder.iv_head.setBackgroundResource(R.color.transparent);
                     } else {
                         holder.iv_head.setImageResource(R.drawable.ic_icon_profile_);
+                        holder.iv_head.setBackgroundResource(R.color.color_white);
                     }
                     holder.tv_content.setText(kidsWithParent.getName());
-                    holder.iv_action.setImageResource(R.drawable.ic_icon_line_arrow);
+                    holder.iv_action.setImageResource(R.drawable.icon_arrow_up_orange);
                     holder.iv_action.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
