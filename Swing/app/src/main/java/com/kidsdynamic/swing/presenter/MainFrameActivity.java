@@ -37,6 +37,8 @@ public class MainFrameActivity extends BaseFragmentActivity {
     //用于CalendarFragment间的数据交换
 //    public Stack<WatchContact> mContactStack;
     public Stack<Bundle> mCalendarBundleStack;
+
+    public Stack<WatchEvent> mEventStack;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,6 +68,8 @@ public class MainFrameActivity extends BaseFragmentActivity {
 
     private void initValue() {
         mCalendarBundleStack = new Stack<>();
+
+        mEventStack = new Stack<>();
     }
 
     private void initFragments(){

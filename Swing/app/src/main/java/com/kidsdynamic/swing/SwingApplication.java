@@ -27,10 +27,13 @@ public class SwingApplication extends Application {
         //配置服务器地址：该地址根据当前编译类型
         ApiGen.BASE_URL = BuildConfig.API_BASE_URL;
 
-        //全局异常捕获
-        CrashHandler crashHandler = CrashHandler.getInstance();
-        crashHandler.setEnable(true);
-        crashHandler.init(getApplicationContext());
+        //非debug，则开启全局捕获异常
+        if (!BuildConfig.DEBUG) {
+            //全局异常捕获
+            CrashHandler crashHandler = CrashHandler.getInstance();
+            crashHandler.setEnable(true);
+            crashHandler.init(getApplicationContext());
+        }
 
     }
 

@@ -380,7 +380,8 @@
                     android:hint="@string/calendar_event_description"
                     android:maxLength="64"
                     android:paddingBottom="10dp"
-                    android:paddingTop="10dp" />
+                    android:paddingTop="10dp"
+                    android:freezesText="true"/>
             </LinearLayout>
 
             <!--event to-do list-->

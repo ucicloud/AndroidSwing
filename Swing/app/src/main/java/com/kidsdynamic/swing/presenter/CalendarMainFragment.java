@@ -16,7 +16,6 @@ import com.kidsdynamic.data.net.event.model.EventUtils;
 import com.kidsdynamic.data.net.event.model.TodoEntity;
 import com.kidsdynamic.swing.R;
 import com.kidsdynamic.swing.adapter.TodoListAdapter;
-import com.kidsdynamic.swing.domain.CalendarManager;
 import com.kidsdynamic.swing.domain.EventManager;
 import com.kidsdynamic.swing.model.WatchEvent;
 import com.kidsdynamic.swing.view.ViewCircle;

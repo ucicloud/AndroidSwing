@@ -19,7 +19,6 @@ import android.widget.TextView;
 
 import com.kidsdynamic.swing.R;
 import com.kidsdynamic.swing.domain.CalendarManager;
-import com.kidsdynamic.swing.domain.DeviceManager;
 import com.kidsdynamic.swing.model.WatchEvent;
 import com.kidsdynamic.swing.model.WatchTodo;
 import com.kidsdynamic.swing.utils.SwingFontsCache;
@@ -130,13 +129,108 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        // TODO: 2017/11/5
+
         //如果stack不为空，则表示stack保存当前编辑的event；
         //如果为空，则表示需要新增一个新的event
-        if (!mainFrameActivity.mCalendarBundleStack.isEmpty()) {
+        /*if (!mainFrameActivity.mCalendarBundleStack.isEmpty()) {
             //如果bundle不为空，则认为有业务数据
             updateEventByFragmentBundle(mainFrameActivity.mCalendarBundleStack.pop());
+        }*/
+
+        // 由帶入的参数表示事件预设定的日期,显示在UI之上
+        if (getArguments() != null)
+            mDefaultDate = getArguments().getLong(BUNDLE_KEY_DATE);
+
+        // 若Stack不為空, 表示Stack中保存當前需進行編輯的事件
+        // 若為空, 表示需要新增一個新的事件
+        if (mainFrameActivity.mEventStack.isEmpty()) {
+            mEvent = new WatchEvent(mDefaultDate);
+
+            //todo
+            mEvent.mUserId = 123;
+        } else {
+            mEvent = mainFrameActivity.mEventStack.pop();
         }
+
+        loadWatchEvent();
+    }
+
+    private void loadWatchEvent() {
+        loadDate();
+        loadColor();
+        loadRepeat();
+        loadAssign();
+        loadDescription();
+        loadTodo();
+        loadAlarm();
+
+//        viewAdvance(mEvent.mRepeat.length() != 0 || mEvent.mDescription.length() != 0 || mEvent.mTodoList.size() != 0);
+//        viewEnable(mActivityMain.mOperator.getUser().mId == mEvent.mUserId);
+//        ViewDelete(mActivityMain.mOperator.getUser().mId == mEvent.mUserId && mEvent.mId != 0);
+    }
+
+
+    private void loadColor() {
+        mViewColor.setColor(WatchEvent.stringToColor(mEvent.mColor));
+    }
+
+    private void loadRepeat() {
+        String repeat = mEvent.mRepeat.toUpperCase();
+
+        switch (repeat) {
+            case WatchEvent.REPEAT_MONTHLY:
+                mViewRepeat.setText(getResources().getString(R.string.event_repeat_monthly));
+                break;
+
+            case WatchEvent.REPEAT_WEEKLY:
+                mViewRepeat.setText(getResources().getString(R.string.event_repeat_weekly));
+                break;
+
+            case WatchEvent.REPEAT_DAILY:
+                mViewRepeat.setText(getResources().getString(R.string.event_repeat_daily));
+                break;
+
+            case WatchEvent.REPEAT_NEVER:
+                mViewRepeat.setText(getResources().getString(R.string.event_repeat_never));
+                break;
+        }
+    }
+
+    private void loadAssign() {
+
+        // TODO: 2017/11/11
+       /* ArrayList<WatchContact.Kid> list = new ArrayList<>();
+
+        list.addAll(mActivityMain.mOperator.getDeviceList());
+        list.addAll(mActivityMain.mOperator.getSharedList());
+
+        if (list.size() == 0)
+            return;
+
+        if (mEvent.mKids.size() == 0) { // assign is illegal
+            WatchContact.Kid focusKid = mActivityMain.mOperator.getFocusKid();
+            if (focusKid == null)
+                mEvent.insertKid(list.get(0).mId, 0);
+            else
+                mEvent.insertKid(focusKid.mId, 0);
+        }
+
+        setAssign(mEvent.mKids.get(0));
+
+        // Note: We create kids options here, to avoid
+        // some kids create during fragment paused.
+        mViewAssignContainer.removeAllViews();
+        for (WatchContact.Kid kid : list)
+            addKid(kid);*/
+    }
+
+    private void loadDescription() {
+        mViewDescription.setText(mEvent.mDescription);
+    }
+
+    private void loadTodo() {
+        for (WatchTodo todo : mEvent.mTodoList)
+            addTodoView(todo);
     }
 
     private void updateEventByFragmentBundle(Bundle fragmentBundle) {
@@ -328,7 +422,7 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
     //repeat
     @OnClick(R.id.calendar_event_repeat_line)
     protected void onClickEventRepeat(){
-//        mainFrameActivity.mEventStack.push(mEvent);
+        mainFrameActivity.mEventStack.push(mEvent);
         selectFragment(EventRepeatOptionFragment.class.getName(),null,true);
     }
 
@@ -336,11 +430,11 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
     @OnClick(R.id.calendar_event_assign_line)
     protected void onClickAssignLine(){
 
-        //todo kids test
-
-        Bundle args = new Bundle();
+        /*Bundle args = new Bundle();
         args.putLong(DeviceManager.BUNDLE_KEY_USER_ID,mEvent.mUserId);
-        args.putLong(DeviceManager.BUNDLE_KEY_KID_ID,123);
+        args.putLong(DeviceManager.BUNDLE_KEY_KID_ID,123);*/
+
+        mainFrameActivity.mEventStack.push(mEvent);
         selectFragment(EventAssignToFragment.class.getName(),null,true);
     }
 

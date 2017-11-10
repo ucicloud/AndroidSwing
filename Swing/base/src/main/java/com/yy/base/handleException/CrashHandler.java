@@ -192,8 +192,9 @@ import java.util.Map;
                 String fileName = "crash-" + time + "-" + timestamp + ".log";  
                 if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {  
 //                    String path = "/sdcard/xdjalog/safeEmail/";  
-                	 String path = Environment.getExternalStorageDirectory() + "/swing/crashlog/";
-                    File dir = new File(path);  
+//                	 String path = Environment.getExternalStorageDirectory() + "/swing/crashlog/";
+                	 String path = mContext.getExternalCacheDir() + "/swing/crashlog/";
+                    File dir = new File(path);
                     if (!dir.exists()) {  
                         dir.mkdirs();  
                     }  

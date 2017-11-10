@@ -11,7 +11,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.kidsdynamic.swing.R;
-import com.kidsdynamic.swing.domain.CalendarManager;
 import com.kidsdynamic.swing.model.WatchEvent;
 
 import java.util.ArrayList;
@@ -31,7 +30,7 @@ public class EventRepeatOptionFragment extends CalendarBaseFragment {
     @BindView(R.id.listview_repeat)
     protected ListView listView_event_option;
 
-    private WatchEvent watchEvent;
+    private WatchEvent mEvent;
     private EventRepeatListAdapter eventRepeatListAdapter;
 
     @Nullable
@@ -49,7 +48,7 @@ public class EventRepeatOptionFragment extends CalendarBaseFragment {
     }
 
     private void initValue() {
-//        mainFrameActivity.mEventStack.pop();
+        mEvent = mainFrameActivity.mEventStack.pop();
     }
 
     private void initTitleBar() {
@@ -60,7 +59,7 @@ public class EventRepeatOptionFragment extends CalendarBaseFragment {
 
     @OnClick(R.id.main_toolbar_title)
     public void onToolbarAction1() {
-//        mActivityMain.mEventStack.push(mEvent);
+        mainFrameActivity.mEventStack.push(mEvent);
         getActivity().getSupportFragmentManager().popBackStack();
     }
 
@@ -76,7 +75,7 @@ public class EventRepeatOptionFragment extends CalendarBaseFragment {
     }
 
     private void handleOnItemClick(int i) {
-        Bundle bundle = new Bundle();
+        /*Bundle bundle = new Bundle();
         bundle.putString(CalendarManager.KEY_DATA_TYPE,CalendarManager.VALUE_DATA_TYPE_REPEAT);
         bundle.putString(CalendarManager.KEY_DATA_TYPE_REPEAT_VALUE,
                 eventRepeatListAdapter.getItem(i));
@@ -84,9 +83,10 @@ public class EventRepeatOptionFragment extends CalendarBaseFragment {
         String optionShowStr = getContext().getString(
                 eventOptionMap.get(eventRepeatListAdapter.getItem(i)));
         bundle.putString(CalendarManager.KEY_DATA_TYPE_REPEAT_STR,
-                optionShowStr);
+                optionShowStr);*/
 
-        mainFrameActivity.mCalendarBundleStack.push(bundle);
+        mEvent.mRepeat = eventRepeatListAdapter.getItem(i);
+        mainFrameActivity.mEventStack.push(mEvent);
 
         getActivity().getSupportFragmentManager().popBackStack();
     }
