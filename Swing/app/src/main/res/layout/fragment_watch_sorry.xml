@@ -16,7 +16,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="@string/watch_sorry_sorry" />
+            android:text="@string/watch_sorry_sorry"
+            android:textStyle="bold" />
 
         <com.kidsdynamic.swing.view.AvenirTextView
             style="@style/textview_hint"

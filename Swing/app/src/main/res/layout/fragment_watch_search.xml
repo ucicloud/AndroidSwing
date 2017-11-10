@@ -22,6 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
+            android:textStyle="bold"
             android:text="@string/watch_search_searching" />
 
         <com.kidsdynamic.swing.view.ViewCircle

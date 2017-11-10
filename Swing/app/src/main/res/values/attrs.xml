@@ -75,4 +75,46 @@
         </attr>
         <attr name="desiredSize" format="dimension" />
     </declare-styleable>
+
+    <declare-styleable name="ViewChart">
+        <attr name="chartColor" format="color" />
+        <attr name="chartWidth" format="dimension" />
+        <attr name="chartTextColor" format="color" />
+        <attr name="chartTextSize" format="dimension" />
+        <attr name="chartTextStyle" format="integer" />
+        <attr name="nodeColor" format="color" />
+        <attr name="nodeSize" format="dimension" />
+        <attr name="axisColor" format="color" />
+        <attr name="axisWidth" format="dimension" />
+        <attr name="axisTextSize" format="dimension" />
+        <attr name="axisTextColor" format="color" />
+        <attr name="axisTextStyle" format="integer" />
+        <attr name="axisHEnabled" format="boolean" />
+        <attr name="axisHMax" format="float" />
+        <attr name="axisHMin" format="float" />
+        <attr name="axisVEnabled" format="boolean" />
+        <attr name="axisVMax" format="float" />
+        <attr name="axisVMin" format="float" />
+    </declare-styleable>
+
+    <declare-styleable name="ViewDotIndicator">
+        <attr name="dotColorOn" format="color" />
+        <attr name="dotColorOff" format="color" />
+        <attr name="dotCount" format="integer" />
+        <attr name="dotPosition" format="integer" />
+        <attr name="dotSize" format="dimension" />
+    </declare-styleable>
+
+    <declare-styleable name="ViewTextSelector">
+        <attr name="android:textSize" />
+        <attr name="android:textStyle" />
+        <attr name="android:textColor" />
+        <attr name="selectorColor" format="color" />
+    </declare-styleable>
+
+    <declare-styleable name="ViewBorderButton">
+        <attr name="floorColor" format="color" />
+        <attr name="borderColor" format="color" />
+        <attr name="borderWidth" format="dimension" />
+    </declare-styleable>
 </resources>

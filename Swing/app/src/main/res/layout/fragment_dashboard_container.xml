@@ -7,10 +7,6 @@
     android:clipToPadding="false"
     android:fitsSystemWindows="true">
 
-    <!-- <include layout="@layout/base_title_bar"
-         android:id="@+id/title_bar"
-         android:visibility="invisible"/>-->
-
     <ImageView
         android:id="@+id/dashboard_fragment_bottom_banner"
         android:layout_width="match_parent"

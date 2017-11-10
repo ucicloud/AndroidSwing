@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/dashboard_chart_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/base_title_bar" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.5">
+
+        <com.kidsdynamic.swing.view.ViewSponge
+            android:id="@+id/dashboard_chart_indicator_sponge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            app:shrinkWidth="0.3" />
+
+        <com.kidsdynamic.swing.view.ViewDotIndicator
+            android:id="@+id/dashboard_chart_indicator"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignEnd="@+id/dashboard_chart_indicator_sponge"
+            android:layout_alignStart="@+id/dashboard_chart_indicator_sponge"
+            app:dotColorOff="@color/color_gray_light"
+            app:dotColorOn="@color/color_gray"
+            app:dotCount="4"
+            app:dotPosition="0"
+            app:dotSize="10dp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <com.kidsdynamic.swing.view.ViewSponge
+            android:id="@+id/dashboard_chart_selector_sponge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            app:shrinkWidth="0.6" />
+
+        <com.kidsdynamic.swing.view.ViewTextSelector
+            android:id="@+id/dashboard_chart_selector"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignEnd="@+id/dashboard_chart_selector_sponge"
+            android:layout_alignStart="@+id/dashboard_chart_selector_sponge"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <com.kidsdynamic.swing.view.AvenirTextView
+        android:id="@+id/dashboard_chart_message"
+        style="@style/dashboard_chart_emotion"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_gravity="center"
+        android:layout_weight="2"
+        android:gravity="center"
+        android:textStyle="bold" />
+
+    <!--<com.kidsdynamic.swing.view.ViewChartKDToday-->
+    <!--android:id="@+id/dashboard_chart_today"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="0dp"-->
+    <!--android:layout_weight="5"-->
+    <!--android:padding="20dp"-->
+    <!--app:axisColor="@color/color_white"-->
+    <!--app:axisHEnabled="true"-->
+    <!--app:axisHMax="15000"-->
+    <!--app:chartTextSize="16sp" />-->
+
+    <com.kidsdynamic.swing.view.ViewChartHorizontal
+        android:id="@+id/dashboard_chart_horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="5"
+        android:padding="20dp"
+        app:axisColor="@color/color_white"
+        app:axisHEnabled="true"
+        app:axisHMax="15000"
+        app:chartTextSize="16sp" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="3">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:orientation="horizontal">
+
+            <com.kidsdynamic.swing.view.ViewBorderButton
+                android:id="@+id/dashboard_chart_indoor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/dashboard_chart_indoor"
+                android:textAllCaps="false"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:borderColor="@color/color_orange_main"
+                app:borderWidth="3dp"
+                app:floorColor="@color/color_white" />
+
+            <com.kidsdynamic.swing.view.ViewBorderButton
+                android:id="@+id/dashboard_chart_outdoor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="@string/dashboard_chart_outdoor"
+                android:textAllCaps="false"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:borderColor="@color/color_orange_main"
+                app:borderWidth="3dp"
+                app:floorColor="@color/color_white" />
+        </LinearLayout>
+    </RelativeLayout>
+
+</LinearLayout>

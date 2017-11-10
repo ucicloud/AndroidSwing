@@ -4,12 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <include
-        android:id="@+id/title_bar"
-        layout="@layout/base_title_bar"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" />
+    <include layout="@layout/base_title_bar" />
 
     <ImageView
         android:layout_width="match_parent"

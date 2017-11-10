@@ -162,4 +162,9 @@
         <item name="android:paddingEnd">@dimen/base_1</item>
         <item name="android:textColor">@color/color_red</item>
     </style>
+
+    <style name="dashboard_chart_emotion">
+        <item name="android:textSize">24sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
 </resources>
