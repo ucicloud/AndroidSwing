@@ -90,22 +90,40 @@
                 <TextView
                     android:id="@+id/label_1"
                     style="@style/calendar_red_star" />
-
-                <com.kidsdynamic.swing.view.AvenirTextView
-                    android:id="@+id/calendar_event_start"
-                    style="@style/textview_calendar_hint"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/base_35"
-                    android:layout_marginEnd="@dimen/base_10"
-                    android:layout_marginStart="@dimen/base_5"
-                    android:layout_marginTop="5dp"
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_toEndOf="@id/label_1"
                     android:background="@drawable/contact_background"
-                    android:drawableEnd="@drawable/icon_arrow_bottom"
-                    android:gravity="start|center_vertical"
-                    android:hint="@string/calendar_event_start"
-                    android:paddingEnd="@dimen/base_10"
-                    android:paddingStart="@dimen/base_10" />
+                    android:layout_marginStart="@dimen/base_5"
+                    android:layout_marginEnd="@dimen/base_10"
+                    android:layout_marginTop="5dp">
+
+                    <com.kidsdynamic.swing.view.AvenirTextView
+                        android:id="@+id/tv_label_start"
+                        style="@style/textview_calendar_event"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:paddingBottom="10dp"
+                        android:paddingTop="10dp"
+                        android:layout_marginStart="@dimen/base_10"
+                        android:text="@string/calendar_event_start" />
+
+                    <com.kidsdynamic.swing.view.AvenirTextView
+                        android:id="@+id/calendar_event_start"
+                        style="@style/textview_calendar_hint"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/base_35"
+                        android:layout_marginStart="@dimen/base_5"
+                        android:layout_toEndOf="@id/tv_label_start"
+                        android:drawableEnd="@drawable/icon_arrow_bottom"
+                        android:layout_centerVertical="true"
+                        android:gravity="end|center_vertical"
+                        android:paddingEnd="@dimen/base_10" />
+
+                </RelativeLayout>
+
             </RelativeLayout>
 
             <!--end time-->
@@ -120,21 +138,45 @@
                     style="@style/calendar_red_star"
                     android:gravity="end"/>
 
-                <com.kidsdynamic.swing.view.AvenirTextView
-                    android:id="@+id/calendar_event_end"
-                    style="@style/textview_calendar_hint"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/base_35"
-                    android:layout_marginEnd="@dimen/base_10"
-                    android:layout_marginStart="@dimen/base_5"
-                    android:layout_marginTop="5dp"
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_toEndOf="@id/label_2"
                     android:background="@drawable/contact_background"
-                    android:drawableEnd="@drawable/icon_arrow_bottom"
-                    android:gravity="start|center_vertical"
-                    android:hint="@string/calendar_event_end"
-                    android:paddingEnd="@dimen/base_10"
-                    android:paddingStart="@dimen/base_10" />
+                    android:layout_marginStart="@dimen/base_5"
+                    android:layout_marginEnd="@dimen/base_10"
+                    android:layout_marginTop="5dp">
+
+                    <com.kidsdynamic.swing.view.AvenirTextView
+                        android:id="@+id/tv_label_end"
+                        style="@style/textview_calendar_event"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:paddingBottom="10dp"
+                        android:paddingTop="10dp"
+                        android:layout_marginStart="@dimen/base_10"
+                        android:text="@string/calendar_event_end" />
+
+                    <com.kidsdynamic.swing.view.AvenirTextView
+                        android:id="@+id/calendar_event_end"
+                        style="@style/textview_calendar_hint"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/base_35"
+                        android:layout_marginStart="@dimen/base_5"
+                        android:layout_marginTop="5dp"
+                        android:layout_toEndOf="@id/tv_label_end"
+                        android:background="@drawable/contact_background"
+                        android:drawableEnd="@drawable/icon_arrow_bottom"
+                        android:gravity="end|center_vertical"
+                        android:hint="@string/calendar_event_end"
+                        android:paddingEnd="@dimen/base_10"
+                        android:paddingStart="@dimen/base_10"
+                        android:layout_centerVertical="true"/>
+
+                </RelativeLayout>
+
+
             </RelativeLayout>
 
 

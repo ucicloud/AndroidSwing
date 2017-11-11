@@ -2,7 +2,6 @@ package com.kidsdynamic.swing.domain;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import com.kidsdynamic.data.net.Config;
 import com.kidsdynamic.data.net.user.model.UserProfileRep;
@@ -60,5 +59,21 @@ public class LoginManager {
         return true;
     }
 
+    public long getCurrentLoginUserId(Context context){
+        return PreferencesUtil.getInstance(context.getApplicationContext()).
+                gPrefLongValue(ConfigUtil.label_user_id);
+    }
 
+    public void clearCacheLoginData(Context context){
+        PreferencesUtil.getInstance(SwingApplication.getAppContext()).
+                setPreferenceBooleanValue(ConfigUtil.login_state, false);
+
+        //删除登录者
+        PreferencesUtil.getInstance(context.getApplicationContext()).
+                setPreferenceLongValue(ConfigUtil.label_user_id,-1);
+        //删除focus kids id
+        DeviceManager.updateFocusKids(-1);
+
+
+    }
 }

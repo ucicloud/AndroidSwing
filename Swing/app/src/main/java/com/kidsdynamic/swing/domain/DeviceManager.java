@@ -29,7 +29,7 @@ public class DeviceManager {
     private final static String key_focus_kids = "focus_kids";
     public static DB_Kids getFocusWatchInfo(Context context){
 
-        int focusKidsId = getFocusKidsId();
+        long focusKidsId = getFocusKidsId();
         DbUtil dbUtil = DbUtil.getInstance(context.getApplicationContext());
         KidsDataStore kidsDataStore = new KidsDataStore(dbUtil);
 
@@ -78,14 +78,14 @@ public class DeviceManager {
 
     }
 
-    public static boolean updateFocusKids(int kids){
+    public static boolean updateFocusKids(long kids){
         PreferencesUtil preferencesUtil = PreferencesUtil.getInstance(SwingApplication.getAppContext());
-        return preferencesUtil.setPreferenceIntValue(key_focus_kids, kids);
+        return preferencesUtil.setPreferenceLongValue(key_focus_kids, kids);
     }
 
-    public static int getFocusKidsId(){
+    public static long getFocusKidsId(){
         PreferencesUtil preferencesUtil = PreferencesUtil.getInstance(SwingApplication.getAppContext());
-        return preferencesUtil.gPrefIntValue(key_focus_kids);
+        return preferencesUtil.gPrefLongValue(key_focus_kids);
     }
 
     public boolean saveKidsData(@NonNull Context context, KidsWithParent kidsWithParent){
@@ -103,7 +103,7 @@ public class DeviceManager {
         return true;
     }
 
-    public List<KidsEntityBean>  getAllKidsByUserId(Context context, long parentId){
+    public static List<KidsEntityBean>  getAllKidsByUserId(Context context, long parentId){
         DbUtil dbUtil = DbUtil.getInstance(context.getApplicationContext());
 
         KidsDataStore kidsDataStore = new KidsDataStore(dbUtil);
@@ -119,5 +119,18 @@ public class DeviceManager {
         }
 
         return kidsEntityBeanList;
+    }
+
+    public KidsEntityBean  getKidsInfo(Context context, long kidId){
+        DbUtil dbUtil = DbUtil.getInstance(context.getApplicationContext());
+
+        KidsDataStore kidsDataStore = new KidsDataStore(dbUtil);
+        DB_Kids dbKids = kidsDataStore.getKidsInfo(kidId);
+
+        if(dbKids != null){
+            return BeanConvertor.convert(dbKids);
+        }
+
+        return null;
     }
 }

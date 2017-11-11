@@ -15,9 +15,10 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.kidsdynamic.data.net.kids.model.KidsWithParent;
 import com.kidsdynamic.swing.R;
 import com.kidsdynamic.swing.domain.CalendarManager;
+import com.kidsdynamic.swing.domain.DeviceManager;
+import com.kidsdynamic.swing.model.KidsEntityBean;
 import com.kidsdynamic.swing.model.WatchEvent;
 import com.kidsdynamic.swing.view.AvenirTextView;
 
@@ -25,7 +26,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static android.util.TypedValue.COMPLEX_UNIT_SP;
-import static com.kidsdynamic.swing.domain.EventManager.eventOptionMap;
 
 /**
  * CalendarAlarmListFragment
@@ -40,7 +40,7 @@ public class CalendarAlarmListFragment extends CalendarBaseFragment {
     private int mLineMarginEnd = 10;
 
     private WatchEvent mEvent;
-    private int kidId;
+    private long kidId;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -50,7 +50,7 @@ public class CalendarAlarmListFragment extends CalendarBaseFragment {
         mLineMarginStart = getResources().getDisplayMetrics().widthPixels / 16;
         mLineMarginEnd = getResources().getDisplayMetrics().widthPixels / 16;
 
-        kidId = getArguments().getInt("kidId");
+        kidId = getArguments().getLong("kidId");
     }
 
     private void initTitleBar() {
@@ -73,8 +73,8 @@ public class CalendarAlarmListFragment extends CalendarBaseFragment {
 
         //todo
 //        WatchContact.Kid kid = mActivityMain.mOperator.getKid(kidId);
-        KidsWithParent kid = new KidsWithParent();
-        if(kid.getFirmwareVersion() != null && kid.getFirmwareVersion().contains("KDV01")) {
+        KidsEntityBean kid = new DeviceManager().getKidsInfo(getContext(), kidId);
+        if(kid != null && kid.getFirmwareVersion() != null && kid.getFirmwareVersion().contains("KDV01")) {
             addSeparator();
             addTitle(getResources().getString(R.string.calendar_alarm_agenda));
             addAlarm(WatchEvent.AlarmList_new[0], mLineListener);
@@ -128,9 +128,9 @@ public class CalendarAlarmListFragment extends CalendarBaseFragment {
 
         // TODO: 2017/11/5
         // 若由Stack非空, 則可取出處於編輯狀態下的Event
-        /*if (!mActivityMain.mEventStack.isEmpty())
-            mEvent = mActivityMain.mEventStack.pop();
-        else*/
+        if (!mainFrameActivity.mEventStack.isEmpty())
+            mEvent = mainFrameActivity.mEventStack.pop();
+        else
             mEvent = new WatchEvent();
     }
 
@@ -143,7 +143,7 @@ public class CalendarAlarmListFragment extends CalendarBaseFragment {
 
    @OnClick(R.id.main_toolbar_title)
     public void onToolbarAction1() {
-//        mActivityMain.mEventStack.push(mEvent);
+       mainFrameActivity.mEventStack.push(mEvent);
         getActivity().getSupportFragmentManager().popBackStack();
     }
 
@@ -253,7 +253,7 @@ public class CalendarAlarmListFragment extends CalendarBaseFragment {
         public void onClick(View view) {
             mEvent.mAlert = (int) view.getTag();
             Log.d("On CLicked", String.valueOf(mEvent.mAlert));
-//            getActivity().mEventStack.push(mEvent);
+            mainFrameActivity.mEventStack.push(mEvent);
 
             Bundle bundle = new Bundle();
             bundle.putString(CalendarManager.KEY_DATA_TYPE,CalendarManager.VALUE_DATA_TYPE_EVENT);

@@ -17,8 +17,12 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.kidsdynamic.commonlib.utils.ObjectUtils;
 import com.kidsdynamic.swing.R;
 import com.kidsdynamic.swing.domain.CalendarManager;
+import com.kidsdynamic.swing.domain.DeviceManager;
+import com.kidsdynamic.swing.domain.LoginManager;
+import com.kidsdynamic.swing.model.KidsEntityBean;
 import com.kidsdynamic.swing.model.WatchEvent;
 import com.kidsdynamic.swing.model.WatchTodo;
 import com.kidsdynamic.swing.utils.SwingFontsCache;
@@ -27,9 +31,11 @@ import com.kidsdynamic.swing.view.ViewTodo;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 import com.yy.base.utils.ColorUtils;
+import com.yy.base.utils.ToastCommon;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 import butterknife.BindView;
@@ -116,14 +122,49 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
 
         initView();
 
-        initValue();
+//        initValue();
 
         return mView;
     }
 
-    private void initValue() {
+    private boolean initValue() {
         mEvent = new WatchEvent(mDefaultDate);
-        mEvent.mUserId = 123;
+        long userId = new LoginManager().getCurrentLoginUserId(getContext());
+        long focusKidsIdId = DeviceManager.getFocusKidsId();
+
+        if(userId <= 0){
+            ToastCommon.makeText(getContext(),R.string.login_data_invalid);
+            getFragmentManager().popBackStack();
+
+            return false;
+        }
+
+        //获取kids list
+        List<KidsEntityBean> allKidsByUserId = DeviceManager.getAllKidsByUserId(getContext(), userId);
+
+        //test todo
+        KidsEntityBean kidsEntityBean = new KidsEntityBean();
+        kidsEntityBean.setKidsId(123);
+        kidsEntityBean.setName("Alex Smith");
+        kidsEntityBean.setParentId(123);
+        allKidsByUserId.add(kidsEntityBean);
+
+        if(ObjectUtils.isListEmpty(allKidsByUserId)){
+            ToastCommon.makeText(getContext(),R.string.login_data_invalid);
+            getFragmentManager().popBackStack();
+
+            return false;
+        }
+
+        if (mEvent.mKids.size() == 0) { // assign is illegal
+            if (focusKidsIdId <= 0)
+                mEvent.insertKid(allKidsByUserId.get(0).getKidsId(), 0);
+            else
+                mEvent.insertKid(focusKidsIdId, 0);
+        }
+
+
+        return true;
     }
 
     @Override
@@ -144,10 +185,10 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
         // 若Stack不為空, 表示Stack中保存當前需進行編輯的事件
         // 若為空, 表示需要新增一個新的事件
         if (mainFrameActivity.mEventStack.isEmpty()) {
-            mEvent = new WatchEvent(mDefaultDate);
-
-            //todo
-            mEvent.mUserId = 123;
+            //如果初始化获取当前登录者id和focusKidsId为空，则退出该界面
+           if(!initValue()){
+               return;
+           }
         } else {
             mEvent = mainFrameActivity.mEventStack.pop();
         }
@@ -254,13 +295,14 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
     }
 
     private boolean loadAlarm() {
-        WatchEvent.Alarm[] alertList = WatchEvent.AlarmList_new;
-        /*if(mActivityMain.language.equals(Locale.JAPAN.getLanguage())) {
-            alertList = WatchEvent.AlarmList_ja;
+        WatchEvent.Alarm[] alertList;
+        KidsEntityBean kid = new DeviceManager().getKidsInfo(getContext(), mEvent.mKids.get(0));
+        if (kid != null && kid.getFirmwareVersion() != null && kid.getFirmwareVersion().contains("KDV01")) {
+            alertList = WatchEvent.AlarmList_new;
         } else {
             alertList = WatchEvent.AlarmList;
-        }*/
 
+        }
 
         for (WatchEvent.Alarm target : alertList) {
             if (target.mId == mEvent.mAlert) {
@@ -319,11 +361,11 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
 
     @OnClick(R.id.calendar_event_alarm_name_layout)
    protected void onClickSelectEvent(){
-//       mainFrameActivity.mEventStack.push(mEvent);
+       mainFrameActivity.mEventStack.push(mEvent);
 
        Bundle bundle = new Bundle();
-//       bundle.putInt("kidId", mEvent.mKids.get(0));
-       bundle.putInt("kidId", 123);
+       bundle.putLong("kidId", mEvent.mKids.get(0));
+//       bundle.putInt("kidId", 123);
        selectFragment(CalendarAlarmListFragment.class.getName(), bundle,true);
    }
 

@@ -30,7 +30,7 @@ public class KidsDataStore {
         kidsDao.insertInTx(kidsList);
     }
 
-    public DB_Kids getKidsInfo(int kidsId){
+    public DB_Kids getKidsInfo(long kidsId){
         KidsDao kidsDao = dbUtil.getDaoSession().getKidsDao();
         List<DB_Kids> kidsList = kidsDao.queryBuilder().where(KidsDao.Properties.KidsId.eq(kidsId)).list();
         if(!ObjectUtils.isListEmpty(kidsList)){

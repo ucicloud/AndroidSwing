@@ -141,7 +141,7 @@ public class PreferencesUtil {
 
     // For long
     public long gPrefLongValue(String key) {
-        return sp.getLong(key,0);
+        return sp.getLong(key,-1);
     }
 
     // For float

@@ -34,7 +34,7 @@ public class EventAssignToFragment extends CalendarBaseFragment {
     @BindView(R.id.listview_kids)
     protected ListView listView_kids;
 
-    private WatchEvent watchEvent;
+    private WatchEvent mEvent;
     private EventAssignToListAdapter eventAssignToListAdapter;
 
     private long assignToKidsId = -1;
@@ -68,9 +68,9 @@ public class EventAssignToFragment extends CalendarBaseFragment {
     private void initValue() {
 //        mainFrameActivity.mEventStack.pop();
 
-        allKidsByUserId = new DeviceManager().getAllKidsByUserId(getContext(), userId);
+        allKidsByUserId = DeviceManager.getAllKidsByUserId(getContext(), userId);
 
-        //test
+        //test todo
         KidsEntityBean kidsEntityBean = new KidsEntityBean();
         kidsEntityBean.setKidsId(123);
         kidsEntityBean.setName("Alex Smith");
@@ -86,7 +86,7 @@ public class EventAssignToFragment extends CalendarBaseFragment {
 
     @OnClick(R.id.main_toolbar_title)
     public void onToolbarAction1() {
-//        mActivityMain.mEventStack.push(mEvent);
+        mainFrameActivity.mEventStack.push(mEvent);
         getActivity().getSupportFragmentManager().popBackStack();
     }
 
