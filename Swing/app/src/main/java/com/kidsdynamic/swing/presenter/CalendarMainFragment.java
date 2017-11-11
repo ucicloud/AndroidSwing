@@ -3,7 +3,6 @@ package com.kidsdynamic.swing.presenter;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,8 +14,8 @@ import android.widget.TextView;
 import com.kidsdynamic.data.net.event.model.EventUtils;
 import com.kidsdynamic.data.net.event.model.TodoEntity;
 import com.kidsdynamic.swing.R;
-import com.kidsdynamic.swing.adapter.TodoListAdapter;
 import com.kidsdynamic.swing.domain.EventManager;
+import com.kidsdynamic.swing.domain.LoginManager;
 import com.kidsdynamic.swing.model.WatchEvent;
 import com.kidsdynamic.swing.view.ViewCircle;
 import com.kidsdynamic.swing.view.calendar.ViewCalendar;
@@ -80,6 +79,7 @@ public class CalendarMainFragment extends CalendarBaseFragment {
 
     private List<WatchEvent> mEventList;
     private WatchEvent mNearbyEven;
+    private long currentUserId;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -115,7 +115,7 @@ public class CalendarMainFragment extends CalendarBaseFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        getView().setFocusableInTouchMode(true);
+        /*getView().setFocusableInTouchMode(true);
         getView().requestFocus();
         getView().setOnKeyListener(new View.OnKeyListener() {
             @Override
@@ -128,17 +128,17 @@ public class CalendarMainFragment extends CalendarBaseFragment {
                         //切换右上角图标
                         view_right_action.setImageResource(R.drawable.icon_add);
                         view_right_action.setTag(R.drawable.icon_add);
-                        /*Intent intent = new Intent(CalendarContainerFragment.UI_Update_Action);
+                        *//*Intent intent = new Intent(CalendarContainerFragment.UI_Update_Action);
                         intent.putExtra(CalendarContainerFragment.UI_Update_Action_Type,
                                 CalendarContainerFragment.UI_Action_Change_Event_Add);
-                        SwingApplication.localBroadcastManager.sendBroadcast(intent);*/
+                        SwingApplication.localBroadcastManager.sendBroadcast(intent);*//*
 
                         return true;
                     }
                 }
                 return false;
             }
-        });
+        });*/
     }
 
     private void initCalendar(){
@@ -162,12 +162,10 @@ public class CalendarMainFragment extends CalendarBaseFragment {
 
     @OnClick(R.id.main_toolbar_action2)
     public void onToolbarAction2() {
-        //todo add new event
-        /*WatchEvent event = new WatchEvent(mViewCalendar.getDate());
-        event.mUserId = mActivityMain.mOperator.getUser().mId;
+        WatchEvent event = new WatchEvent(mViewCalendarWeek.getDate());
+        event.mUserId = currentUserId;
 
-        mActivityMain.mEventStack.push(event);
-        mActivityMain.selectFragment(FragmentCalendarEvent.class.getName(), null);*/
+        mainFrameActivity.mEventStack.push(event);
 
         selectFragment(CalendarAddEventFragment.class.getName(),null,true);
     }
@@ -177,19 +175,15 @@ public class CalendarMainFragment extends CalendarBaseFragment {
     protected void onNearbyEventClick(){
         // TODO: 2017/10/30 测试，不论有没有event都可以点击
 //        if(mNearbyEven != null){
-            layout_event_detail.setVisibility(View.VISIBLE);
+            /*layout_event_detail.setVisibility(View.VISIBLE);
             layout_event_oper.setVisibility(View.GONE);
 
-        /*Intent intent = new Intent(CalendarContainerFragment.UI_Update_Action);
-        intent.putExtra(CalendarContainerFragment.UI_Update_Action_Type,
-                CalendarContainerFragment.UI_Action_Change_Event_detail);
-        SwingApplication.localBroadcastManager.sendBroadcast(intent);*/
         view_right_action.setImageResource(R.drawable.icon_pen);
         view_right_action.setTag(R.drawable.icon_pen);
 
 
         TodoListAdapter todoListAdapter = new TodoListAdapter(getContext(), getTodoEntity());
-        listView_todo.setAdapter(todoListAdapter);
+        listView_todo.setAdapter(todoListAdapter);*/
 //        }
     }
 
@@ -245,9 +239,9 @@ public class CalendarMainFragment extends CalendarBaseFragment {
         long start = ViewCalendar.stripTime(mDefaultDate);
         long end = start + 86400000 - 1;
 
-        //todo 从cache中读取当前userid
-        long userId = 123;
-        mEventList = EventManager.getEventList(userId, start, end);
+        //从cache中读取当前userid
+        currentUserId = LoginManager.getCurrentLoginUserId(getContext());
+        mEventList = EventManager.getEventList(currentUserId, start, end);
 
         updateAlert();
 
@@ -338,11 +332,11 @@ public class CalendarMainFragment extends CalendarBaseFragment {
     private ViewCalendarWeek.OnSelectListener mCalendarListener = new ViewCalendarWeek.OnSelectListener() {
         @Override
         public void onSelect(ViewCalendarWeek calendar, ViewCalendarCellWeek cell) {
-            // TODO: 2017/10/29 调整转到每天event界面
-            /*Bundle bundle = new Bundle();
+            //2017/10/29 调整转到每天event界面
+            Bundle bundle = new Bundle();
             bundle.putLong(BUNDLE_KEY_DATE, cell.getDate());
 
-            mActivityMain.selectFragment(FragmentCalendarDaily.class.getName(), bundle);*/
+            selectFragment(CalendarDailyFragment.class.getName(), bundle,true);
         }
     };
 

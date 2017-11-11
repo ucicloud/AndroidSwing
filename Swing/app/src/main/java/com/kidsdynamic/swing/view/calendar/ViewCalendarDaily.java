@@ -115,7 +115,7 @@ public class ViewCalendarDaily extends ViewCalendar {
         removeAllViews();
     }
 
-    interface OnSelectListener {
+    public interface OnSelectListener {
         void OnSelect(View view, WatchEvent event);
     }
 

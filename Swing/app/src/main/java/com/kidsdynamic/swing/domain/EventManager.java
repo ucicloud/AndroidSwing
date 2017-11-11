@@ -5,7 +5,9 @@ import android.support.annotation.NonNull;
 
 import com.kidsdynamic.commonlib.utils.ObjectUtils;
 import com.kidsdynamic.data.dao.DB_Event;
+import com.kidsdynamic.data.dao.DB_Todo;
 import com.kidsdynamic.data.dao.EventDao;
+import com.kidsdynamic.data.net.event.model.EventEditRep;
 import com.kidsdynamic.data.net.event.model.EventWithTodo;
 import com.kidsdynamic.data.persistent.DbUtil;
 import com.kidsdynamic.data.repository.disk.EventDataStore;
@@ -52,6 +54,23 @@ public class EventManager {
         eventDataStore.saveAll(BeanConvertor.getDBEventList(eventWithTodoList));
         todoItemDataStore.saveAll(BeanConvertor.getDBTodo(eventWithTodoList));
 
+    }
+
+    public static void saveEventForAdd(@NonNull Context context, @NonNull EventEditRep eventEditRep){
+        if(eventEditRep.getEvent() == null){
+            return;
+        }
+
+        DbUtil dbUtil = DbUtil.getInstance(context.getApplicationContext());
+        EventDataStore eventDataStore = new EventDataStore(dbUtil);
+        TodoItemDataStore todoItemDataStore = new TodoItemDataStore(dbUtil);
+
+        List<EventWithTodo> eventWithTodoList = new ArrayList<>(1);
+        eventWithTodoList.add(eventEditRep.getEvent());
+
+        //save
+        eventDataStore.saveAll(BeanConvertor.getDBEventList(eventWithTodoList));
+        todoItemDataStore.saveAll(BeanConvertor.getDBTodo(eventWithTodoList));
     }
 
     public static List<WatchEvent> getEventList(long userId, long startTimeStamp, long endTimeStamp){
@@ -262,5 +281,30 @@ public class EventManager {
 
         return result;
 
+    }
+
+    public static void updateTodoItemStatus(WatchTodo watchTodo){
+        if(watchTodo == null){
+            return;
+        }
+
+        DB_Todo dbTodo = BeanConvertor.getDBTodo(watchTodo);
+        DbUtil dbUtil = DbUtil.getInstance(SwingApplication.getAppContext());
+
+        TodoItemDataStore todoItemDataStore = new TodoItemDataStore(dbUtil);
+
+        List<DB_Todo> db_todos = new ArrayList<>(1);
+        db_todos.add(dbTodo);
+
+        todoItemDataStore.updateTodoStatus(db_todos);
+    }
+
+    public static void delEventById(long eventId){
+        DbUtil dbUtil = DbUtil.getInstance(SwingApplication.getAppContext());
+        EventDataStore eventDataStore = new EventDataStore(dbUtil);
+        eventDataStore.deleteById(eventId);
+
+        TodoItemDataStore todoItemDataStore = new TodoItemDataStore(dbUtil);
+        todoItemDataStore.deleteByEventId(eventId);
     }
 }

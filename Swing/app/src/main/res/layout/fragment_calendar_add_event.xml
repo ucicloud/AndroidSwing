@@ -411,7 +411,7 @@
                 android:orientation="horizontal"
                 android:paddingEnd="10dp"
                 android:paddingStart="10dp"
-                android:visibility="visible">
+                android:visibility="invisible">
 
                 <EditText
                     android:id="@+id/calendar_event_description"

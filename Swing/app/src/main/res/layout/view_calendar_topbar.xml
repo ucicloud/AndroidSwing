@@ -17,13 +17,9 @@
     <com.kidsdynamic.swing.view.calendar.ViewCalendarSelector
         android:id="@+id/calendar_main_selector"
         app:calendarMode="week"
-        app:exceedColor="@color/color_gray_deep"
-        app:todayColor="@color/color_orange_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginLeft="@dimen/base_56"
         android:layout_marginRight="@dimen/base_56"
-        android:textColor="@color/color_orange_main"
-        android:textSize="18sp"
-        android:textStyle="bold" />
+        style="@style/calendar_selector"/>
 </RelativeLayout>

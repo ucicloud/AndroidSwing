@@ -1,4 +1,4 @@
-<resources>
+<resources >
 
     <!-- Base application theme. -->
     <style name="AppThemeViewlib" parent="Theme.AppCompat.Light.DarkActionBar">
@@ -167,4 +167,44 @@
         <item name="android:textSize">24sp</item>
         <item name="android:textStyle">bold</item>
     </style>
+
+    <style name="AppDialogStyle" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorAccent">@color/color_orange_main</item>
+        <item name="android:textColorPrimary">@color/color_orange_main</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:background">#fff</item>
+    </style>
+
+    <style name="textview_calendar_todo_title">
+        <item name="android:textColor">@color/color_white</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="textview_calendar_todo_description">
+        <item name="android:textColor">@color/color_white</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="calendar_selector">
+        <item name="android:textColor">@color/color_orange_main</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="exceedColor">@color/color_gray_deep</item>
+        <item name="todayColor">@color/color_orange_main</item>
+    </style>
+
+
+    <style name="calendar_week">
+        <item name="android:textColor">@color/color_gray_deep</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="exceedColor">@color/color_gray_light</item>
+        <item name="focusBackgroundColor">@color/color_orange_main</item>
+        <item name="focusColor">@color/color_white</item>
+        <item name="todayColor">@color/color_orange_main</item>
+        <item name="weekNameColor">@color/color_orange_main</item>
+    </style>
+
 </resources>

@@ -13,7 +13,7 @@ public class ToastCommon{
         Toast.makeText(context, context.getString(strResId,formatArgs), Toast.LENGTH_SHORT).show();
     }
 
-    protected void showToast(Context context, CharSequence text) {
+    public static void showToast(Context context, CharSequence text) {
         Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
     }
 

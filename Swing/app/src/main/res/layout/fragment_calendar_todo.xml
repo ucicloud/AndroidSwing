@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_blue_sky"
+    android:orientation="vertical">
+
+    <include layout="@layout/base_title_bar"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:paddingEnd="10dp"
+        android:paddingStart="10dp"
+        android:paddingTop="10dp">
+
+        <com.kidsdynamic.swing.view.ViewSponge
+            android:id="@+id/calendar_todo_selector_sponge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            app:shrinkWidth="0.8" />
+
+        <com.kidsdynamic.swing.view.calendar.ViewCalendarSelector
+            android:id="@+id/calendar_todo_selector"
+            style="@style/calendar_selector"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignEnd="@+id/calendar_todo_selector_sponge"
+            android:layout_alignStart="@+id/calendar_todo_selector_sponge"
+            app:calendarMode="week" />
+
+        <!--android:textColor="@color/color_gray_deep"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:exceedColor="@color/color_gray_deep"
+        app:todayColor="@color/color_orange_main"-->
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:paddingEnd="10dp"
+        android:paddingStart="10dp">
+
+        <com.kidsdynamic.swing.view.ViewSponge
+            android:id="@+id/calendar_todo_calendar_sponge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            app:shrinkWidth="0.9" />
+
+        <com.kidsdynamic.swing.view.calendar.ViewCalendarWeek
+            android:id="@+id/calendar_todo_calendar"
+            style="@style/calendar_week"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignEnd="@+id/calendar_todo_calendar_sponge"
+            android:layout_alignStart="@+id/calendar_todo_calendar_sponge" />
+
+    </RelativeLayout>
+
+    <!--event detail; to-do list-->
+    <LinearLayout
+        android:id="@+id/layout_earliest_detail"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="9"
+        android:background="#7573C0"
+        android:orientation="vertical"
+        android:padding="10dp"
+        android:paddingLeft="@dimen/base_35"
+        android:paddingRight="@dimen/base_35">
+
+        <com.kidsdynamic.swing.view.AvenirTextView
+            android:id="@+id/calendar_todo_title"
+            style="@style/textview_calendar_todo_title"
+            android:textSize="15sp"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical|start"
+            android:paddingEnd="25dp"
+            android:paddingStart="25dp" />
+
+        <com.kidsdynamic.swing.view.AvenirTextView
+            android:id="@+id/calendar_todo_name"
+            style="@style/textview_calendar_todo_title"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical|start"
+            android:paddingEnd="25dp"
+            android:paddingStart="25dp" />
+
+        <com.kidsdynamic.swing.view.AvenirTextView
+            android:id="@+id/calendar_todo_description"
+            style="@style/textview_calendar_todo_description"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:gravity="center_vertical|start"
+            android:maxLines="2"
+            android:paddingEnd="25dp"
+            android:paddingStart="25dp" />
+
+        <ScrollView
+            android:id="@+id/calendar_todo_container_line"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="4"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp">
+
+            <LinearLayout
+                android:id="@+id/calendar_todo_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingEnd="20dp"
+                android:paddingStart="20dp" />
+
+        </ScrollView>
+
+        <RelativeLayout
+            android:id="@+id/calendar_todo_button_line"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2">
+
+            <!--<com.kidsdynamic.swing.view.ViewSponge
+                android:id="@+id/calendar_todo_button_sponge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                app:shrinkWidth="0.5" />-->
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                tools:ignore="UselessParent">
+
+                <Button
+                    android:id="@+id/calendar_todo_save"
+                    style="@style/button_main"
+                    android:layout_width="@dimen/base_150"
+                    android:layout_centerVertical="true"
+                    android:text="@string/calendar_todo_save" />
+
+                <ImageView
+                    android:id="@+id/calendar_todo_delete"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toEndOf="@+id/calendar_todo_save"
+                    android:src="@drawable/icon_delete" />
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+    </LinearLayout>
+</LinearLayout>

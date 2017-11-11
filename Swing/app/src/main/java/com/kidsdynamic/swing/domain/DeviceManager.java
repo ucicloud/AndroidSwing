@@ -133,4 +133,17 @@ public class DeviceManager {
 
         return null;
     }
+
+    public static KidsEntityBean getKidsByIdInCache(List<KidsEntityBean> kidsEntityBeans, long kidsId){
+        if(!ObjectUtils.isListEmpty(kidsEntityBeans)){
+            for (KidsEntityBean kidsEntityBean :
+                    kidsEntityBeans) {
+             if(kidsId == kidsEntityBean.getKidsId()){
+                 return kidsEntityBean;
+             }
+            }
+        }
+
+        return null;
+    }
 }

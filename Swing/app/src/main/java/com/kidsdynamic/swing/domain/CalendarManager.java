@@ -5,6 +5,7 @@ import android.util.SparseArray;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -71,6 +72,13 @@ public class CalendarManager {
 
 
         return colors;
+    }
+
+
+    public static int getTimezoneOffset(){
+        Calendar now = Calendar.getInstance();
+        int offset = now.getTimeZone().getOffset(now.getTimeInMillis());
+        return offset / 60 / 1000;
     }
 
 

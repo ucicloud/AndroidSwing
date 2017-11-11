@@ -1,8 +1,11 @@
 package com.kidsdynamic.swing.presenter;
 
+import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -16,15 +19,23 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.kidsdynamic.commonlib.utils.ObjectUtils;
+import com.kidsdynamic.data.net.ApiGen;
+import com.kidsdynamic.data.net.event.EventApi;
+import com.kidsdynamic.data.net.event.model.EventAddEntity;
+import com.kidsdynamic.data.net.event.model.EventEditRep;
 import com.kidsdynamic.swing.R;
+import com.kidsdynamic.swing.domain.BeanConvertor;
 import com.kidsdynamic.swing.domain.CalendarManager;
 import com.kidsdynamic.swing.domain.DeviceManager;
+import com.kidsdynamic.swing.domain.EventManager;
 import com.kidsdynamic.swing.domain.LoginManager;
 import com.kidsdynamic.swing.model.KidsEntityBean;
 import com.kidsdynamic.swing.model.WatchEvent;
 import com.kidsdynamic.swing.model.WatchTodo;
+import com.kidsdynamic.swing.net.BaseRetrofitCallback;
 import com.kidsdynamic.swing.utils.SwingFontsCache;
 import com.kidsdynamic.swing.view.ViewShape;
 import com.kidsdynamic.swing.view.ViewTodo;
@@ -41,6 +52,8 @@ import java.util.Locale;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import retrofit2.Call;
+import retrofit2.Response;
 
 /**
  * CalendarAddEventFragment
@@ -110,6 +123,7 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
     private long mDefaultDate = System.currentTimeMillis();
     private boolean isStarDate = false;
     private Calendar mCalendarDate;
+    private List<KidsEntityBean> allKidsByUserId;
 
 
     @Nullable
@@ -127,9 +141,8 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
         return mView;
     }
 
-    private boolean initValue() {
-        mEvent = new WatchEvent(mDefaultDate);
-        long userId = new LoginManager().getCurrentLoginUserId(getContext());
+    private boolean initValue(long userId) {
+
         long focusKidsIdId = DeviceManager.getFocusKidsId();
 
         if(userId <= 0){
@@ -140,7 +153,7 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
         }
 
         //获取kids list
-        List<KidsEntityBean> allKidsByUserId = DeviceManager.getAllKidsByUserId(getContext(), userId);
+        allKidsByUserId = DeviceManager.getAllKidsByUserId(getContext(), userId);
 
         //test todo
         KidsEntityBean kidsEntityBean = new KidsEntityBean();
@@ -185,12 +198,17 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
         // 若Stack不為空, 表示Stack中保存當前需進行編輯的事件
         // 若為空, 表示需要新增一個新的事件
         if (mainFrameActivity.mEventStack.isEmpty()) {
+            mEvent = new WatchEvent(mDefaultDate);
+            mEvent.mUserId = LoginManager.getCurrentLoginUserId(getContext());
             //如果初始化获取当前登录者id和focusKidsId为空，则退出该界面
-           if(!initValue()){
+           if(!initValue(mEvent.mUserId)){
                return;
            }
         } else {
             mEvent = mainFrameActivity.mEventStack.pop();
+            if(!initValue(mEvent.mUserId)){
+                return;
+            }
         }
 
         loadWatchEvent();
@@ -240,7 +258,7 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
     private void loadAssign() {
 
         // TODO: 2017/11/11
-       /* ArrayList<WatchContact.Kid> list = new ArrayList<>();
+        /*ArrayList<WatchContact.Kid> list = new ArrayList<>();
 
         list.addAll(mActivityMain.mOperator.getDeviceList());
         list.addAll(mActivityMain.mOperator.getSharedList());
@@ -254,15 +272,26 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
                 mEvent.insertKid(list.get(0).mId, 0);
             else
                 mEvent.insertKid(focusKid.mId, 0);
-        }
+        }*/
+
 
         setAssign(mEvent.mKids.get(0));
 
-        // Note: We create kids options here, to avoid
-        // some kids create during fragment paused.
-        mViewAssignContainer.removeAllViews();
-        for (WatchContact.Kid kid : list)
-            addKid(kid);*/
+    }
+
+    private void setAssign(long kidsId) {
+        if (kidsId <= 0) {
+            mViewAssignName.setText("");
+        } else {
+            KidsEntityBean kidsByIdInCache = DeviceManager.getKidsByIdInCache(allKidsByUserId, kidsId);
+            if(kidsByIdInCache != null){
+
+                String name = kidsByIdInCache.getName();
+                if (mEvent.mKids.size() > 1)
+                    name += "...";
+                mViewAssignName.setText(name);
+            }
+        }
     }
 
     private void loadDescription() {
@@ -365,7 +394,6 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
 
        Bundle bundle = new Bundle();
        bundle.putLong("kidId", mEvent.mKids.get(0));
-//       bundle.putInt("kidId", 123);
        selectFragment(CalendarAlarmListFragment.class.getName(), bundle,true);
    }
 
@@ -615,6 +643,78 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
         }
 
         mViewTodoOption.requestLayout();
+    }
+
+    @OnClick(R.id.calendar_event_save)
+    protected void onSaveClick(){
+        if (!loadAlarm()) {
+            Toast.makeText(getActivity(), R.string.calendar_event_please_select_event, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        showLoadingDialog(R.string.activity_main_wait);
+        //save event
+
+        final EventApi eventApi = ApiGen.getInstance(getContext().getApplicationContext()).
+                generateApi(EventApi.class,true);
+
+        EventAddEntity eventAddBean = BeanConvertor.getEventAddBean(mEvent);
+
+        eventApi.eventAdd(eventAddBean).enqueue(new BaseRetrofitCallback<EventEditRep>(){
+            @Override
+            public void onResponse(Call<EventEditRep> call, Response<EventEditRep> response) {
+                super.onResponse(call, response);
+                //如果保存成功，则把event保存到本地
+                if(response.code() == 200){
+                    EventManager.saveEventForAdd(getContext(), response.body());
+
+                    getFragmentManager().popBackStack();
+                    showSyncDialog();
+                }
+
+                finishLoadingDialog();
+
+            }
+
+            @Override
+            public void onFailure(Call<EventEditRep> call, Throwable t) {
+                super.onFailure(call, t);
+
+                finishLoadingDialog();
+            }
+        });
+    }
+
+    private void showSyncDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(mainFrameActivity,
+                R.style.AppDialogStyle);
+        builder.setTitle("");
+        builder.setMessage(R.string.dialog_sync_content);
+
+        String positiveText = getString(android.R.string.ok);
+        builder.setPositiveButton(positiveText,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+
+        AlertDialog dialog = builder.create();
+
+        // display dialog
+        dialog.show();
+
+        Button nbutton = dialog.getButton(DialogInterface.BUTTON_NEGATIVE);
+        nbutton.setBackgroundColor(getResources().getColor(R.color.color_orange_main));
+        nbutton.setTextColor(Color.WHITE);
+        ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) nbutton.getLayoutParams();
+        params.rightMargin = 50;
+        nbutton.setLayoutParams(params);
+
+        TextView msgText = (TextView) dialog.findViewById(android.R.id.message);
+        msgText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+
     }
 
 }

@@ -30,14 +30,17 @@
             android:id="@+id/calendar_week"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:textColor="@color/color_gray_deep"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:exceedColor="@color/color_gray_light"
-            app:focusBackgroundColor="@color/color_orange_main"
-            app:focusColor="@color/color_white"
-            app:todayColor="@color/color_orange_main"
-            app:weekNameColor="@color/color_orange_main"/>
+            style="@style/calendar_week"/>
+
+
+       <!-- android:textColor="@color/color_gray_deep"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:exceedColor="@color/color_gray_light"
+        app:focusBackgroundColor="@color/color_orange_main"
+        app:focusColor="@color/color_white"
+        app:todayColor="@color/color_orange_main"
+        app:weekNameColor="@color/color_orange_main"-->
 
     </RelativeLayout>
 

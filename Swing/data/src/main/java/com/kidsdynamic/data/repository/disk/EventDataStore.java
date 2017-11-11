@@ -6,8 +6,6 @@ import com.kidsdynamic.data.persistent.DbUtil;
 
 import java.util.List;
 
-import de.greenrobot.dao.DbUtils;
-
 /**
  * <br>author: wzg@xdja.com <br/>
  * date:   2017/10/26 17:02 <br/>
@@ -42,5 +40,10 @@ public class EventDataStore {
     public void saveAll(List<DB_Event> db_eventList){
         EventDao eventDao = dbUtil.getDaoSession().getEventDao();
         eventDao.insertInTx(db_eventList);
+    }
+
+    public void deleteById(long eventId){
+        EventDao eventDao = dbUtil.getDaoSession().getEventDao();
+        eventDao.deleteByKey(eventId);
     }
 }

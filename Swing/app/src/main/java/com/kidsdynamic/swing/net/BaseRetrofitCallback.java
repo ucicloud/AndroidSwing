@@ -13,7 +13,7 @@ import retrofit2.Response;
  * date:   2017/10/26 11:57 <br/>
  */
 
-public  class BaseRetrofitCallback<T> implements Callback<T> {
+public abstract class BaseRetrofitCallback<T> implements Callback<T> {
 
     @Override
     public void onResponse(Call<T> call, Response<T> response) {

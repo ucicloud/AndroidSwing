@@ -59,7 +59,7 @@ public class LoginManager {
         return true;
     }
 
-    public long getCurrentLoginUserId(Context context){
+    public static long getCurrentLoginUserId(Context context){
         return PreferencesUtil.getInstance(context.getApplicationContext()).
                 gPrefLongValue(ConfigUtil.label_user_id);
     }

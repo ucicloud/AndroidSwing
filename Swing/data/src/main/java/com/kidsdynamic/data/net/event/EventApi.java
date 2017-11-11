@@ -42,7 +42,7 @@ public interface EventApi {
 //400	Bad request. Missing some parameters, or the type is wrong
 //500	Internal error. Please send me the error. I will fix it
     @DELETE("v1/event/delete")
-    Call<Object> eventDelete(@Query("eventId") int eventId);
+    Call<Object> eventDelete(@Query("eventId") long eventId);
 
 //    200	Retrieve successfully
 //    500	Internal error. Please send me the error. I will fix it

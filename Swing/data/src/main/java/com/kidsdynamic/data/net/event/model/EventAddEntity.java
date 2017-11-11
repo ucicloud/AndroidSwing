@@ -28,7 +28,7 @@ public class EventAddEntity {
     private String description;
     private int alert;
     private String repeat;//DAILY, MONTHLY
-    private List<Integer> kidId;
+    private List<Long> kidId;
     private List<String> todo;
 
     public String getName() {
@@ -95,11 +95,11 @@ public class EventAddEntity {
         this.repeat = repeat;
     }
 
-    public List<Integer> getKidId() {
+    public List<Long> getKidId() {
         return kidId;
     }
 
-    public void setKidId(List<Integer> kidId) {
+    public void setKidId(List<Long> kidId) {
         this.kidId = kidId;
     }
 

@@ -7,6 +7,7 @@ import com.kidsdynamic.data.dao.DB_Event;
 import com.kidsdynamic.data.dao.DB_Kids;
 import com.kidsdynamic.data.dao.DB_Todo;
 import com.kidsdynamic.data.dao.DB_User;
+import com.kidsdynamic.data.net.event.model.EventAddEntity;
 import com.kidsdynamic.data.net.event.model.EventWithTodo;
 import com.kidsdynamic.data.net.event.model.TodoEntity;
 import com.kidsdynamic.data.net.kids.model.KidsWithParent;
@@ -208,7 +209,7 @@ public class BeanConvertor {
     }
 
 
-    public static List<WatchEvent> getWatchEvent(List<DB_Event> dbEvents){
+    static List<WatchEvent> getWatchEvent(List<DB_Event> dbEvents){
         List<WatchEvent> watchEvents = new ArrayList<>(dbEvents.size());
         for (DB_Event db_event: dbEvents) {
             watchEvents.add(getWatchEvent(db_event));
@@ -217,7 +218,7 @@ public class BeanConvertor {
         return watchEvents;
     }
 
-    public static WatchEvent getWatchEvent(DB_Event db_event){
+    private static WatchEvent getWatchEvent(DB_Event db_event){
 
         WatchEvent watchEvent = new WatchEvent();
         watchEvent.mId = db_event.getEventId();
@@ -287,6 +288,42 @@ public class BeanConvertor {
         kidsEntityBean.setParentId(db_kids.getParentId());
 
         return kidsEntityBean;
+    }
+
+    public static EventAddEntity getEventAddBean(@NonNull WatchEvent event){
+
+        EventAddEntity eventAddEntity = new EventAddEntity();
+
+        eventAddEntity.setKidId(event.mKids);
+        eventAddEntity.setName(event.mName);
+        eventAddEntity.setStartDate(getLocalTimeString(event.mStartDate));
+        eventAddEntity.setEndDate(getLocalTimeString(event.mEndDate));
+        eventAddEntity.setColor(event.mColor);
+        eventAddEntity.setDescription(event.mDescription);
+        eventAddEntity.setAlert(event.mAlert);
+        eventAddEntity.setRepeat(event.mRepeat);
+        eventAddEntity.setTimezoneOffset(CalendarManager.getTimezoneOffset());
+
+        List<String> todos = new ArrayList<>();
+        for (WatchTodo todo : event.mTodoList)
+            todos.add(todo.mText);
+
+        eventAddEntity.setTodo(todos);
+
+        return eventAddEntity;
+    }
+
+    public static DB_Todo getDBTodo(@NonNull WatchTodo watchTodo){
+        DB_Todo db_todo = new DB_Todo();
+
+        db_todo.setTodoId(watchTodo.mId);
+        db_todo.setText(watchTodo.mText);
+        db_todo.setStatus(watchTodo.mStatus);
+        db_todo.setDateCreated(watchTodo.mDateCreated);
+        db_todo.setLastUpdated(watchTodo.mLastUpdated);
+        db_todo.setEventId(watchTodo.mEventId);
+
+        return db_todo;
     }
 
 }

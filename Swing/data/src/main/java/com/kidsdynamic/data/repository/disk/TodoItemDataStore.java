@@ -2,7 +2,6 @@ package com.kidsdynamic.data.repository.disk;
 
 import com.kidsdynamic.commonlib.utils.ObjectUtils;
 import com.kidsdynamic.data.dao.DB_Todo;
-import com.kidsdynamic.data.dao.EventDao;
 import com.kidsdynamic.data.dao.TodoDao;
 import com.kidsdynamic.data.persistent.DbUtil;
 
@@ -33,5 +32,24 @@ public class TodoItemDataStore {
         todoDao.insertInTx(db_todoList);
 
         return true;
+    }
+
+    public boolean updateTodoStatus(List<DB_Todo> db_todoList){
+        if(ObjectUtils.isListEmpty(db_todoList)){
+            return true;
+        }
+
+        TodoDao todoDao = dbUtil.getDaoSession().getTodoDao();
+        todoDao.updateInTx(db_todoList);
+
+        return true;
+    }
+
+    public void deleteByEventId(long eventId){
+        TodoDao todoDao = dbUtil.getDaoSession().getTodoDao();
+        List<DB_Todo> dbTodos = todoDao.queryBuilder().
+                where(TodoDao.Properties.EventId.eq(eventId)).list();
+
+        todoDao.deleteInTx(dbTodos);
     }
 }

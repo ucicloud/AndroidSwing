@@ -11,22 +11,22 @@ public class TodoDoneEntity {
      * todoId : 2
      */
 
-    private int eventId;
-    private int todoId;
+    private long eventId;
+    private long todoId;
 
-    public int getEventId() {
+    public long getEventId() {
         return eventId;
     }
 
-    public void setEventId(int eventId) {
+    public void setEventId(long eventId) {
         this.eventId = eventId;
     }
 
-    public int getTodoId() {
+    public long getTodoId() {
         return todoId;
     }
 
-    public void setTodoId(int todoId) {
+    public void setTodoId(long todoId) {
         this.todoId = todoId;
     }
 }

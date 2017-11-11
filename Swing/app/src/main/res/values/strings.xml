@@ -444,4 +444,6 @@
     <string name="dashboard_emotion_activity">Activity</string>
     <string name="dashboard_emotion_uv_detection">UV Detection</string>
 
+    <string name="save_todo_done_statue_err">save fail, try again[%1$d]</string>
+
 </resources>
