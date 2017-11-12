@@ -2,6 +2,7 @@ package com.kidsdynamic.swing.domain;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.kidsdynamic.commonlib.utils.ObjectUtils;
 import com.kidsdynamic.data.dao.DB_Event;
@@ -14,6 +15,7 @@ import com.kidsdynamic.data.repository.disk.EventDataStore;
 import com.kidsdynamic.data.repository.disk.TodoItemDataStore;
 import com.kidsdynamic.swing.R;
 import com.kidsdynamic.swing.SwingApplication;
+import com.kidsdynamic.swing.model.KidsEntityBean;
 import com.kidsdynamic.swing.model.WatchEvent;
 import com.kidsdynamic.swing.model.WatchTodo;
 
@@ -338,5 +340,25 @@ public class EventManager {
         }
 
         return BeanConvertor.getWatchEvent(eventById);
+    }
+
+   public static List<WatchEvent> getEventsForSync(KidsEntityBean kid) {
+        Calendar cal = Calendar.getInstance();
+        long startTimeStamp = cal.getTimeInMillis();
+        cal.add(Calendar.MONTH, 1);
+        long endTimeStamp = cal.getTimeInMillis();
+
+        List<WatchEvent> list = getEventList(kid.getParentId(),startTimeStamp, endTimeStamp);
+        List<WatchEvent> rtn = new ArrayList<>();
+        Log.d("Sync", "!!!!!!!!! ignore kid !!!!!!!! " + startTimeStamp);
+        for (WatchEvent watchEvent : list) {
+            //if (watchEvent.containsKid(kid.mId))
+            //    rtn.add(watchEvent);
+
+            if (watchEvent.mAlertTimeStamp > startTimeStamp)//watchEvent.containsKid(kid.mId)
+                rtn.add(watchEvent);
+        }
+
+        return rtn;
     }
 }

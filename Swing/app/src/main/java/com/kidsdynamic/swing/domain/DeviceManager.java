@@ -48,6 +48,10 @@ public class DeviceManager {
     }
 
     public static String getMacAddress(String macId) {
+        if(TextUtils.isEmpty(macId)){
+            return "00:00:00:00:00:00";
+        }
+
         if (macId.length() < 12)
             return "00:00:00:00:00:00";
 
