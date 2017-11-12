@@ -153,13 +153,24 @@
                     android:layout_centerVertical="true"
                     android:text="@string/calendar_todo_save" />
 
+                <Button
+                    android:id="@+id/calendar_todo_del"
+                    style="@style/button_main"
+                    android:layout_width="@dimen/base_150"
+                    android:layout_centerVertical="true"
+                    android:text="@string/calendar_todo_del"
+                    android:layout_marginStart="@dimen/base_10"
+                    android:layout_toEndOf="@+id/calendar_todo_save"/>
+
+
                 <ImageView
                     android:id="@+id/calendar_todo_delete"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_toEndOf="@+id/calendar_todo_save"
-                    android:src="@drawable/icon_delete" />
+                    android:src="@drawable/icon_delete"
+                    android:visibility="gone"/>
 
             </RelativeLayout>
 

@@ -87,8 +87,12 @@ public class SignupLoginFragment extends BaseFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        et_email.setText("123@qq.com");
+        et_password.setText("123456");
+/*
         et_email.setText("lwz3@swing.com");
         et_password.setText("1");
+*/
     }
 
     @OnClick(R.id.ib_back)

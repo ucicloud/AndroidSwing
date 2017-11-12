@@ -1,6 +1,7 @@
 package com.kidsdynamic.swing.domain;
 
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 
 import com.kidsdynamic.commonlib.utils.ObjectUtils;
 import com.kidsdynamic.data.dao.DB_Event;
@@ -8,6 +9,7 @@ import com.kidsdynamic.data.dao.DB_Kids;
 import com.kidsdynamic.data.dao.DB_Todo;
 import com.kidsdynamic.data.dao.DB_User;
 import com.kidsdynamic.data.net.event.model.EventAddEntity;
+import com.kidsdynamic.data.net.event.model.EventInfo;
 import com.kidsdynamic.data.net.event.model.EventWithTodo;
 import com.kidsdynamic.data.net.event.model.TodoEntity;
 import com.kidsdynamic.data.net.kids.model.KidsWithParent;
@@ -44,6 +46,7 @@ public class BeanConvertor {
         //dataCreate, lastUpdate 使用utc时间
         db_user.setDataCreate(getUTCTimeStamp(userEntity.getDateCreated()));
         db_user.setLastUpdate(getUTCTimeStamp(userEntity.getLastUpdate()));
+
         db_user.setPhoneNum(userEntity.getPhoneNumber());
         db_user.setProfile(userEntity.getProfile());
         db_user.setZipCode(userEntity.getZipCode());
@@ -66,6 +69,9 @@ public class BeanConvertor {
             db_kids.setMacId(kidsEntity.getMacId());
             db_kids.setProfile(kidsEntity.getProfile());
             db_kids.setParentId(userProfileRep.getUser().getId());
+            db_kids.setFirmwareVersion("");
+
+            db_kidsList.add(db_kids);
         }
 
         return db_kidsList;
@@ -100,6 +106,10 @@ public class BeanConvertor {
         db_event.setTimezoneOffset(eventWithTodo.getTimezoneOffset());
         db_event.setStatus(eventWithTodo.getStatus());
 
+        //create data, update data use utc time
+        db_event.setDateCreated(getUTCTimeStamp(eventWithTodo.getDateCreated()));
+        db_event.setLastUpdate(getUTCTimeStamp(eventWithTodo.getLastUpdated()));
+
         return db_event;
     }
 
@@ -130,6 +140,7 @@ public class BeanConvertor {
 
                     db_todo.setTodoId(todoEntity.getId());
                     db_todo.setText(todoEntity.getText());
+                    db_todo.setStatus(todoEntity.getStatus());
                     db_todo.setDateCreated(getUTCTimeStamp(todoEntity.getDateCreated()));
                     db_todo.setLastUpdated(getUTCTimeStamp(todoEntity.getLastUpdated()));
                     db_todo.setEventId((long) eventWithTodo.getId());
@@ -152,6 +163,7 @@ public class BeanConvertor {
             db_kids.setMacId(kidsWithParent.getMacId());
             db_kids.setProfile(kidsWithParent.getProfile());
             db_kids.setParentId(kidsWithParent.getParent().getId());
+            db_kids.setFirmwareVersion(kidsWithParent.getFirmwareVersion());
 
         return db_kids;
     }
@@ -218,7 +230,7 @@ public class BeanConvertor {
         return watchEvents;
     }
 
-    private static WatchEvent getWatchEvent(DB_Event db_event){
+    static WatchEvent getWatchEvent(DB_Event db_event){
 
         WatchEvent watchEvent = new WatchEvent();
         watchEvent.mId = db_event.getEventId();
@@ -233,8 +245,14 @@ public class BeanConvertor {
         watchEvent.mAlert = db_event.getAlert();
         watchEvent.mRepeat = db_event.getRepeat();
         watchEvent.mTimezoneOffset = db_event.getTimezoneOffset();
-        watchEvent.mDateCreated = db_event.getDateCreated();
-        watchEvent.mLastUpdated = db_event.getLastUpdate();
+
+        if(db_event.getDateCreated() != null){
+            watchEvent.mDateCreated = db_event.getDateCreated();
+        }
+
+        if(db_event.getLastUpdate() != null){
+            watchEvent.mLastUpdated = db_event.getLastUpdate();
+        }
 
         watchEvent.mTodoList = getWatchTodos(db_event.getUserId(),db_event.getTodoList());
 
@@ -270,7 +288,12 @@ public class BeanConvertor {
         watchTodo.mUserId = userId;
         watchTodo.mEventId = db_todo.getEventId();
         watchTodo.mText = db_todo.getText();
-        watchTodo.mStatus = db_todo.getStatus();
+
+        if(!TextUtils.isEmpty(db_todo.getStatus())){
+            watchTodo.mStatus = db_todo.getStatus();
+        }else {
+            watchTodo.mStatus = WatchTodo.STATUS_PENDING;
+        }
 
         return watchTodo;
     }
@@ -311,6 +334,30 @@ public class BeanConvertor {
         eventAddEntity.setTodo(todos);
 
         return eventAddEntity;
+    }
+
+    public static EventInfo getEventInfo4Update(@NonNull WatchEvent event){
+
+        EventInfo eventInfo = new EventInfo();
+
+        eventInfo.setEventId(event.mId);
+        eventInfo.setKidId(event.mKids);
+        eventInfo.setName(event.mName);
+        eventInfo.setStartDate(getLocalTimeString(event.mStartDate));
+        eventInfo.setEndDate(getLocalTimeString(event.mEndDate));
+        eventInfo.setColor(event.mColor);
+        eventInfo.setDescription(event.mDescription);
+        eventInfo.setAlert(event.mAlert);
+        eventInfo.setRepeat(event.mRepeat);
+        eventInfo.setTimezoneOffset(CalendarManager.getTimezoneOffset());
+
+        List<String> todos = new ArrayList<>();
+        for (WatchTodo todo : event.mTodoList)
+            todos.add(todo.mText);
+
+        eventInfo.setTodo(todos);
+
+        return eventInfo;
     }
 
     public static DB_Todo getDBTodo(@NonNull WatchTodo watchTodo){

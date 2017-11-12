@@ -148,6 +148,16 @@ public class CalendarMainFragment extends CalendarBaseFragment {
         //每天日期选择
         mViewCalendarWeek.setOnSelectListener(mCalendarListener);
 
+        //today's schedule
+        mViewToday.setOnClickListener(mTodayListener);
+        //sync now
+        mSyncButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectFragment(DashboardProgressFragment.class.getName(), null,true);
+            }
+        });
+
     }
 
 
@@ -171,10 +181,9 @@ public class CalendarMainFragment extends CalendarBaseFragment {
     }
 
 //    @OnClick(R.id.nearby_event_layout)
-    @OnClick(R.id.calendar_main_alert_event)
+//    @OnClick(R.id.calendar_main_alert_event)
     protected void onNearbyEventClick(){
-        // TODO: 2017/10/30 测试，不论有没有event都可以点击
-//        if(mNearbyEven != null){
+        if(mNearbyEven != null){
             /*layout_event_detail.setVisibility(View.VISIBLE);
             layout_event_oper.setVisibility(View.GONE);
 
@@ -184,7 +193,7 @@ public class CalendarMainFragment extends CalendarBaseFragment {
 
         TodoListAdapter todoListAdapter = new TodoListAdapter(getContext(), getTodoEntity());
         listView_todo.setAdapter(todoListAdapter);*/
-//        }
+        }
     }
 
     public void onTodoItemClick(){
@@ -332,7 +341,7 @@ public class CalendarMainFragment extends CalendarBaseFragment {
     private ViewCalendarWeek.OnSelectListener mCalendarListener = new ViewCalendarWeek.OnSelectListener() {
         @Override
         public void onSelect(ViewCalendarWeek calendar, ViewCalendarCellWeek cell) {
-            //2017/10/29 调整转到每天event界面
+            //2017/10/29 跳转转到每天event界面
             Bundle bundle = new Bundle();
             bundle.putLong(BUNDLE_KEY_DATE, cell.getDate());
 
@@ -343,25 +352,25 @@ public class CalendarMainFragment extends CalendarBaseFragment {
     private View.OnClickListener mAlertListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            /*WatchEvent event = (WatchEvent) view.getTag();
+            WatchEvent event = (WatchEvent) view.getTag();
             if (event == null)
                 return;
 
-            mActivityMain.mEventStack.push(event);
-            mActivityMain.selectFragment(FragmentCalendarEvent.class.getName(), null);*/
+            mainFrameActivity.mEventStack.push(event);
+            selectFragment(CalendarAddEventFragment.class.getName(), null,true);
         }
     };
 
     private View.OnClickListener mTodayListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            /*Calendar cale = Calendar.getInstance();
+            Calendar cale = Calendar.getInstance();
             long date = ViewCalendar.stripTime(cale.getTimeInMillis());
 
             Bundle bundle = new Bundle();
             bundle.putLong(BUNDLE_KEY_DATE, date);
 
-            mActivityMain.selectFragment(FragmentCalendarDaily.class.getName(), bundle);*/
+            selectFragment(CalendarDailyFragment.class.getName(), bundle,true);
         }
     };
 

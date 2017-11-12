@@ -5,13 +5,15 @@ import android.util.AttributeSet;
 import android.view.ViewParent;
 import android.widget.TextView;
 
+import com.kidsdynamic.swing.view.AvenirTextView;
+
 import java.util.Calendar;
 
 /**
  */
 
 // ViewCalendar物件中, 各日期(欄位)的物件.
-public class ViewCalendarCell extends TextView {
+public class ViewCalendarCell extends AvenirTextView {
     protected long mDate;
     protected ViewCalendar mViewCalendar = null;
 

@@ -26,6 +26,7 @@ import com.kidsdynamic.data.net.ApiGen;
 import com.kidsdynamic.data.net.event.EventApi;
 import com.kidsdynamic.data.net.event.model.EventAddEntity;
 import com.kidsdynamic.data.net.event.model.EventEditRep;
+import com.kidsdynamic.data.net.event.model.EventInfo;
 import com.kidsdynamic.swing.R;
 import com.kidsdynamic.swing.domain.BeanConvertor;
 import com.kidsdynamic.swing.domain.CalendarManager;
@@ -42,6 +43,7 @@ import com.kidsdynamic.swing.view.ViewTodo;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 import com.yy.base.utils.ColorUtils;
+import com.yy.base.utils.LogUtil;
 import com.yy.base.utils.ToastCommon;
 
 import java.text.SimpleDateFormat;
@@ -124,6 +126,7 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
     private boolean isStarDate = false;
     private Calendar mCalendarDate;
     private List<KidsEntityBean> allKidsByUserId;
+    private long currentUserId = -1;
 
 
     @Nullable
@@ -195,11 +198,14 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
         if (getArguments() != null)
             mDefaultDate = getArguments().getLong(BUNDLE_KEY_DATE);
 
+        //缓存当前登录者id
+        currentUserId = LoginManager.getCurrentLoginUserId(getContext());
+
         // 若Stack不為空, 表示Stack中保存當前需進行編輯的事件
         // 若為空, 表示需要新增一個新的事件
         if (mainFrameActivity.mEventStack.isEmpty()) {
             mEvent = new WatchEvent(mDefaultDate);
-            mEvent.mUserId = LoginManager.getCurrentLoginUserId(getContext());
+            mEvent.mUserId = currentUserId;
             //如果初始化获取当前登录者id和focusKidsId为空，则退出该界面
            if(!initValue(mEvent.mUserId)){
                return;
@@ -223,9 +229,10 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
         loadTodo();
         loadAlarm();
 
-//        viewAdvance(mEvent.mRepeat.length() != 0 || mEvent.mDescription.length() != 0 || mEvent.mTodoList.size() != 0);
+        viewAdvance(mEvent.mRepeat.length() != 0 ||
+                mEvent.mDescription.length() != 0 || mEvent.mTodoList.size() != 0);
 //        viewEnable(mActivityMain.mOperator.getUser().mId == mEvent.mUserId);
-//        ViewDelete(mActivityMain.mOperator.getUser().mId == mEvent.mUserId && mEvent.mId != 0);
+        ViewDelete(currentUserId == mEvent.mUserId && mEvent.mId != 0);
     }
 
 
@@ -379,14 +386,58 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
         tv_title.setText(R.string.title_calendar);
         view_left_action.setImageResource(R.drawable.icon_left);
 
-        /*view_right_action.setImageResource(R.drawable.icon_add);
-        view_right_action.setTag(R.drawable.icon_add);*/
+        view_right_action.setImageResource(R.drawable.icon_delete);
+        view_right_action.setVisibility(View.INVISIBLE);
+       /* view_right_action.setTag(R.drawable.icon_add);*/
     }
 
     @OnClick(R.id.main_toolbar_action1)
     protected void onTopLeftBtnClick(){
         getActivity().getSupportFragmentManager().popBackStack();
     }
+
+    @OnClick(R.id.main_toolbar_action2)
+    protected void onTopRightBtnClick(){
+        //del event
+        showLoadingDialog(R.string.activity_main_wait);
+
+        final EventApi eventApi = ApiGen.getInstance(getContext().getApplicationContext()).
+                generateApi(EventApi.class,true);
+
+        eventApi.eventDelete(mEvent.mId).enqueue(new BaseRetrofitCallback<Object>() {
+            @Override
+            public void onResponse(Call<Object> call, Response<Object> response) {
+//                    super.onResponse(call, response);
+
+                int code = response.code();
+                if(code == 200){//删除成功
+                    //删除本地数据库中相关记录
+                    EventManager.delEventById(mEvent.mId);
+                    getFragmentManager().popBackStack();
+
+                }else if(code == 403){//无权限删除
+                    ToastCommon.makeText(getContext(),
+                            R.string.error_api_event_delete_403);
+                }else if(code == 400){
+                    ToastCommon.makeText(getContext(),
+                            R.string.error_api_event_delete_400);
+                }else {
+                    ToastCommon.makeText(getContext(),
+                            R.string.error_api_unknown);
+                }
+                finishLoadingDialog();
+            }
+
+            @Override
+            public void onFailure(Call<Object> call, Throwable t) {
+                super.onFailure(call, t);
+
+                finishLoadingDialog();
+                ToastCommon.makeText(getContext(),R.string.cloud_api_call_net_error);
+            }
+        });
+    }
+
 
     @OnClick(R.id.calendar_event_alarm_name_layout)
    protected void onClickSelectEvent(){
@@ -583,6 +634,15 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
         viewTodoList(mViewTodoContainer.getChildCount() != 0);
     }
 
+    // 啟動或關閉UI中, 刪除事件的按鈕, 若事件為新增的事件或是事件擁有者並非用戶本人,
+    // 則不顯示刪除鈕, 若事件擁有人為用戶本人時.
+    //title bar right btn; 如果是新增event或拥有者非用户本人，则不显示；否则显示；
+    private void ViewDelete(boolean enable) {
+
+        int visibility = enable ? View.VISIBLE : View.INVISIBLE;
+        view_right_action.setVisibility(visibility);
+    }
+
     private View addTodoView(WatchTodo todo) {
         ViewTodo viewTodo = new ViewTodo(getContext());
         viewTodo.setTag(todo);
@@ -660,6 +720,16 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
 
         EventAddEntity eventAddBean = BeanConvertor.getEventAddBean(mEvent);
 
+        if (mEvent.mId <= 0) {
+            addNewEvent(eventApi, eventAddBean);
+        }else {
+            LogUtil.getUtils().d("event update");
+            updateEvent(eventApi);
+        }
+
+    }
+
+    private void addNewEvent(EventApi eventApi, EventAddEntity eventAddBean) {
         eventApi.eventAdd(eventAddBean).enqueue(new BaseRetrofitCallback<EventEditRep>(){
             @Override
             public void onResponse(Call<EventEditRep> call, Response<EventEditRep> response) {
@@ -670,6 +740,39 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
 
                     getFragmentManager().popBackStack();
                     showSyncDialog();
+                }
+
+                finishLoadingDialog();
+
+            }
+
+            @Override
+            public void onFailure(Call<EventEditRep> call, Throwable t) {
+                super.onFailure(call, t);
+
+                finishLoadingDialog();
+            }
+        });
+    }
+
+    private void updateEvent(EventApi eventApi) {
+        EventInfo eventInfo4Update = BeanConvertor.getEventInfo4Update(mEvent);
+
+        eventApi.eventUpdate(eventInfo4Update).enqueue(new BaseRetrofitCallback<EventEditRep>(){
+            @Override
+            public void onResponse(Call<EventEditRep> call, Response<EventEditRep> response) {
+                super.onResponse(call, response);
+                //如果保存成功，则把event保存到本地
+                if(response.code() == 200){
+                    EventManager.updateEvent(getContext(), response.body());
+
+                    getFragmentManager().popBackStack();
+                    showSyncDialog();
+                }else if(response.code() == 403){
+                    ToastCommon.makeText(getContext(),R.string.error_api_event_update_403);
+                }else {
+                    String msg = getResources().getString(R.string.save_todo_done_statue_err, response.code());
+                    ToastCommon.showToast(getContext(),msg);
                 }
 
                 finishLoadingDialog();

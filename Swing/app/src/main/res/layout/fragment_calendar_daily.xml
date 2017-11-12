@@ -27,12 +27,8 @@
             android:id="@+id/calendar_daily_selector"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:textColor="@color/color_gray_deep"
-            android:textSize="18sp"
-            android:textStyle="bold"
             app:calendarMode="week"
-            app:exceedColor="@color/color_gray_deep"
-            app:todayColor="@color/color_orange_main" />
+            style="@style/calendar_selector" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -55,13 +51,7 @@
             android:layout_height="match_parent"
             android:layout_alignEnd="@+id/calendar_daily_calendar_sponge"
             android:layout_alignStart="@+id/calendar_daily_calendar_sponge"
-            android:textColor="@color/color_gray_deep"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:exceedColor="@color/color_gray_light"
-            app:focusBackgroundColor="@color/color_orange_main"
-            app:focusColor="@color/color_white"
-            app:todayColor="@color/color_orange_main" />
+            style="@style/calendar_week" />
 
     </RelativeLayout>
 

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Typeface;
 import android.support.v4.content.ContextCompat;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
@@ -60,7 +61,11 @@ public class ViewTodo extends RelativeLayout {
     }
 
     public void load(WatchTodo todo) {
-        mViewCheck.setSelected(todo.mStatus.equals(WatchTodo.STATUS_DONE));
+        if(!TextUtils.isEmpty(todo.mStatus)){
+            mViewCheck.setSelected(todo.mStatus.equals(WatchTodo.STATUS_DONE));
+        }else {
+            mViewCheck.setSelected(false);
+        }
         mViewText.setText(todo.mText);
     }
 

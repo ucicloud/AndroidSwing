@@ -24,7 +24,6 @@ import com.yy.base.utils.ToastCommon;
 
 import java.util.ArrayDeque;
 import java.util.Calendar;
-import java.util.List;
 import java.util.Locale;
 import java.util.Queue;
 
@@ -56,6 +55,7 @@ public class CalendarTodoFragment extends CalendarBaseFragment {
 
     private long mDefaultDate = System.currentTimeMillis();
     private WatchEvent mEvent;
+    private long currentEventId;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -85,7 +85,7 @@ public class CalendarTodoFragment extends CalendarBaseFragment {
         mViewButtonLine = mViewMain.findViewById(R.id.calendar_todo_button_line);
         mViewSave = mViewMain.findViewById(R.id.calendar_todo_save);
         mViewSave.setOnClickListener(mSaveListener);
-        mViewDelete = mViewMain.findViewById(R.id.calendar_todo_delete);
+        mViewDelete = mViewMain.findViewById(R.id.calendar_todo_del);
         mViewDelete.setOnClickListener(mDeleteListener);
 
         initTitleBar();
@@ -96,7 +96,7 @@ public class CalendarTodoFragment extends CalendarBaseFragment {
     private void initTitleBar() {
         tv_title.setTextColor(getResources().getColor(R.color.colorAccent));
         tv_title.setText(R.string.title_calendar);
-        view_left_action.setImageResource(R.drawable.icon_calendar);
+        view_left_action.setImageResource(R.drawable.icon_left);
 
         view_right_action.setImageResource(R.drawable.icon_pen);
         view_right_action.setTag(R.drawable.icon_pen);
@@ -130,15 +130,29 @@ public class CalendarTodoFragment extends CalendarBaseFragment {
         mViewCalendar.setDate(mDefaultDate);
 
         // 載入需要編輯的事件
-        if (mActivityMain.mEventStack.isEmpty())
-            mEvent = new WatchEvent();
-        else
-            mEvent = mActivityMain.mEventStack.pop();
+        if (mActivityMain.mEventStack.isEmpty()){
+            if(currentEventId > 0){
+                mEvent = EventManager.getEventById(currentEventId);
+            }
 
-        mViewTitle.setBackgroundColor(WatchEvent.stringToColor(mEvent.mColor));
+            if(mEvent == null){
+                //如果查询不到，根据当前界面的业务，可以认为当前event已经被del
+//                mEvent = new WatchEvent();
+
+                getFragmentManager().popBackStack();
+                return;
+            }
+        }
+        else{
+            mEvent = mActivityMain.mEventStack.pop();
+            currentEventId = mEvent.mId;
+        }
+
+        //del 2017年11月12日13:05:01 to-do的展示UI背景颜色固定
+        /*mViewTitle.setBackgroundColor(WatchEvent.stringToColor(mEvent.mColor));
         mViewDescription.setBackgroundColor(WatchEvent.stringToColor(mEvent.mColor));
         mViewContainerLine.setBackgroundColor(WatchEvent.stringToColor(mEvent.mColor));
-        mViewButtonLine.setBackgroundColor(WatchEvent.stringToColor(mEvent.mColor));
+        mViewButtonLine.setBackgroundColor(WatchEvent.stringToColor(mEvent.mColor));*/
 
         Calendar cale = Calendar.getInstance();
         cale.setTimeInMillis(mEvent.mStartDate);
@@ -256,9 +270,9 @@ public class CalendarTodoFragment extends CalendarBaseFragment {
         todoDoneEntity.setEventId(watchTodo.mEventId);
         todoDoneEntity.setTodoId(watchTodo.mId);
 
-        eventApi.todoItemDone(todoDoneEntity).enqueue(new BaseRetrofitCallback<List<Object>>() {
+        eventApi.todoItemDone(todoDoneEntity).enqueue(new BaseRetrofitCallback<Object>() {
             @Override
-            public void onResponse(Call<List<Object>> call, Response<List<Object>> response) {
+            public void onResponse(Call<Object> call, Response<Object> response) {
                 super.onResponse(call, response);
                 int code = response.code();
                 if(code == 200){//向服务器保存状态成功后
@@ -270,6 +284,7 @@ public class CalendarTodoFragment extends CalendarBaseFragment {
                     if(doneWatchTodoQueue.isEmpty()){
                         //如果全部保存了，则提示保存完成
                         finishLoadingDialog();
+                        getFragmentManager().popBackStack();
                     }else {
                         sendSingleTodoStatueToCloud(eventApi,doneWatchTodoQueue.peek());
                     }
@@ -281,7 +296,7 @@ public class CalendarTodoFragment extends CalendarBaseFragment {
             }
 
             @Override
-            public void onFailure(Call<List<Object>> call, Throwable t) {
+            public void onFailure(Call<Object> call, Throwable t) {
                 super.onFailure(call, t);
 
                 finishLoadingDialog();

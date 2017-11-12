@@ -72,9 +72,29 @@ public class EventManager {
         eventDataStore.saveAll(BeanConvertor.getDBEventList(eventWithTodoList));
         todoItemDataStore.saveAll(BeanConvertor.getDBTodo(eventWithTodoList));
     }
+    
+    public static void updateEvent(@NonNull Context context, @NonNull EventEditRep eventEditRep){
+        if(eventEditRep.getEvent() == null){
+            return;
+        }
+
+        DbUtil dbUtil = DbUtil.getInstance(context.getApplicationContext());
+        EventDataStore eventDataStore = new EventDataStore(dbUtil);
+        TodoItemDataStore todoItemDataStore = new TodoItemDataStore(dbUtil);
+
+        eventDataStore.updateEvent(BeanConvertor.getDBEvent(eventEditRep.getEvent()));
+
+        List<EventWithTodo> eventWithTodoList = new ArrayList<>(1);
+        eventWithTodoList.add(eventEditRep.getEvent());
+
+        //event的to-do更新时，to-do的id也会更新；故删除原有，然后保存新的
+        todoItemDataStore.deleteByEventId(eventEditRep.getEvent().getId());
+        todoItemDataStore.saveAll(BeanConvertor.getDBTodo(eventWithTodoList));
+
+    }
 
     public static List<WatchEvent> getEventList(long userId, long startTimeStamp, long endTimeStamp){
-        boolean isTestData = true;
+        boolean isTestData = false;
         if(isTestData){
             return getTestEventList(startTimeStamp, endTimeStamp);
         }
@@ -132,8 +152,8 @@ public class EventManager {
         List<DB_Event> dbEvents = qb.where(EventDao.Properties.UserId.eq(userId),
                 EventDao.Properties.Repeat.eq(""),
                 qb.or(qb.and(EventDao.Properties.StartDate.le(startTimeStamp), EventDao.Properties.EndDate.ge(startTimeStamp)),
-                        qb.and(EventDao.Properties.StartDate.ge(startTimeStamp), EventDao.Properties.EndDate.le(endTimeStamp))),
-                qb.and(EventDao.Properties.StartDate.le(endTimeStamp), EventDao.Properties.EndDate.ge(endTimeStamp))
+                        qb.and(EventDao.Properties.StartDate.ge(startTimeStamp), EventDao.Properties.EndDate.le(endTimeStamp)),
+                        qb.and(EventDao.Properties.StartDate.le(endTimeStamp), EventDao.Properties.EndDate.ge(endTimeStamp)))
         ).orderAsc(EventDao.Properties.StartDate).list();
 
         if(!ObjectUtils.isListEmpty(dbEvents)){
@@ -306,5 +326,17 @@ public class EventManager {
 
         TodoItemDataStore todoItemDataStore = new TodoItemDataStore(dbUtil);
         todoItemDataStore.deleteByEventId(eventId);
+    }
+
+    public static WatchEvent getEventById(long eventId){
+        DbUtil dbUtil = DbUtil.getInstance(SwingApplication.getAppContext());
+        EventDataStore eventDataStore = new EventDataStore(dbUtil);
+        DB_Event eventById = eventDataStore.getEventById(eventId);
+
+        if(eventById == null){
+            return null;
+        }
+
+        return BeanConvertor.getWatchEvent(eventById);
     }
 }

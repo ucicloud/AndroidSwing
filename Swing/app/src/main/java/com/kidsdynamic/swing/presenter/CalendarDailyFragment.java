@@ -69,7 +69,7 @@ public class CalendarDailyFragment extends CalendarBaseFragment {
     private void initTitleBar() {
         tv_title.setTextColor(getResources().getColor(R.color.colorAccent));
         tv_title.setText(R.string.title_calendar);
-        view_left_action.setImageResource(R.drawable.icon_calendar);
+        view_left_action.setImageResource(R.drawable.icon_left);
 
         view_right_action.setImageResource(R.drawable.icon_add);
         view_right_action.setTag(R.drawable.icon_add);

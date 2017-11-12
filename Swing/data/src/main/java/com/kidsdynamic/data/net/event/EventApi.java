@@ -60,5 +60,5 @@ public interface EventApi {
 //    400	Bad request. Missing some parameters, or the type is wrong
 //    500	Internal error. Please send me the error. I will fix it
     @PUT("v1/event/todo/done")
-    Call<List<Object>> todoItemDone(@Body TodoDoneEntity todoDoneEntity);
+    Call<Object> todoItemDone(@Body TodoDoneEntity todoDoneEntity);
 }

@@ -7,7 +7,7 @@ import java.util.List;
  */
 
 public class EventInfo {
-    private String eventId;
+    private long eventId;
     private String Name;
     private String startDate;
     private String endDate;
@@ -16,14 +16,14 @@ public class EventInfo {
     private String description;
     private int alert;
     private String repeat;
-    private List<Integer> kidId;
+    private List<Long> kidId;
     private List<String> todo;
 
-    public String getEventId() {
+    public long getEventId() {
         return eventId;
     }
 
-    public void setEventId(String eventId) {
+    public void setEventId(long eventId) {
         this.eventId = eventId;
     }
 
@@ -91,11 +91,11 @@ public class EventInfo {
         this.repeat = repeat;
     }
 
-    public List<Integer> getKidId() {
+    public List<Long> getKidId() {
         return kidId;
     }
 
-    public void setKidId(List<Integer> kidId) {
+    public void setKidId(List<Long> kidId) {
         this.kidId = kidId;
     }
 

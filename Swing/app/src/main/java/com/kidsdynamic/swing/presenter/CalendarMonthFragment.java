@@ -155,9 +155,8 @@ public class CalendarMonthFragment extends CalendarBaseFragment {
     private Button.OnClickListener mOnSynBtnClickedListener = new Button.OnClickListener() {
         @Override
         public void onClick(View v) {
-            // TODO: 2017/11/11
-//            mActivityMain.selectFragment(FragmentDashboardMain.class.getName(), null);
-//            mActivityMain.selectFragment(FragmentDashboardProgress.class.getName(), null);
+            selectFragment(DashboardProgressFragment.class.getName(), null,true);
+
         }
     };
 

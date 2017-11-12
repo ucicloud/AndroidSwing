@@ -102,7 +102,7 @@ public class MainActivity extends Activity {
         //show waiting dialog
 
         String email = "only_app@163.com";
-        String psw = "123456";
+        String psw = "1";
 
         final LoginEntity loginEntity = new LoginEntity();
         loginEntity.setEmail(email);

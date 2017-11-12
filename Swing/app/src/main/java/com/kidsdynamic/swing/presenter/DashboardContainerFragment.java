@@ -9,8 +9,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.kidsdynamic.commonlib.utils.ObjectUtils;
 import com.kidsdynamic.swing.BaseFragment;
 import com.kidsdynamic.swing.R;
+import com.kidsdynamic.swing.domain.DeviceManager;
+import com.kidsdynamic.swing.domain.LoginManager;
+import com.kidsdynamic.swing.model.KidsEntityBean;
+
+import java.util.List;
 
 import butterknife.ButterKnife;
 
@@ -48,7 +54,17 @@ public class DashboardContainerFragment extends BaseFragment {
 
         registerUIReceiver();
 
-        selectFragment(DashboardMainFragment.class.getName(), null, false);
+        //modify 2017年11月12日11:01:44 only_app
+        //如果当前还未绑定kids，则进入到无设备界面；注意情况：绑定了设备，但未设置focus device
+        long currentLoginUserId = LoginManager.getCurrentLoginUserId(getContext());
+        List<KidsEntityBean> allKidsByUserId =
+                DeviceManager.getAllKidsByUserId(getContext(), currentLoginUserId);
+
+        if(ObjectUtils.isListEmpty(allKidsByUserId)){
+            selectFragment(DashboardNoDevicesFragment.class.getName(), null, false);
+        }else {
+            selectFragment(DashboardMainFragment.class.getName(), null, false);
+        }
 
     }
 

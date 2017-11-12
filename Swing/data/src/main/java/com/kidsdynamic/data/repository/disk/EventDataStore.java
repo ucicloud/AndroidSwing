@@ -1,5 +1,6 @@
 package com.kidsdynamic.data.repository.disk;
 
+import com.kidsdynamic.commonlib.utils.ObjectUtils;
 import com.kidsdynamic.data.dao.DB_Event;
 import com.kidsdynamic.data.dao.EventDao;
 import com.kidsdynamic.data.persistent.DbUtil;
@@ -45,5 +46,22 @@ public class EventDataStore {
     public void deleteById(long eventId){
         EventDao eventDao = dbUtil.getDaoSession().getEventDao();
         eventDao.deleteByKey(eventId);
+    }
+
+    public void updateEvent(DB_Event db_event){
+        EventDao eventDao = dbUtil.getDaoSession().getEventDao();
+        eventDao.update(db_event);
+    }
+
+    public DB_Event getEventById(long eventId){
+        EventDao eventDao = dbUtil.getDaoSession().getEventDao();
+        List<DB_Event> dbEvents = eventDao.queryBuilder().
+                where(EventDao.Properties.EventId.eq(eventId)).list();
+
+        if(ObjectUtils.isListEmpty(dbEvents)){
+            return null;
+        }
+
+        return dbEvents.get(0);
     }
 }
