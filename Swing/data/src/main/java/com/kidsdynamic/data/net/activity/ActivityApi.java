@@ -45,7 +45,7 @@ public interface ActivityApi {
 //    500	Internal error. Please send me the error. I will fix it
     @GET("v1/activity/retrieveDataByTime")
     Call<RetrieveDataRep> retrieveDataByTime (@Query("start") long start, @Query("end") long end,
-                                              @Query("kidId")String kidId);
+                                              @Query("kidId")long kidId);
 
 
 }

@@ -14,13 +14,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.kidsdynamic.data.net.ApiGen;
+import com.kidsdynamic.data.net.user.UserApiNeedToken;
+import com.kidsdynamic.data.net.user.model.UserProfileRep;
+import com.kidsdynamic.data.utils.LogUtil2;
 import com.kidsdynamic.swing.R;
 import com.kidsdynamic.swing.domain.DeviceManager;
 import com.kidsdynamic.swing.domain.EventManager;
+import com.kidsdynamic.swing.domain.KidActivityManager;
+import com.kidsdynamic.swing.domain.LoginManager;
 import com.kidsdynamic.swing.model.KidsEntityBean;
 import com.kidsdynamic.swing.model.WatchEvent;
 import com.kidsdynamic.swing.model.WatchVoiceAlertEntity;
+import com.kidsdynamic.swing.net.BaseRetrofitCallback;
 import com.kidsdynamic.swing.view.ViewCircle;
 
 import java.util.ArrayList;
@@ -29,6 +37,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import retrofit2.Call;
+import retrofit2.Response;
 
 /**
  * DashboardProgressFragment </br></br>
@@ -165,7 +175,7 @@ public class DashboardProgressFragment extends DashboardBaseFragment {
 
         mServerSyncFinish = false;
         //先执行用户信息的同步
-//        mActivityMain.mOperator.resumeSync(mFinishListener, "", "");
+        syncUserData();
     }
 
     @Override
@@ -182,6 +192,39 @@ public class DashboardProgressFragment extends DashboardBaseFragment {
         mActivityMain.startService(intent);*/
 
         super.onPause();
+    }
+
+    //从服务端获取用户数据，更新本地缓存
+    private void syncUserData(){
+        final UserApiNeedToken userApiNeedToken = ApiGen.getInstance(
+                getActivity().getApplicationContext()).
+                generateApi(UserApiNeedToken.class, true);
+
+        userApiNeedToken.retrieveUserProfile().enqueue(new BaseRetrofitCallback<UserProfileRep>() {
+            @Override
+            public void onResponse(Call<UserProfileRep> call, Response<UserProfileRep> response) {
+                LogUtil2.getUtils().d("retrieveUserProfile onResponse");
+                super.onResponse(call, response);
+
+                if (response.code() == 200) {//获取到用户信息
+                    //先清除本地数据，然后再保存
+                    new LoginManager().saveLoginData(getContext(), response.body());
+                }
+
+                //设置同步用户数据已经完成
+                mServerSyncFinish = true;
+
+            }
+
+            @Override
+            public void onFailure(Call<UserProfileRep> call, Throwable t) {
+                Log.d("syncData", "retrieveUserProfile error, ");
+                super.onFailure(call, t);
+
+                //设置同步用户数据已经完成
+                mServerSyncFinish = true;
+            }
+        });
     }
 
     //与服务器同步数据结果listener
@@ -216,7 +259,8 @@ public class DashboardProgressFragment extends DashboardBaseFragment {
                         mActivityMain.FirebaseLog(LogEvent.Event.SYNC_WATCH_DATA, bundle);*/
 
                         //开始从服务器获取activity数据
-//                        mActivityMain.mOperator.updateActivity(mActivityUpdateListener, mDevice.mId);
+                        new KidActivityManager().getActivityDataFromCloud
+                                (getContext(),mDevice.getKidsId(),mActivityUpdateListener);
                         mServerSyncState = 1;
                     }
                     break;
@@ -235,6 +279,9 @@ public class DashboardProgressFragment extends DashboardBaseFragment {
             }
         }
     };
+
+    //从服务端获取kids的activity数据
+
 
     private ViewCircle.OnProgressListener mSearchProgressListener = new ViewCircle.OnProgressListener() {
         @Override
@@ -557,7 +604,7 @@ public class DashboardProgressFragment extends DashboardBaseFragment {
     };*/
 
     //从服务端获取activity数据业务结果的listener
-   /* WatchOperator.finishListener mActivityUpdateListener = new WatchOperator.finishListener() {
+    KidActivityManager.IFinishListener mActivityUpdateListener = new KidActivityManager.IFinishListener() {
         @Override
         public void onFinish(Object arg) {
             mActivityUpdateFinish = true;
@@ -568,5 +615,5 @@ public class DashboardProgressFragment extends DashboardBaseFragment {
             mActivityUpdateFinish = true;
             Toast.makeText(mActivityMain, Command, Toast.LENGTH_SHORT).show();
         }
-    };*/
+    };
 }

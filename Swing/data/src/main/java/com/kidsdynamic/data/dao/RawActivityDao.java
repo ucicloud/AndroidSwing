@@ -29,6 +29,7 @@ public class RawActivityDao extends AbstractDao<DB_RawActivity, Long> {
         public final static Property TimeZoneOffset = new Property(3, Integer.class, "timeZoneOffset", false, "timeZoneOffset");
         public final static Property Time = new Property(4, Long.class, "time", false, "time");
         public final static Property MacId = new Property(5, String.class, "macId", false, "macId");
+        public final static Property Status = new Property(6, String.class, "status", false, "status");
     };
 
 
@@ -49,7 +50,8 @@ public class RawActivityDao extends AbstractDao<DB_RawActivity, Long> {
                 "\"outdoor_activity\" TEXT," + // 2: outdoorActivity
                 "\"timeZoneOffset\" INTEGER," + // 3: timeZoneOffset
                 "\"time\" INTEGER," + // 4: time
-                "\"macId\" TEXT);"); // 5: macId
+                "\"macId\" TEXT," + // 5: macId
+                "\"status\" TEXT);"); // 6: status
     }
 
     /** Drops the underlying database table. */
@@ -88,6 +90,11 @@ public class RawActivityDao extends AbstractDao<DB_RawActivity, Long> {
         if (macId != null) {
             stmt.bindString(6, macId);
         }
+ 
+        String status = entity.getStatus();
+        if (status != null) {
+            stmt.bindString(7, status);
+        }
     }
 
     /** @inheritdoc */
@@ -105,7 +112,8 @@ public class RawActivityDao extends AbstractDao<DB_RawActivity, Long> {
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // outdoorActivity
             cursor.isNull(offset + 3) ? null : cursor.getInt(offset + 3), // timeZoneOffset
             cursor.isNull(offset + 4) ? null : cursor.getLong(offset + 4), // time
-            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5) // macId
+            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // macId
+            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6) // status
         );
         return entity;
     }
@@ -119,6 +127,7 @@ public class RawActivityDao extends AbstractDao<DB_RawActivity, Long> {
         entity.setTimeZoneOffset(cursor.isNull(offset + 3) ? null : cursor.getInt(offset + 3));
         entity.setTime(cursor.isNull(offset + 4) ? null : cursor.getLong(offset + 4));
         entity.setMacId(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
+        entity.setStatus(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
      }
     
     /** @inheritdoc */

@@ -22,7 +22,7 @@ public class ActivityFromCloudMaker implements Maker {
         entity.addStringProperty("type").columnName("type");
         entity.addLongProperty("steps").columnName("steps");
         entity.addLongProperty("distance").columnName("distance");
-        entity.addStringProperty("receivedDate").columnName("receivedDate");
+        entity.addLongProperty("receivedDate").columnName("receivedDate");
 
         return entity;
     }

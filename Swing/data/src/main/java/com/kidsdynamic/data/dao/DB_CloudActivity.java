@@ -12,7 +12,7 @@ public class DB_CloudActivity {
     private String type;
     private Long steps;
     private Long distance;
-    private String receivedDate;
+    private Long receivedDate;
 
     public DB_CloudActivity() {
     }
@@ -21,7 +21,7 @@ public class DB_CloudActivity {
         this.actvId = actvId;
     }
 
-    public DB_CloudActivity(Long actvId, String macId, String kidId, String type, Long steps, Long distance, String receivedDate) {
+    public DB_CloudActivity(Long actvId, String macId, String kidId, String type, Long steps, Long distance, Long receivedDate) {
         this.actvId = actvId;
         this.macId = macId;
         this.kidId = kidId;
@@ -79,11 +79,11 @@ public class DB_CloudActivity {
         this.distance = distance;
     }
 
-    public String getReceivedDate() {
+    public Long getReceivedDate() {
         return receivedDate;
     }
 
-    public void setReceivedDate(String receivedDate) {
+    public void setReceivedDate(Long receivedDate) {
         this.receivedDate = receivedDate;
     }
 

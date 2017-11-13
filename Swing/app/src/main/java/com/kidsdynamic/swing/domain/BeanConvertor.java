@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import com.kidsdynamic.commonlib.utils.ObjectUtils;
+import com.kidsdynamic.data.dao.DB_CloudActivity;
 import com.kidsdynamic.data.dao.DB_Event;
 import com.kidsdynamic.data.dao.DB_Kids;
 import com.kidsdynamic.data.dao.DB_Todo;
@@ -15,7 +16,9 @@ import com.kidsdynamic.data.net.event.model.TodoEntity;
 import com.kidsdynamic.data.net.kids.model.KidsWithParent;
 import com.kidsdynamic.data.net.user.model.KidInfo;
 import com.kidsdynamic.data.net.user.model.UserProfileRep;
+import com.kidsdynamic.data.repository.disk.ActivityCloudDataStore;
 import com.kidsdynamic.swing.model.KidsEntityBean;
+import com.kidsdynamic.swing.model.WatchActivity;
 import com.kidsdynamic.swing.model.WatchEvent;
 import com.kidsdynamic.swing.model.WatchTodo;
 
@@ -373,4 +376,47 @@ public class BeanConvertor {
         return db_todo;
     }
 
+    static List<DB_CloudActivity> getDBCloudActivity(@NonNull List<WatchActivity> watchActivityList){
+        List<DB_CloudActivity> dbCloudActivities = new ArrayList<>(1);
+        if(ObjectUtils.isListEmpty(watchActivityList)){
+            return dbCloudActivities;
+        }
+
+        for (WatchActivity watchActivity :
+                watchActivityList) {
+            dbCloudActivities.add(getDBCloudActivity(watchActivity));
+        }
+
+        return dbCloudActivities;
+    }
+
+    static DB_CloudActivity getDBCloudActivity(@NonNull WatchActivity watchActivity){
+        DB_CloudActivity db_cloudActivity = new DB_CloudActivity();
+
+        WatchActivity.Act dataAct = null;
+        String type = "";
+        if (watchActivity.mIndoor.mId > 0) {
+            dataAct = watchActivity.mIndoor;
+            type = ActivityCloudDataStore.Activity_type_indoor;
+        }else if(watchActivity.mOutdoor.mId > 0){
+            dataAct = watchActivity.mOutdoor;
+            type = ActivityCloudDataStore.Activity_type_outdoor;
+        }
+
+        if (dataAct == null) {
+            return null;
+        }
+
+
+        db_cloudActivity.setActvId(dataAct.mId);
+        db_cloudActivity.setKidId(dataAct.mKidId);
+        db_cloudActivity.setMacId(dataAct.mMacId);
+        db_cloudActivity.setDistance(dataAct.mDistance);
+        db_cloudActivity.setReceivedDate(dataAct.mTimestamp);
+        db_cloudActivity.setSteps(dataAct.mSteps);
+
+        db_cloudActivity.setType(type);
+
+        return db_cloudActivity;
+    }
 }

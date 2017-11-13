@@ -32,7 +32,7 @@ public class RetrieveDataRep {
         private int id;
         private String macId;
         private String kidId;
-        private String type;
+        public String type;
         private int steps;
         private int distance;
         private String receivedDate;

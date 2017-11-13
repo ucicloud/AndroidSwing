@@ -21,6 +21,7 @@ public class RawActivityMaker implements Maker {
         entity.addIntProperty("timeZoneOffset").columnName("timeZoneOffset");
         entity.addLongProperty("time").columnName("time");
         entity.addStringProperty("macId").columnName("macId");
+        entity.addStringProperty("status").columnName("status");
 
         return entity;
     }

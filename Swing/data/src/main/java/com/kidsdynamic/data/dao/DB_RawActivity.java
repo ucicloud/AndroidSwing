@@ -13,6 +13,7 @@ public class DB_RawActivity {
     private Integer timeZoneOffset;
     private Long time;
     private String macId;
+    private String status;
 
     public DB_RawActivity() {
     }
@@ -21,13 +22,14 @@ public class DB_RawActivity {
         this.id = id;
     }
 
-    public DB_RawActivity(Long id, String indoorActivity, String outdoorActivity, Integer timeZoneOffset, Long time, String macId) {
+    public DB_RawActivity(Long id, String indoorActivity, String outdoorActivity, Integer timeZoneOffset, Long time, String macId, String status) {
         this.id = id;
         this.indoorActivity = indoorActivity;
         this.outdoorActivity = outdoorActivity;
         this.timeZoneOffset = timeZoneOffset;
         this.time = time;
         this.macId = macId;
+        this.status = status;
     }
 
     public Long getId() {
@@ -78,6 +80,14 @@ public class DB_RawActivity {
 
     public void setMacId(String macId) {
         this.macId = macId;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
 }
