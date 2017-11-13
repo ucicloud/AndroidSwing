@@ -26,6 +26,7 @@ public class SwingApplication extends Application {
 
         //配置服务器地址：该地址根据当前编译类型
         ApiGen.BASE_URL = BuildConfig.API_BASE_URL;
+        ApiGen.BASE_PHOTO_URL = BuildConfig.PHOTO_BASE_URL;
 
         //非debug，则开启全局捕获异常
         if (!BuildConfig.DEBUG) {

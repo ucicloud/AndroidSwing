@@ -34,7 +34,9 @@ import com.kidsdynamic.data.net.user.model.UserInfo;
 import com.kidsdynamic.data.net.user.model.UserProfileRep;
 import com.kidsdynamic.data.utils.LogUtil2;
 import com.kidsdynamic.swing.domain.LoginManager;
+import com.kidsdynamic.swing.domain.UserManager;
 import com.kidsdynamic.swing.presenter.ActivityTest;
+import com.kidsdynamic.swing.utils.GlideHelper;
 import com.kidsdynamic.swing.utils.SwingFontsCache;
 
 import java.io.File;
@@ -47,6 +49,7 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.carbs.android.avatarimageview.library.AvatarImageView;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -61,6 +64,9 @@ public class MainActivity extends Activity {
 
     @BindView(R.id.text_test)
     TextView textView;
+
+    @BindView(R.id.user_avatar_iv)
+    AvatarImageView userAvatarImgView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,8 +107,11 @@ public class MainActivity extends Activity {
     void loginTest2(){
         //show waiting dialog
 
-        String email = "only_app@163.com";
-        String psw = "1";
+        /*String email = "only_app@163.com";
+        String psw = "1";*/
+
+        String email = "123@qq.com";
+        String psw = "123456";
 
         final LoginEntity loginEntity = new LoginEntity();
         loginEntity.setEmail(email);
@@ -406,6 +415,7 @@ public class MainActivity extends Activity {
     @OnClick(R.id.btn_upload_avatar)
     public void uploadKidAvatar(){
 //        "upload"
+        LogUtil2.getUtils().d("uploadKidAvatar start");
         final AvatarApi avatarApi = ApiGen.getInstance(this.getApplicationContext()).
                 generateApi4Avatar(AvatarApi.class);
 
@@ -418,6 +428,14 @@ public class MainActivity extends Activity {
                 LogUtil2.getUtils().d("uploadKidAvatar onResponse");
                 LogUtil2.getUtils().d("uploadKidAvatar  code: " + response.code());
                 //code == 200 upload ok
+
+                if( response.code() == 200){
+
+                    String avatarProfile = response.body().getKid().getProfile();
+                    String profileRealUri = UserManager.getProfileRealUri(avatarProfile);
+
+                    GlideHelper.showCircleImageView(MainActivity.this,profileRealUri,userAvatarImgView);
+                }
             }
 
             @Override
@@ -430,7 +448,7 @@ public class MainActivity extends Activity {
 
     private Map<String, RequestBody> getUploadKidAvatarPram(){
         HashMap<String, RequestBody> paramMap = new HashMap<>();
-        PartUtils.putRequestBodyMap(paramMap,AvatarApi.param_kidId,"123");
+        PartUtils.putRequestBodyMap(paramMap,AvatarApi.param_kidId,"117");
 
         return paramMap;
     }

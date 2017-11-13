@@ -19,7 +19,7 @@ import retrofit2.http.PartMap;
  */
 
 public interface AvatarApi {
-    String BASE_PHOTO_URL = BuildConfig.PHOTO_BASE_URL;
+//    String BASE_PHOTO_URL = BuildConfig.PHOTO_BASE_URL;
     String BASE_URL = BuildConfig.API_BASE_URL;
 
     static String param_upload = "upload";

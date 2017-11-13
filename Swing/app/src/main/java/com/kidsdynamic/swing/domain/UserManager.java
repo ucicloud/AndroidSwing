@@ -1,6 +1,7 @@
 package com.kidsdynamic.swing.domain;
 
-import static com.kidsdynamic.data.net.avatar.AvatarApi.BASE_PHOTO_URL;
+import com.kidsdynamic.data.net.ApiGen;
+
 
 /**
  * Created by Administrator on 2017/11/4.
@@ -8,6 +9,6 @@ import static com.kidsdynamic.data.net.avatar.AvatarApi.BASE_PHOTO_URL;
 
 public class UserManager {
     public static String getProfileRealUri(String userProfile){
-        return BASE_PHOTO_URL + userProfile;
+        return ApiGen.BASE_PHOTO_URL + userProfile;
     }
 }

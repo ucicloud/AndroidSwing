@@ -21,6 +21,9 @@ import okhttp3.OkHttpClient;
 
 public class ApiGen {
     public static String BASE_URL = BuildConfig.API_BASE_URL;
+//    public static String AVATAR_BASE_URL = BASE_URL;
+
+    public static String BASE_PHOTO_URL = BuildConfig.PHOTO_BASE_URL;
 
     private Context context;
     private static ApiGen apiGen;
@@ -49,10 +52,11 @@ public class ApiGen {
                 .create(service);
     }
 
+    //头像相关接口
     public <T> T generateApi4Avatar(Class<T> service){
         return Retrofit2Client.INSTANCE.getRetrofitBuilder()
                 .client(getOkHttpClient(true))
-                .baseUrl(AvatarApi.BASE_URL).build()
+                .baseUrl(BASE_URL).build()
                 .create(service);
     }
 
