@@ -29,14 +29,13 @@ import com.kidsdynamic.swing.ble.EventModel;
 import com.kidsdynamic.swing.ble.IDeviceScanCallback;
 import com.kidsdynamic.swing.ble.IDeviceSyncCallback;
 import com.kidsdynamic.swing.ble.SwingBLEService;
-import com.kidsdynamic.swing.bletest.SwingScanActivity;
 import com.kidsdynamic.swing.domain.DeviceManager;
 import com.kidsdynamic.swing.domain.EventManager;
 import com.kidsdynamic.swing.domain.KidActivityManager;
 import com.kidsdynamic.swing.domain.LoginManager;
+import com.kidsdynamic.swing.domain.RawActivityManager;
 import com.kidsdynamic.swing.model.KidsEntityBean;
 import com.kidsdynamic.swing.model.WatchEvent;
-import com.kidsdynamic.swing.model.WatchVoiceAlertEntity;
 import com.kidsdynamic.swing.net.BaseRetrofitCallback;
 import com.kidsdynamic.swing.view.ViewCircle;
 import com.vise.baseble.model.BluetoothLeDevice;
@@ -350,6 +349,7 @@ public class DashboardProgressFragment extends DashboardBaseFragment {
             if (mSyncState == SYNC_STATE_SUCCESS) {
                 viewCompleted();
             } else if (mSyncTimeout == 0 || mSyncState == SYNC_STATE_FAIL) {
+                // TODO: 2017/11/14 同步数据失败后的提示语不正确
                 viewNotFound();
                 bleSyncCancel();
             }
@@ -395,8 +395,9 @@ public class DashboardProgressFragment extends DashboardBaseFragment {
     private Button.OnClickListener mExitListener = new Button.OnClickListener() {
         @Override
         public void onClick(View view) {
-            // TODO: 2017/11/14 应该切换到dash fragment中
-            selectFragment(DashboardEmotionFragment.class.getName(), null,true);
+            //应该切换到dash fragment中
+            mActivityMain.switchToDashBoardFragment();
+//            selectFragment(DashboardEmotionFragment.class.getName(), null,true);
         }
     };
 
@@ -475,29 +476,39 @@ public class DashboardProgressFragment extends DashboardBaseFragment {
             @Override
             public void onSyncComplete() {
                 LogUtil.getUtils().d("sync data complete: ok");
-                //todo sync成功后，需要修改标志位
+                //与watch同步数据完成后，开始逐条上传数据
+
+                new RawActivityManager().uploadRawActivity(mDevice.getMacId(),
+                        mUpdateRawActivityListener);
+                //向服务器上传数据完成后，设置成功标志位
+               /* mSyncState = SYNC_STATE_SUCCESS;
+                mActivityMain.mBLEMachine.FirmwareVersion(mOnFirmwareListener, mSearchResult.mAddress);*/
             }
 
             @Override
             public void onSyncFail(int reason) {
                 LogUtil.getUtils().d("sync data complete: fail, reason: " + reason);
-                //todo sync fail后，需要修改标志位
+                //sync fail后，需要修改标志位
+                mSyncState = SYNC_STATE_FAIL;
             }
 
             @Override
             public void onSyncing(String tip) {
-                //todo what todo
+                //test fun; no need care
 
             }
 
             @Override
             public void onSyncActivity(ActivityModel activity) {
-                //watch todo
+                //首先把这些数据保存到数据库；然后同步完成，向服务器获取上传数据
+                RawActivityManager.saveRawActivity(activity);
             }
 
             @Override
             public void onDeviceBattery(int battery) {
                 Log.d("dashProgress", "onDeviceBattery battery " + battery);
+                DeviceManager.saveBindWatchBattery(mDevice.getMacId(), battery);
+
             }
         });
     }
@@ -732,6 +743,21 @@ public class DashboardProgressFragment extends DashboardBaseFragment {
         public void onFailed(String Command, int statusCode) {
             mActivityUpdateFinish = true;
             Toast.makeText(mActivityMain, Command, Toast.LENGTH_SHORT).show();
+        }
+    };
+
+    //从服务端获取activity数据业务结果的listener
+    RawActivityManager.IFinishListener mUpdateRawActivityListener = new RawActivityManager.IFinishListener() {
+        @Override
+        public void onFinish(Object arg) {
+            mSyncState = SYNC_STATE_SUCCESS;
+        }
+
+        @Override
+        public void onFailed(String Command, int statusCode) {
+            mSyncState = SYNC_STATE_FAIL;
+            Log.d("dashboardProgress","upload raw activity fail: " + Command);
+//            Toast.makeText(mActivityMain, Command, Toast.LENGTH_SHORT).show();
         }
     };
 

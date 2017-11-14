@@ -42,4 +42,25 @@ public class RawActivityDataStore {
         }
     }
 
+    public void saveRawActivityData(DB_RawActivity db_rawActivity){
+
+        if(db_rawActivity == null){
+            return;
+        }
+
+        RawActivityDao rawActivityDao = dbUtil.getDaoSession().getRawActivityDao();
+        rawActivityDao.insert(db_rawActivity);
+    }
+
+    public void deleteById(long id){
+        RawActivityDao rawActivityDao = dbUtil.getDaoSession().getRawActivityDao();
+        rawActivityDao.deleteByKey(id);
+    }
+
+    public List<DB_RawActivity> getAllData(String macId){
+        RawActivityDao rawActivityDao = dbUtil.getDaoSession().getRawActivityDao();
+
+        return rawActivityDao.queryBuilder().list();
+    }
+
 }

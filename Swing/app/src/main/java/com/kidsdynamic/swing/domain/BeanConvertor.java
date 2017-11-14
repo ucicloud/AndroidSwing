@@ -7,8 +7,10 @@ import com.kidsdynamic.commonlib.utils.ObjectUtils;
 import com.kidsdynamic.data.dao.DB_CloudActivity;
 import com.kidsdynamic.data.dao.DB_Event;
 import com.kidsdynamic.data.dao.DB_Kids;
+import com.kidsdynamic.data.dao.DB_RawActivity;
 import com.kidsdynamic.data.dao.DB_Todo;
 import com.kidsdynamic.data.dao.DB_User;
+import com.kidsdynamic.data.net.activity.model.RawActivityDataEntity;
 import com.kidsdynamic.data.net.event.model.EventAddEntity;
 import com.kidsdynamic.data.net.event.model.EventInfo;
 import com.kidsdynamic.data.net.event.model.EventWithTodo;
@@ -17,6 +19,8 @@ import com.kidsdynamic.data.net.kids.model.KidsWithParent;
 import com.kidsdynamic.data.net.user.model.KidInfo;
 import com.kidsdynamic.data.net.user.model.UserProfileRep;
 import com.kidsdynamic.data.repository.disk.ActivityCloudDataStore;
+import com.kidsdynamic.data.repository.disk.RawActivityDataStore;
+import com.kidsdynamic.swing.ble.ActivityModel;
 import com.kidsdynamic.swing.model.KidsEntityBean;
 import com.kidsdynamic.swing.model.WatchActivity;
 import com.kidsdynamic.swing.model.WatchEvent;
@@ -418,5 +422,30 @@ public class BeanConvertor {
         db_cloudActivity.setType(type);
 
         return db_cloudActivity;
+    }
+
+    public static DB_RawActivity getDBRawActivity(ActivityModel activityModel) {
+        DB_RawActivity db_rawActivity = new DB_RawActivity();
+
+        db_rawActivity.setMacId(activityModel.getMacId());
+        db_rawActivity.setIndoorActivity(activityModel.getIndoorActivity());
+        db_rawActivity.setOutdoorActivity(activityModel.getOutdoorActivity());
+        db_rawActivity.setTime((long) activityModel.getTime());
+        db_rawActivity.setTimeZoneOffset(activityModel.getTimeZoneOffset());
+        db_rawActivity.setStatus(RawActivityDataStore.status_pending);
+
+        return db_rawActivity;
+    }
+
+    public static RawActivityDataEntity getRawActivityDataEntity(DB_RawActivity dbRawActivity) {
+        RawActivityDataEntity rawActivityDataEntity = new RawActivityDataEntity();
+
+        rawActivityDataEntity.setMacId(dbRawActivity.getMacId());
+        rawActivityDataEntity.setIndoorActivity(dbRawActivity.getIndoorActivity());
+        rawActivityDataEntity.setOutdoorActivity(dbRawActivity.getOutdoorActivity());
+        rawActivityDataEntity.setTime(dbRawActivity.getTime());
+        rawActivityDataEntity.setTimeZoneOffset(dbRawActivity.getTimeZoneOffset());
+
+        return rawActivityDataEntity;
     }
 }

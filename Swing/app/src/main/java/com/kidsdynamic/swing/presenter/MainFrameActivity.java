@@ -97,7 +97,7 @@ public class MainFrameActivity extends BaseFragmentActivity {
     private class OnTabItemClickListener implements View.OnClickListener{
         @Override
         public void onClick(View v) {
-            //首先设置点击item未选中状态，其他的为非选择状态
+            //首先设置点击item为选中状态，其他的为非选择状态
             int clickedItemIndex = getTabItemIndexFromResId(v.getId());
             selectTabItem(clickedItemIndex);
 
@@ -206,5 +206,9 @@ public class MainFrameActivity extends BaseFragmentActivity {
     }
 
 
+    public void switchToDashBoardFragment(){
+        selectTabItem(R.id.main_console_dashboard);
+        switchShowFragment(R.id.main_console_dashboard);
+    }
 
 }

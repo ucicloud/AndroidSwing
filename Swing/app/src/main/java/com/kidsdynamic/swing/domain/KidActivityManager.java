@@ -150,7 +150,6 @@ public class KidActivityManager {
 
     }
 
-
     public interface IFinishListener {
         void onFinish(Object arg);
 
