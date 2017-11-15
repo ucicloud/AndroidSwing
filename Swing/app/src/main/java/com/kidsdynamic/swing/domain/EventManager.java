@@ -243,7 +243,8 @@ public class EventManager {
         Calendar startDate = Calendar.getInstance();
         Calendar endDate = Calendar.getInstance();
 
-        Calendar untilDate = Calendar.getInstance();
+        //modify only_app 根据ios的实现，重复日历事件不再有范围限制
+        /*Calendar untilDate = Calendar.getInstance();
         untilDate.setTimeInMillis(alertDate.getTimeInMillis());
         switch (repeat) {
             case WatchEvent.REPEAT_MONTHLY:
@@ -258,7 +259,7 @@ public class EventManager {
                 break;
         }
         untilDate.add(Calendar.DATE, -1);
-        long untilTimeStamp = untilDate.getTimeInMillis();
+        long untilTimeStamp = untilDate.getTimeInMillis();*/
 
         for (WatchEvent event : resultRaw) {
             alertDate.setTimeInMillis(event.mAlertTimeStamp);
@@ -298,7 +299,7 @@ public class EventManager {
                 event.mStartDate = startDate.getTimeInMillis();
                 event.mEndDate = endDate.getTimeInMillis();
             }
-            while (event.mAlertTimeStamp <= endTimeStamp && event.mAlertTimeStamp < untilTimeStamp);
+            while (event.mAlertTimeStamp <= endTimeStamp /*&& event.mAlertTimeStamp < untilTimeStamp*/);
         }
 
         return result;
