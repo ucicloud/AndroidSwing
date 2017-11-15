@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.kidsdynamic.swing.R;
+import com.kidsdynamic.swing.domain.KidActivityManager;
+import com.kidsdynamic.swing.domain.RawActivityManager;
 import com.kidsdynamic.swing.utils.ConfigUtil;
 
 import butterknife.BindView;
@@ -51,6 +53,9 @@ public class LogoutConfirmFragment extends ProfileBaseFragment {
     protected void logout(){
         //show dialog to confirm
         //del token and
+
+        //请求缓存数据
+        RawActivityManager.delAllRawActivity();
 
         ConfigUtil.logoutState();
         getActivity().finish();

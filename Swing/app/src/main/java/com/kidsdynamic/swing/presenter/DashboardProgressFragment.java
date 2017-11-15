@@ -335,7 +335,7 @@ public class DashboardProgressFragment extends DashboardBaseFragment {
                 bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "Search Swing Watch Timeout");
                 mActivityMain.FirebaseLog(LogEvent.Event.SYNC_WATCH_DATA, bundle);*/
 
-                viewNotFound();
+                viewNotFound(R.string.dashboard_progress_not_found);
                 bleSearchCancel();
             }
         }
@@ -349,8 +349,7 @@ public class DashboardProgressFragment extends DashboardBaseFragment {
             if (mSyncState == SYNC_STATE_SUCCESS) {
                 viewCompleted();
             } else if (mSyncTimeout == 0 || mSyncState == SYNC_STATE_FAIL) {
-                // TODO: 2017/11/14 同步数据失败后的提示语不正确
-                viewNotFound();
+                viewNotFound(R.string.dashboard_progress_sync_fail);
                 bleSyncCancel();
             }
         }
@@ -636,13 +635,14 @@ public class DashboardProgressFragment extends DashboardBaseFragment {
         mViewProgress.setActive(true);
     }
 
-    private void viewNotFound() {
+    private void viewNotFound(int errMsgStrId) {
        /* Bundle bundle = new Bundle();
         bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "Swing Watch Not Found");
         bundle.putString(FirebaseAnalytics.Param.ITEM_ID, mDevice.mMacId);
         mActivityMain.FirebaseLog(LogEvent.Event.SYNC_WATCH_DATA, bundle);*/
 
-        mViewLabel.setText(getResources().getString(R.string.dashboard_progress_not_found));
+//        mViewLabel.setText(getResources().getString(R.string.dashboard_progress_not_found));
+        mViewLabel.setText(getResources().getString(errMsgStrId));
 
         mViewButton1.setText(getResources().getString(R.string.dashboard_progress_again));
         mViewButton2.setText(getResources().getString(R.string.dashboard_progress_last));

@@ -446,6 +446,6 @@
 
     <string name="save_todo_done_statue_err">save fail, try again[%1$d]</string>
     <string name="calendar_todo_del">Delete</string>
-    <!--<string name="dashboard_update_raw_activity_not_all_success"></string>-->
+    <string name="dashboard_progress_sync_fail">Sync Fail</string>
 
 </resources>

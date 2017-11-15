@@ -63,4 +63,9 @@ public class RawActivityDataStore {
         return rawActivityDao.queryBuilder().list();
     }
 
+    public void dealAll(){
+        RawActivityDao rawActivityDao = dbUtil.getDaoSession().getRawActivityDao();
+        rawActivityDao.deleteAll();
+    }
+
 }

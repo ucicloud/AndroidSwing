@@ -252,6 +252,7 @@ public class BeanConvertor {
         watchEvent.mAlert = db_event.getAlert();
         watchEvent.mRepeat = db_event.getRepeat();
         watchEvent.mTimezoneOffset = db_event.getTimezoneOffset();
+        watchEvent.mAlertTimeStamp = watchEvent.mStartDate;
 
         if(db_event.getDateCreated() != null){
             watchEvent.mDateCreated = db_event.getDateCreated();

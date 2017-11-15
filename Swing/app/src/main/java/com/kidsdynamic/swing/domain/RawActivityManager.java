@@ -114,6 +114,13 @@ public class RawActivityManager {
         }
     }
 
+    public static void delAllRawActivity(){
+        DbUtil dbUtil = DbUtil.getInstance(SwingApplication.getAppContext());
+        RawActivityDataStore rawActivityDataStore = new RawActivityDataStore(dbUtil);
+
+        rawActivityDataStore.dealAll();
+    }
+
     public interface IFinishListener {
         void onFinish(Object arg);
 
