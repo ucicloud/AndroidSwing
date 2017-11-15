@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import com.kidsdynamic.commonlib.utils.ObjectUtils;
 import com.kidsdynamic.data.dao.DB_CloudActivity;
 import com.kidsdynamic.data.dao.DB_Event;
+import com.kidsdynamic.data.dao.DB_FormatActivity;
 import com.kidsdynamic.data.dao.DB_Kids;
 import com.kidsdynamic.data.dao.DB_RawActivity;
 import com.kidsdynamic.data.dao.DB_Todo;
@@ -381,6 +382,49 @@ public class BeanConvertor {
         return db_todo;
     }
 
+    static List<DB_FormatActivity> getDBFormatActivity(@NonNull List<WatchActivity> watchActivityList){
+        List<DB_FormatActivity> dbFormatActivities = new ArrayList<>(1);
+        if(ObjectUtils.isListEmpty(watchActivityList)){
+            return dbFormatActivities;
+        }
+
+        for (WatchActivity watchActivity :
+                watchActivityList) {
+            if(watchActivity.mOutdoor.mId <= 0 && watchActivity.mIndoor.mId <= 0){
+                continue;
+            }
+
+            dbFormatActivities.add(getDBFormatActivity(watchActivity));
+        }
+
+        return dbFormatActivities;
+    }
+
+    static DB_FormatActivity getDBFormatActivity(WatchActivity watchActivity){
+        DB_FormatActivity db_formatActivity = new DB_FormatActivity();
+
+        long actvId = watchActivity.mIndoor.mId > 0 ? watchActivity.mIndoor.mId : watchActivity.mOutdoor.mId;
+        db_formatActivity.setActvId(actvId);
+        db_formatActivity.setIndoorId(watchActivity.mIndoor.mId);
+        db_formatActivity.setIndoorSteps(watchActivity.mIndoor.mSteps);
+        db_formatActivity.setOutdoorId(watchActivity.mOutdoor.mId);
+        db_formatActivity.setOutdoorSteps(watchActivity.mOutdoor.mSteps);
+
+        if(watchActivity.mIndoor.mId > 0){
+            db_formatActivity.setMacId(watchActivity.mIndoor.mMacId);
+            db_formatActivity.setKidId(watchActivity.mIndoor.mKidId);
+            db_formatActivity.setTime(watchActivity.mIndoor.mTimestamp);
+            db_formatActivity.setDistance(watchActivity.mIndoor.mDistance);
+        }else {
+            db_formatActivity.setMacId(watchActivity.mOutdoor.mMacId);
+            db_formatActivity.setKidId(watchActivity.mOutdoor.mKidId);
+            db_formatActivity.setTime(watchActivity.mOutdoor.mTimestamp);
+            db_formatActivity.setDistance(watchActivity.mOutdoor.mDistance);
+        }
+
+        return db_formatActivity;
+    }
+
     static List<DB_CloudActivity> getDBCloudActivity(@NonNull List<WatchActivity> watchActivityList){
         List<DB_CloudActivity> dbCloudActivities = new ArrayList<>(1);
         if(ObjectUtils.isListEmpty(watchActivityList)){
@@ -424,6 +468,17 @@ public class BeanConvertor {
 
         return db_cloudActivity;
     }
+
+    /*static DB_CloudActivity getDBCloudActivity(@NonNull RetrieveDataRep.ActivitiesEntity activitiesEntity){
+        DB_CloudActivity db_cloudActivity = new DB_CloudActivity();
+        db_cloudActivity.setActvId((long) activitiesEntity.getId());
+        db_cloudActivity.setMacId(activitiesEntity.getMacId());
+        db_cloudActivity.setKidId(activitiesEntity.getKidId());
+        db_cloudActivity.setType(activitiesEntity.getType());
+        db_cloudActivity.setSteps((long) activitiesEntity.getSteps());
+        db_cloudActivity.setDistance((long) activitiesEntity.getDistance());
+        db_cloudActivity.setReceivedDate(activitiesEntity.getReceivedDate());
+    }*/
 
     public static DB_RawActivity getDBRawActivity(ActivityModel activityModel) {
         DB_RawActivity db_rawActivity = new DB_RawActivity();

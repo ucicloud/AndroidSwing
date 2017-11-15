@@ -3,12 +3,14 @@ package com.kidsdynamic.swing.domain;
 import android.content.Context;
 import android.util.Log;
 
-import com.kidsdynamic.data.dao.DB_CloudActivity;
+import com.kidsdynamic.commonlib.utils.ObjectUtils;
+import com.kidsdynamic.data.dao.DB_FormatActivity;
 import com.kidsdynamic.data.net.ApiGen;
 import com.kidsdynamic.data.net.activity.ActivityApi;
 import com.kidsdynamic.data.net.activity.model.RetrieveDataRep;
 import com.kidsdynamic.data.persistent.DbUtil;
 import com.kidsdynamic.data.repository.disk.ActivityCloudDataStore;
+import com.kidsdynamic.data.repository.disk.ActivityFormatDataStore;
 import com.kidsdynamic.data.repository.disk.RawActivityDataStore;
 import com.kidsdynamic.swing.SwingApplication;
 import com.kidsdynamic.swing.model.WatchActivity;
@@ -96,6 +98,10 @@ public class KidActivityManager {
     private void handleRetrieveActivityData(long kidId, Response<RetrieveDataRep> response) {
         RetrieveDataRep retrieveDataRep = response.body();
 
+        if(ObjectUtils.isListEmpty(retrieveDataRep.getActivities())){
+            return;
+        }
+
         for (RetrieveDataRep.ActivitiesEntity activity : retrieveDataRep.getActivities()) {
             long timestamp = BeanConvertor.getLocalTimeStamp(activity.getReceivedDate());
 
@@ -103,6 +109,7 @@ public class KidActivityManager {
                 Log.d("swing", "Retrieve activity wrong time! " + activity.getReceivedDate());
                 continue;
             }
+
 
             for (WatchActivity act : mActivities) {
                 long actEnd = act.mIndoor.mTimestamp + 86400000;
@@ -136,14 +143,18 @@ public class KidActivityManager {
 
     private void updateActivityList(long kidId, List<WatchActivity> list) {
         DbUtil dbUtil = DbUtil.getInstance(SwingApplication.getAppContext());
-        ActivityCloudDataStore activityCloudDataStore = new ActivityCloudDataStore(dbUtil);
+//        ActivityCloudDataStore activityCloudDataStore = new ActivityCloudDataStore(dbUtil);
+        ActivityFormatDataStore activityFormatDataStore = new ActivityFormatDataStore(dbUtil);
 
 
         //按照kids删除
-        activityCloudDataStore.deleteByKidId(kidId);
+        activityFormatDataStore.deleteByKidId(kidId);
 
-        List<DB_CloudActivity> dbCloudActivity = BeanConvertor.getDBCloudActivity(list);
-        activityCloudDataStore.saveAll(dbCloudActivity);
+        List<DB_FormatActivity> dbFormatActivitys = BeanConvertor.getDBFormatActivity(list);
+
+        if(!ObjectUtils.isListEmpty(dbFormatActivitys)){
+            activityFormatDataStore.saveAll(dbFormatActivitys);
+        }
 
         RawActivityDataStore rawActivityDataStore = new RawActivityDataStore(dbUtil);
         rawActivityDataStore.deleteByStatus(RawActivityDataStore.status_done);

@@ -1,5 +1,6 @@
 package com.daomaker;
 
+import com.daomaker.maker.ActivityFormatMaker;
 import com.daomaker.maker.ActivityFromCloudMaker;
 import com.daomaker.maker.EventMaker;
 import com.daomaker.maker.RawActivityMaker;
@@ -26,6 +27,7 @@ public class MainMaker {
         makers.add(new ActivityFromCloudMaker());
         makers.add(new EventMaker());
         makers.add(new RawActivityMaker());
+        makers.add(new ActivityFormatMaker());
 
 
         for (Maker maker : makers) {

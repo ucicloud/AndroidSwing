@@ -209,6 +209,9 @@ public class MainFrameActivity extends BaseFragmentActivity {
     public void switchToDashBoardFragment(){
         selectTabItem(R.id.main_console_dashboard);
         switchShowFragment(R.id.main_console_dashboard);
+
+        int clickedItemIndex = getTabItemIndexFromResId(R.id.main_console_dashboard);
+        selectTabItem(clickedItemIndex);
     }
 
 }

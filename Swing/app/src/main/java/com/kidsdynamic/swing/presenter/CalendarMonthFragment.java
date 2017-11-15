@@ -2,6 +2,7 @@ package com.kidsdynamic.swing.presenter;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import com.kidsdynamic.swing.view.calendar.ViewCalendarCellMonth;
 import com.kidsdynamic.swing.view.calendar.ViewCalendarMonth;
 import com.kidsdynamic.swing.view.calendar.ViewCalendarSelector;
 
+import java.util.Calendar;
 import java.util.List;
 
 import butterknife.BindView;
@@ -114,6 +116,13 @@ public class CalendarMonthFragment extends CalendarBaseFragment {
 
     private void loadEventList(long start, long end) {
         mViewCalendar.delAllEvent();
+
+        Calendar startCalendar = Calendar.getInstance();
+        startCalendar.setTimeInMillis(start);
+        Calendar endCalendar = Calendar.getInstance();
+        endCalendar.setTimeInMillis(end);
+        Log.d("CalendarMonthFragment", "start:" + startCalendar.getTime().toString());
+        Log.d("CalendarMonthFragment", "end:  " + endCalendar.getTime().toString());
 
         // TODO: 2017/11/8
 //        List<WatchEvent> list = CalendarManager.getEventList(start, end);

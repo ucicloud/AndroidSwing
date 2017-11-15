@@ -250,7 +250,9 @@ public class CalendarMainFragment extends CalendarBaseFragment {
 
         //从cache中读取当前userid
         currentUserId = LoginManager.getCurrentLoginUserId(getContext());
-        mEventList = EventManager.getEventList(currentUserId, start, end);
+//        mEventList = EventManager.getEventList(currentUserId, start, end);
+        mEventList = EventManager.getEventList(currentUserId,
+                mViewCalendarWeek.getDateBegin(), mViewCalendarWeek.getDateEnd());
 
         updateAlert();
 
@@ -334,6 +336,10 @@ public class CalendarMainFragment extends CalendarBaseFragment {
         @Override
         public void OnSelect(View view, long offset, long date) {
             mViewCalendarWeek.setDate(date);
+
+            mEventList = EventManager.getEventList(currentUserId,
+                    mViewCalendarWeek.getDateBegin(), mViewCalendarWeek.getDateEnd());
+
             loadEvents();
         }
     };
