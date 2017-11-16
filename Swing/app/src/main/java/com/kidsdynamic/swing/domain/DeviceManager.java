@@ -30,11 +30,20 @@ public class DeviceManager {
     public static DB_Kids getFocusWatchInfo(Context context){
 
         long focusKidsId = getFocusKidsId();
+
         DbUtil dbUtil = DbUtil.getInstance(context.getApplicationContext());
         KidsDataStore kidsDataStore = new KidsDataStore(dbUtil);
+        if(focusKidsId > 0){
+            return kidsDataStore.getKidsInfo(focusKidsId);
+        }else {
+            long userId = LoginManager.getCurrentLoginUserId(context);
+            List<DB_Kids> kidsInfoByParentId = kidsDataStore.getKidsInfoByParentId(userId);
+            if(!ObjectUtils.isListEmpty(kidsInfoByParentId)){
+                return kidsInfoByParentId.get(0);
+            }
+        }
 
-
-        return kidsDataStore.getKidsInfo(focusKidsId);
+        return null;
     }
 
     public static String getMacID(String macAddress) {

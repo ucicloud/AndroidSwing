@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/content"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:background="@color/color_blue_sky"
     android:clipToPadding="false"
-    android:fitsSystemWindows="true"
-    android:background="@color/color_blue_sky">
+    android:fitsSystemWindows="true">
 
     <FrameLayout
         android:id="@+id/fragment_container"
@@ -70,21 +70,27 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:padding="10dp"
+            android:visibility="gone"
             app:strokeColorActive="@color/color_orange_main"
             app:strokeColorNormal="@color/color_gray_main"
-            app:strokeWidth="2dp"
-            android:visibility="gone"/>
+            app:strokeWidth="2dp" />
 
-        <cn.carbs.android.avatarimageview.library.AvatarImageView
-            android:id="@+id/main_control_profile"
+        <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:padding="10dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/default_avatar"
-            android:visibility="invisible"/>
+            android:layout_weight="1">
 
+            <cn.carbs.android.avatarimageview.library.AvatarImageView
+                android:id="@+id/main_control_profile"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_centerInParent="true"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:paddingTop="10dp"
+                android:src="@drawable/default_avatar"
+                android:visibility="visible" />
+        </RelativeLayout>
     </LinearLayout>
 
 </FrameLayout>

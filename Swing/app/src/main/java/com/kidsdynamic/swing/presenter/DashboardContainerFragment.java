@@ -54,6 +54,12 @@ public class DashboardContainerFragment extends BaseFragment {
 
         registerUIReceiver();
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
         //modify 2017年11月12日11:01:44 only_app
         //如果当前还未绑定kids，则进入到无设备界面；注意情况：绑定了设备，但未设置focus device
         long currentLoginUserId = LoginManager.getCurrentLoginUserId(getContext());
@@ -65,7 +71,6 @@ public class DashboardContainerFragment extends BaseFragment {
         }else {
             selectFragment(DashboardMainFragment.class.getName(), null, false);
         }
-
     }
 
     private void registerUIReceiver() {

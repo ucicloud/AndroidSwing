@@ -4,7 +4,6 @@ import android.support.annotation.NonNull;
 
 import com.kidsdynamic.commonlib.utils.ObjectUtils;
 import com.kidsdynamic.data.dao.DB_User;
-import com.kidsdynamic.data.dao.DaoSession;
 import com.kidsdynamic.data.dao.UserDao;
 import com.kidsdynamic.data.persistent.DbUtil;
 
@@ -59,5 +58,18 @@ public class UserDataStore {
     public void save(@NonNull DB_User db_user){
         UserDao userDao = dbUtil.getDaoSession().getUserDao();
         userDao.insert(db_user);
+    }
+
+    public DB_User getById(long userId){
+        UserDao userDao = dbUtil.getDaoSession().getUserDao();
+        List<DB_User> list = userDao.queryBuilder().
+                where(UserDao.Properties.UserId.eq(userId)).
+                build().list();
+
+        if(!ObjectUtils.isListEmpty(list)){
+            return list.get(0);
+        }
+
+        return null;
     }
 }

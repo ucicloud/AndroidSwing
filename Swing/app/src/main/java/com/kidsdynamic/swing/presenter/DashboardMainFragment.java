@@ -2,13 +2,16 @@ package com.kidsdynamic.swing.presenter;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.kidsdynamic.data.dao.DB_Kids;
 import com.kidsdynamic.swing.R;
 import com.kidsdynamic.swing.domain.DeviceManager;
+import com.kidsdynamic.swing.domain.UserManager;
 import com.kidsdynamic.swing.utils.GlideHelper;
 
 import butterknife.BindView;
@@ -64,9 +67,15 @@ public class DashboardMainFragment extends DashboardBaseFragment {
         super.onActivityCreated(savedInstanceState);
         initTitleBar();
         //just test
-        kidName = "Alex Smith";
-        tv_kids_name.setText(kidName);
-        GlideHelper.showCircleImageView(getContext(), mAvatarFilename, vc_photo);
+        DB_Kids focusWatchInfo = DeviceManager.getFocusWatchInfo(getContext());
+        if(focusWatchInfo != null){
+            kidName = focusWatchInfo.getName();
+            tv_kids_name.setText(kidName);
+
+            String profileRealUri = UserManager.getProfileRealUri(focusWatchInfo.getProfile());
+            Log.d("dash_main","avatar: " + profileRealUri);
+            GlideHelper.showCircleImageView(getContext(), profileRealUri, vc_photo);
+        }
     }
 
     private void initTitleBar() {

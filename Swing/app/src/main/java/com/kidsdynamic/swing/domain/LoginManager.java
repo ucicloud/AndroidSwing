@@ -3,6 +3,7 @@ package com.kidsdynamic.swing.domain;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
+import com.kidsdynamic.data.dao.DB_User;
 import com.kidsdynamic.data.net.Config;
 import com.kidsdynamic.data.net.user.model.UserProfileRep;
 import com.kidsdynamic.data.persistent.DbUtil;
@@ -62,6 +63,16 @@ public class LoginManager {
     public static long getCurrentLoginUserId(Context context){
         return PreferencesUtil.getInstance(context.getApplicationContext()).
                 gPrefLongValue(ConfigUtil.label_user_id);
+    }
+
+    public static DB_User getCurrentLoginUserInfo(){
+        long userId = getCurrentLoginUserId(SwingApplication.getAppContext());
+        if(userId > 0){
+            DbUtil dbUtil = DbUtil.getInstance(SwingApplication.getAppContext());
+            UserDataStore userDataStore = new UserDataStore(dbUtil);
+            return userDataStore.getById(userId);
+        }
+        return null;
     }
 
     public void clearCacheLoginData(Context context){
