@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -113,9 +114,17 @@ public class WatchProfileFragment extends BaseFragment {
 
     @OnClick(R.id.ib_back)
     public void back() {
-        SignupActivity signupActivity = (SignupActivity) getActivity();
+
+        FragmentActivity activity = getActivity();
+        if(activity instanceof MainFrameActivity){
+            ((MainFrameActivity) activity).
+                    getSupportFragmentManager().popBackStack();
+        }else {
+            SignupActivity signupActivity = (SignupActivity) getActivity();
 //        signupActivity.setFragment(SignupLoginFragment.newInstance());
-        signupActivity.getSupportFragmentManager().popBackStack();
+            signupActivity.getSupportFragmentManager().popBackStack();
+        }
+
     }
 
     @OnClick(R.id.watch_profile_photo)
@@ -199,8 +208,7 @@ public class WatchProfileFragment extends BaseFragment {
                         bundle.putString(DeviceManager.BUNDLE_KEY_KID_NAME,
                                 kidsName);
 
-                        SignupActivity signupActivity = (SignupActivity) getActivity();
-                        signupActivity.selectFragment(WatchAddSuccessFragment.class.getName(), bundle);
+                        gotoAddSuccessFragment(bundle);
                     }
 
                 } else if (response.code() == 409) {
@@ -258,8 +266,7 @@ public class WatchProfileFragment extends BaseFragment {
                             bundle.putString(DeviceManager.BUNDLE_KEY_AVATAR,
                                     UserManager.getProfileRealUri(response.body().getKid().getProfile()));
 
-                            SignupActivity signupActivity = (SignupActivity) getActivity();
-                            signupActivity.selectFragment(WatchAddSuccessFragment.class.getName(), bundle);
+                            gotoAddSuccessFragment(bundle);
                         } else {
                             ToastCommon.makeText(getContext(), R.string.error_api_unknown);
                             LogUtil2.getUtils().d("uploadKidAvatar error code:" + response.code());
@@ -273,6 +280,17 @@ public class WatchProfileFragment extends BaseFragment {
                         t.printStackTrace();
                     }
                 });
+    }
+
+    private void gotoAddSuccessFragment(Bundle bundle) {
+        FragmentActivity activity = getActivity();
+        if(activity instanceof MainFrameActivity){
+            ((MainFrameActivity) activity).
+                    selectFragment(WatchAddSuccessFragment.class.getName(), bundle,true);
+        }else {
+            SignupActivity signupActivity = (SignupActivity) getActivity();
+            signupActivity.selectFragment(WatchAddSuccessFragment.class.getName(), bundle);
+        }
     }
 
     private Map<String, RequestBody> getUploadKidAvatarPram(String kidsId) {

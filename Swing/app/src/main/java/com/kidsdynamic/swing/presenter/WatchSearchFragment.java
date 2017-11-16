@@ -2,6 +2,7 @@ package com.kidsdynamic.swing.presenter;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -81,8 +82,15 @@ public class WatchSearchFragment extends BaseFragment {
         public void onProgress(ViewCircle view, int begin, int end) {
             if (begin == bound - 1) count += 1;
             if (count == destCount && end == random) {
-                SignupActivity signupActivity = (SignupActivity) getActivity();
-                signupActivity.setFragment(WatchSelectFragment.newInstance(), true);
+                //modify 2017年11月16日16:42:33 only_app
+                //根据当前fragment所在activity来使用不同的方法跳转
+                FragmentActivity activity = getActivity();
+                if(activity instanceof MainFrameActivity){
+                    ((MainFrameActivity) activity).setFragment(WatchSelectFragment.newInstance(), true);
+                }else {
+                    SignupActivity signupActivity = (SignupActivity) getActivity();
+                    signupActivity.setFragment(WatchSelectFragment.newInstance(), true);
+                }
             }
         }
     }

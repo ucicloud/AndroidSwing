@@ -6,12 +6,18 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 
+import com.kidsdynamic.data.dao.DB_Kids;
 import com.kidsdynamic.swing.R;
+import com.kidsdynamic.swing.domain.DeviceManager;
+import com.kidsdynamic.swing.domain.UserManager;
 import com.kidsdynamic.swing.model.WatchEvent;
+import com.kidsdynamic.swing.utils.GlideHelper;
 import com.yy.base.BaseFragmentActivity;
 
 import java.util.HashMap;
 import java.util.Stack;
+
+import cn.carbs.android.avatarimageview.library.AvatarImageView;
 
 /**
  * 主界面
@@ -21,7 +27,7 @@ public class MainFrameActivity extends BaseFragmentActivity {
     private View view_tab_device;
     private View view_tab_calendar;
     private View view_tab_dashboard;
-    private View view_tab_profile;//我的
+    private AvatarImageView view_tab_profile;
 
     private View [] tabViews = {view_tab_device,view_tab_calendar, view_tab_dashboard, view_tab_profile};
     private int [] tabViews_res_id = {R.id.main_console_device,  R.id.main_console_calendar,
@@ -66,6 +72,17 @@ public class MainFrameActivity extends BaseFragmentActivity {
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        DB_Kids focusWatchInfo = DeviceManager.getFocusWatchInfo(this.getApplicationContext());
+        if(focusWatchInfo != null){
+            String profileRealUri = UserManager.getProfileRealUri(focusWatchInfo.getProfile());
+            GlideHelper.showCircleImageView(this,profileRealUri,view_tab_profile);
+        }
+    }
+
     private void initValue() {
         mCalendarBundleStack = new Stack<>();
 
@@ -81,6 +98,7 @@ public class MainFrameActivity extends BaseFragmentActivity {
     }
 
     private void initView() {
+        view_tab_profile = findViewById(R.id.main_control_profile);
         initTabView();
     }
 
@@ -212,6 +230,24 @@ public class MainFrameActivity extends BaseFragmentActivity {
 
         int clickedItemIndex = getTabItemIndexFromResId(R.id.main_console_dashboard);
         selectTabItem(clickedItemIndex);
+    }
+
+    public void setFragment(Fragment fragment, boolean isAddBackStack) {
+        Fragment currentFragment = getCurrentFragment();
+        if(currentFragment instanceof DashboardContainerFragment){
+            ((DashboardContainerFragment) currentFragment).setFragment(fragment,isAddBackStack);
+        }else if(currentFragment instanceof CalendarContainerFragment){
+            ((CalendarContainerFragment) currentFragment).setFragment(fragment, isAddBackStack);
+        }
+    }
+
+    public void selectFragment(String className, Bundle args, boolean isAddToBackStack) {
+        Fragment currentFragment = getCurrentFragment();
+        if(currentFragment instanceof DashboardContainerFragment){
+            ((DashboardContainerFragment) currentFragment).selectFragment(className,args,isAddToBackStack);
+        }else if(currentFragment instanceof CalendarContainerFragment){
+            ((CalendarContainerFragment) currentFragment).selectFragment(className,args,isAddToBackStack);
+        }
     }
 
 }

@@ -56,7 +56,7 @@ public class DashboardNoDevicesFragment extends DashboardBaseFragment {
 
     @OnClick(R.id.dashboard_add_device)
     public void gotoSearchFragment() {
-
+        setFragment(WatchSearchFragment.newInstance(),true);
     }
 
     @OnClick(R.id.dashboard_no_devices_goto)

@@ -3,6 +3,7 @@ package com.kidsdynamic.swing.presenter;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -79,9 +80,17 @@ public class WatchAddSuccessFragment extends BaseFragment {
     @OnClick(R.id.watch_go_to_dashboard)
     public void gotoDashboard() {
 
-        getActivity().finish();
-        //跳转到主界面
-        startActivity(new Intent(getActivity(),MainFrameActivity.class));
+        FragmentActivity activity = getActivity();
+        if(activity instanceof MainFrameActivity){
+            ((MainFrameActivity) activity).
+                    switchToDashBoardFragment();
+        }else {
+
+            getActivity().finish();
+            //跳转到主界面
+            startActivity(new Intent(getActivity(),MainFrameActivity.class));
+        }
+
     }
 
     @OnClick(R.id.watch_add_other)

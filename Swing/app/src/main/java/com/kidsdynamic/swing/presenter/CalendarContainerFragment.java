@@ -150,6 +150,16 @@ public class CalendarContainerFragment extends BaseFragment {
 
     }
 
+    public void setFragment(Fragment fragment, boolean isAddBackStack) {
+        FragmentTransaction fragmentTransaction = getFragmentManager()
+                .beginTransaction()
+                .replace(R.id.calender_fragment_container, fragment);
+        if (isAddBackStack) {
+            fragmentTransaction.addToBackStack(null);
+        }
+        fragmentTransaction.commit();
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();

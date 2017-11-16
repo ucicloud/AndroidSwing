@@ -65,14 +65,26 @@
             android:src="@drawable/control_button_dashboard" />
 
         <com.kidsdynamic.swing.view.ViewCircle
-            android:id="@+id/main_control_profile"
+            android:id="@+id/main_control_profile1"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:padding="10dp"
             app:strokeColorActive="@color/color_orange_main"
             app:strokeColorNormal="@color/color_gray_main"
-            app:strokeWidth="2dp"/>
+            app:strokeWidth="2dp"
+            android:visibility="gone"/>
+
+        <cn.carbs.android.avatarimageview.library.AvatarImageView
+            android:id="@+id/main_control_profile"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:padding="10dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/default_avatar"
+            android:visibility="invisible"/>
+
     </LinearLayout>
 
 </FrameLayout>

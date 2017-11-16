@@ -11,6 +11,7 @@ import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -355,8 +356,15 @@ public class WatchSelectFragment extends BaseFragment {
             @Override
             public void onInitComplete(String mac) {
                 finishLoadingDialog();
-                SignupActivity signupActivity = (SignupActivity) getActivity();
-                signupActivity.setFragment(WatchProfileFragment.newInstance(macId), true);
+
+                FragmentActivity activity = getActivity();
+                if(activity instanceof MainFrameActivity){
+                    ((MainFrameActivity) activity).
+                            setFragment(WatchProfileFragment.newInstance(macId), true);
+                }else {
+                    SignupActivity signupActivity = (SignupActivity) getActivity();
+                    signupActivity.setFragment(WatchProfileFragment.newInstance(macId), true);
+                }
             }
 
             @Override
