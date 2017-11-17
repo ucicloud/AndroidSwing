@@ -19,6 +19,7 @@ public class ConfigUtil {
 	public static final String label_notify_getreqward = "isNotifyReward";
 	public static final String value_notify_getreqward_nomore = "nomore";
 	public static final String login_state = "login";
+	public static final String calendar_first_time = "calendar";
 
 
 	/**

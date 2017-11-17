@@ -7,10 +7,12 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 
 import com.kidsdynamic.data.dao.DB_Kids;
+import com.kidsdynamic.data.persistent.PreferencesUtil;
 import com.kidsdynamic.swing.R;
 import com.kidsdynamic.swing.domain.DeviceManager;
 import com.kidsdynamic.swing.domain.UserManager;
 import com.kidsdynamic.swing.model.WatchEvent;
+import com.kidsdynamic.swing.utils.ConfigUtil;
 import com.kidsdynamic.swing.utils.GlideHelper;
 import com.yy.base.BaseFragmentActivity;
 
@@ -28,6 +30,8 @@ public class MainFrameActivity extends BaseFragmentActivity {
     private View view_tab_calendar;
     private View view_tab_dashboard;
     private AvatarImageView view_tab_profile;
+
+    protected View view_info;
 
     private View [] tabViews = {view_tab_device,view_tab_calendar, view_tab_dashboard, view_tab_profile};
     private int [] tabViews_res_id = {R.id.main_console_device,  R.id.main_console_calendar,
@@ -72,6 +76,10 @@ public class MainFrameActivity extends BaseFragmentActivity {
 
     }
 
+    protected void viewInfoClick(){
+        view_info.setVisibility(View.GONE);
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -100,6 +108,14 @@ public class MainFrameActivity extends BaseFragmentActivity {
     private void initView() {
         view_tab_profile = findViewById(R.id.main_control_profile);
         initTabView();
+
+        view_info = findViewById(R.id.view_bg);
+        view_info.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                viewInfoClick();
+            }
+        });
     }
 
     private void initTabView(){
@@ -125,6 +141,7 @@ public class MainFrameActivity extends BaseFragmentActivity {
                     break;
                 case R.id.main_console_calendar://calendar
                     switchShowFragment(R.id.main_console_calendar);
+                    showIntroductionUI();
                     break;
                 case R.id.main_console_dashboard:
                     switchShowFragment(R.id.main_console_dashboard);
@@ -133,6 +150,16 @@ public class MainFrameActivity extends BaseFragmentActivity {
                     switchShowFragment(R.id.main_control_profile);
                     break;
             }
+        }
+    }
+
+    private void showIntroductionUI() {
+        Boolean calendarFirstTime = PreferencesUtil.getInstance(getApplicationContext()).
+                gPrefBooleanValue(ConfigUtil.calendar_first_time, true);
+        if(calendarFirstTime){
+            view_info.setVisibility(View.VISIBLE);
+            PreferencesUtil.getInstance(getApplicationContext()).
+                    setPreferenceBooleanValue(ConfigUtil.calendar_first_time,false);
         }
     }
 

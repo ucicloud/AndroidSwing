@@ -93,4 +93,13 @@
         </RelativeLayout>
     </LinearLayout>
 
+    <ImageView
+        android:id="@+id/view_bg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/calendar_landing_instructions"
+        android:contentDescription="@null"
+        android:scaleType="fitEnd"
+        android:visibility="gone"/>
+
 </FrameLayout>

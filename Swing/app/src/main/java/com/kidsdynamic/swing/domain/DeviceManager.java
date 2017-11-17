@@ -46,6 +46,12 @@ public class DeviceManager {
         return null;
     }
 
+    public static KidsEntityBean getFocusKidsInfo(Context context){
+        DB_Kids focusWatchInfo = getFocusWatchInfo(context);
+
+        return BeanConvertor.convert(focusWatchInfo);
+    }
+
     public static String getMacID(String macAddress) {
         String[] separated = macAddress.split(":");
         String macId = "";

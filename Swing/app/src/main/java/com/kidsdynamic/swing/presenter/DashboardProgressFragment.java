@@ -172,9 +172,11 @@ public class DashboardProgressFragment extends DashboardBaseFragment {
         intent.putExtra("PAUSE", true);
         mActivityMain.startService(intent);*/
 
-       /* mDevice = mActivityMain.mContactStack.isEmpty() ?
+        /*mDevice = mActivityMain.mContactStack.isEmpty() ?
                 mActivityMain.mOperator.getFocusKid() :
                 (WatchContact.Kid) mActivityMain.mContactStack.pop();*/
+
+        mDevice = DeviceManager.getFocusKidsInfo(getContext());
 
         if (mDevice == null)
             mDevice = new KidsEntityBean();
@@ -437,6 +439,8 @@ public class DashboardProgressFragment extends DashboardBaseFragment {
 
             @Override
             public void onScanning(BluetoothLeDevice scanResult) {
+
+                Log.d("dashProgress", "onScanning " + scanResult);
                 //如果查找到指定的设备
                 if(scanResult != null
                         && scanResult.getAddress().equals(mMacAddress)){
@@ -499,6 +503,9 @@ public class DashboardProgressFragment extends DashboardBaseFragment {
 
             @Override
             public void onSyncActivity(ActivityModel activity) {
+
+                Log.d("dashProgress", "activity " + activity);
+
                 //首先把这些数据保存到数据库；然后同步完成，向服务器获取上传数据
                 RawActivityManager.saveRawActivity(activity);
             }
