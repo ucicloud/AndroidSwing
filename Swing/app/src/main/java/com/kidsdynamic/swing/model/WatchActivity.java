@@ -21,7 +21,7 @@ public class WatchActivity implements Serializable {
         public long mTimestamp;
         public long mDistance;
 
-        Act() {
+        public Act() {
             init(0, "", "", 0, 0, 0);
         }
 
@@ -40,11 +40,11 @@ public class WatchActivity implements Serializable {
     }
 
     WatchActivity() {
-        init(0, "", "", 0, 0, "", "", 0, 0,0,0);
+        init(0, "", "", 0, 0, "", "", 0, 0, 0, 0);
     }
 
     public WatchActivity(long kidId, long timestamp) {
-        init(0, "", kidId + "", 0, 0, "", kidId + "", 0, timestamp,0,0);
+        init(0, "", kidId + "", 0, 0, "", kidId + "", 0, timestamp, 0, 0);
     }
 
     WatchActivity(WatchActivity src) {
@@ -91,7 +91,7 @@ public class WatchActivity implements Serializable {
     }
 
     public void addInTimeRange(WatchActivity src, long rangeStart, long rangeEnd) {
-        if (src.mIndoor.mTimestamp>=rangeStart && src.mIndoor.mTimestamp<=rangeEnd) {
+        if (src.mIndoor.mTimestamp >= rangeStart && src.mIndoor.mTimestamp <= rangeEnd) {
             mIndoor.mSteps += src.mIndoor.mSteps;
             mOutdoor.mSteps += src.mOutdoor.mSteps;
         }

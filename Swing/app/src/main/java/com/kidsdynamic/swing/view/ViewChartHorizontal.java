@@ -4,10 +4,12 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
+import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PathEffect;
 import android.graphics.Rect;
+import android.graphics.Shader;
 import android.graphics.Typeface;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -113,7 +115,7 @@ public class ViewChartHorizontal extends ViewChart {
             HorizontalBar bar = mBars.get(i);
             drawValue(canvas, mRect, bar, i);
         }
-        drawGoal(canvas, mRect);
+        drawGoal(canvas, mRect, mBars.size());
     }
 
     private void drawAxisH(Canvas canvas, Rect rect) {
@@ -126,6 +128,8 @@ public class ViewChartHorizontal extends ViewChart {
     }
 
     private void drawValue(Canvas canvas, Rect rect, HorizontalBar bar, int i) {
+        int size = mChartTextSize + 1;
+
         Rect axisXRect = makeAxisRect(rect, i);
         if (mAxisHEnabled) {
             drawAxisH(canvas, axisXRect);
@@ -163,23 +167,37 @@ public class ViewChartHorizontal extends ViewChart {
         mPaint.setTextSize(mChartTextSize + 1);
         mPaint.getTextBounds(text, 0, text.length(), textRect);
 
-        int textPadding = 20;
-        if ((textRect.width() + (2 * textPadding)) > barRect.width()) {
-            mPaint.setColor(mChartColor);
-            textX = barRect.right + textPadding;
-        } else {
-            mPaint.setColor(Color.WHITE);
-            textX = barRect.right - textPadding - textRect.width();
-        }
+        int textPadding = size / 2;
+        textX = barRect.left + textPadding;
         textY = barRect.bottom - ((barRect.height() - textRect.height()) / 2);
+
+        float coverLength = barRect.width();
+        float indicator1 = barRect.left + textPadding;
+        final float textWidth = mPaint.measureText(text);
+        float indicator2 = indicator1 + textWidth;
+        if (coverLength <= indicator1) {
+            mPaint.setShader(null);
+            mPaint.setColor(mChartColor);
+        } else if (indicator1 < coverLength && coverLength <= indicator2) {
+            LinearGradient progressTextGradient = new LinearGradient(indicator1, 0, indicator2, 0,
+                    new int[]{Color.WHITE, mChartColor},
+                    null,
+                    Shader.TileMode.CLAMP);
+            mPaint.setColor(mChartColor);
+            mPaint.setShader(progressTextGradient);
+        } else {
+            mPaint.setShader(null);
+            mPaint.setColor(Color.WHITE);
+        }
 
         canvas.drawText(text, textX, textY, mPaint);
     }
 
-    private void drawGoal(Canvas canvas, Rect rect) {
+    private void drawGoal(Canvas canvas, Rect rect, int barCount) {
         int posX = rect.left + (int) (mGoal * rect.width() / mAxisHMax);
-        int posY = rect.top;
+        int posY = 0;
         int size = mChartTextSize + 1;
+        int textPadding = size / 2;
 
         mPaint.reset();
         mPaint.setAntiAlias(true);
@@ -190,8 +208,9 @@ public class ViewChartHorizontal extends ViewChart {
         mPaint.setPathEffect(effects);
 
         Path path = new Path();
-        float lineEndY = posY + rect.height() + 60;
-        path.moveTo(posX, posY - 60);
+        int barHeight = size + textPadding * 2;
+        float lineEndY = barCount * barHeight + (barCount + 1) * barGapHeight;
+        path.moveTo(posX, posY);
         path.lineTo(posX, lineEndY);
 
         canvas.drawPath(path, mPaint);
@@ -206,13 +225,12 @@ public class ViewChartHorizontal extends ViewChart {
         mPaint.getTextBounds(text, 0, text.length(), textRect);
         mPaint.setColor(Color.RED);
 
-        int textPadding = (size / 2) + 30;
-        if ((posX + textRect.width() + textPadding * 2) < getMeasuredWidth()) {
-            textX = posX - textPadding;
+        if (posX + textRect.width() + textPadding * 2 < getMeasuredWidth()) {
+            textX = posX - textPadding * 2;
         } else {
             textX = posX - textPadding - textRect.width();
         }
-        textY = lineEndY + textPadding;
+        textY = lineEndY + textPadding * 2;
 
         canvas.drawText(text, textX, textY, mPaint);
 
@@ -232,11 +250,13 @@ public class ViewChartHorizontal extends ViewChart {
     }
 
     private Rect makeAxisRect(Rect rect, int i) {
-        int barHeight = (int) (rect.height() / 3.0f);
+        int size = mChartTextSize + 1;
+        int textPadding = size / 2;
+        int barHeight = size + textPadding * 2;
         Rect barRect = new Rect();
         barRect.left = rect.left;
         barRect.right = rect.right;
-        barRect.top = i * barHeight + i * barGapHeight;
+        barRect.top = i * barHeight + (i + 1) * barGapHeight;
         barRect.bottom = barRect.top + barHeight;
         return barRect;
     }

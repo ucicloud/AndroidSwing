@@ -11,7 +11,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.5">
+        android:layout_weight="0.8">
 
         <com.kidsdynamic.swing.view.ViewSponge
             android:id="@+id/dashboard_chart_indicator_sponge"
@@ -76,53 +76,77 @@
     <!--app:axisHMax="15000"-->
     <!--app:chartTextSize="16sp" />-->
 
-    <com.kidsdynamic.swing.view.ViewChartHorizontal
-        android:id="@+id/dashboard_chart_horizontal"
+    <!--<com.kidsdynamic.swing.view.ViewChartHorizontal-->
+    <!--android:id="@+id/dashboard_chart_horizontal"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="0dp"-->
+    <!--android:layout_weight="5"-->
+    <!--android:padding="20dp"-->
+    <!--app:axisColor="@color/color_white"-->
+    <!--app:axisHEnabled="true"-->
+    <!--app:axisHMax="15000"-->
+    <!--app:chartTextSize="16sp" />-->
+
+    <com.kidsdynamic.swing.view.ViewChartKDBar
+        android:id="@+id/dashboard_chart_week"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="5"
+        android:layout_weight="6"
         android:padding="20dp"
-        app:axisColor="@color/color_white"
-        app:axisHEnabled="true"
-        app:axisHMax="15000"
-        app:chartTextSize="16sp" />
+        android:visibility="gone"
+        app:axisTextSize="12sp"
+        app:axisVMax="15000"
+        app:axisWidth="1dp"
+        app:chartTextColor="@color/color_white"
+        app:chartTextSize="12sp" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="3">
+        android:layout_weight="3"
+        android:background="@null">
 
-        <LinearLayout
+        <RadioGroup
+            android:id="@+id/dashboard_chart_radio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
+            android:background="@null"
             android:orientation="horizontal">
 
-            <com.kidsdynamic.swing.view.ViewBorderButton
+            <RadioButton
                 android:id="@+id/dashboard_chart_indoor"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="@drawable/border_button_bg_orange"
+                android:button="@null"
+                android:paddingBottom="@dimen/base_6"
+                android:paddingLeft="@dimen/base_30"
+                android:paddingRight="@dimen/base_30"
+                android:paddingTop="@dimen/base_6"
                 android:text="@string/dashboard_chart_indoor"
                 android:textAllCaps="false"
+                android:textColor="@color/text_orange_white_change_selector"
                 android:textSize="16sp"
-                android:textStyle="bold"
-                app:borderColor="@color/color_orange_main"
-                app:borderWidth="3dp"
-                app:floorColor="@color/color_white" />
+                android:textStyle="bold" />
 
-            <com.kidsdynamic.swing.view.ViewBorderButton
+            <RadioButton
                 android:id="@+id/dashboard_chart_outdoor"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
+                android:layout_marginStart="@dimen/base_10"
+                android:background="@drawable/border_button_bg_orange"
+                android:button="@null"
+                android:paddingBottom="@dimen/base_6"
+                android:paddingLeft="@dimen/base_30"
+                android:paddingRight="@dimen/base_30"
+                android:paddingTop="@dimen/base_6"
                 android:text="@string/dashboard_chart_outdoor"
                 android:textAllCaps="false"
+                android:textColor="@color/text_orange_white_change_selector"
                 android:textSize="16sp"
-                android:textStyle="bold"
-                app:borderColor="@color/color_orange_main"
-                app:borderWidth="3dp"
-                app:floorColor="@color/color_white" />
-        </LinearLayout>
+                android:textStyle="bold" />
+        </RadioGroup>
     </RelativeLayout>
 
 </LinearLayout>

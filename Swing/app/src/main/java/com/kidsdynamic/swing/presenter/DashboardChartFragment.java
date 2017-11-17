@@ -1,17 +1,21 @@
 package com.kidsdynamic.swing.presenter;
 
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.kidsdynamic.swing.R;
-import com.kidsdynamic.swing.view.ViewBorderButton;
+import com.kidsdynamic.swing.model.WatchActivity;
+import com.kidsdynamic.swing.utils.SwingFontsCache;
 import com.kidsdynamic.swing.view.ViewChartHorizontal;
-import com.kidsdynamic.swing.view.ViewChartKDToday;
+import com.kidsdynamic.swing.view.ViewChartKDBar;
 import com.kidsdynamic.swing.view.ViewDotIndicator;
 import com.kidsdynamic.swing.view.ViewTextSelector;
 
@@ -54,12 +58,16 @@ public class DashboardChartFragment extends DashboardBaseFragment {
     TextView mViewMessage;
     //    @BindView(R.id.dashboard_chart_today)
 //    ViewChartKDToday mViewChartToday;
-    @BindView(R.id.dashboard_chart_horizontal)
-    ViewChartHorizontal mViewChartHorizontal;
+//    @BindView(R.id.dashboard_chart_horizontal)
+//    ViewChartHorizontal mViewChartHorizontal;
+    @BindView(R.id.dashboard_chart_week)
+    ViewChartKDBar mViewChartWeek;
+    @BindView(R.id.dashboard_chart_radio)
+    RadioGroup mRadioGroup;
     @BindView(R.id.dashboard_chart_indoor)
-    ViewBorderButton mViewIndoor;
+    RadioButton mRadioButtonIndoor;
     @BindView(R.id.dashboard_chart_outdoor)
-    ViewBorderButton mViewOutdoor;
+    RadioButton mRadioButtonOutdoor;
 
     private int mEmotion;
     private int mEmotionColor;
@@ -83,6 +91,11 @@ public class DashboardChartFragment extends DashboardBaseFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        tv_title.setText(R.string.dashboard_chart_activity);
+        mRadioButtonIndoor.setChecked(true);
+        mRadioGroup.setOnCheckedChangeListener(onCheckedChangeListener);
+
+        mViewChartWeek.setTitle(getResources().getString(R.string.dashboard_chart_steps));
     }
 
     @Override
@@ -103,19 +116,19 @@ public class DashboardChartFragment extends DashboardBaseFragment {
         mViewSelector.setOnSelectListener(mSelectorListener);
 
         //////////////////////////////////////////////////////////////////
-        List<ViewChartHorizontal.HorizontalBar> bars = new ArrayList<>();
-        Random random = new Random();
-        for (int i = 0; i < 3; i++) {
-            ViewChartHorizontal.HorizontalBar bar = new ViewChartHorizontal.HorizontalBar();
-            bar.title = String.format(Locale.getDefault(), "Title%d", i);
-            bar.value = random.nextFloat() * 12000;
-            bar.unit = "";
-            bars.add(bar);
-        }
-        mViewChartHorizontal.setHorizontalBars(bars);
-        mViewChartHorizontal.setGoal(12000);
-        mViewChartHorizontal.mChartColor = mEmotionColor;
-        mViewChartHorizontal.postInvalidate();
+//        List<ViewChartHorizontal.HorizontalBar> bars = new ArrayList<>();
+//        Random random = new Random();
+//        for (int i = 0; i < 1; i++) {
+//            ViewChartHorizontal.HorizontalBar bar = new ViewChartHorizontal.HorizontalBar();
+//            bar.title = String.format(Locale.getDefault(), "Title%d", i);
+//            bar.value = random.nextFloat() * 12000;
+//            bar.unit = "";
+//            bars.add(bar);
+//        }
+//        mViewChartHorizontal.setHorizontalBars(bars);
+//        mViewChartHorizontal.setGoal(12000);
+//        mViewChartHorizontal.mChartColor = mEmotionColor;
+//        mViewChartHorizontal.postInvalidate();
         ////////////////////////////////////////////////////////////////////////
 
         mViewSelector.clear();
@@ -128,7 +141,8 @@ public class DashboardChartFragment extends DashboardBaseFragment {
         mViewIndicator.setDotCount(mViewSelector.getCount());
         mViewIndicator.setDotPosition(0);
 
-        showToday();
+//        showToday();
+        showWeek();
     }
 
     private ViewTextSelector.OnSelectListener mSelectorListener = new ViewTextSelector.OnSelectListener() {
@@ -139,18 +153,21 @@ public class DashboardChartFragment extends DashboardBaseFragment {
         }
     };
 
-    private View.OnClickListener mDoorListener = new View.OnClickListener() {
+    private RadioGroup.OnCheckedChangeListener onCheckedChangeListener = new RadioGroup.OnCheckedChangeListener() {
         @Override
-        public void onClick(View view) {
-            setDoor(view == mViewIndoor ? INDOOR : OUTDOOR);
+        public void onCheckedChanged(RadioGroup group, int checkedId) {
 //            setChart(getChart());
         }
     };
 
     private void setEmotion(int emotion) {
+        int mBorderButtonBg;
+        ColorStateList mBorderButtonTextColorStateList;
         switch (emotion) {
             case EMOTION_LOW:
                 mEmotionColor = ContextCompat.getColor(getContext(), R.color.color_blue_main);
+                mBorderButtonBg = R.drawable.border_button_bg_blue;
+                mBorderButtonTextColorStateList = ContextCompat.getColorStateList(getContext(), R.color.text_blue_white_change_selector);
 
                 mViewRoot.setBackgroundResource(R.drawable.background_dashboard_monster01);
                 mViewMessage.setText(getResources().getString(R.string.dashboard_chart_message_below));
@@ -158,6 +175,8 @@ public class DashboardChartFragment extends DashboardBaseFragment {
 
             case EMOTION_ALMOST:
                 mEmotionColor = ContextCompat.getColor(getContext(), R.color.color_green_main);
+                mBorderButtonBg = R.drawable.border_button_bg_green;
+                mBorderButtonTextColorStateList = ContextCompat.getColorStateList(getContext(), R.color.text_green_white_change_selector);
 
                 mViewRoot.setBackgroundResource(R.drawable.background_dashboard_monster02);
                 mViewMessage.setText(getResources().getString(R.string.dashboard_chart_message_almost));
@@ -165,6 +184,8 @@ public class DashboardChartFragment extends DashboardBaseFragment {
 
             default:
                 mEmotionColor = ContextCompat.getColor(getContext(), R.color.color_orange_main);
+                mBorderButtonBg = R.drawable.border_button_bg_orange;
+                mBorderButtonTextColorStateList = ContextCompat.getColorStateList(getContext(), R.color.text_orange_white_change_selector);
 
                 mViewRoot.setBackgroundResource(R.drawable.background_dashboard_monster03);
                 mViewMessage.setText(getResources().getString(R.string.dashboard_chart_message_excellent));
@@ -175,33 +196,24 @@ public class DashboardChartFragment extends DashboardBaseFragment {
         mViewSelector.setTextColor(mEmotionColor);
         mViewSelector.setSelectorColor(mEmotionColor);
         mViewMessage.setTextColor(mEmotionColor);
-        mViewIndoor.setBorderColor(mEmotionColor);
-        mViewOutdoor.setBorderColor(mEmotionColor);
 
 //        mViewChartToday.mChartColor = mEmotionColor;
-//        mViewChartWeek.mChartColor = mEmotionColor;
+        mViewChartWeek.mChartColor = mEmotionColor;
 //        mViewChartMonth.mChartColor = mEmotionColor;
 //        mViewChartYear.mChartColor = mEmotionColor;
+
+        mRadioButtonIndoor.setBackgroundResource(mBorderButtonBg);
+        mRadioButtonIndoor.setTypeface(SwingFontsCache.getBoldType(getContext()));
+        mRadioButtonIndoor.setTextColor(mBorderButtonTextColorStateList);
+        mRadioButtonOutdoor.setBackgroundResource(mBorderButtonBg);
+        mRadioButtonIndoor.setTypeface(SwingFontsCache.getBoldType(getContext()));
+        mRadioButtonOutdoor.setTextColor(mBorderButtonTextColorStateList);
 
         mEmotion = emotion;
     }
 
     private int getDoor() {
-        return mViewIndoor.isSelected() ? INDOOR : OUTDOOR;
-    }
-
-    private void setDoor(int door) {
-        if (door == INDOOR) {
-            mViewIndoor.setSelected(true);
-            mViewIndoor.setOnClickListener(null);
-            mViewOutdoor.setSelected(false);
-            mViewOutdoor.setOnClickListener(mDoorListener);
-        } else {
-            mViewIndoor.setSelected(false);
-            mViewIndoor.setOnClickListener(mDoorListener);
-            mViewOutdoor.setSelected(true);
-            mViewOutdoor.setOnClickListener(null);
-        }
+        return mRadioButtonIndoor.isChecked() ? INDOOR : OUTDOOR;
     }
 
     private void showToday() {
@@ -219,4 +231,27 @@ public class DashboardChartFragment extends DashboardBaseFragment {
 //        mViewChartToday.invalidate();
     }
 
+    private void showWeek() {
+        mViewMessage.setVisibility(View.GONE);
+//        mViewChartToday.setVisibility(View.GONE);
+        mViewChartWeek.setVisibility(View.VISIBLE);
+//        mViewChartMonth.setVisibility(View.GONE);
+//        mViewChartYear.setVisibility(View.GONE);
+
+        mViewChartWeek.setValue(getStepWeek(getDoor()));
+        mViewChartWeek.invalidate();
+    }
+
+    private List<WatchActivity.Act> getStepWeek(int door) {
+        List<WatchActivity.Act> rtn = new ArrayList<>();
+        Random random = new Random();
+        for (int i = 0; i < 7; i++) {
+            WatchActivity.Act act = new WatchActivity.Act();
+            act.mSteps = random.nextInt(12000);
+            act.mTimestamp = System.currentTimeMillis();
+            act.mDistance = random.nextInt(8000);
+            rtn.add(act);
+        }
+        return rtn;
+    }
 }
