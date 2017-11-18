@@ -14,15 +14,14 @@ import android.widget.TextView;
 import com.kidsdynamic.swing.R;
 import com.kidsdynamic.swing.model.WatchActivity;
 import com.kidsdynamic.swing.utils.SwingFontsCache;
-import com.kidsdynamic.swing.view.ViewChartHorizontal;
-import com.kidsdynamic.swing.view.ViewChartKDBar;
+import com.kidsdynamic.swing.view.ViewChartBarVertical;
+import com.kidsdynamic.swing.view.ViewChartKDToday;
 import com.kidsdynamic.swing.view.ViewDotIndicator;
 import com.kidsdynamic.swing.view.ViewTextSelector;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
 import java.util.Random;
 
 import butterknife.BindView;
@@ -56,12 +55,12 @@ public class DashboardChartFragment extends DashboardBaseFragment {
     ViewTextSelector mViewSelector;
     @BindView(R.id.dashboard_chart_message)
     TextView mViewMessage;
-    //    @BindView(R.id.dashboard_chart_today)
-//    ViewChartKDToday mViewChartToday;
-//    @BindView(R.id.dashboard_chart_horizontal)
+    @BindView(R.id.dashboard_chart_today)
+    ViewChartKDToday mViewChartToday;
+    //    @BindView(R.id.dashboard_chart_horizontal)
 //    ViewChartHorizontal mViewChartHorizontal;
-    @BindView(R.id.dashboard_chart_week)
-    ViewChartKDBar mViewChartWeek;
+    @BindView(R.id.dashboard_chart_vertical)
+    ViewChartBarVertical mViewChartVertical;
     @BindView(R.id.dashboard_chart_radio)
     RadioGroup mRadioGroup;
     @BindView(R.id.dashboard_chart_indoor)
@@ -95,7 +94,7 @@ public class DashboardChartFragment extends DashboardBaseFragment {
         mRadioButtonIndoor.setChecked(true);
         mRadioGroup.setOnCheckedChangeListener(onCheckedChangeListener);
 
-        mViewChartWeek.setTitle(getResources().getString(R.string.dashboard_chart_steps));
+        mViewChartVertical.setTitle(getResources().getString(R.string.dashboard_chart_steps));
     }
 
     @Override
@@ -141,8 +140,17 @@ public class DashboardChartFragment extends DashboardBaseFragment {
         mViewIndicator.setDotCount(mViewSelector.getCount());
         mViewIndicator.setDotPosition(0);
 
-//        showToday();
-        showWeek();
+        Random random = new Random();
+        int remainder = random.nextInt() % 4;
+        if (remainder == 0) {
+            showToday();
+        } else if (remainder == 1) {
+            showWeek();
+        } else if (remainder == 2) {
+            showMonth();
+        } else {
+            showYear();
+        }
     }
 
     private ViewTextSelector.OnSelectListener mSelectorListener = new ViewTextSelector.OnSelectListener() {
@@ -197,10 +205,8 @@ public class DashboardChartFragment extends DashboardBaseFragment {
         mViewSelector.setSelectorColor(mEmotionColor);
         mViewMessage.setTextColor(mEmotionColor);
 
-//        mViewChartToday.mChartColor = mEmotionColor;
-        mViewChartWeek.mChartColor = mEmotionColor;
-//        mViewChartMonth.mChartColor = mEmotionColor;
-//        mViewChartYear.mChartColor = mEmotionColor;
+        mViewChartToday.mChartColor = mEmotionColor;
+        mViewChartVertical.mChartColor = mEmotionColor;
 
         mRadioButtonIndoor.setBackgroundResource(mBorderButtonBg);
         mRadioButtonIndoor.setTypeface(SwingFontsCache.getBoldType(getContext()));
@@ -218,28 +224,53 @@ public class DashboardChartFragment extends DashboardBaseFragment {
 
     private void showToday() {
         mViewMessage.setVisibility(View.VISIBLE);
-//        mViewChartToday.setVisibility(View.VISIBLE);
-//        mViewChartWeek.setVisibility(View.GONE);
-//        mViewChartMonth.setVisibility(View.GONE);
-//        mViewChartYear.setVisibility(View.GONE);
+        mViewChartToday.setVisibility(View.VISIBLE);
+        mViewChartVertical.setVisibility(View.GONE);
 
-//        mViewChartToday.setValue(getStepToday(getDoor()));
+        mViewChartToday.setValue(getStepToday(getDoor()));
 //        mViewChartToday.setTotal(getStepToday(INDOOR).mSteps + getStepToday(OUTDOOR).mSteps);
-//        mViewChartToday.setSteps(1023);
-//        mViewChartToday.setTotal(3562f);
-//        mViewChartToday.setGoal(12000);
-//        mViewChartToday.invalidate();
+        mViewChartToday.setTotal(3562f);
+        mViewChartToday.setGoal(12000);
+        mViewChartToday.invalidate();
     }
 
     private void showWeek() {
         mViewMessage.setVisibility(View.GONE);
-//        mViewChartToday.setVisibility(View.GONE);
-        mViewChartWeek.setVisibility(View.VISIBLE);
-//        mViewChartMonth.setVisibility(View.GONE);
-//        mViewChartYear.setVisibility(View.GONE);
+        mViewChartToday.setVisibility(View.GONE);
+        mViewChartVertical.setVisibility(View.VISIBLE);
 
-        mViewChartWeek.setValue(getStepWeek(getDoor()));
-        mViewChartWeek.invalidate();
+        mViewChartVertical.setValue(getStepWeek(getDoor()));
+        mViewChartVertical.setGoal(12000);
+        mViewChartVertical.invalidate();
+    }
+
+    private void showMonth() {
+        mViewMessage.setVisibility(View.GONE);
+        mViewChartToday.setVisibility(View.GONE);
+        mViewChartVertical.setVisibility(View.VISIBLE);
+
+        mViewChartVertical.setValue(getStepMonth(getDoor()));
+        mViewChartVertical.setGoal(12000);
+        mViewChartVertical.invalidate();
+    }
+
+    private void showYear() {
+        mViewMessage.setVisibility(View.GONE);
+        mViewChartToday.setVisibility(View.GONE);
+        mViewChartVertical.setVisibility(View.VISIBLE);
+
+        mViewChartVertical.setValue(getStepYear(getDoor()));
+        mViewChartVertical.setGoal(12000);
+        mViewChartVertical.invalidate();
+    }
+
+    private WatchActivity.Act getStepToday(int door) {
+        Random random = new Random();
+        WatchActivity.Act act = new WatchActivity.Act();
+        act.mSteps = random.nextInt(12000);
+        act.mTimestamp = System.currentTimeMillis();
+        act.mDistance = random.nextInt(8000);
+        return act;
     }
 
     private List<WatchActivity.Act> getStepWeek(int door) {
@@ -254,4 +285,31 @@ public class DashboardChartFragment extends DashboardBaseFragment {
         }
         return rtn;
     }
+
+    private List<WatchActivity.Act> getStepMonth(int door) {
+        List<WatchActivity.Act> rtn = new ArrayList<>();
+        Random random = new Random();
+        for (int i = 0; i < 30; i++) {
+            WatchActivity.Act act = new WatchActivity.Act();
+            act.mSteps = random.nextInt(12000);
+            act.mTimestamp = System.currentTimeMillis();
+            act.mDistance = random.nextInt(8000);
+            rtn.add(act);
+        }
+        return rtn;
+    }
+
+    private List<WatchActivity.Act> getStepYear(int door) {
+        List<WatchActivity.Act> rtn = new ArrayList<>();
+        Random random = new Random();
+        for (int i = 0; i < 12; i++) {
+            WatchActivity.Act act = new WatchActivity.Act();
+            act.mSteps = random.nextInt(12000);
+            act.mTimestamp = System.currentTimeMillis();
+            act.mDistance = random.nextInt(8000);
+            rtn.add(act);
+        }
+        return rtn;
+    }
+
 }

@@ -4,12 +4,16 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
+import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PathEffect;
 import android.graphics.Rect;
+import android.graphics.Shader;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
+
+import com.kidsdynamic.swing.model.WatchActivity;
 
 import java.util.Locale;
 
@@ -20,12 +24,11 @@ import java.util.Locale;
 public class ViewChartKDToday extends ViewChart {
 
     private int mDesiredWidth = 160;
-    private int mDesiredHeight = 100;
+    private int mDesiredHeight = 72;
 
     private float mTotal;
     private float mGoal;
-    //    private WatchActivity.Act mValue;
-    private int mSteps;
+    private WatchActivity.Act mValue;
 
     private Paint mPaint;
     private Rect mRect;
@@ -46,17 +49,13 @@ public class ViewChartKDToday extends ViewChart {
     }
 
     private void init(Context context, AttributeSet attrs) {
-//        mValue = new WatchActivity.Act();
+        mValue = new WatchActivity.Act();
         mPaint = new Paint();
         mRect = new Rect();
     }
 
-//    public void setValue(WatchActivity.Act value) {
-//        mValue = new WatchActivity.Act(value);
-//    }
-
-    public void setSteps(int steps) {
-        mSteps = steps;
+    public void setValue(WatchActivity.Act value) {
+        mValue = new WatchActivity.Act(value);
     }
 
     public float getGoal() {
@@ -115,8 +114,7 @@ public class ViewChartKDToday extends ViewChart {
             drawAxisH(canvas, mRect);
         }
 
-//        drawValue(canvas, mRect, mValue.mSteps);
-        drawValue(canvas, mRect, mSteps);
+        drawValue(canvas, mRect, mValue.mSteps);
 //        drawTotal(canvas, mRect);
         drawGoal(canvas, mRect);
     }
@@ -131,6 +129,7 @@ public class ViewChartKDToday extends ViewChart {
     }
 
     private void drawValue(Canvas canvas, Rect rect, float value) {
+        int size = mChartTextSize + 1;
         Rect barRect = new Rect(rect);
 
         if (value > mAxisHMax)
@@ -155,15 +154,28 @@ public class ViewChartKDToday extends ViewChart {
         mPaint.setTextSize(mChartTextSize + 1);
         mPaint.getTextBounds(text, 0, text.length(), textRect);
 
-        int textPadding = 20;
-        if ((textRect.width() + (2 * textPadding)) > barRect.width()) {
-            mPaint.setColor(mChartColor);
-            textX = barRect.right + textPadding;
-        } else {
-            mPaint.setColor(Color.WHITE);
-            textX = barRect.right - textPadding - textRect.width();
-        }
+        int textPadding = size / 2;
+        textX = barRect.left + textPadding;
         textY = barRect.bottom - ((barRect.height() - textRect.height()) / 2);
+
+        float coverLength = barRect.width();
+        float indicator1 = barRect.left + textPadding;
+        final float textWidth = mPaint.measureText(text);
+        float indicator2 = indicator1 + textWidth;
+        if (coverLength <= indicator1) {
+            mPaint.setShader(null);
+            mPaint.setColor(mChartColor);
+        } else if (indicator1 < coverLength && coverLength <= indicator2) {
+            LinearGradient progressTextGradient = new LinearGradient(indicator1, 0, indicator2, 0,
+                    new int[]{Color.WHITE, mChartColor},
+                    null,
+                    Shader.TileMode.CLAMP);
+            mPaint.setColor(mChartColor);
+            mPaint.setShader(progressTextGradient);
+        } else {
+            mPaint.setShader(null);
+            mPaint.setColor(Color.WHITE);
+        }
 
         canvas.drawText(text, textX, textY, mPaint);
     }
@@ -259,7 +271,7 @@ public class ViewChartKDToday extends ViewChart {
         rect.left = getPaddingStart();
         rect.right = getMeasuredWidth() - getPaddingEnd();
         rect.top = (getMeasuredHeight() - height) / 2;
-        rect.bottom = rect.top + height;
+        rect.bottom = rect.top + height / 2;
 
         return rect;
     }

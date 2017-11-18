@@ -21,6 +21,7 @@ public abstract class ViewChart extends View {
     public int mChartTextColor = Color.BLACK;
     public int mChartTextSize = 30;
     public int mChartTextStyle = Typeface.NORMAL;
+    public int mChartTilteTextSize = 40;
     public int mNodeColor = Color.GRAY;
     public int mNodeSize = 15;
     public int mAxisColor = Color.BLACK;
@@ -69,6 +70,8 @@ public abstract class ViewChart extends View {
                     mChartTextSize = typedArray.getDimensionPixelOffset(attr, mChartTextSize);
                 } else if (attr == R.styleable.ViewChart_chartTextStyle) {
                     mChartTextStyle = typedArray.getInteger(attr, mChartTextStyle);
+                } else if (attr == R.styleable.ViewChart_chartTitleTextSize) {
+                    mChartTilteTextSize = typedArray.getDimensionPixelSize(attr, mChartTilteTextSize);
                 } else if (attr == R.styleable.ViewChart_nodeColor) {
                     mNodeColor = typedArray.getColor(attr, mNodeColor);
                 } else if (attr == R.styleable.ViewChart_nodeSize) {

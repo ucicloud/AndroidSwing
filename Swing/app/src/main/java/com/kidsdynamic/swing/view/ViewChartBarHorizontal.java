@@ -10,9 +10,10 @@ import android.graphics.Path;
 import android.graphics.PathEffect;
 import android.graphics.Rect;
 import android.graphics.Shader;
-import android.graphics.Typeface;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+
+import com.kidsdynamic.swing.utils.SwingFontsCache;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +23,7 @@ import java.util.Locale;
  * Created by 03543 on 2017/2/20.
  */
 
-public class ViewChartHorizontal extends ViewChart {
+public class ViewChartBarHorizontal extends ViewChart {
 
     private int mDesiredWidth = 160 * 3;
     private int mDesiredHeight = 100 * 3;
@@ -37,17 +38,17 @@ public class ViewChartHorizontal extends ViewChart {
      */
     private int barGapHeight = 60;
 
-    public ViewChartHorizontal(Context context) {
+    public ViewChartBarHorizontal(Context context) {
         super(context);
         init(context, null);
     }
 
-    public ViewChartHorizontal(Context context, AttributeSet attrs) {
+    public ViewChartBarHorizontal(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context, attrs);
     }
 
-    public ViewChartHorizontal(Context context, AttributeSet attrs, int defStyle) {
+    public ViewChartBarHorizontal(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         init(context, attrs);
     }
@@ -163,7 +164,7 @@ public class ViewChartHorizontal extends ViewChart {
             sb.append(bar.unit);
         }
         String text = sb.toString();
-        mPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
+        mPaint.setTypeface(SwingFontsCache.getBoldType(getContext()));
         mPaint.setTextSize(mChartTextSize + 1);
         mPaint.getTextBounds(text, 0, text.length(), textRect);
 
@@ -220,7 +221,7 @@ public class ViewChartHorizontal extends ViewChart {
         String text = "Goal";
 
         mPaint.reset();
-        mPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
+        mPaint.setTypeface(SwingFontsCache.getBoldType(getContext()));
         mPaint.setTextSize(mChartTextSize + 1);
         mPaint.getTextBounds(text, 0, text.length(), textRect);
         mPaint.setColor(Color.RED);
@@ -233,7 +234,6 @@ public class ViewChartHorizontal extends ViewChart {
         textY = lineEndY + textPadding * 2;
 
         canvas.drawText(text, textX, textY, mPaint);
-
     }
 
     private Rect makeChartRect() {

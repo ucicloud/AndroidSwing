@@ -25,7 +25,7 @@ public class WatchActivity implements Serializable {
             init(0, "", "", 0, 0, 0);
         }
 
-        Act(Act src) {
+        public Act(Act src) {
             init(src.mId, src.mMacId, src.mKidId, src.mSteps, src.mTimestamp, src.mDistance);
         }
 

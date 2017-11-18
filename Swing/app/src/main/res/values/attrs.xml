@@ -82,6 +82,7 @@
         <attr name="chartTextColor" format="color" />
         <attr name="chartTextSize" format="dimension" />
         <attr name="chartTextStyle" format="integer" />
+        <attr name="chartTitleTextSize" format="dimension" />
         <attr name="nodeColor" format="color" />
         <attr name="nodeSize" format="dimension" />
         <attr name="axisColor" format="color" />

@@ -3,14 +3,18 @@ package com.kidsdynamic.swing.view;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.DashPathEffect;
 import android.graphics.Paint;
+import android.graphics.Path;
+import android.graphics.PathEffect;
 import android.graphics.Rect;
-import android.graphics.Typeface;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.TypedValue;
 
+import com.kidsdynamic.swing.R;
 import com.kidsdynamic.swing.model.WatchActivity;
+import com.kidsdynamic.swing.utils.SwingFontsCache;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -22,7 +26,7 @@ import java.util.Locale;
  * Created by 03543 on 2017/2/22.
  */
 
-public class ViewChartKDBar extends ViewChart {
+public class ViewChartBarVertical extends ViewChart {
 
     private int mDesiredWidth = 160;
     private int mDesiredHeight = 100;
@@ -32,20 +36,21 @@ public class ViewChartKDBar extends ViewChart {
     private Rect mRectH;
     private Rect mRectV;
 
+    private float mGoal;
     private List<WatchActivity.Act> mValue;
     private String mTitle = "Step";
 
-    public ViewChartKDBar(Context context) {
+    public ViewChartBarVertical(Context context) {
         super(context);
         init(context, null);
     }
 
-    public ViewChartKDBar(Context context, AttributeSet attrs) {
+    public ViewChartBarVertical(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context, attrs);
     }
 
-    public ViewChartKDBar(Context context, AttributeSet attrs, int defStyle) {
+    public ViewChartBarVertical(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         init(context, attrs);
     }
@@ -61,14 +66,19 @@ public class ViewChartKDBar extends ViewChart {
 
     public void setValue(List<WatchActivity.Act> list) {
         mValue.clear();
-
-        for (WatchActivity.Act act : list) {
-            mValue.add(act);
-        }
+        mValue.addAll(list);
     }
 
     public void setTitle(String title) {
         mTitle = title;
+    }
+
+    public float getGoal() {
+        return mGoal;
+    }
+
+    public void setGoal(float goal) {
+        mGoal = goal;
     }
 
     @Override
@@ -102,7 +112,7 @@ public class ViewChartKDBar extends ViewChart {
 
         setMeasuredDimension(width, height);
 
-        mRect.set(getPaddingStart(), getPaddingTop(), getMeasuredWidth() - getPaddingEnd(), getMeasuredHeight() - getPaddingBottom());
+        mRect.set(getPaddingStart(), getPaddingTop(), getMeasuredWidth() - getPaddingEnd(), getMeasuredHeight());
     }
 
     @Override
@@ -115,10 +125,14 @@ public class ViewChartKDBar extends ViewChart {
         int colWidth = mRect.width() * 162 / sum;
         int gapWidth = mRect.width() * 100 / sum;
 
-        mRectV.set(mRect.left, mRect.top, mRect.right, mRect.top + mRect.height() * 3 / 4);
+        mRectV.set(mRect.left, mRect.top, mRect.right, mRect.top + mRect.height() * 7 / 8);
         mRectH.set(mRectV.left, mRectV.top, mRectV.left + colWidth, mRectV.bottom);
+
+        drawTitle(canvas, mRectV, mTitle);
+        drawGoal(canvas, mRectH, mRectV);
+
         for (int idx = 0; idx < mValue.size(); idx++) {
-            drawValue(canvas, mRectH, idx);
+            drawValue(canvas, mRectH, idx, mValue.size() <= 7);
             mRectH.offset(colWidth + gapWidth, 0);
         }
 
@@ -131,19 +145,27 @@ public class ViewChartKDBar extends ViewChart {
         mRectV.bottom = (mRect.bottom + mRectV.top) / 2;
         mRectH.set(mRectV.left, mRectV.top, mRectV.left + colWidth, mRectV.bottom);
         for (int idx = 0; idx < mValue.size(); idx++) {
-            if (mValue.size() > 7)
-                drawMonth(canvas, mRectH, idx);
-            else
-                drawDate(canvas, mRectH, idx);
+            if (mValue.size() == 12) {
+                if (idx == 0 || idx % 4 == 0 || idx == mValue.size() - 1) {
+                    drawMonth(canvas, mRectH, idx);
+                }
+            } else if (mValue.size() == 7) {
+                if (idx == 0 || idx == mValue.size() - 1) {
+                    drawDate(canvas, mRectH, idx);
+                }
+            } else {
+                if (idx == 0 || idx == mValue.size() - 1) {
+                    drawDate(canvas, mRectH, idx);
+                }
+            }
             mRectH.offset(colWidth + gapWidth, 0);
         }
 
         mRectV.top = mRectV.bottom;
         mRectV.bottom = mRect.bottom;
-        drawTitle(canvas, mRectV, mTitle);
     }
 
-    private void drawValue(Canvas canvas, Rect rect, int index) {
+    private void drawValue(Canvas canvas, Rect rect, int index, boolean shouldDrawValueText) {
         Rect barRect = new Rect(rect);
 
         int value = 0;
@@ -165,6 +187,9 @@ public class ViewChartKDBar extends ViewChart {
 
         canvas.drawRect(barRect, mPaint);
 
+        if (!shouldDrawValueText) {
+            return;
+        }
         if (mChartTextColor == Color.TRANSPARENT)
             return;
 
@@ -172,7 +197,7 @@ public class ViewChartKDBar extends ViewChart {
         Rect textRect = new Rect();
         String text = String.format(Locale.US, "%d", (int) value);
 
-        mPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
+        mPaint.setTypeface(SwingFontsCache.getNormalType(getContext()));
         mPaint.setTextSize(mChartTextSize + 1);
         mPaint.getTextBounds(text, 0, text.length(), textRect);
         mPaint.setColor(mChartTextColor);
@@ -193,12 +218,14 @@ public class ViewChartKDBar extends ViewChart {
         mPaint.setColor(mChartColor);
         mPaint.setStyle(Paint.Style.FILL);
 
+        rect.left = rect.left - 36;
+        rect.right = rect.right + 36;
         canvas.drawRect(rect, mPaint);
     }
 
     private void drawMonth(Canvas canvas, Rect rect, int index) {
-        if ((index % 2) == 0)
-            return;
+//        if ((index % 2) == 0)
+//            return;
 
         Calendar cale = Calendar.getInstance();
         long date = cale.getTimeInMillis();
@@ -213,14 +240,14 @@ public class ViewChartKDBar extends ViewChart {
 
         mPaint.reset();
         mPaint.setAntiAlias(true);
-        mPaint.setTypeface(Typeface.create(Typeface.DEFAULT, mChartTextStyle));
+        mPaint.setTypeface(SwingFontsCache.getNormalType(getContext()));
         mPaint.setTextSize(mAxisTextSize + 1);
-        mPaint.setColor(Color.WHITE);
+        mPaint.setColor(mChartColor);
 
         Rect textRect = new Rect();
         mPaint.getTextBounds(text, 0, text.length(), textRect);
 
-        int textX = rect.left + (rect.width() - textRect.width()) / 2;
+        int textX = rect.left + rect.width() / 2;
         int textY = rect.top + mAxisTextSize + 5; // padding 5
 
         canvas.drawText(text, textX, textY, mPaint);
@@ -239,14 +266,14 @@ public class ViewChartKDBar extends ViewChart {
 
         mPaint.reset();
         mPaint.setAntiAlias(true);
-        mPaint.setTypeface(Typeface.create(Typeface.DEFAULT, mChartTextStyle));
+        mPaint.setTypeface(SwingFontsCache.getNormalType(getContext()));
         mPaint.setTextSize(mAxisTextSize + 1);
-        mPaint.setColor(Color.WHITE);
+        mPaint.setColor(mChartColor);
 
         Rect textRect = new Rect();
         mPaint.getTextBounds(text, 0, text.length(), textRect);
 
-        int textX = rect.left + (rect.width() - textRect.width()) / 2;
+        int textX = rect.left + rect.width() / 2;
         int textY = rect.top + mAxisTextSize + 5; // padding 5
 
         canvas.drawText(text, textX, textY, mPaint);
@@ -254,22 +281,71 @@ public class ViewChartKDBar extends ViewChart {
 
     private void drawTitle(Canvas canvas, Rect rect, String title) {
         mPaint.reset();
-        mPaint.setAntiAlias(true);
+        mPaint.setTextSize(mChartTilteTextSize + 1);
         mPaint.setColor(mChartColor);
-        mPaint.setStyle(Paint.Style.FILL);
-
-        canvas.drawRect(rect, mPaint);
-
-        mPaint.setTextSize(mAxisTextSize + 1);
-        mPaint.setColor(Color.WHITE);
-        mPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
+        mPaint.setTypeface(SwingFontsCache.getBoldType(getContext()));
 
         Rect textRect = new Rect();
         mPaint.getTextBounds(title, 0, title.length(), textRect);
 
         int x = rect.left + (rect.width() - textRect.width()) / 2;
-        int y = rect.bottom - ((rect.height() - textRect.height()) / 2) - 5; // padding 5
-
-        canvas.drawText(title, x, y, mPaint);
+        canvas.drawText(title, x, mRect.height() / 8, mPaint);
     }
+
+    private void drawGoal(Canvas canvas, Rect rectH, Rect rectV) {
+        if (mGoal == 0.0f) {
+            return;
+        }
+        int bound = (int) mGoal;
+        if (bound > mAxisVMax)
+            bound = Math.round(mAxisVMax);
+        if (bound < mAxisVMin)
+            bound = 0;
+
+        int posX = rectV.left - 36;
+        int posY = rectH.bottom - (int) (bound * rectH.height() / mAxisVMax);
+
+        mPaint.reset();
+        mPaint.setAntiAlias(true);
+        mPaint.setColor(Color.RED);
+        mPaint.setStrokeWidth(8f);
+        mPaint.setStyle(Paint.Style.STROKE);
+        PathEffect effects = new DashPathEffect(new float[]{8, 8, 8, 8}, 1);
+        mPaint.setPathEffect(effects);
+
+        Rect textRect = new Rect();
+        String text = String.valueOf(bound);
+        mPaint.getTextBounds(text, 0, text.length(), textRect);
+
+        Path dashLine = new Path();
+        int lineEndX = rectV.right - textRect.width() - 36 * 2 - 20;
+        dashLine.moveTo(posX, posY);
+        dashLine.lineTo(lineEndX, posY);
+
+        canvas.drawPath(dashLine, mPaint);
+
+        Path polygon = new Path();
+        polygon.moveTo(lineEndX, posY);
+        polygon.lineTo(lineEndX + 20, posY - textRect.height() * 3);
+        polygon.lineTo(rectV.right + 36, posY - textRect.height() * 3);
+        polygon.lineTo(rectV.right + 36, posY + textRect.height() * 2);
+        polygon.lineTo(lineEndX + 20, posY + textRect.height() * 2);
+        polygon.lineTo(lineEndX, posY);
+
+        mPaint.reset();
+        mPaint.setAntiAlias(true);
+        mPaint.setColor(Color.RED);
+        mPaint.setStyle(Paint.Style.FILL);
+        canvas.drawPath(polygon, mPaint);
+
+        mPaint.reset();
+        mPaint.setTypeface(SwingFontsCache.getBoldType(getContext()));
+        mPaint.setTextSize(mChartTextSize + 1);
+        mPaint.setColor(Color.WHITE);
+        int textX = lineEndX + 36;
+        int textY = posY + textRect.height() / 2;
+
+        canvas.drawText(text, textX, textY, mPaint);
+    }
+
 }

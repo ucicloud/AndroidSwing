@@ -65,18 +65,19 @@
         android:gravity="center"
         android:textStyle="bold" />
 
-    <!--<com.kidsdynamic.swing.view.ViewChartKDToday-->
-    <!--android:id="@+id/dashboard_chart_today"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="0dp"-->
-    <!--android:layout_weight="5"-->
-    <!--android:padding="20dp"-->
-    <!--app:axisColor="@color/color_white"-->
-    <!--app:axisHEnabled="true"-->
-    <!--app:axisHMax="15000"-->
-    <!--app:chartTextSize="16sp" />-->
+    <com.kidsdynamic.swing.view.ViewChartKDToday
+        android:id="@+id/dashboard_chart_today"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="5"
+        android:padding="20dp"
+        app:axisColor="@color/color_white"
+        app:axisHEnabled="true"
+        app:axisHMax="15000"
+        app:chartTextColor="@color/color_white"
+        app:chartTextSize="16sp" />
 
-    <!--<com.kidsdynamic.swing.view.ViewChartHorizontal-->
+    <!--<com.kidsdynamic.swing.view.ViewChartBarHorizontal-->
     <!--android:id="@+id/dashboard_chart_horizontal"-->
     <!--android:layout_width="match_parent"-->
     <!--android:layout_height="0dp"-->
@@ -87,18 +88,23 @@
     <!--app:axisHMax="15000"-->
     <!--app:chartTextSize="16sp" />-->
 
-    <com.kidsdynamic.swing.view.ViewChartKDBar
-        android:id="@+id/dashboard_chart_week"
+    <com.kidsdynamic.swing.view.ViewChartBarVertical
+        android:id="@+id/dashboard_chart_vertical"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_margin="@dimen/base_18"
         android:layout_weight="6"
-        android:padding="20dp"
+        android:background="@drawable/chart_background"
+        android:paddingLeft="@dimen/base_18"
+        android:paddingRight="@dimen/base_18"
+        android:paddingTop="@dimen/base_18"
         android:visibility="gone"
-        app:axisTextSize="12sp"
+        app:axisTextSize="11sp"
         app:axisVMax="15000"
         app:axisWidth="1dp"
         app:chartTextColor="@color/color_white"
-        app:chartTextSize="12sp" />
+        app:chartTextSize="11sp"
+        app:chartTitleTextSize="16sp" />
 
     <RelativeLayout
         android:layout_width="match_parent"
