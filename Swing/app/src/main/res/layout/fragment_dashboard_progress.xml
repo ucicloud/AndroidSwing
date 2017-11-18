@@ -8,6 +8,7 @@
     <include layout="@layout/base_title_bar" />
 
     <RelativeLayout
+        android:id="@+id/layout_info"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginLeft="@dimen/base_56"
@@ -15,13 +16,22 @@
         android:layout_marginTop="@dimen/base_35"
         android:layout_weight="5">
 
+        <ImageView
+            android:id="@+id/view_sync_complete"
+            android:layout_width="200dp"
+            android:layout_height="180dp"
+            android:background="@drawable/sync_complete_bg"
+            android:layout_centerInParent="true"
+            android:visibility="gone"/>
+
         <com.kidsdynamic.swing.view.AvenirTextView
             android:id="@+id/tv_message"
             style="@style/textview_main"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="@string/dashboard_progress_searching" />
+            android:text="@string/dashboard_progress_searching"
+            android:visibility="visible"/>
 
         <com.kidsdynamic.swing.view.ViewCircle
             android:id="@+id/dashboard_progress_circle"
@@ -33,7 +43,8 @@
             app:strokeCount="100"
             app:strokeEnd="-1"
             app:strokeType="arc"
-            app:strokeWidth="10dp" />
+            app:strokeWidth="10dp"
+            android:visibility="visible"/>
     </RelativeLayout>
 
     <View

@@ -72,6 +72,8 @@ public class DashboardProgressFragment extends DashboardBaseFragment {
     private MainFrameActivity mActivityMain;
     private View mViewMain;
 
+    @BindView(R.id.view_sync_complete)
+    protected View view_sync_complete;
     @BindView(R.id.tv_message)
     protected TextView mViewLabel;
     @BindView(R.id.dashboard_progress_button_first)
@@ -640,6 +642,10 @@ public class DashboardProgressFragment extends DashboardBaseFragment {
         mViewProgress.stopProgress();
         mViewProgress.setOnProgressListener(null);
         mViewProgress.setActive(true);
+
+        mViewLabel.setVisibility(View.INVISIBLE);
+        mViewProgress.setVisibility(View.INVISIBLE);
+        view_sync_complete.setVisibility(View.VISIBLE);
     }
 
     private void viewNotFound(int errMsgStrId) {
