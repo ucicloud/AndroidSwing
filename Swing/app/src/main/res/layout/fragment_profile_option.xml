@@ -8,6 +8,10 @@
     <include layout="@layout/base_title_bar"
         android:background="@color/color_white"/>
 
+    <View android:layout_width="match_parent"
+        android:layout_height="@dimen/base_1"
+        android:background="@color/color_blue_sky"/>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -34,7 +38,7 @@
         android:paddingEnd="10dp"
         android:paddingStart="10dp">
 
-        <TextView
+        <com.kidsdynamic.swing.view.AvenirTextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
@@ -56,11 +60,11 @@
         android:paddingEnd="10dp"
         android:paddingStart="10dp">
 
-        <TextView
+        <com.kidsdynamic.swing.view.AvenirTextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
-            android:text="@string/profile_option_change_password" />
+            android:text="@string/profile_option_password" />
 
         <ImageView
             style="@style/option_right_img" />
@@ -78,7 +82,7 @@
         android:paddingEnd="10dp"
         android:paddingStart="10dp">
 
-        <TextView
+        <com.kidsdynamic.swing.view.AvenirTextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
@@ -101,7 +105,7 @@
         android:paddingEnd="10dp"
         android:paddingStart="10dp">
 
-        <TextView
+        <com.kidsdynamic.swing.view.AvenirTextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
@@ -124,7 +128,7 @@
         android:paddingEnd="10dp"
         android:paddingStart="10dp">
 
-        <TextView
+        <com.kidsdynamic.swing.view.AvenirTextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
@@ -149,7 +153,7 @@
         android:paddingStart="10dp"
         android:visibility="gone">
 
-        <TextView
+        <com.kidsdynamic.swing.view.AvenirTextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
@@ -176,7 +180,7 @@
         android:paddingEnd="10dp"
         android:paddingStart="10dp">
 
-        <TextView
+        <com.kidsdynamic.swing.view.AvenirTextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
@@ -189,7 +193,7 @@
     <View
         style="@style/option_line" />
 
-    <TextView
+    <com.kidsdynamic.swing.view.AvenirTextView
         style="@style/textview_toolbar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/profile_item_height"
@@ -207,7 +211,7 @@
         android:paddingEnd="10dp"
         android:paddingStart="10dp">
 
-        <TextView
+        <com.kidsdynamic.swing.view.AvenirTextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
@@ -228,7 +232,7 @@
         android:paddingEnd="10dp"
         android:paddingStart="10dp">
 
-        <TextView
+        <com.kidsdynamic.swing.view.AvenirTextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
@@ -253,7 +257,7 @@
         android:paddingStart="10dp"
         android:visibility="gone">
 
-        <TextView
+        <com.kidsdynamic.swing.view.AvenirTextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
@@ -279,7 +283,7 @@
         android:paddingEnd="10dp"
         android:paddingStart="10dp">
 
-        <TextView
+        <com.kidsdynamic.swing.view.AvenirTextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
@@ -299,13 +303,13 @@
         android:paddingEnd="10dp"
         android:paddingStart="10dp">
 
-        <TextView
+        <com.kidsdynamic.swing.view.AvenirTextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:text="@string/profile_option_version" />
 
-        <TextView
+        <com.kidsdynamic.swing.view.AvenirTextView
             android:id="@+id/profile_option_version"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

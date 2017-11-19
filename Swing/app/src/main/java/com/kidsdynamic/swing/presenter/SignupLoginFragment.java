@@ -26,6 +26,7 @@ import com.kidsdynamic.data.net.user.model.LoginSuccessRep;
 import com.kidsdynamic.data.net.user.model.UserProfileRep;
 import com.kidsdynamic.data.utils.LogUtil2;
 import com.kidsdynamic.swing.BaseFragment;
+import com.kidsdynamic.swing.BuildConfig;
 import com.kidsdynamic.swing.R;
 import com.kidsdynamic.swing.domain.EventManager;
 import com.kidsdynamic.swing.domain.LoginManager;
@@ -87,8 +88,11 @@ public class SignupLoginFragment extends BaseFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        et_email.setText("123@qq.com");
-        et_password.setText("123456");
+
+        if(BuildConfig.DEBUG){
+            et_email.setText("123@qq.com");
+            et_password.setText("123456");
+        }
 /*
         et_email.setText("lwz3@swing.com");
         et_password.setText("1");

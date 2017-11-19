@@ -10,6 +10,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.kidsdynamic.swing.R;
+import com.kidsdynamic.swing.view.AvenirTextView;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -76,7 +77,7 @@ public class ViewCalendarSelector extends ViewCalendar implements View.OnClickLi
         mViewPrev.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, 2));
         tableRow.addView(mViewPrev);
 
-        mViewDate = new TextView(context);
+        mViewDate = new AvenirTextView(context);
         mViewDate.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTextSize);
         mViewDate.setTypeface(mViewDate.getTypeface(), mTextStyle);
         mViewDate.setTextColor(mTodayColor);

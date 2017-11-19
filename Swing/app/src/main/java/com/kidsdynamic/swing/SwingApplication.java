@@ -2,9 +2,11 @@ package com.kidsdynamic.swing;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.support.v4.content.LocalBroadcastManager;
 
 import com.kidsdynamic.data.net.ApiGen;
+import com.yy.base.ActivityController;
 import com.yy.base.handleException.CrashHandler;
 
 /**
@@ -40,5 +42,13 @@ public class SwingApplication extends Application {
 
     public static Context getAppContext(){
         return applicationContext;
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        ActivityController.getInstance().exit();
+
     }
 }

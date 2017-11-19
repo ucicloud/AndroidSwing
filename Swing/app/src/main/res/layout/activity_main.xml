@@ -115,7 +115,8 @@
             android:layout_height="wrap_content"
             android:text="addKids"
             tools:layout_editor_absoluteX="162dp"
-            tools:layout_editor_absoluteY="172dp"/>
+            tools:layout_editor_absoluteY="172dp"
+            android:visibility="gone"/>
 
         <Button
             android:id="@+id/btn_show_main"
@@ -123,7 +124,14 @@
             android:layout_height="wrap_content"
             android:text="showMain"
             tools:layout_editor_absoluteX="162dp"
-            tools:layout_editor_absoluteY="172dp"/>
+            tools:layout_editor_absoluteY="172dp"
+            android:visibility="gone"/>
+
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:src="@drawable/default_avatar"
+            android:background="@drawable/control_profile_focus_bg"/>
 
         <cn.carbs.android.avatarimageview.library.AvatarImageView
             android:id="@+id/user_avatar_iv"
