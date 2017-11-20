@@ -207,4 +207,35 @@
         <item name="weekNameColor">@color/color_orange_main</item>
     </style>
 
+    <style name="textview_profile_group">
+        <item name="android:textColor">@color/profile_label_color</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:paddingStart">@dimen/base_10</item>
+        <item name="android:paddingEnd">@dimen/base_10</item>
+    </style>
+
+
+    <style name="line_profile_label">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/base_1</item>
+        <item name="android:background">@color/color_white</item>
+        <item name="android:layout_centerVertical">true</item>
+    </style>
+
+    <style name="profile_label_layout">
+        <item name="android:paddingEnd">@dimen/base_15</item>
+        <item name="android:paddingStart">@dimen/base_15</item>
+    </style>
+
+    <style name="edittext_profile" parent="@android:style/Widget.EditText">
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:textColorHint">@color/color_gray</item>
+        <item name="android:textColor">@color/color_black</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:gravity">center</item>
+    </style>
+
 </resources>

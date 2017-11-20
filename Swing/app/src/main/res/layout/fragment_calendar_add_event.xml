@@ -225,7 +225,7 @@
                 <LinearLayout
                     android:id="@+id/calendar_event_color_option"
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
+                    android:layout_height="wrap_content"
                     android:orientation="vertical">
 
                     <View

@@ -2,6 +2,7 @@ package com.kidsdynamic.swing.domain;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 
 import com.kidsdynamic.data.dao.DB_User;
 import com.kidsdynamic.data.net.Config;
@@ -73,6 +74,25 @@ public class LoginManager {
             return userDataStore.getById(userId);
         }
         return null;
+    }
+
+    public static String getUserName(@NonNull DB_User currentLoginUserInfo){
+        String firstName = currentLoginUserInfo.getFirstName();
+        String lastName = currentLoginUserInfo.getLastName();
+        if(!TextUtils.isEmpty(firstName)
+                && !TextUtils.isEmpty(lastName)){
+            return firstName + " " + lastName;
+        }
+
+        if(!TextUtils.isEmpty(firstName)){
+            return firstName;
+        }
+
+        if(!TextUtils.isEmpty(lastName)){
+            return lastName;
+        }
+
+        return "";
     }
 
     public void clearCacheLoginData(Context context){

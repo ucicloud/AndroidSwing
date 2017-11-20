@@ -11,7 +11,9 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:paddingEnd="10dp"
+        android:paddingStart="10dp">
 
         <com.kidsdynamic.swing.view.calendar.ViewCalendarSelector
             android:id="@+id/calendar_month_selector"
@@ -19,12 +21,8 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="@dimen/base_56"
             android:layout_marginRight="@dimen/base_56"
-            android:textColor="@color/color_orange_main"
-            android:textSize="18sp"
-            android:textStyle="bold"
             app:calendarMode="month"
-            app:exceedColor="@color/color_gray_deep"
-            app:todayColor="@color/color_orange_main" />
+            style="@style/calendar_selector"/>
     </RelativeLayout>
 
     <RelativeLayout

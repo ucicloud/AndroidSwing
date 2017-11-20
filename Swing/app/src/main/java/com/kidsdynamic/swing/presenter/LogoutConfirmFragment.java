@@ -2,7 +2,6 @@ package com.kidsdynamic.swing.presenter;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,29 +58,11 @@ public class LogoutConfirmFragment extends ProfileBaseFragment {
         DB_User currentLoginUserInfo = LoginManager.getCurrentLoginUserInfo();
         if(currentLoginUserInfo != null){
             tv_accountEmail.setText(currentLoginUserInfo.getEmail());
-            tv_accountName.setText(getUserName(currentLoginUserInfo));
+            tv_accountName.setText(LoginManager.getUserName(currentLoginUserInfo));
         }
 
     }
 
-    private String getUserName(DB_User currentLoginUserInfo){
-        String firstName = currentLoginUserInfo.getFirstName();
-        String lastName = currentLoginUserInfo.getLastName();
-        if(!TextUtils.isEmpty(firstName)
-                && !TextUtils.isEmpty(lastName)){
-            return firstName + " " + lastName;
-        }
-
-        if(!TextUtils.isEmpty(firstName)){
-            return firstName;
-        }
-
-        if(!TextUtils.isEmpty(lastName)){
-            return lastName;
-        }
-
-        return "";
-    }
     @OnClick(R.id.btn_confirm_logout)
     protected void logout(){
         //show dialog to confirm

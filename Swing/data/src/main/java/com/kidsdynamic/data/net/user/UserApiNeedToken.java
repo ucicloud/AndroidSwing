@@ -1,5 +1,6 @@
 package com.kidsdynamic.data.net.user;
 
+import com.kidsdynamic.data.net.user.model.UpdatePasswordRequest;
 import com.kidsdynamic.data.net.user.model.UserInfo;
 import com.kidsdynamic.data.net.user.model.UserProfileRep;
 
@@ -44,5 +45,11 @@ public interface UserApiNeedToken {
 //    500 Internal error. Please send me the error. I will fix it
     @GET("v1/user/findByEmail")
     Call<UserInfo> findByEmail(@Query("email") String email);
+
+//    200 send successfully
+//    400 Bad request. The token is invalid
+//    500 Internal error. Please send me the error. I will fix it
+    @POST("v1/user/updatePassword ")
+    Call<Object> updatePassword (@Body UpdatePasswordRequest updatePasswordRequest);
 
 }

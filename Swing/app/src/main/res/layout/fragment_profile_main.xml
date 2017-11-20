@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_blue_sky"
+    android:orientation="vertical">
+
+    <include layout="@layout/base_title_bar"/>
+
+    <com.kidsdynamic.swing.view.ViewCircle
+        android:id="@+id/profile_main_photo"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_gravity="center"
+        android:layout_margin="20dp"
+        android:layout_weight="4"
+        app:strokeBegin="12"
+        app:strokeColorNormal="@color/color_blue_light2"
+        app:strokeCount="12"
+        app:strokeEnd="-1"
+        app:strokeType="arc"
+        app:strokeWidth="4dp" />
+
+    <com.kidsdynamic.swing.view.AvenirTextView
+        android:id="@+id/profile_main_name"
+        style="@style/textview_main"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:textColor="#09C3B6" />
+
+    <com.kidsdynamic.swing.view.AvenirTextView
+        android:id="@+id/profile_main_mail"
+        style="@style/textview_hint"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:textColor="#9AB5B5" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2.5"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingBottom="6dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/profile_label_layout">
+
+            <com.kidsdynamic.swing.view.AvenirTextView
+                android:id="@+id/tv_my_devices"
+                style="@style/textview_profile_group"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:text="@string/profile_main_hosting" />
+
+            <View
+                style="@style/line_profile_label"
+                android:layout_toStartOf="@id/tv_my_devices" />
+
+            <View
+                style="@style/line_profile_label"
+                android:layout_toEndOf="@id/tv_my_devices" />
+
+        </RelativeLayout>
+
+        <HorizontalScrollView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal">
+
+            <LinearLayout
+                android:id="@+id/profile_main_device_container"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <com.kidsdynamic.swing.view.ViewCircle
+                    android:id="@+id/profile_main_device_add"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginStart="5dp"
+                    android:visibility="gone"
+                    app:crossColor="@color/color_white"
+                    app:crossRatio="0.2"
+                    app:crossWidth="2dp"
+                    app:strokeBegin="12"
+                    app:strokeColorNormal="@color/color_white"
+                    app:strokeCount="12"
+                    app:strokeEnd="-1"
+                    app:strokeType="arc"
+                    app:strokeWidth="2dp" />
+
+            </LinearLayout>
+        </HorizontalScrollView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2.5"
+        android:orientation="vertical"
+        android:paddingBottom="6dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/profile_label_layout">
+
+            <com.kidsdynamic.swing.view.AvenirTextView
+                android:id="@+id/tv_devices_shared_with_me"
+                style="@style/textview_profile_group"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:text="@string/profile_main_shared" />
+
+            <View
+                style="@style/line_profile_label"
+                android:layout_toStartOf="@id/tv_devices_shared_with_me" />
+
+            <View
+                style="@style/line_profile_label"
+                android:layout_toEndOf="@id/tv_devices_shared_with_me" />
+
+        </RelativeLayout>
+
+        <!--<TextView
+            style="@style/textview_profile_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/profile_main_shared"
+            android:visibility="invisible" />-->
+
+        <HorizontalScrollView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal">
+
+            <LinearLayout
+                android:id="@+id/profile_main_shared_container"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal" />
+
+        </HorizontalScrollView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2.5"
+        android:orientation="vertical"
+        android:paddingBottom="6dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/profile_label_layout">
+
+            <com.kidsdynamic.swing.view.AvenirTextView
+                android:id="@+id/tv_your_pending"
+                style="@style/textview_profile_group"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:text="@string/profile_main_request_to" />
+
+            <View
+                style="@style/line_profile_label"
+                android:layout_toStartOf="@id/tv_your_pending" />
+
+            <View
+                style="@style/line_profile_label"
+                android:layout_toEndOf="@id/tv_your_pending" />
+
+        </RelativeLayout>
+
+        <!--<TextView
+            style="@style/textview_profile_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/profile_main_request_to"
+            android:visibility="invisible" />-->
+
+        <HorizontalScrollView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal">
+
+            <LinearLayout
+                android:id="@+id/profile_main_request_to_container"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <com.kidsdynamic.swing.view.ViewCircle
+                    android:id="@+id/profile_main_request_to_add"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginStart="5dp"
+                    android:visibility="gone"
+                    app:crossColor="@color/color_white"
+                    app:crossRatio="0.2"
+                    app:crossWidth="2dp"
+                    app:strokeBegin="12"
+                    app:strokeColorNormal="@color/color_white"
+                    app:strokeCount="12"
+                    app:strokeEnd="-1"
+                    app:strokeType="arc"
+                    app:strokeWidth="2dp" />
+
+            </LinearLayout>
+        </HorizontalScrollView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2.5"
+        android:orientation="vertical"
+        android:paddingBottom="6dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/profile_label_layout">
+
+            <com.kidsdynamic.swing.view.AvenirTextView
+                android:id="@+id/profile_main_request_from_title"
+                style="@style/textview_profile_group"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:text="@string/profile_main_request_to" />
+
+            <View
+                style="@style/line_profile_label"
+                android:layout_toStartOf="@id/profile_main_request_from_title" />
+
+            <View
+                style="@style/line_profile_label"
+                android:layout_toEndOf="@id/profile_main_request_from_title" />
+
+        </RelativeLayout>
+
+        <!--<TextView
+            android:id="@+id/profile_main_request_from_title"
+            style="@style/textview_profile_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:visibility="invisible" />-->
+
+        <HorizontalScrollView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal">
+
+            <LinearLayout
+                android:id="@+id/profile_main_request_from_container"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal" />
+        </HorizontalScrollView>
+    </LinearLayout>
+</LinearLayout>
+

@@ -159,11 +159,11 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
         allKidsByUserId = DeviceManager.getAllKidsByUserId(getContext(), userId);
 
         //test todo
-        KidsEntityBean kidsEntityBean = new KidsEntityBean();
+        /*KidsEntityBean kidsEntityBean = new KidsEntityBean();
         kidsEntityBean.setKidsId(123);
         kidsEntityBean.setName("Alex Smith");
         kidsEntityBean.setParentId(123);
-        allKidsByUserId.add(kidsEntityBean);
+        allKidsByUserId.add(kidsEntityBean);*/
 
         if(ObjectUtils.isListEmpty(allKidsByUserId)){
             ToastCommon.makeText(getContext(),R.string.login_data_invalid);
@@ -547,8 +547,9 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
         selectFragment(EventRepeatOptionFragment.class.getName(),null,true);
     }
 
+    //todo 2017年11月20日22:44:38 weizg 暂不可响应
     //assign to
-    @OnClick(R.id.calendar_event_assign_line)
+//    @OnClick(R.id.calendar_event_assign_line)
     protected void onClickAssignLine(){
 
         /*Bundle args = new Bundle();
@@ -592,7 +593,8 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
         }
     };
 
-    @OnClick(R.id.calendar_event_color_line)
+    //del 2017年11月20日23:01:49 weizg 不响应折叠效果
+//    @OnClick(R.id.calendar_event_color_line)
     protected void onViewLineClick(){
         LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) mViewColorOption.getLayoutParams();
         if (params.height == 0)

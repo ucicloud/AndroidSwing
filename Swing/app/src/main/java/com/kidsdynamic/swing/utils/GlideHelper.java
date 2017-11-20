@@ -1,10 +1,12 @@
 package com.kidsdynamic.swing.utils;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.kidsdynamic.swing.R;
 
 /**
@@ -35,6 +37,20 @@ public class GlideHelper {
                     .load(mode)
                     .apply(requestOptions)
                     .into(imageView);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public static void getBitMap(Context context, String uri, SimpleTarget<Bitmap> SimpleTarget) {
+        try {
+            RequestOptions requestOptions = RequestOptions.circleCropTransform()
+                    .placeholder(R.drawable.default_avatar);
+            Glide.with(context).asBitmap()
+                    .load(uri)
+                    .apply(requestOptions)
+                    .into(SimpleTarget);
         } catch (Exception e) {
             e.printStackTrace();
         }

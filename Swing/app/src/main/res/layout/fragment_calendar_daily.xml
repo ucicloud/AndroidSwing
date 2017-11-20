@@ -13,21 +13,22 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:paddingEnd="10dp"
-        android:paddingStart="10dp"
-        android:paddingTop="10dp">
+        android:paddingStart="10dp">
 
-        <com.kidsdynamic.swing.view.ViewSponge
+<!--        <com.kidsdynamic.swing.view.ViewSponge
             android:id="@+id/calendar_daily_selector_sponge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            app:shrinkWidth="0.8" />
+            app:shrinkWidth="0.8" />-->
 
         <com.kidsdynamic.swing.view.calendar.ViewCalendarSelector
             android:id="@+id/calendar_daily_selector"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:calendarMode="week"
+            android:layout_marginLeft="@dimen/base_56"
+            android:layout_marginRight="@dimen/base_56"
             style="@style/calendar_selector" />
     </RelativeLayout>
 
@@ -65,7 +66,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/color_gray_main"
-            android:textSize="16sp"
+            android:textSize="14sp"
             app:todayColor="@color/color_orange_main" />
     </ScrollView>
 </LinearLayout>

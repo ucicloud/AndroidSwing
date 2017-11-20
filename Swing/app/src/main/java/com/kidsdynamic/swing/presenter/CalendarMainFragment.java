@@ -363,21 +363,27 @@ public class CalendarMainFragment extends CalendarBaseFragment {
             if (event == null)
                 return;
 
-            mainFrameActivity.mEventStack.push(event);
-            selectFragment(CalendarAddEventFragment.class.getName(), null,true);
+            //点击显示当日时间线界面
+            showDailyEventFragment();
+           /* mainFrameActivity.mEventStack.push(event);
+            selectFragment(CalendarAddEventFragment.class.getName(), null,true);*/
         }
     };
+
+    private void showDailyEventFragment() {
+        Calendar cale = Calendar.getInstance();
+        long date = ViewCalendar.stripTime(cale.getTimeInMillis());
+
+        Bundle bundle = new Bundle();
+        bundle.putLong(BUNDLE_KEY_DATE, date);
+
+        selectFragment(CalendarDailyFragment.class.getName(), bundle,true);
+    }
 
     private View.OnClickListener mTodayListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            Calendar cale = Calendar.getInstance();
-            long date = ViewCalendar.stripTime(cale.getTimeInMillis());
-
-            Bundle bundle = new Bundle();
-            bundle.putLong(BUNDLE_KEY_DATE, date);
-
-            selectFragment(CalendarDailyFragment.class.getName(), bundle,true);
+            showDailyEventFragment();
         }
     };
 
