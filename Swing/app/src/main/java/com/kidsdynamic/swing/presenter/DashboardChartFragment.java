@@ -35,12 +35,7 @@ import butterknife.ButterKnife;
 
 public class DashboardChartFragment extends DashboardBaseFragment {
 
-    private static final int EMOTION_LOW = 0;
-    private static final int EMOTION_ALMOST = 1;
-    private static final int EMOTION_EXCELLENT = 2;
-
-    private static final int INDOOR = 0;
-    private static final int OUTDOOR = 1;
+    public static final String DOOR_TYPE = "door_type";
 
     private static final int CHART_TODAY = 0;
     private static final int CHART_WEEK = 1;
@@ -70,9 +65,11 @@ public class DashboardChartFragment extends DashboardBaseFragment {
 
     private int mEmotion;
     private int mEmotionColor;
+    private int mDoor;
 
-    public static DashboardChartFragment newInstance() {
+    public static DashboardChartFragment newInstance(int doorType) {
         Bundle args = new Bundle();
+        args.putInt(DOOR_TYPE, doorType);
         DashboardChartFragment fragment = new DashboardChartFragment();
         fragment.setArguments(args);
         return fragment;
@@ -90,8 +87,11 @@ public class DashboardChartFragment extends DashboardBaseFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        Bundle args = getArguments();
+        mDoor = args.getInt(DOOR_TYPE, INDOOR);
         tv_title.setText(R.string.dashboard_chart_activity);
-        mRadioButtonIndoor.setChecked(true);
+        mRadioButtonIndoor.setChecked(INDOOR == mDoor);
+        mRadioButtonOutdoor.setChecked(OUTDOOR == mDoor);
         mRadioGroup.setOnCheckedChangeListener(onCheckedChangeListener);
 
         mViewChartVertical.setTitle(getResources().getString(R.string.dashboard_chart_steps));

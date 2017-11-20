@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_weight="1"
+    android:background="@drawable/item_bg_solid_white_snow_corner_4dp">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/base_12"
+        android:layout_marginTop="@dimen/base_12"
+        android:orientation="vertical">
+
+        <com.kidsdynamic.swing.view.AvenirTextView
+            android:id="@+id/tvTimeDisplay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/base_6"
+            android:layout_marginStart="@dimen/base_15"
+            android:gravity="start"
+            android:includeFontPadding="false"
+            android:text="November 21,2017"
+            android:textColor="@color/color_orange_main"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <com.kidsdynamic.swing.view.AvenirTextView
+            android:id="@+id/tvTimeDesc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/base_15"
+            android:layout_marginTop="@dimen/base_6"
+            android:gravity="start"
+            android:includeFontPadding="false"
+            android:minEms="3"
+            android:text="@string/calendar_event_start"
+            android:textColor="@color/color_gray_main"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="@dimen/base_15"
+        android:gravity="end"
+        android:orientation="horizontal">
+
+        <com.kidsdynamic.swing.view.AvenirTextView
+            android:id="@+id/tvStepsValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="1,234"
+            android:textColor="@color/color_orange_main"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <com.kidsdynamic.swing.view.AvenirTextView
+            android:id="@+id/tvStepsUnit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/base_10"
+            android:gravity="bottom"
+            android:text="@string/dashboard_emotion_steps"
+            android:textColor="@color/color_orange_main"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+</RelativeLayout>

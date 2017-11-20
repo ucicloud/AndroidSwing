@@ -12,11 +12,19 @@ import com.kidsdynamic.swing.R;
 import butterknife.BindView;
 
 /**
+ * DashboardBaseFragment
+ * <p>
  * Created by Administrator on 2017/11/1.
  */
 
 public class DashboardBaseFragment extends BaseFragment {
 
+    protected static final int EMOTION_LOW = 0;
+    protected static final int EMOTION_ALMOST = 1;
+    protected static final int EMOTION_EXCELLENT = 2;
+
+    protected static final int INDOOR = 0;
+    protected static final int OUTDOOR = 1;
 
     @BindView(R.id.main_toolbar_title)
     protected TextView tv_title;
@@ -39,8 +47,7 @@ public class DashboardBaseFragment extends BaseFragment {
                 .replace(R.id.dashboard_fragment_container, fragment, className);
 
         if (isAddToBackStack) {
-            fragmentTransaction
-                    .addToBackStack(null);
+            fragmentTransaction.addToBackStack(null);
         }
 
         fragmentTransaction.commit();

@@ -16,6 +16,7 @@ import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * DashboardEmotionFragment
@@ -108,7 +109,22 @@ public class DashboardEmotionFragment extends DashboardBaseFragment {
         }
     }
 
-    private void setViews(int level) {
+    @OnClick({R.id.rlIndoorSteps})
+    public void clickIndoorSteps() {
+        setFragment(DashboardChartFragment.newInstance(INDOOR), true);
+    }
+
+    @OnClick({R.id.rlOutdoorSteps})
+    public void clickOutdoorSteps() {
+        setFragment(DashboardChartFragment.newInstance(OUTDOOR), true);
+    }
+
+    @OnClick({R.id.rlUVExplosure})
+    public void clickUVExplosure() {
+
+    }
+
+    private void setViews(int emotion) {
         Resources res = getResources();
         int rootId = R.drawable.emotion_fragment_bg_blue;
         int color = res.getColor(R.color.color_blue_main);
@@ -116,21 +132,21 @@ public class DashboardEmotionFragment extends DashboardBaseFragment {
         int monsterId = R.drawable.monster_purple;
         int activityId = R.drawable.ic_icon_activity_blue;
         int uvDetectionId = R.drawable.ic_icon_uv_blue;
-        if (0 == level) {
+        if (EMOTION_LOW == emotion) {
             rootId = R.drawable.emotion_fragment_bg_blue;
             color = res.getColor(R.color.color_blue_main);
             messageId = R.string.dashboard_emotion_below;
             monsterId = R.drawable.monster_purple;
             activityId = R.drawable.ic_icon_activity_blue;
             uvDetectionId = R.drawable.ic_icon_uv_blue;
-        } else if (1 == level) {
+        } else if (EMOTION_ALMOST == emotion) {
             rootId = R.drawable.emotion_fragment_bg_green;
             color = res.getColor(R.color.color_green_main);
             messageId = R.string.dashboard_emotion_almost;
             monsterId = R.drawable.monster_green;
             activityId = R.drawable.ic_icon_activity_green;
             uvDetectionId = R.drawable.ic_icon_uv_green;
-        } else if (2 == level) {
+        } else if (EMOTION_EXCELLENT == emotion) {
             rootId = R.drawable.emotion_fragment_bg_orange;
             color = res.getColor(R.color.color_orange_main);
             messageId = R.string.dashboard_emotion_excellent;

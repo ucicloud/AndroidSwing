@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/dashboard_list_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/base_title_bar" />
+
+    <ListView
+        android:id="@+id/dashboard_list_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="3"
+        android:choiceMode="singleChoice"
+        android:clipToPadding="false"
+        android:divider="@null"
+        android:dividerHeight="@dimen/base_10"
+        android:fadingEdge="none"
+        android:footerDividersEnabled="false"
+        android:headerDividersEnabled="false"
+        android:listSelector="@null"
+        android:paddingBottom="@dimen/base_18"
+        android:paddingLeft="@dimen/base_15"
+        android:paddingRight="@dimen/base_15"
+        android:paddingTop="@dimen/base_18"
+        android:scrollbarStyle="outsideOverlay" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@null">
+
+        <RadioGroup
+            android:id="@+id/dashboard_list_radio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:background="@null"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/dashboard_list_indoor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/border_button_bg_orange"
+                android:button="@null"
+                android:paddingBottom="@dimen/base_6"
+                android:paddingLeft="@dimen/base_30"
+                android:paddingRight="@dimen/base_30"
+                android:paddingTop="@dimen/base_6"
+                android:text="@string/dashboard_chart_indoor"
+                android:textAllCaps="false"
+                android:textColor="@color/text_orange_white_change_selector"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <RadioButton
+                android:id="@+id/dashboard_list_outdoor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/base_10"
+                android:background="@drawable/border_button_bg_orange"
+                android:button="@null"
+                android:paddingBottom="@dimen/base_6"
+                android:paddingLeft="@dimen/base_30"
+                android:paddingRight="@dimen/base_30"
+                android:paddingTop="@dimen/base_6"
+                android:text="@string/dashboard_chart_outdoor"
+                android:textAllCaps="false"
+                android:textColor="@color/text_orange_white_change_selector"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+        </RadioGroup>
+    </RelativeLayout>
+</LinearLayout>

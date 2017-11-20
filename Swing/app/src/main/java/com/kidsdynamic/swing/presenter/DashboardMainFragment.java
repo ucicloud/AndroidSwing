@@ -68,12 +68,12 @@ public class DashboardMainFragment extends DashboardBaseFragment {
         initTitleBar();
         //just test
         DB_Kids focusWatchInfo = DeviceManager.getFocusWatchInfo(getContext());
-        if(focusWatchInfo != null){
+        if (focusWatchInfo != null) {
             kidName = focusWatchInfo.getName();
             tv_kids_name.setText(kidName);
 
             String profileRealUri = UserManager.getProfileRealUri(focusWatchInfo.getProfile());
-            Log.d("dash_main","avatar: " + profileRealUri);
+            Log.d("dash_main", "avatar: " + profileRealUri);
             GlideHelper.showCircleImageView(getContext(), profileRealUri, vc_photo);
         }
     }
@@ -90,7 +90,7 @@ public class DashboardMainFragment extends DashboardBaseFragment {
     @OnClick(R.id.watch_sync_yes)
     public void yes() {
 //        setFragment(DashboardProgressFragment.newInstance(), true);
-        setFragment(DashboardChartFragment.newInstance(), true);
+        setFragment(DashboardEmotionFragment.newInstance(), true);
     }
 
     @OnClick(R.id.watch_sync_no)
