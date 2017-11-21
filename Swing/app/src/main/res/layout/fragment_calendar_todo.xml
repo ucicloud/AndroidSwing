@@ -9,7 +9,12 @@
 
     <include layout="@layout/base_title_bar"/>
 
-    <RelativeLayout
+    <include layout="@layout/view_calendar_topbar"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+    <!--<RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
@@ -32,35 +37,28 @@
             android:layout_alignEnd="@+id/calendar_todo_selector_sponge"
             android:layout_alignStart="@+id/calendar_todo_selector_sponge"
             app:calendarMode="week" />
-
-        <!--android:textColor="@color/color_gray_deep"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:exceedColor="@color/color_gray_deep"
-        app:todayColor="@color/color_orange_main"-->
-    </RelativeLayout>
+    </RelativeLayout>-->
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="2"
         android:paddingEnd="10dp"
-        android:paddingStart="10dp">
+        android:paddingStart="10dp"
+        android:layout_marginBottom="@dimen/base_20">
 
-        <com.kidsdynamic.swing.view.ViewSponge
+        <!--<com.kidsdynamic.swing.view.ViewSponge
             android:id="@+id/calendar_todo_calendar_sponge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            app:shrinkWidth="0.9" />
+            app:shrinkWidth="0.9" />-->
 
         <com.kidsdynamic.swing.view.calendar.ViewCalendarWeek
             android:id="@+id/calendar_todo_calendar"
             style="@style/calendar_week"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignEnd="@+id/calendar_todo_calendar_sponge"
-            android:layout_alignStart="@+id/calendar_todo_calendar_sponge" />
+            android:layout_height="match_parent" />
 
     </RelativeLayout>
 

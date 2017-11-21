@@ -52,7 +52,7 @@ public class CalendarDailyFragment extends CalendarBaseFragment {
         InputMethodManager imm = (InputMethodManager) mainFrameActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(mViewMain.getWindowToken(), 0);
 
-        mViewSelector = (ViewCalendarSelector) mViewMain.findViewById(R.id.calendar_daily_selector);
+        mViewSelector = (ViewCalendarSelector) mViewMain.findViewById(R.id.calendar_main_selector);
         mViewSelector.setOnSelectListener(mSelectorListener);
 
         mViewCalendar = (ViewCalendarWeek) mViewMain.findViewById(R.id.calendar_daily_calendar);
@@ -171,10 +171,14 @@ public class CalendarDailyFragment extends CalendarBaseFragment {
         @Override
         public void OnSelect(View view, WatchEvent event) {
             mainFrameActivity.mEventStack.push(event);
-            if (event.mTodoList.size() > 0)
+
+            //modify 2017年11月21日21:55:36 only
+            //无论有没有todo，都先进入详情界面
+            selectFragment(CalendarTodoFragment.class.getName(), null,true);
+            /*if (event.mTodoList.size() > 0)
                 selectFragment(CalendarTodoFragment.class.getName(), null,true);
             else
-               selectFragment(CalendarAddEventFragment.class.getName(), null,true);
+               selectFragment(CalendarAddEventFragment.class.getName(), null,true);*/
         }
     };
 }

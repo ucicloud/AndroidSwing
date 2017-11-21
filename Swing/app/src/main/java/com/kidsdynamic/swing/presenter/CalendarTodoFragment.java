@@ -13,6 +13,7 @@ import com.kidsdynamic.data.net.event.EventApi;
 import com.kidsdynamic.data.net.event.model.TodoDoneEntity;
 import com.kidsdynamic.swing.R;
 import com.kidsdynamic.swing.domain.EventManager;
+import com.kidsdynamic.swing.domain.LoginManager;
 import com.kidsdynamic.swing.model.WatchEvent;
 import com.kidsdynamic.swing.model.WatchTodo;
 import com.kidsdynamic.swing.net.BaseRetrofitCallback;
@@ -24,6 +25,7 @@ import com.yy.base.utils.ToastCommon;
 
 import java.util.ArrayDeque;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 import java.util.Queue;
 
@@ -56,6 +58,7 @@ public class CalendarTodoFragment extends CalendarBaseFragment {
     private long mDefaultDate = System.currentTimeMillis();
     private WatchEvent mEvent;
     private long currentEventId;
+    private long currentUserId;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -69,7 +72,7 @@ public class CalendarTodoFragment extends CalendarBaseFragment {
 
         ButterKnife.bind(this,mViewMain);
 
-        mViewSelector = mViewMain.findViewById(R.id.calendar_todo_selector);
+        mViewSelector = mViewMain.findViewById(R.id.calendar_main_selector);
         mViewSelector.setOnSelectListener(mSelectorListener);
 
         mViewCalendar = mViewMain.findViewById(R.id.calendar_todo_calendar);
@@ -169,8 +172,25 @@ public class CalendarTodoFragment extends CalendarBaseFragment {
         mViewEventName.setText(mEvent.mName);
         mViewDescription.setText(mEvent.mDescription);
 
-        for (WatchTodo todo : mEvent.mTodoList)
+        for (WatchTodo todo : mEvent.mTodoList){
             addTodo(todo);
+        }
+
+        loadWeekEventList();
+    }
+
+    //load week event
+    private void loadWeekEventList() {
+        currentUserId = LoginManager.getCurrentLoginUserId(getContext());
+        List<WatchEvent> list = EventManager.getEventList(currentUserId,
+                mViewCalendar.getDateBegin(), mViewCalendar.getDateEnd());
+
+        //add 2017年11月21日11:42:53
+        //week calendar add event
+        mViewCalendar.delAllEvent();
+        for (WatchEvent watchEvent : list) {
+            mViewCalendar.addEvent(watchEvent);
+        }
     }
 
     @Override
@@ -201,6 +221,8 @@ public class CalendarTodoFragment extends CalendarBaseFragment {
         @Override
         public void OnSelect(View view, long offset, long date) {
             mViewCalendar.setDate(date);
+
+            loadWeekEventList();
         }
     };
 

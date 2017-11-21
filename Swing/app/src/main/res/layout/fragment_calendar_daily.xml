@@ -8,19 +8,12 @@
 
     <include layout="@layout/base_title_bar"/>
 
-    <RelativeLayout
+    <!--<RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:paddingEnd="10dp"
         android:paddingStart="10dp">
-
-<!--        <com.kidsdynamic.swing.view.ViewSponge
-            android:id="@+id/calendar_daily_selector_sponge"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            app:shrinkWidth="0.8" />-->
 
         <com.kidsdynamic.swing.view.calendar.ViewCalendarSelector
             android:id="@+id/calendar_daily_selector"
@@ -30,7 +23,12 @@
             android:layout_marginLeft="@dimen/base_56"
             android:layout_marginRight="@dimen/base_56"
             style="@style/calendar_selector" />
-    </RelativeLayout>
+    </RelativeLayout>-->
+
+    <include layout="@layout/view_calendar_topbar"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -39,19 +37,17 @@
         android:paddingEnd="10dp"
         android:paddingStart="10dp">
 
-        <com.kidsdynamic.swing.view.ViewSponge
+        <!--<com.kidsdynamic.swing.view.ViewSponge
             android:id="@+id/calendar_daily_calendar_sponge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            app:shrinkWidth="0.9" />
+            app:shrinkWidth="0.9" />-->
 
         <com.kidsdynamic.swing.view.calendar.ViewCalendarWeek
             android:id="@+id/calendar_daily_calendar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_alignEnd="@+id/calendar_daily_calendar_sponge"
-            android:layout_alignStart="@+id/calendar_daily_calendar_sponge"
             style="@style/calendar_week" />
 
     </RelativeLayout>

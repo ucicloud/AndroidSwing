@@ -27,6 +27,7 @@ public class ViewTodo extends RelativeLayout {
     private EditText mViewText;
     private TextView mViewDelete;
     private View mViewSeparator;
+    private ImageView mViewDel; //删除按钮
 
     private ViewTodo mThis = this;
     private OnEditListener mOnEditListener = null;
@@ -57,6 +58,8 @@ public class ViewTodo extends RelativeLayout {
 
         mViewDelete = (TextView) findViewById(R.id.todo_delete);
 
+        mViewDel = findViewById(R.id.img_todo_delete);
+
         mViewSeparator = findViewById(R.id.todo_separator);
     }
 
@@ -77,40 +80,40 @@ public class ViewTodo extends RelativeLayout {
     public void setEditMode() {
         mViewCheck.setEnabled(true);
         mViewText.setEnabled(true);
-        mViewDelete.setEnabled(true);
+        mViewDel.setEnabled(true);
 
         mViewText.setTypeface(mViewText.getTypeface(), Typeface.NORMAL);
         mViewText.setTextColor(ContextCompat.getColor(getContext(), R.color.color_gray_deep));
 
         mViewCheck.setOnClickListener(mCheckListener);
         mViewText.setOnTouchListener(mOnTouchListener);
-        mViewDelete.setOnClickListener(mDeleteListener);
+        mViewDel.setOnClickListener(mDeleteListener);
     }
 
     public void setCheckMode() {
         mViewCheck.setEnabled(true);
         mViewText.setEnabled(false);
-        mViewDelete.setEnabled(false);
+        mViewDel.setEnabled(false);
 
         mViewText.setTypeface(mViewText.getTypeface(), Typeface.BOLD);
         mViewText.setTextColor(ContextCompat.getColor(getContext(), R.color.color_white));
 
         mViewCheck.setOnClickListener(mCheckListener);
         mViewText.setOnTouchListener(null);
-        mViewDelete.setOnClickListener(null);
+        mViewDel.setOnClickListener(null);
     }
 
     public void setLockMode() {
         mViewCheck.setEnabled(false);
         mViewText.setEnabled(false);
-        mViewDelete.setEnabled(false);
+        mViewDel.setEnabled(false);
 
         mViewText.setTypeface(mViewText.getTypeface(), Typeface.NORMAL);
         mViewText.setTextColor(ContextCompat.getColor(getContext(), R.color.color_gray_light));
 
         mViewCheck.setOnClickListener(null);
         mViewText.setOnTouchListener(null);
-        mViewDelete.setOnClickListener(null);
+        mViewDel.setOnClickListener(null);
     }
 
     public boolean isChecked() {

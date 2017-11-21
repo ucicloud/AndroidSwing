@@ -230,7 +230,7 @@
 
                     <View
                         android:layout_width="match_parent"
-                        android:layout_height="2dp"
+                        android:layout_height="1dp"
                         android:layout_marginBottom="5dp"
                         android:layout_marginTop="5dp"
                         android:background="@color/color_gray_light" />
@@ -446,31 +446,10 @@
                     android:layout_height="wrap_content" />
 
                 <LinearLayout
-                    android:id="@+id/calendar_event_todo_option"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:orientation="vertical"
-                    android:paddingTop="10dp">
-
-                    <LinearLayout
-                        android:id="@+id/calendar_event_todo_container"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical" />
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="2dp"
-                        android:layout_marginBottom="5dp"
-                        android:layout_marginTop="5dp"
-                        android:background="@color/color_gray_light" />
-                </LinearLayout>
-
-                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
                     android:orientation="horizontal"
-                    android:paddingBottom="10dp"
+                    android:paddingBottom="2dp"
                     android:paddingTop="10dp">
 
                     <com.kidsdynamic.swing.view.AvenirTextView
@@ -491,6 +470,30 @@
                         android:scaleType="fitCenter"
                         android:src="@drawable/iconbutton_add" />
                 </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/calendar_event_todo_option"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:orientation="vertical"
+                    android:paddingTop="5dp">
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@color/color_gray_light" />
+
+                    <LinearLayout
+                        android:id="@+id/calendar_event_todo_container"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical" />
+
+                </LinearLayout>
+
+
             </LinearLayout>
 
 

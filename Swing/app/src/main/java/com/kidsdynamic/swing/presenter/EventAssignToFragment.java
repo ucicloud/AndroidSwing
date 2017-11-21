@@ -17,6 +17,7 @@ import com.kidsdynamic.swing.domain.UserManager;
 import com.kidsdynamic.swing.model.KidsEntityBean;
 import com.kidsdynamic.swing.model.WatchEvent;
 import com.kidsdynamic.swing.utils.GlideHelper;
+import com.yy.base.utils.ToastCommon;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -84,6 +85,18 @@ public class EventAssignToFragment extends CalendarBaseFragment {
         view_left_action.setImageResource(R.drawable.icon_left);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (mainFrameActivity.mEventStack.isEmpty()) {
+            ToastCommon.showToast(getContext(),"event null");
+            getFragmentManager().popBackStack();
+        }else {
+            mEvent = mainFrameActivity.mEventStack.pop();
+        }
+    }
+
     @OnClick(R.id.main_toolbar_title)
     public void onToolbarAction1() {
         mainFrameActivity.mEventStack.push(mEvent);
@@ -114,6 +127,7 @@ public class EventAssignToFragment extends CalendarBaseFragment {
 
         mainFrameActivity.mCalendarBundleStack.push(bundle);*/
 
+        mainFrameActivity.mEventStack.push(mEvent);
         getActivity().getSupportFragmentManager().popBackStack();
     }
 

@@ -158,7 +158,7 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
         //获取kids list
         allKidsByUserId = DeviceManager.getAllKidsByUserId(getContext(), userId);
 
-        //test todo
+        //test
         /*KidsEntityBean kidsEntityBean = new KidsEntityBean();
         kidsEntityBean.setKidsId(123);
         kidsEntityBean.setName("Alex Smith");
@@ -220,6 +220,12 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
         loadWatchEvent();
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        mainFrameActivity.mEventStack.push(mEvent);
+    }
+
     private void loadWatchEvent() {
         loadDate();
         loadColor();
@@ -229,7 +235,8 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
         loadTodo();
         loadAlarm();
 
-        viewAdvance(mEvent.mRepeat.length() != 0 ||
+        //高级选项中，不用判断repeat
+        viewAdvance(/*mEvent.mRepeat.length() != 0 ||*/
                 mEvent.mDescription.length() != 0 || mEvent.mTodoList.size() != 0);
 //        viewEnable(mActivityMain.mOperator.getUser().mId == mEvent.mUserId);
         ViewDelete(currentUserId == mEvent.mUserId && mEvent.mId != 0);
@@ -264,7 +271,7 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
 
     private void loadAssign() {
 
-        // TODO: 2017/11/11
+        // 2017/11/11
         /*ArrayList<WatchContact.Kid> list = new ArrayList<>();
 
         list.addAll(mActivityMain.mOperator.getDeviceList());
@@ -306,6 +313,8 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
     }
 
     private void loadTodo() {
+        mViewTodoContainer.removeAllViews();
+
         for (WatchTodo todo : mEvent.mTodoList)
             addTodoView(todo);
     }
@@ -441,7 +450,7 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
 
     @OnClick(R.id.calendar_event_alarm_name_layout)
    protected void onClickSelectEvent(){
-       mainFrameActivity.mEventStack.push(mEvent);
+//       mainFrameActivity.mEventStack.push(mEvent);
 
        Bundle bundle = new Bundle();
        bundle.putLong("kidId", mEvent.mKids.get(0));
@@ -543,7 +552,7 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
     //repeat
     @OnClick(R.id.calendar_event_repeat_line)
     protected void onClickEventRepeat(){
-        mainFrameActivity.mEventStack.push(mEvent);
+//        mainFrameActivity.mEventStack.push(mEvent);
         selectFragment(EventRepeatOptionFragment.class.getName(),null,true);
     }
 
@@ -556,7 +565,7 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
         args.putLong(DeviceManager.BUNDLE_KEY_USER_ID,mEvent.mUserId);
         args.putLong(DeviceManager.BUNDLE_KEY_KID_ID,123);*/
 
-        mainFrameActivity.mEventStack.push(mEvent);
+//        mainFrameActivity.mEventStack.push(mEvent);
         selectFragment(EventAssignToFragment.class.getName(),null,true);
     }
 
