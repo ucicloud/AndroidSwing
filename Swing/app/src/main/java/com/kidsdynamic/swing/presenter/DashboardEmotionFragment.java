@@ -111,12 +111,12 @@ public class DashboardEmotionFragment extends DashboardBaseFragment {
 
     @OnClick({R.id.rlIndoorSteps})
     public void clickIndoorSteps() {
-        setFragment(DashboardChartFragment.newInstance(INDOOR), true);
+        setFragment(DashboardChartSingleFragment.newInstance(INDOOR), true);
     }
 
     @OnClick({R.id.rlOutdoorSteps})
     public void clickOutdoorSteps() {
-        setFragment(DashboardChartFragment.newInstance(OUTDOOR), true);
+        setFragment(DashboardChartSingleFragment.newInstance(OUTDOOR), true);
     }
 
     @OnClick({R.id.rlUVExplosure})

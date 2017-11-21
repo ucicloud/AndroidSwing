@@ -77,7 +77,7 @@
                 android:id="@+id/rlIndoorSteps"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/item_bg_solid_white_snow_corner_4dp">
+                android:background="@drawable/solid_white_snow_corner_selector">
 
                 <com.kidsdynamic.swing.view.AvenirTextView
                     android:id="@+id/tv_indoor_steps_desc"
@@ -149,7 +149,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/base_10"
-                android:background="@drawable/item_bg_solid_white_snow_corner_4dp">
+                android:background="@drawable/solid_white_snow_corner_selector">
 
                 <com.kidsdynamic.swing.view.AvenirTextView
                     android:id="@+id/tv_outdoor_steps_desc"
@@ -221,7 +221,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/base_10"
-                android:background="@drawable/item_bg_solid_white_snow_corner_4dp">
+                android:background="@drawable/solid_white_snow_corner_selector">
 
                 <com.kidsdynamic.swing.view.AvenirTextView
                     android:id="@+id/tv_uv_desc"

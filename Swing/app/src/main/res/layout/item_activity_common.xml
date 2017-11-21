@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_weight="1"
-    android:background="@drawable/item_bg_solid_white_snow_corner_4dp">
+    android:background="@drawable/solid_white_snow_corner_selector">
 
     <LinearLayout
         android:layout_width="wrap_content"

@@ -26,6 +26,11 @@ public class DashboardBaseFragment extends BaseFragment {
     protected static final int INDOOR = 0;
     protected static final int OUTDOOR = 1;
 
+    protected static final int LIST_TODAY = 0;
+    protected static final int LIST_WEEK = 1;
+    protected static final int LIST_MONTH = 2;
+    protected static final int LIST_YEAR = 3;
+
     @BindView(R.id.main_toolbar_title)
     protected TextView tv_title;
     @BindView(R.id.main_toolbar_action1)

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/dashboard_chart_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/base_title_bar" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.8">
+
+        <com.kidsdynamic.swing.view.ViewSponge
+            android:id="@+id/dashboard_chart_indicator_sponge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            app:shrinkWidth="0.3" />
+
+        <com.kidsdynamic.swing.view.ViewDotIndicator
+            android:id="@+id/dashboard_chart_indicator"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignEnd="@+id/dashboard_chart_indicator_sponge"
+            android:layout_alignStart="@+id/dashboard_chart_indicator_sponge"
+            app:dotColorOff="@color/color_white"
+            app:dotColorOn="@color/color_gray_main"
+            app:dotCount="4"
+            app:dotPosition="0"
+            app:dotSize="10dp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <com.kidsdynamic.swing.view.ViewSponge
+            android:id="@+id/dashboard_chart_selector_sponge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            app:shrinkWidth="0.6" />
+
+        <com.kidsdynamic.swing.view.ViewTextSelector
+            android:id="@+id/dashboard_chart_selector"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignEnd="@+id/dashboard_chart_selector_sponge"
+            android:layout_alignStart="@+id/dashboard_chart_selector_sponge"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <android.support.v4.view.BetterViewPager
+        android:id="@+id/dashboard_chart_pager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="6" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="3"
+        android:background="@null">
+
+        <RadioGroup
+            android:id="@+id/dashboard_chart_radio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:background="@null"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/dashboard_chart_indoor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/border_button_bg_orange"
+                android:button="@null"
+                android:paddingBottom="@dimen/base_6"
+                android:paddingLeft="@dimen/base_30"
+                android:paddingRight="@dimen/base_30"
+                android:paddingTop="@dimen/base_6"
+                android:text="@string/dashboard_chart_indoor"
+                android:textAllCaps="false"
+                android:textColor="@color/text_orange_white_change_selector"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <RadioButton
+                android:id="@+id/dashboard_chart_outdoor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/base_10"
+                android:background="@drawable/border_button_bg_orange"
+                android:button="@null"
+                android:paddingBottom="@dimen/base_6"
+                android:paddingLeft="@dimen/base_30"
+                android:paddingRight="@dimen/base_30"
+                android:paddingTop="@dimen/base_6"
+                android:text="@string/dashboard_chart_outdoor"
+                android:textAllCaps="false"
+                android:textColor="@color/text_orange_white_change_selector"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+        </RadioGroup>
+    </RelativeLayout>
+
+</LinearLayout>

@@ -13,7 +13,7 @@
         android:layout_height="0dp"
         android:layout_weight="3"
         android:choiceMode="singleChoice"
-        android:clipToPadding="false"
+        android:clipToPadding="true"
         android:divider="@null"
         android:dividerHeight="@dimen/base_10"
         android:fadingEdge="none"
