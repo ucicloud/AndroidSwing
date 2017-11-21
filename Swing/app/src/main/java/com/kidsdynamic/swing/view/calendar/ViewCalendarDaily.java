@@ -26,6 +26,9 @@ import java.util.Locale;
 
 public class ViewCalendarDaily extends ViewCalendar {
 
+    private final int heightBase = 1560;//26 * 60
+    private final int hourViewCount = (26 + (int)Math.round(0.2*26)) * 2;//26 * 60
+
     private int mDesiredWidth;
     private int mDesiredHeight;
 
@@ -51,7 +54,9 @@ public class ViewCalendarDaily extends ViewCalendar {
         setWillNotDraw(false);
 
         mDesiredWidth = getResources().getDisplayMetrics().widthPixels;
-        mDesiredHeight = mTextSize * 48;
+//        mDesiredHeight = mTextSize * 48;
+//        mDesiredHeight = mTextSize * 52;//modify 2017年11月21日17:30:26 only 时间线新增0AM,12PM
+        mDesiredHeight = mTextSize * hourViewCount;//modify 2017年11月21日17:30:26 only 时间线新增0AM,12PM
 
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         makePaintHour();
@@ -216,8 +221,8 @@ public class ViewCalendarDaily extends ViewCalendar {
                 layoutParams.rect.right = layoutParams.rect.left + column_width;
             }
 
-            layoutParams.rect.top = layoutParams.getStartPos() * height / 1440;
-            layoutParams.rect.bottom = layoutParams.getEndPos() * height / 1440;
+            layoutParams.rect.top = layoutParams.getStartPos() * height / heightBase;
+            layoutParams.rect.bottom = layoutParams.getEndPos() * height / heightBase;
         }
 
         /**
@@ -271,7 +276,8 @@ public class ViewCalendarDaily extends ViewCalendar {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        for (int idx = 1; idx < 24; idx++) {
+//        for (int idx = 1; idx < 24; idx++) {
+        for (int idx = 0; idx <= 24; idx++) {
             drawHour(canvas, idx);
             drawSeparator(canvas, idx);
         }
@@ -325,7 +331,7 @@ public class ViewCalendarDaily extends ViewCalendar {
         makePaintHour();
         mPaint.getTextBounds(text, 0, text.length(), mRect);
         int x = mHourPadding - (int) mPaint.measureText(text, 0, text.length());
-        int y = (hour * 60 * height / 1440) + (mRect.height() / 2);
+        int y = ((hour+1) * 60 * height / heightBase) + (mRect.height() / 2);
 
         canvas.drawText(text, x + getPaddingStart(), y + getPaddingTop(), mPaint);
     }
@@ -336,7 +342,7 @@ public class ViewCalendarDaily extends ViewCalendar {
         makePaintSeparator();
 
         int x = mHourPadding + mHourMargin;
-        int y = hour * 60 * height / 1440;
+        int y = (hour+1) * 60 * height / heightBase;
 
         canvas.drawLine(x, y, getMeasuredWidth(), y, mPaint);
     }
@@ -347,7 +353,7 @@ public class ViewCalendarDaily extends ViewCalendar {
         makePaintNow();
 
         int x = mHourPadding + mHourMargin;
-        int y = hour * 60 * height / 1440;
+        int y = (hour+1) * 60 * height / heightBase;
 
         canvas.drawLine(x, y, getMeasuredWidth(), y, mPaint);
     }

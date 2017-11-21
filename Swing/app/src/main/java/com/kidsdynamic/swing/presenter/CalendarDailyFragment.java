@@ -34,7 +34,7 @@ public class CalendarDailyFragment extends CalendarBaseFragment {
     private ViewCalendarWeek mViewCalendar;
     private ViewCalendarDaily mViewSchedule;
 
-    private long mDefaultDate = System.currentTimeMillis();
+    private long mDefaultDate = -1;
     private long currentUserId;
 
     @Override
@@ -98,13 +98,34 @@ public class CalendarDailyFragment extends CalendarBaseFragment {
         currentUserId = LoginManager.getCurrentLoginUserId(getContext());
 
         // 帶入的Arguments, 表示日曆需設置的日期
-        if (getArguments() != null)
-            mDefaultDate = getArguments().getLong(BUNDLE_KEY_DATE);
+        if(mDefaultDate == -1){
+            if (getArguments() != null){
+                mDefaultDate = getArguments().getLong(BUNDLE_KEY_DATE);
+            }else {
+                mDefaultDate = System.currentTimeMillis();
+            }
+        }
+
         mViewSelector.setDate(mDefaultDate);
         mViewCalendar.setDate(mDefaultDate);
         mViewSchedule.setDate(mDefaultDate);
 
         loadEventList(mDefaultDate);
+
+        loadWeekEventList();
+    }
+
+    //load week event
+    private void loadWeekEventList() {
+        List<WatchEvent> list = EventManager.getEventList(currentUserId,
+                mViewCalendar.getDateBegin(), mViewCalendar.getDateEnd());
+
+        //add 2017年11月21日11:42:53
+        //week calendar add event
+        mViewCalendar.delAllEvent();
+        for (WatchEvent watchEvent : list) {
+            mViewCalendar.addEvent(watchEvent);
+        }
     }
 
     private void loadEventList(long date) {
@@ -116,22 +137,30 @@ public class CalendarDailyFragment extends CalendarBaseFragment {
         List<WatchEvent> list = EventManager.getEventList(currentUserId, start, end);;
 
         // 載入當日的所有事件
-        for (WatchEvent event : list)
+        for (WatchEvent event : list){
             mViewSchedule.addEvent(event);
+        }
     }
 
     private ViewCalendarSelector.OnSelectListener mSelectorListener = new ViewCalendarSelector.OnSelectListener() {
         @Override
         public void OnSelect(View view, long offset, long date) {
+            mDefaultDate = date;//更新为选择日期
+
             mViewCalendar.setDate(date);
             mViewSchedule.setDate(date);
             loadEventList(date);
+
+            loadWeekEventList();
         }
     };
 
     private ViewCalendarWeek.OnSelectListener mCalendarListener = new ViewCalendarWeek.OnSelectListener() {
         @Override
         public void onSelect(ViewCalendarWeek calendar, ViewCalendarCellWeek cell) {
+
+            mDefaultDate = cell.getDate();//更新为选择日期
+
             mViewSelector.setDate(cell.getDate());
             mViewSchedule.setDate(cell.getDate());
             loadEventList(cell.getDate());

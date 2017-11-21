@@ -22,6 +22,7 @@ public class ViewCalendar extends TableLayout {
     protected int mTodayColor = Color.WHITE;
     protected int mFocusColor = Color.TRANSPARENT;
     protected int mFocusBackgroundColor = Color.TRANSPARENT;
+    protected int mTodayBackgroundColor = Color.TRANSPARENT;
     protected int mExceedColor = Color.LTGRAY;
 
     protected int mWeekNameTextColor = Color.BLACK;
@@ -63,7 +64,9 @@ public class ViewCalendar extends TableLayout {
                 } else if (attr == R.styleable.ViewCalendar_exceedColor) {
                     mExceedColor = typedArray.getColor(attr, mExceedColor);
                 }else if(attr == R.styleable.ViewCalendar_weekNameColor){
-                    mWeekNameTextColor = typedArray.getColor(attr, mExceedColor);
+                    mWeekNameTextColor = typedArray.getColor(attr, mWeekNameTextColor);
+                }else if(attr == R.styleable.ViewCalendar_todayBackgroundColor){
+                    mTodayBackgroundColor = typedArray.getColor(attr, mTodayBackgroundColor);
                 }
             }
 
@@ -117,6 +120,14 @@ public class ViewCalendar extends TableLayout {
 
     public int getExceedColor() {
         return mExceedColor;
+    }
+
+    public int getTodayBackgroundColor() {
+        return mTodayBackgroundColor;
+    }
+
+    public void setTodayBackgroundColor(int mTodayBackgroundColor) {
+        this.mTodayBackgroundColor = mTodayBackgroundColor;
     }
 
     public void setDate(long date) {

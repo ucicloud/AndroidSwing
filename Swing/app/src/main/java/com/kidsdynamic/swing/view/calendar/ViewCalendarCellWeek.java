@@ -80,8 +80,9 @@ public class ViewCalendarCellWeek extends ViewCalendarCell {
         if (calendar != null) {
             if (calendar.isSameDay(mDate) && calendar.getFocusColor() != Color.TRANSPARENT)
                 setTextColor(calendar.getFocusColor());
-            else if (ViewCalendar.isToday(mDate))
+            else if (ViewCalendar.isToday(mDate)){
                 setTextColor(calendar.getTodayColor());
+            }
             else
                 setTextColor(calendar.getTextColor());
         }
@@ -96,8 +97,20 @@ public class ViewCalendarCellWeek extends ViewCalendarCell {
     @Override
     protected void onDraw(Canvas canvas) {
         ViewCalendar calendar = getViewCalendar();
-        if (calendar != null && calendar.getFocusBackgroundColor() != Color.TRANSPARENT && calendar.isSameDay(mDate))
+        /*if (calendar != null && calendar.getFocusBackgroundColor() != Color.TRANSPARENT
+                && calendar.isSameDay(mDate)){
             drawFocus(canvas, calendar.getFocusBackgroundColor());
+        }*/
+
+        if (calendar != null && calendar.getFocusBackgroundColor() != Color.TRANSPARENT){
+
+            if(ViewCalendar.isToday(mDate)){//如果是今天
+                drawFocus(canvas, calendar.getTodayBackgroundColor());
+            }else if(calendar.isSameDay(mDate)){ //如果时选中的date
+                drawFocus(canvas, calendar.getFocusBackgroundColor());
+            }
+
+        }
 
         if (mEventList.size() > 0){
 //            drawEvent(canvas);

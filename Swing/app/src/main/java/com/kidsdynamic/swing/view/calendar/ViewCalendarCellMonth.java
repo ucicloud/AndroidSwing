@@ -100,8 +100,18 @@ public class ViewCalendarCellMonth extends ViewCalendarCell {
     @Override
     protected void onDraw(Canvas canvas) {
         ViewCalendar calendar = getViewCalendar();
-        if (calendar != null && calendar.getFocusBackgroundColor()!= Color.TRANSPARENT && calendar.isSameDay(mDate))
-            drawFocus(canvas, calendar.getFocusBackgroundColor());
+        /*if (calendar != null && calendar.getFocusBackgroundColor()!= Color.TRANSPARENT && calendar.isSameDay(mDate))
+            drawFocus(canvas, calendar.getFocusBackgroundColor());*/
+
+        if (calendar != null && calendar.getFocusBackgroundColor() != Color.TRANSPARENT){
+
+            if(ViewCalendar.isToday(mDate)){//如果是今天
+                drawFocus(canvas, calendar.getTodayBackgroundColor());
+            }else if(calendar.isSameDay(mDate)){ //如果时选中的date
+                drawFocus(canvas, calendar.getFocusBackgroundColor());
+            }
+
+        }
 
         if (mEventList.size() > 0){
 //            drawEvent(canvas);

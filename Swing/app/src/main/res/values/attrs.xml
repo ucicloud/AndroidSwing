@@ -41,6 +41,7 @@
         <attr name="focusColor" format="color" />
         <attr name="focusBackgroundColor" format="color" />
         <attr name="exceedColor" format="color" />
+        <attr name="todayBackgroundColor" format="color" />
     </declare-styleable>
 
     <declare-styleable name="ViewCalendarSelector">

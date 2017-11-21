@@ -201,9 +201,10 @@
         <item name="android:textSize">16sp</item>
         <item name="android:textStyle">bold</item>
         <item name="exceedColor">@color/color_gray_light</item>
-        <item name="focusBackgroundColor">@color/color_orange_main</item>
+        <item name="focusBackgroundColor">@color/color_gray</item>
+        <item name="todayBackgroundColor">@color/color_orange_main</item>
         <item name="focusColor">@color/color_white</item>
-        <item name="todayColor">@color/color_orange_main</item>
+        <item name="todayColor">@color/color_white</item>
         <item name="weekNameColor">@color/color_orange_main</item>
     </style>
 

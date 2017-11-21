@@ -38,12 +38,7 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="@dimen/base_10"
             android:layout_marginRight="@dimen/base_10"
-            android:textColor="@color/color_gray_deep"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:exceedColor="@color/color_gray_light"
-            app:todayColor="@color/color_orange_main"
-            app:weekNameColor="@color/color_orange_main"/>
+            style="@style/calendar_week"/>
 
     </RelativeLayout>
     <View
