@@ -65,7 +65,7 @@
         android:gravity="center"
         android:textStyle="bold" />
 
-    <com.kidsdynamic.swing.view.ViewChartKDToday
+    <com.kidsdynamic.swing.view.ViewChartToday
         android:id="@+id/dashboard_chart_today"
         android:layout_width="match_parent"
         android:layout_height="0dp"

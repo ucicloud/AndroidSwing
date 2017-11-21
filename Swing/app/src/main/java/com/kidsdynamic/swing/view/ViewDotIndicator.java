@@ -13,6 +13,8 @@ import android.view.View;
 import com.kidsdynamic.swing.R;
 
 /**
+ * ViewDotIndicator
+ * <p>
  * Created by 03543 on 2017/2/19.
  */
 
@@ -21,8 +23,8 @@ public class ViewDotIndicator extends View {
 
     private int mDesiredSize = 50;
 
-    private int mDotColorOn = Color.WHITE;
-    private int mDotColorOff = Color.LTGRAY;
+    private int mDotColorOn = Color.GRAY;
+    private int mDotColorOff = Color.WHITE;
     private int mDotCount = 3;
     private int mDotPosition = 0;
     private int mDotSize = 12;
@@ -125,14 +127,14 @@ public class ViewDotIndicator extends View {
     }
 
     public void offset(int offset) {
-        int newpos = mDotPosition + offset;
+        int newPos = mDotPosition + offset;
 
-        if (newpos >= mDotCount)
-            newpos = newpos % mDotCount;
-        if (newpos < 0)
-            newpos = (newpos % mDotCount) + mDotCount;
+        if (newPos >= mDotCount)
+            newPos = newPos % mDotCount;
+        if (newPos < 0)
+            newPos = (newPos % mDotCount) + mDotCount;
 
-        setDotPosition(newpos);
+        setDotPosition(newPos);
     }
 
     public void setDotColorOn(int color) {

@@ -11,6 +11,7 @@ import android.graphics.Rect;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.util.TypedValue;
+import android.view.MotionEvent;
 
 import com.kidsdynamic.swing.R;
 import com.kidsdynamic.swing.model.WatchActivity;
@@ -23,6 +24,8 @@ import java.util.List;
 import java.util.Locale;
 
 /**
+ * ViewChartBarVertical
+ * <p>
  * Created by 03543 on 2017/2/22.
  */
 
@@ -39,6 +42,10 @@ public class ViewChartBarVertical extends ViewChart {
     private float mGoal;
     private List<WatchActivity.Act> mValue;
     private String mTitle = "Step";
+
+    private List<Rect> barRectList;
+    private MotionEvent mCurrentEvent;
+    private onBarClickListener onBarClickListener;
 
     public ViewChartBarVertical(Context context) {
         super(context);
@@ -62,6 +69,8 @@ public class ViewChartBarVertical extends ViewChart {
         mRect = new Rect();
         mRectV = new Rect();
         mRectH = new Rect();
+
+        barRectList = new ArrayList<>();
     }
 
     public void setValue(List<WatchActivity.Act> list) {
@@ -79,6 +88,14 @@ public class ViewChartBarVertical extends ViewChart {
 
     public void setGoal(float goal) {
         mGoal = goal;
+    }
+
+    public void setOnBarClickListener(ViewChartBarVertical.onBarClickListener listener) {
+        this.onBarClickListener = listener;
+    }
+
+    public interface onBarClickListener {
+        void onBarClick(int index, float x, float y);
     }
 
     @Override
@@ -165,6 +182,39 @@ public class ViewChartBarVertical extends ViewChart {
         mRectV.bottom = mRect.bottom;
     }
 
+    @Override
+    public boolean performClick() {
+        super.performClick();
+        if (null == barRectList || barRectList.isEmpty()) {
+            return false;
+        }
+        if (null == onBarClickListener || null == mCurrentEvent) {
+            return false;
+        }
+        for (int i = 0; i < barRectList.size(); i++) {
+            Rect rect = barRectList.get(i);
+            if (rect.contains((int) mCurrentEvent.getX(), (int) mCurrentEvent.getY())) {
+                onBarClickListener.onBarClick(i, mCurrentEvent.getX(), mCurrentEvent.getY());
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        int action = event.getAction();
+        float x = event.getX();
+        float y = event.getY();
+        switch (action) {
+            case MotionEvent.ACTION_UP:
+                mCurrentEvent = event;
+                performClick();
+                break;
+        }
+        return true;
+    }
+
     private void drawValue(Canvas canvas, Rect rect, int index, boolean shouldDrawValueText) {
         Rect barRect = new Rect(rect);
 
@@ -186,6 +236,8 @@ public class ViewChartBarVertical extends ViewChart {
         mPaint.setStyle(Paint.Style.FILL);
 
         canvas.drawRect(barRect, mPaint);
+
+        barRectList.add(index, barRect);
 
         if (!shouldDrawValueText) {
             return;

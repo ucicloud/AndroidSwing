@@ -15,7 +15,7 @@ import com.kidsdynamic.swing.R;
 import com.kidsdynamic.swing.model.WatchActivity;
 import com.kidsdynamic.swing.utils.SwingFontsCache;
 import com.kidsdynamic.swing.view.ViewChartBarVertical;
-import com.kidsdynamic.swing.view.ViewChartKDToday;
+import com.kidsdynamic.swing.view.ViewChartToday;
 import com.kidsdynamic.swing.view.ViewDotIndicator;
 import com.kidsdynamic.swing.view.ViewTextSelector;
 
@@ -28,12 +28,12 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * DashboardChartFragment
+ * DashboardChartSingleFragment
  * <p>
  * Created by Stefan on 2017/11/9.
  */
 
-public class DashboardChartFragment extends DashboardBaseFragment {
+public class DashboardChartTripleFragment extends DashboardBaseFragment {
 
     public static final String DOOR_TYPE = "door_type";
 
@@ -51,7 +51,7 @@ public class DashboardChartFragment extends DashboardBaseFragment {
     @BindView(R.id.dashboard_chart_message)
     TextView mViewMessage;
     @BindView(R.id.dashboard_chart_today)
-    ViewChartKDToday mViewChartToday;
+    ViewChartToday mViewChartToday;
     //    @BindView(R.id.dashboard_chart_horizontal)
 //    ViewChartHorizontal mViewChartHorizontal;
     @BindView(R.id.dashboard_chart_vertical)
@@ -67,10 +67,10 @@ public class DashboardChartFragment extends DashboardBaseFragment {
     private int mEmotionColor;
     private int mDoor;
 
-    public static DashboardChartFragment newInstance(int doorType) {
+    public static DashboardChartTripleFragment newInstance(int doorType) {
         Bundle args = new Bundle();
         args.putInt(DOOR_TYPE, doorType);
-        DashboardChartFragment fragment = new DashboardChartFragment();
+        DashboardChartTripleFragment fragment = new DashboardChartTripleFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -79,7 +79,7 @@ public class DashboardChartFragment extends DashboardBaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View layout = inflater.inflate(R.layout.fragment_dashboard_chart, container, false);
+        View layout = inflater.inflate(R.layout.fragment_dashboard_chart_single, container, false);
         ButterKnife.bind(this, layout);
         return layout;
     }

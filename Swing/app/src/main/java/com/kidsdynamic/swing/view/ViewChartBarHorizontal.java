@@ -20,13 +20,15 @@ import java.util.List;
 import java.util.Locale;
 
 /**
+ * ViewChartBarHorizontal
+ * <p>
  * Created by 03543 on 2017/2/20.
  */
 
 public class ViewChartBarHorizontal extends ViewChart {
 
-    private int mDesiredWidth = 160 * 3;
-    private int mDesiredHeight = 100 * 3;
+    private int mDesiredWidth = 160;
+    private int mDesiredHeight = 100;
 
     private float mGoal;
     private List<HorizontalBar> mBars = new ArrayList<>();

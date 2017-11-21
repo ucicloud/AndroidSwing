@@ -12,19 +12,22 @@ import android.graphics.Rect;
 import android.graphics.Shader;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 
 import com.kidsdynamic.swing.model.WatchActivity;
 
 import java.util.Locale;
 
 /**
+ * ViewChartToday
+ * <p>
  * Created by 03543 on 2017/2/20.
  */
 
-public class ViewChartKDToday extends ViewChart {
+public class ViewChartToday extends ViewChart {
 
     private int mDesiredWidth = 160;
-    private int mDesiredHeight = 72;
+    private int mDesiredHeight = 100;
 
     private float mTotal;
     private float mGoal;
@@ -33,17 +36,21 @@ public class ViewChartKDToday extends ViewChart {
     private Paint mPaint;
     private Rect mRect;
 
-    public ViewChartKDToday(Context context) {
+    private boolean mNeedDrawGoal = false;
+    private MotionEvent clickEvent;
+    private OnAxisRectClickListener onAxisRectClickListener;
+
+    public ViewChartToday(Context context) {
         super(context);
         init(context, null);
     }
 
-    public ViewChartKDToday(Context context, AttributeSet attrs) {
+    public ViewChartToday(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context, attrs);
     }
 
-    public ViewChartKDToday(Context context, AttributeSet attrs, int defStyle) {
+    public ViewChartToday(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         init(context, attrs);
     }
@@ -72,6 +79,18 @@ public class ViewChartKDToday extends ViewChart {
 
     public void setTotal(float total) {
         mTotal = total;
+    }
+
+    public void setNeedDrawGoal(boolean needDrawGoal) {
+        mNeedDrawGoal = needDrawGoal;
+    }
+
+    public void setOnAxisRectClickListener(ViewChartToday.OnAxisRectClickListener listener) {
+        this.onAxisRectClickListener = listener;
+    }
+
+    public interface OnAxisRectClickListener {
+        void onAxisRectClick(float x, float y);
     }
 
     @Override
@@ -115,8 +134,38 @@ public class ViewChartKDToday extends ViewChart {
         }
 
         drawValue(canvas, mRect, mValue.mSteps);
-//        drawTotal(canvas, mRect);
+        if (mNeedDrawGoal) {
+            drawTotal(canvas, mRect);
+        }
         drawGoal(canvas, mRect);
+    }
+
+    @Override
+    public boolean performClick() {
+        super.performClick();
+        if (null != onAxisRectClickListener) {
+            float x = null != clickEvent ? clickEvent.getX() : -1;
+            float y = null != clickEvent ? clickEvent.getY() : -1;
+            onAxisRectClickListener.onAxisRectClick(x, y);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        super.onTouchEvent(event);
+        int action = event.getAction();
+        float x = event.getX();
+        float y = event.getY();
+        switch (action) {
+            case MotionEvent.ACTION_UP:
+                if (mRect.contains((int) x, (int) y)) {
+                    performClick();
+                }
+                clickEvent = event;
+                break;
+        }
+        return true;
     }
 
     private void drawAxisH(Canvas canvas, Rect rect) {
@@ -275,4 +324,5 @@ public class ViewChartKDToday extends ViewChart {
 
         return rect;
     }
+
 }

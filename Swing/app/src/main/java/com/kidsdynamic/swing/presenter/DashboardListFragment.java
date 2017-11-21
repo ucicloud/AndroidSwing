@@ -35,11 +35,6 @@ public class DashboardListFragment extends DashboardBaseFragment {
     private static final String LIST_TYPE = "list_type";
     private static final String EMOTION_INT = "emotion_int";
 
-    private static final int LIST_TODAY = 0;
-    private static final int LIST_WEEK = 1;
-    private static final int LIST_MONTH = 2;
-    private static final int LIST_YEAR = 3;
-
     @BindView(R.id.dashboard_list_root)
     View mViewRoot;
     @BindView(R.id.dashboard_list_view)
