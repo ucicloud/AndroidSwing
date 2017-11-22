@@ -69,7 +69,6 @@ public class KidActivityManager {
                 kidId).enqueue(new BaseRetrofitCallback<RetrieveDataRep>() {
             @Override
             public void onResponse(Call<RetrieveDataRep> call, Response<RetrieveDataRep> response) {
-                super.onResponse(call, response);
 
                 //如果获取数据成功，则开始更新本地数据
                 if(response.code() == 200
@@ -80,6 +79,8 @@ public class KidActivityManager {
                 if(finishListener != null){
                     finishListener.onFinish(response.code());
                 }
+
+                super.onResponse(call, response);
 
             }
 

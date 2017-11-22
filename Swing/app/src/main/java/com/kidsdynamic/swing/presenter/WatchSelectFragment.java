@@ -229,7 +229,6 @@ public class WatchSelectFragment extends BaseFragment {
             @Override
             public void onResponse(Call<WhoRegisterMacIDResp> call, Response<WhoRegisterMacIDResp> response) {
                 LogUtil2.getUtils().d("whoRegisteredMacID onResponse: " + response.code());
-                super.onResponse(call, response);
 
                 KidsWithParent kidsWithParent = null;
                 if (response.code() == 200) {
@@ -251,6 +250,7 @@ public class WatchSelectFragment extends BaseFragment {
                     ll_select.setAdapter(dataAdapter);
                 }
 
+                super.onResponse(call, response);
 
             }
 

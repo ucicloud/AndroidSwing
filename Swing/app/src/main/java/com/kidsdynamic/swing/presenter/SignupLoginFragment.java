@@ -153,7 +153,6 @@ public class SignupLoginFragment extends BaseFragment {
             @Override
             public void onResponse(Call<Object> call, Response<Object> response) {
                 LogUtil2.getUtils().d("check mail onResponse ");
-                super.onResponse(call, response);
 
                 if (response.code() == 200) {
                     SignupLoginFragment.this.finishLoadingDialog();
@@ -164,6 +163,8 @@ public class SignupLoginFragment extends BaseFragment {
                     //邮箱已经注册，则执行登录流程
                     loginByEmail(userApi, loginEntity);
                 }
+
+                super.onResponse(call, response);
             }
 
             @Override
@@ -192,7 +193,6 @@ public class SignupLoginFragment extends BaseFragment {
         userApi.login(loginEntity).enqueue(new BaseRetrofitCallback<LoginSuccessRep>() {
             @Override
             public void onResponse(Call<LoginSuccessRep> call, Response<LoginSuccessRep> response) {
-                super.onResponse(call, response);
 
                 if (response.code() == 200) {
                     LogUtil2.getUtils().d("login success");
@@ -210,6 +210,8 @@ public class SignupLoginFragment extends BaseFragment {
 
                     showErrInfo(R.string.signup_profile_login_failed);
                 }
+
+                super.onResponse(call, response);
             }
 
             @Override
@@ -237,7 +239,6 @@ public class SignupLoginFragment extends BaseFragment {
             @Override
             public void onResponse(Call<UserProfileRep> call, Response<UserProfileRep> response) {
                 LogUtil2.getUtils().d("retrieveUserProfile onResponse");
-                super.onResponse(call, response);
 
                 if (response.code() == 200) {//获取到用户信息
                     LogUtil2.getUtils().d("onResponse: " + response.body());
@@ -253,6 +254,8 @@ public class SignupLoginFragment extends BaseFragment {
 
                     showErrInfo(R.string.signup_profile_login_failed);
                 }
+
+                super.onResponse(call, response);
             }
 
             @Override
@@ -275,7 +278,6 @@ public class SignupLoginFragment extends BaseFragment {
         eventApi.retrieveAllEventsWithTodo().enqueue(new BaseRetrofitCallback<List<EventWithTodo>>() {
             @Override
             public void onResponse(Call<List<EventWithTodo>> call, Response<List<EventWithTodo>> response) {
-                super.onResponse(call, response);
 
                 if (response.code() == 200) {//获取成功
                     LogUtil2.getUtils().d("onResponse: " + response.body());
@@ -291,6 +293,9 @@ public class SignupLoginFragment extends BaseFragment {
                     finishLoadingDialog();
                     showErrInfo(R.string.signup_profile_login_failed);
                 }
+
+                super.onResponse(call, response);
+
             }
 
             @Override
@@ -353,7 +358,6 @@ public class SignupLoginFragment extends BaseFragment {
         userApiNeedToken.sendResetPasswordEmail(resetPswParam).enqueue(new BaseRetrofitCallback<Object>() {
             @Override
             public void onResponse(Call<Object> call, Response<Object> response) {
-                super.onResponse(call, response);
 
                 finishLoadingDialog();
 
@@ -364,6 +368,8 @@ public class SignupLoginFragment extends BaseFragment {
                 } else {
                     Toast.makeText(getContext(), R.string.error_api_unknown + " " + code, Toast.LENGTH_SHORT).show();
                 }
+
+                super.onResponse(call, response);
             }
 
             @Override

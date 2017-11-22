@@ -2,7 +2,6 @@ package com.kidsdynamic.swing.presenter;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -73,7 +72,7 @@ public class DashboardMainFragment extends DashboardBaseFragment {
             tv_kids_name.setText(kidName);
 
             String profileRealUri = UserManager.getProfileRealUri(focusWatchInfo.getProfile());
-            Log.d("dash_main", "avatar: " + profileRealUri);
+//            Log.d("dash_main", "avatar: " + profileRealUri);
             GlideHelper.showCircleImageView(getContext(), profileRealUri, vc_photo);
         }
     }

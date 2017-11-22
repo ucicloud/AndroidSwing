@@ -194,7 +194,6 @@ public class SignupProfileFragment extends BaseFragment {
             @Override
             public void onResponse(Call<RegisterFailResponse> call, Response<RegisterFailResponse> response) {
                 LogUtil2.getUtils().d("register onResponse");
-                super.onResponse(call, response);
 
                 int code = response.code();
                 if (code == 200) {
@@ -213,6 +212,8 @@ public class SignupProfileFragment extends BaseFragment {
                     finishLoadingDialog();
                     ToastCommon.makeText(getContext(), R.string.user_register_fail_common);
                 }
+
+                super.onResponse(call, response);
             }
 
             @Override
@@ -229,7 +230,6 @@ public class SignupProfileFragment extends BaseFragment {
         userApi.login(loginEntity).enqueue(new BaseRetrofitCallback<LoginSuccessRep>() {
             @Override
             public void onResponse(Call<LoginSuccessRep> call, Response<LoginSuccessRep> response) {
-                super.onResponse(call, response);
 
                 if (response.code() == 200) {
                     LogUtil2.getUtils().d("login success");
@@ -252,6 +252,8 @@ public class SignupProfileFragment extends BaseFragment {
                     gotoLoginFragment();
                     LogUtil2.getUtils().d("login error code: " + response.code());
                 }
+
+                super.onResponse(call, response);
             }
 
             @Override
@@ -301,7 +303,6 @@ public class SignupProfileFragment extends BaseFragment {
             @Override
             public void onResponse(Call<UserProfileRep> call, Response<UserProfileRep> response) {
                 LogUtil2.getUtils().d("retrieveUserProfile onResponse");
-                super.onResponse(call, response);
 
                 if (response.code() == 200) {//获取到用户信息
                     LogUtil2.getUtils().d("onResponse: " + response.body());
@@ -322,6 +323,8 @@ public class SignupProfileFragment extends BaseFragment {
                     gotoLoginFragment();
                     ToastCommon.makeText(getContext(),R.string.profile_login_fail);
                 }
+
+                super.onResponse(call, response);
             }
 
             @Override

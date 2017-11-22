@@ -506,7 +506,9 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
 
         int minutes = now.get(Calendar.MINUTE);
         if(!isStarDate) {
-            minutes = 0;
+            //如果是选择event ent time，则把当前时间设置为默认值
+            now.setTimeInMillis(mEvent.mEndDate);
+//            minutes = 0;
         }
 
         TimePickerDialog dpd = TimePickerDialog.newInstance(
@@ -738,6 +740,12 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
             return;
         }
 
+        if (mEvent.mStartDate >= mEvent.mEndDate) {
+            Toast.makeText(getActivity(), R.string.event_time_select_error,
+                    Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         showLoadingDialog(R.string.activity_main_wait);
         //save event
 
@@ -759,7 +767,7 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
         eventApi.eventAdd(eventAddBean).enqueue(new BaseRetrofitCallback<EventEditRep>(){
             @Override
             public void onResponse(Call<EventEditRep> call, Response<EventEditRep> response) {
-                super.onResponse(call, response);
+
                 //如果保存成功，则把event保存到本地
                 if(response.code() == 200){
                     EventManager.saveEventForAdd(getContext(), response.body());
@@ -770,6 +778,7 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
 
                 finishLoadingDialog();
 
+                super.onResponse(call, response);
             }
 
             @Override
@@ -787,7 +796,7 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
         eventApi.eventUpdate(eventInfo4Update).enqueue(new BaseRetrofitCallback<EventEditRep>(){
             @Override
             public void onResponse(Call<EventEditRep> call, Response<EventEditRep> response) {
-                super.onResponse(call, response);
+
                 //如果保存成功，则把event保存到本地
                 if(response.code() == 200){
                     EventManager.updateEvent(getContext(), response.body());
@@ -802,6 +811,8 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
                 }
 
                 finishLoadingDialog();
+
+                super.onResponse(call, response);
 
             }
 

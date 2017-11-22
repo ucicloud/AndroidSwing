@@ -248,7 +248,6 @@ public class DashboardProgressFragment extends DashboardBaseFragment {
             @Override
             public void onResponse(Call<UserProfileRep> call, Response<UserProfileRep> response) {
                 LogUtil2.getUtils().d("retrieveUserProfile onResponse");
-                super.onResponse(call, response);
 
                 if (response.code() == 200) {//获取到用户信息
                     //先清除本地数据，然后再保存
@@ -258,6 +257,7 @@ public class DashboardProgressFragment extends DashboardBaseFragment {
                 //设置同步用户数据已经完成
                 mServerSyncFinish = true;
 
+                super.onResponse(call, response);
             }
 
             @Override

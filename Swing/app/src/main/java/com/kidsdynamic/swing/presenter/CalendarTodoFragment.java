@@ -295,7 +295,6 @@ public class CalendarTodoFragment extends CalendarBaseFragment {
         eventApi.todoItemDone(todoDoneEntity).enqueue(new BaseRetrofitCallback<Object>() {
             @Override
             public void onResponse(Call<Object> call, Response<Object> response) {
-                super.onResponse(call, response);
                 int code = response.code();
                 if(code == 200){//向服务器保存状态成功后
                     //首先保存状态到数据库
@@ -315,6 +314,8 @@ public class CalendarTodoFragment extends CalendarBaseFragment {
                     ToastCommon.showToast(getContext(),
                             getString(R.string.save_todo_done_statue_err,code));
                 }
+
+                super.onResponse(call, response);
             }
 
             @Override

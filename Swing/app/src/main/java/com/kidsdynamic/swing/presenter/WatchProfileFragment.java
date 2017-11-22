@@ -186,7 +186,6 @@ public class WatchProfileFragment extends BaseFragment {
             @Override
             public void onResponse(Call<KidsWithParent> call, Response<KidsWithParent> response) {
                 LogUtil2.getUtils().d("addKid onResponse: " + response.code());
-                super.onResponse(call, response);
 
                 if (response.code() == 200) {
                     //add successfully
@@ -225,6 +224,8 @@ public class WatchProfileFragment extends BaseFragment {
                     /*SignupActivity signupActivity = (SignupActivity) getActivity();
                     signupActivity.setFragment(DashboardMainFragment.newInstance());*/
                 }
+
+                super.onResponse(call, response);
             }
 
             @Override

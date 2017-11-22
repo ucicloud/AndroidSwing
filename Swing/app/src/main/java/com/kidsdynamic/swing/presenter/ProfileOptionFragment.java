@@ -152,7 +152,6 @@ public class ProfileOptionFragment extends ProfileBaseFragment {
         userApiNeedToken.sendResetPasswordEmail(resetPswParam).enqueue(new BaseRetrofitCallback<Object>() {
             @Override
             public void onResponse(Call<Object> call, Response<Object> response) {
-                super.onResponse(call, response);
 
                 finishLoadingDialog();
 
@@ -163,6 +162,8 @@ public class ProfileOptionFragment extends ProfileBaseFragment {
                 } else {
                     Toast.makeText(getContext(), R.string.error_api_unknown + " " + code, Toast.LENGTH_SHORT).show();
                 }
+
+                super.onResponse(call, response);
             }
 
             @Override
