@@ -12,6 +12,7 @@ import android.graphics.Rect;
 import android.graphics.Shader;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 
 import com.kidsdynamic.swing.utils.SwingFontsCache;
 
@@ -38,7 +39,11 @@ public class ViewChartBarHorizontal extends ViewChart {
     /**
      * the gap height between two bars
      */
-    private int barGapHeight = 60;
+    private int barGapHeight = 36;
+
+    private List<Rect> barRectList;
+    private MotionEvent mCurrentEvent;
+    private onBarClickListener onBarClickListener;
 
     public ViewChartBarHorizontal(Context context) {
         super(context);
@@ -58,6 +63,8 @@ public class ViewChartBarHorizontal extends ViewChart {
     private void init(Context context, AttributeSet attrs) {
         mPaint = new Paint();
         mRect = new Rect();
+
+        barRectList = new ArrayList<>();
     }
 
     public void setHorizontalBars(List<HorizontalBar> bars) {
@@ -73,6 +80,14 @@ public class ViewChartBarHorizontal extends ViewChart {
 
     public void setGoal(float goal) {
         mGoal = goal;
+    }
+
+    public void setOnBarClickListener(ViewChartBarHorizontal.onBarClickListener listener) {
+        this.onBarClickListener = listener;
+    }
+
+    public interface onBarClickListener {
+        void onBarClick(int index, float x, float y);
     }
 
     @Override
@@ -121,6 +136,37 @@ public class ViewChartBarHorizontal extends ViewChart {
         drawGoal(canvas, mRect, mBars.size());
     }
 
+    @Override
+    public boolean performClick() {
+        super.performClick();
+        if (null == barRectList || barRectList.isEmpty()) {
+            return false;
+        }
+        if (null == onBarClickListener || null == mCurrentEvent) {
+            return false;
+        }
+        for (int i = 0; i < barRectList.size(); i++) {
+            Rect rect = barRectList.get(i);
+            if (rect.contains((int) mCurrentEvent.getX(), (int) mCurrentEvent.getY())) {
+                onBarClickListener.onBarClick(i, mCurrentEvent.getX(), mCurrentEvent.getY());
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        int action = event.getAction();
+        switch (action) {
+            case MotionEvent.ACTION_UP:
+                mCurrentEvent = event;
+                performClick();
+                break;
+        }
+        return true;
+    }
+
     private void drawAxisH(Canvas canvas, Rect rect) {
         mPaint.reset();
         mPaint.setAntiAlias(true);
@@ -130,10 +176,10 @@ public class ViewChartBarHorizontal extends ViewChart {
         canvas.drawRect(rect, mPaint);
     }
 
-    private void drawValue(Canvas canvas, Rect rect, HorizontalBar bar, int i) {
+    private void drawValue(Canvas canvas, Rect rect, HorizontalBar bar, int index) {
         int size = mChartTextSize + 1;
 
-        Rect axisXRect = makeAxisRect(rect, i);
+        Rect axisXRect = makeAxisRect(rect, index);
         if (mAxisHEnabled) {
             drawAxisH(canvas, axisXRect);
         }
@@ -152,6 +198,8 @@ public class ViewChartBarHorizontal extends ViewChart {
         mPaint.setStyle(Paint.Style.FILL);
 
         canvas.drawRect(barRect, mPaint);
+
+        barRectList.add(index, barRect);
 
         int textX, textY;
         Rect textRect = new Rect();
@@ -205,7 +253,7 @@ public class ViewChartBarHorizontal extends ViewChart {
         mPaint.reset();
         mPaint.setAntiAlias(true);
         mPaint.setColor(Color.RED);
-        mPaint.setStrokeWidth(8f);
+        mPaint.setStrokeWidth(4f);
         mPaint.setStyle(Paint.Style.STROKE);
         PathEffect effects = new DashPathEffect(new float[]{8, 8, 8, 8}, 1);
         mPaint.setPathEffect(effects);

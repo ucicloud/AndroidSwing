@@ -47,6 +47,8 @@ public class ViewChartBarVertical extends ViewChart {
     private MotionEvent mCurrentEvent;
     private onBarClickListener onBarClickListener;
 
+    private int padding = 18;
+
     public ViewChartBarVertical(Context context) {
         super(context);
         init(context, null);
@@ -129,7 +131,7 @@ public class ViewChartBarVertical extends ViewChart {
 
         setMeasuredDimension(width, height);
 
-        mRect.set(getPaddingStart(), getPaddingTop(), getMeasuredWidth() - getPaddingEnd(), getMeasuredHeight());
+        mRect.set(getPaddingStart() + padding, getPaddingTop(), getMeasuredWidth() - getPaddingEnd() - padding, getMeasuredHeight());
     }
 
     @Override
@@ -333,7 +335,7 @@ public class ViewChartBarVertical extends ViewChart {
 
     private void drawTitle(Canvas canvas, Rect rect, String title) {
         mPaint.reset();
-        mPaint.setTextSize(mChartTilteTextSize + 1);
+        mPaint.setTextSize(mChartTitleTextSize + 1);
         mPaint.setColor(mChartColor);
         mPaint.setTypeface(SwingFontsCache.getBoldType(getContext()));
 
@@ -360,7 +362,7 @@ public class ViewChartBarVertical extends ViewChart {
         mPaint.reset();
         mPaint.setAntiAlias(true);
         mPaint.setColor(Color.RED);
-        mPaint.setStrokeWidth(8f);
+        mPaint.setStrokeWidth(4f);
         mPaint.setStyle(Paint.Style.STROKE);
         PathEffect effects = new DashPathEffect(new float[]{8, 8, 8, 8}, 1);
         mPaint.setPathEffect(effects);
@@ -370,7 +372,7 @@ public class ViewChartBarVertical extends ViewChart {
         mPaint.getTextBounds(text, 0, text.length(), textRect);
 
         Path dashLine = new Path();
-        int lineEndX = rectV.right - textRect.width() - 36 * 2 - 20;
+        int lineEndX = rectV.right - textRect.width() - 36 - 20;
         dashLine.moveTo(posX, posY);
         dashLine.lineTo(lineEndX, posY);
 
@@ -378,10 +380,10 @@ public class ViewChartBarVertical extends ViewChart {
 
         Path polygon = new Path();
         polygon.moveTo(lineEndX, posY);
-        polygon.lineTo(lineEndX + 20, posY - textRect.height() * 3);
-        polygon.lineTo(rectV.right + 36, posY - textRect.height() * 3);
-        polygon.lineTo(rectV.right + 36, posY + textRect.height() * 2);
-        polygon.lineTo(lineEndX + 20, posY + textRect.height() * 2);
+        polygon.lineTo(lineEndX + 20, posY - textRect.height() * 2);
+        polygon.lineTo(rectV.right + 36, posY - textRect.height() * 2);
+        polygon.lineTo(rectV.right + 36, posY + textRect.height() * 3 / 2);
+        polygon.lineTo(lineEndX + 20, posY + textRect.height() * 3 / 2);
         polygon.lineTo(lineEndX, posY);
 
         mPaint.reset();
@@ -394,7 +396,7 @@ public class ViewChartBarVertical extends ViewChart {
         mPaint.setTypeface(SwingFontsCache.getBoldType(getContext()));
         mPaint.setTextSize(mChartTextSize + 1);
         mPaint.setColor(Color.WHITE);
-        int textX = lineEndX + 36;
+        int textX = lineEndX + 32;
         int textY = posY + textRect.height() / 2;
 
         canvas.drawText(text, textX, textY, mPaint);

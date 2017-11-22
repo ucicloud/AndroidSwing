@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -64,8 +65,12 @@ public class DashboardEmotionFragment extends DashboardBaseFragment {
     TextView tv_uv_minutes;
     @BindView(R.id.tv_uv_time)
     TextView tv_uv_time;
+    @BindView(R.id.ib_activity)
+    ImageButton ib_activity;
     @BindView(R.id.tv_activity)
     TextView tv_activity;
+    @BindView(R.id.ib_uv_detection)
+    ImageButton ib_uv_detection;
     @BindView(R.id.tv_uv_detection)
     TextView tv_uv_detection;
 
@@ -109,18 +114,28 @@ public class DashboardEmotionFragment extends DashboardBaseFragment {
         }
     }
 
-    @OnClick({R.id.rlIndoorSteps})
+    @OnClick(R.id.rl_indoor_steps)
     public void clickIndoorSteps() {
-        setFragment(DashboardChartSingleFragment.newInstance(INDOOR), true);
+        setFragment(DashboardChartSingleFragment.newInstance(INDOOR, CHART_TODAY), true);
     }
 
-    @OnClick({R.id.rlOutdoorSteps})
+    @OnClick(R.id.rl_outdoor_steps)
     public void clickOutdoorSteps() {
-        setFragment(DashboardChartSingleFragment.newInstance(OUTDOOR), true);
+        setFragment(DashboardChartSingleFragment.newInstance(OUTDOOR, CHART_TODAY), true);
     }
 
-    @OnClick({R.id.rlUVExplosure})
+    @OnClick(R.id.rl_uv_explosure)
     public void clickUVExplosure() {
+
+    }
+
+    @OnClick({R.id.ib_activity, R.id.tv_activity})
+    public void clickActivity() {
+        setFragment(DashboardChartTripleFragment.newInstance(OUTDOOR), true);
+    }
+
+    @OnClick({R.id.ib_uv_detection, R.id.tv_uv_detection})
+    public void clickUVDetection() {
 
     }
 
@@ -130,29 +145,29 @@ public class DashboardEmotionFragment extends DashboardBaseFragment {
         int color = res.getColor(R.color.color_blue_main);
         int messageId = R.string.dashboard_emotion_below;
         int monsterId = R.drawable.monster_purple;
-        int activityId = R.drawable.ic_icon_activity_blue;
-        int uvDetectionId = R.drawable.ic_icon_uv_blue;
+        int activityBgId = R.drawable.circle_bg_blue;
+        int uvDetectionBgId = R.drawable.circle_bg_blue;
         if (EMOTION_LOW == emotion) {
             rootId = R.drawable.emotion_fragment_bg_blue;
             color = res.getColor(R.color.color_blue_main);
             messageId = R.string.dashboard_emotion_below;
             monsterId = R.drawable.monster_purple;
-            activityId = R.drawable.ic_icon_activity_blue;
-            uvDetectionId = R.drawable.ic_icon_uv_blue;
+            activityBgId = R.drawable.circle_bg_blue;
+            uvDetectionBgId = R.drawable.circle_bg_blue;
         } else if (EMOTION_ALMOST == emotion) {
             rootId = R.drawable.emotion_fragment_bg_green;
             color = res.getColor(R.color.color_green_main);
             messageId = R.string.dashboard_emotion_almost;
             monsterId = R.drawable.monster_green;
-            activityId = R.drawable.ic_icon_activity_green;
-            uvDetectionId = R.drawable.ic_icon_uv_green;
+            activityBgId = R.drawable.circle_bg_green;
+            uvDetectionBgId = R.drawable.circle_bg_green;
         } else if (EMOTION_EXCELLENT == emotion) {
             rootId = R.drawable.emotion_fragment_bg_orange;
             color = res.getColor(R.color.color_orange_main);
             messageId = R.string.dashboard_emotion_excellent;
             monsterId = R.drawable.monster_yellow;
-            activityId = R.drawable.ic_icon_activity_orange;
-            uvDetectionId = R.drawable.ic_icon_uv_orange;
+            activityBgId = R.drawable.circle_bg_orange;
+            uvDetectionBgId = R.drawable.circle_bg_orange;
         }
         root.setBackgroundResource(rootId);
         tv_top_banner.setTextColor(color);
@@ -163,21 +178,18 @@ public class DashboardEmotionFragment extends DashboardBaseFragment {
         tv_indoor_steps_desc.setTextColor(color);
         tv_indoor_steps_value.setTextColor(color);
         tv_indoor_steps_unit.setTextColor(color);
-//        tv_indoor_time.setTextColor(color);
         tv_outdoor_steps_desc.setTextColor(color);
         tv_outdoor_steps_value.setTextColor(color);
         tv_outdoor_steps_unit.setTextColor(color);
-//        tv_outdoor_time.setTextColor(color);
         tv_uv_desc.setTextColor(color);
         tv_uv_hour.setTextColor(color);
         tv_uv_hours.setTextColor(color);
         tv_uv_minute.setTextColor(color);
         tv_uv_minutes.setTextColor(color);
-//        tv_uv_time.setTextColor(color);
         tv_activity.setTextColor(color);
         tv_uv_detection.setTextColor(color);
-        tv_activity.setCompoundDrawablesWithIntrinsicBounds(0, activityId, 0, 0);
-        tv_uv_detection.setCompoundDrawablesWithIntrinsicBounds(0, uvDetectionId, 0, 0);
+        ib_activity.setBackgroundResource(activityBgId);
+        ib_uv_detection.setBackgroundResource(uvDetectionBgId);
     }
 
 }

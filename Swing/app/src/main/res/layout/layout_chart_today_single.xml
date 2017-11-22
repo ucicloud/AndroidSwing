@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.kidsdynamic.swing.view.AvenirTextView
+        android:id="@+id/dashboard_chart_message"
+        style="@style/dashboard_chart_emotion"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_gravity="center"
+        android:layout_marginLeft="@dimen/base_18"
+        android:layout_marginRight="@dimen/base_18"
+        android:layout_weight="2"
+        android:gravity="center"
+        android:textStyle="bold" />
+
+    <com.kidsdynamic.swing.view.ViewChartToday
+        android:id="@+id/dashboard_chart_today"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="5"
+        android:padding="@dimen/base_18"
+        app:axisColor="@color/color_white"
+        app:axisHEnabled="true"
+        app:axisHMax="15000"
+        app:chartTextColor="@color/color_white"
+        app:chartTextSize="16sp" />
+</LinearLayout>

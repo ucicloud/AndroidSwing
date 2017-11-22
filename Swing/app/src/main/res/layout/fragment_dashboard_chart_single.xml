@@ -30,7 +30,7 @@
             app:dotColorOn="@color/color_gray_main"
             app:dotCount="4"
             app:dotPosition="0"
-            app:dotSize="10dp" />
+            app:dotSize="8dp" />
     </RelativeLayout>
 
     <RelativeLayout

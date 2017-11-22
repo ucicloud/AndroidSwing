@@ -74,7 +74,7 @@
             android:weightSum="1">
 
             <RelativeLayout
-                android:id="@+id/rlIndoorSteps"
+                android:id="@+id/rl_indoor_steps"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/solid_white_snow_corner_selector">
@@ -115,7 +115,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:gravity="center"
-                            android:text="1,234"
+                            android:text=""
                             android:textColor="@color/color_orange_main"
                             android:textSize="20sp"
                             android:textStyle="bold" />
@@ -137,7 +137,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="end"
-                        android:text="Today, 8:40 am"
+                        android:text=""
                         android:textColor="@color/color_gray_main"
                         android:textSize="12sp"
                         android:textStyle="bold" />
@@ -145,7 +145,7 @@
             </RelativeLayout>
 
             <RelativeLayout
-                android:id="@+id/rlOutdoorSteps"
+                android:id="@+id/rl_outdoor_steps"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/base_10"
@@ -187,7 +187,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:gravity="center"
-                            android:text="3,456"
+                            android:text=""
                             android:textColor="@color/color_orange_main"
                             android:textSize="20sp"
                             android:textStyle="bold" />
@@ -209,7 +209,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="end"
-                        android:text="Today, 8:40 am"
+                        android:text=""
                         android:textColor="@color/color_gray_main"
                         android:textSize="12sp"
                         android:textStyle="bold" />
@@ -217,7 +217,7 @@
             </RelativeLayout>
 
             <RelativeLayout
-                android:id="@+id/rlUVExplosure"
+                android:id="@+id/rl_uv_explosure"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/base_10"
@@ -259,7 +259,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:gravity="center"
-                            android:text="3"
+                            android:text=""
                             android:textColor="@color/color_orange_main"
                             android:textSize="20sp"
                             android:textStyle="bold" />
@@ -281,7 +281,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/base_15"
                             android:gravity="center"
-                            android:text="15"
+                            android:text=""
                             android:textColor="@color/color_orange_main"
                             android:textSize="20sp"
                             android:textStyle="bold" />
@@ -303,7 +303,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="end"
-                        android:text="Today, 8:40 am"
+                        android:text=""
                         android:textColor="@color/color_gray_main"
                         android:textSize="12sp"
                         android:textStyle="bold" />
@@ -319,37 +319,68 @@
         android:gravity="center"
         android:orientation="horizontal">
 
-        <com.kidsdynamic.swing.view.AvenirTextView
-            android:id="@+id/tv_activity"
-            android:layout_width="112dp"
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toStartOf="@+id/v_sponge"
-            android:drawablePadding="@dimen/base_8"
-            android:drawableTop="@drawable/ic_icon_activity_orange"
-            android:gravity="center"
-            android:text="@string/dashboard_emotion_activity"
-            android:textColor="@color/color_orange_main"
-            android:textSize="14sp"
-            android:textStyle="bold" />
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <ImageButton
+                android:id="@+id/ib_activity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/circle_bg_orange"
+                android:contentDescription="@null"
+                android:scaleType="center"
+                android:src="@drawable/icon_activity_white" />
+
+            <com.kidsdynamic.swing.view.AvenirTextView
+                android:id="@+id/tv_activity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/base_8"
+                android:gravity="center"
+                android:text="@string/dashboard_emotion_activity"
+                android:textColor="@color/color_orange_main"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/v_sponge"
-            android:layout_width="1dp"
+            android:layout_width="@dimen/base_18"
             android:layout_height="1dp"
             android:layout_centerInParent="true"
             android:orientation="horizontal" />
 
-        <com.kidsdynamic.swing.view.AvenirTextView
-            android:id="@+id/tv_uv_detection"
-            android:layout_width="112dp"
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toEndOf="@+id/v_sponge"
-            android:drawablePadding="@dimen/base_8"
-            android:drawableTop="@drawable/ic_icon_uv_orange"
-            android:gravity="center"
-            android:text="@string/dashboard_emotion_uv_detection"
-            android:textColor="@color/color_orange_main"
-            android:textSize="14sp"
-            android:textStyle="bold" />
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <ImageButton
+                android:id="@+id/ib_uv_detection"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/circle_bg_orange"
+                android:contentDescription="@null"
+                android:scaleType="center"
+                android:src="@drawable/icon_uv_white" />
+
+            <com.kidsdynamic.swing.view.AvenirTextView
+                android:id="@+id/tv_uv_detection"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/base_8"
+                android:gravity="center"
+                android:text="@string/dashboard_emotion_uv_detection"
+                android:textColor="@color/color_orange_main"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+        </LinearLayout>
     </RelativeLayout>
+
 </LinearLayout>

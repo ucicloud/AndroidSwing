@@ -10,6 +10,8 @@ import android.view.View;
 import com.kidsdynamic.swing.R;
 
 /**
+ * ViewChart
+ * <p>
  * Created by 03543 on 2017/2/19.
  */
 
@@ -21,7 +23,7 @@ public abstract class ViewChart extends View {
     public int mChartTextColor = Color.BLACK;
     public int mChartTextSize = 30;
     public int mChartTextStyle = Typeface.NORMAL;
-    public int mChartTilteTextSize = 40;
+    public int mChartTitleTextSize = 40;
     public int mNodeColor = Color.GRAY;
     public int mNodeSize = 15;
     public int mAxisColor = Color.BLACK;
@@ -71,7 +73,7 @@ public abstract class ViewChart extends View {
                 } else if (attr == R.styleable.ViewChart_chartTextStyle) {
                     mChartTextStyle = typedArray.getInteger(attr, mChartTextStyle);
                 } else if (attr == R.styleable.ViewChart_chartTitleTextSize) {
-                    mChartTilteTextSize = typedArray.getDimensionPixelSize(attr, mChartTilteTextSize);
+                    mChartTitleTextSize = typedArray.getDimensionPixelSize(attr, mChartTitleTextSize);
                 } else if (attr == R.styleable.ViewChart_nodeColor) {
                     mNodeColor = typedArray.getColor(attr, mNodeColor);
                 } else if (attr == R.styleable.ViewChart_nodeSize) {

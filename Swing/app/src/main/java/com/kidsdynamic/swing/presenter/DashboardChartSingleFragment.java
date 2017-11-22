@@ -17,7 +17,6 @@ import android.widget.TextView;
 import com.kidsdynamic.swing.R;
 import com.kidsdynamic.swing.model.WatchActivity;
 import com.kidsdynamic.swing.utils.SwingFontsCache;
-import com.kidsdynamic.swing.view.MyViewPager;
 import com.kidsdynamic.swing.view.ViewChartBarVertical;
 import com.kidsdynamic.swing.view.ViewChartToday;
 import com.kidsdynamic.swing.view.ViewDotIndicator;
@@ -40,11 +39,7 @@ import butterknife.ButterKnife;
 public class DashboardChartSingleFragment extends DashboardBaseFragment {
 
     public static final String DOOR_TYPE = "door_type";
-
-    private static final int CHART_TODAY = 0;
-    private static final int CHART_WEEK = 1;
-    private static final int CHART_MONTH = 2;
-    private static final int CHART_YEAR = 3;
+    public static final String CHART_TYPE = "chart_type";
 
     @BindView(R.id.dashboard_chart_root)
     View mViewRoot;
@@ -69,12 +64,12 @@ public class DashboardChartSingleFragment extends DashboardBaseFragment {
 
     private int mEmotion;
     private int mEmotionColor;
-    private int mDoor;
     private int mCurrentChart;
 
-    public static DashboardChartSingleFragment newInstance(int doorType) {
+    public static DashboardChartSingleFragment newInstance(int doorType, int chartType) {
         Bundle args = new Bundle();
         args.putInt(DOOR_TYPE, doorType);
+        args.putInt(CHART_TYPE, chartType);
         DashboardChartSingleFragment fragment = new DashboardChartSingleFragment();
         fragment.setArguments(args);
         return fragment;
@@ -92,13 +87,16 @@ public class DashboardChartSingleFragment extends DashboardBaseFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Bundle args = getArguments();
-        mDoor = args.getInt(DOOR_TYPE, INDOOR);
-
+        view_left_action.setImageResource(R.drawable.icon_left);
         tv_title.setText(R.string.dashboard_chart_activity);
+        view_right_action.setImageResource(R.drawable.icon_uv_blue_light2_);
+        int right = (int) getResources().getDimension(R.dimen.base_12);
+        view_right_action.setPadding(0, 0, right, 0);
 
-        mRadioButtonIndoor.setChecked(INDOOR == mDoor);
-        mRadioButtonOutdoor.setChecked(OUTDOOR == mDoor);
+        Bundle args = getArguments();
+        int door = args.getInt(DOOR_TYPE, INDOOR);
+        mRadioButtonIndoor.setChecked(INDOOR == door);
+        mRadioButtonOutdoor.setChecked(OUTDOOR == door);
         mRadioGroup.setOnCheckedChangeListener(onCheckedChangeListener);
     }
 
@@ -118,10 +116,10 @@ public class DashboardChartSingleFragment extends DashboardBaseFragment {
 
         mViewSelector.clear();
         mViewSelector.add(Arrays.asList(
-                getResources().getString(R.string.dashboard_chart_today),
-                getResources().getString(R.string.dashboard_chart_this_week),
-                getResources().getString(R.string.dashboard_chart_this_month),
-                getResources().getString(R.string.dashboard_chart_this_year)));
+                getString(R.string.dashboard_chart_today),
+                getString(R.string.dashboard_chart_this_week),
+                getString(R.string.dashboard_chart_this_month),
+                getString(R.string.dashboard_chart_this_year)));
 
         mViewIndicator.setDotCount(mViewSelector.getCount());
         mViewIndicator.setDotPosition(0);
@@ -130,8 +128,10 @@ public class DashboardChartSingleFragment extends DashboardBaseFragment {
 
         setEmotion(emotion);
 
-        setChart(mCurrentChart);
-        mCurrentChart = CHART_TODAY;
+        Bundle args = getArguments();
+        int chartType = args.getInt(CHART_TYPE, CHART_TODAY);
+        setChart(chartType);
+        mCurrentChart = chartType;
     }
 
     private ViewTextSelector.OnSelectListener mSelectorListener = new ViewTextSelector.OnSelectListener() {
@@ -339,33 +339,33 @@ public class DashboardChartSingleFragment extends DashboardBaseFragment {
         List<View> list = new ArrayList<>();
         LayoutInflater inflater = LayoutInflater.from(getContext());
 
-        View chartToday = inflater.inflate(R.layout.layout_chart_today, mViewPager, false);
+        View chartToday = inflater.inflate(R.layout.layout_chart_today_single, mViewPager, false);
         mViewMessage = (TextView) chartToday.findViewById(R.id.dashboard_chart_message);
         mViewChartToday = (ViewChartToday) chartToday.findViewById(R.id.dashboard_chart_today);
         mViewChartToday.setOnAxisRectClickListener(onAxisRectClickListener);
         list.add(chartToday);
 
-        String chartTitle = getResources().getString(R.string.dashboard_chart_steps);
+        String chartTitle = getString(R.string.dashboard_chart_steps);
 
-        View chartWeek = inflater.inflate(R.layout.layout_chart_vertical, mViewPager, false);
+        View chartWeek = inflater.inflate(R.layout.layout_chart_vertical_single, mViewPager, false);
         mViewChartWeek = (ViewChartBarVertical) chartWeek.findViewById(R.id.dashboard_chart_vertical);
         mViewChartWeek.setTitle(chartTitle);
         mViewChartWeek.setOnBarClickListener(onBarClickListener);
         list.add(chartWeek);
 
-        View chartMonth = inflater.inflate(R.layout.layout_chart_vertical, mViewPager, false);
+        View chartMonth = inflater.inflate(R.layout.layout_chart_vertical_single, mViewPager, false);
         mViewChartMonth = (ViewChartBarVertical) chartMonth.findViewById(R.id.dashboard_chart_vertical);
         mViewChartMonth.setTitle(chartTitle);
         mViewChartMonth.setOnBarClickListener(onBarClickListener);
         list.add(chartMonth);
 
-        View chartYear = inflater.inflate(R.layout.layout_chart_vertical, mViewPager, false);
+        View chartYear = inflater.inflate(R.layout.layout_chart_vertical_single, mViewPager, false);
         mViewChartYear = (ViewChartBarVertical) chartYear.findViewById(R.id.dashboard_chart_vertical);
         mViewChartYear.setTitle(chartTitle);
         mViewChartYear.setOnBarClickListener(onBarClickListener);
         list.add(chartYear);
 
-        ViewPagerAdapter adapter = new ViewPagerAdapter(list);
+        ChartPagerAdapter adapter = new ChartPagerAdapter(list);
         mViewPager.setAdapter(adapter);
         mViewPager.addOnPageChangeListener(onPageChangeListener);
 
@@ -375,11 +375,11 @@ public class DashboardChartSingleFragment extends DashboardBaseFragment {
         mViewChartYear.getParent().requestDisallowInterceptTouchEvent(true);
     }
 
-    private class ViewPagerAdapter extends PagerAdapter {
+    private class ChartPagerAdapter extends PagerAdapter {
 
         private List<View> views;
 
-        ViewPagerAdapter(List<View> views) {
+        ChartPagerAdapter(List<View> views) {
             this.views = views;
         }
 
