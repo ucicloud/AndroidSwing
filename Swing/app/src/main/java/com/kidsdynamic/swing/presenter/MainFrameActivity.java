@@ -141,7 +141,8 @@ public class MainFrameActivity extends BaseFragmentActivity {
                     break;
                 case R.id.main_console_calendar://calendar
                     switchShowFragment(R.id.main_console_calendar);
-                    showIntroductionUI();
+                //因介绍界面效果不好，暂时不显示
+//                    showIntroductionUI();
                     break;
                 case R.id.main_console_dashboard:
                     switchShowFragment(R.id.main_console_dashboard);

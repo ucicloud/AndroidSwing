@@ -328,6 +328,13 @@ public class CalendarMainFragment extends CalendarBaseFragment {
             int endMin = endCale.get(Calendar.MINUTE);
 
             endHour = endHour >= 12 ? endHour - 12 : endHour;
+
+            //为了把显示的弧形变宽，如果event的起止时间在一个小时内，则扩大到一个小时
+            if(endHour == startHour){
+                endHour += 1;
+                endMin = 0;
+            }
+
             int endActive = (int) (endHour * 5 + Math.floor(endMin / 12));
 
             mViewAlert.setStrokeBeginEnd(startActive, endActive);
