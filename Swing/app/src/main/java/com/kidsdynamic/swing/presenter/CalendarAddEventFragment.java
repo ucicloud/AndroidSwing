@@ -481,6 +481,9 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
             Calendar cal = Calendar.getInstance();
             cal.setTimeInMillis(mEvent.mStartDate);
             dpd.setMinDate(cal);
+
+            //设置end时间必须和start在同一天
+            dpd.setMaxDate(cal);
         } else {
             dpd.setMinDate(now);
         }
@@ -513,7 +516,14 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
                 false
         );
 
-        now.add(Calendar.MINUTE, 5);
+        //modify 2017年11月22日11:42:57 only
+        //开始时间可以为当前时刻，结束时间至少是1分钟后
+        if(!isStarDate){
+            //如果时选择结束时间
+//            now.add(Calendar.MINUTE, 5);
+            now.add(Calendar.MINUTE, 1);
+
+        }
 
         if(mCalendarDate.get(Calendar.YEAR) == now.get(Calendar.YEAR) &&
                 mCalendarDate.get(Calendar.MONTH) == now.get(Calendar.MONTH) &&
@@ -531,9 +541,14 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
 
             if(isStarDate) {
                 mEvent.mStartDate = mCalendarDate.getTimeInMillis();
-                mCalendarDate.add(Calendar.MINUTE, 10);
+
+                //event的开始和结束时间最少间隔1分钟
+//                mCalendarDate.add(Calendar.MINUTE, 10);
+                mCalendarDate.add(Calendar.MINUTE, 1);
                 mEvent.mEndDate = mCalendarDate.getTimeInMillis();
             } else {
+
+                //event的start，end必须在一天内
                 mEvent.mEndDate = mCalendarDate.getTimeInMillis();
             }
 

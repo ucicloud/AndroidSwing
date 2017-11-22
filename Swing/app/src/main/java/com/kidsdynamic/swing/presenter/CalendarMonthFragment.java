@@ -91,7 +91,9 @@ public class CalendarMonthFragment extends CalendarBaseFragment {
 
     @OnClick(R.id.main_toolbar_action2)
     public void onToolbarAction2() {
-        WatchEvent event = new WatchEvent(mViewCalendar.getDate());
+//        WatchEvent event = new WatchEvent(mViewCalendar.getDate());
+
+        WatchEvent event = EventManager.getWatchEventForAdd(mViewCalendar.getDate());
         event.mUserId = currentUserId;
 
         mainFrameActivity.mEventStack.push(event);

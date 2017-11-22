@@ -362,4 +362,26 @@ public class EventManager {
 
         return rtn;
     }
+
+    public static WatchEvent getWatchEventForAdd(long data){
+        if(CalendarManager.isToday(data)){
+            return new WatchEvent(data);
+        }else {
+            Calendar calc = Calendar.getInstance();
+            calc.setTimeInMillis(data);
+
+            calc.set(Calendar.HOUR_OF_DAY, 6);
+            calc.set(Calendar.MINUTE, 0);
+            calc.set(Calendar.SECOND, 0);
+            calc.set(Calendar.MILLISECOND, 0);
+
+            long start = calc.getTimeInMillis();
+
+            calc.add(Calendar.MINUTE,1);
+            long end = calc.getTimeInMillis();
+
+            return new WatchEvent(start,end);
+        }
+
+    }
 }

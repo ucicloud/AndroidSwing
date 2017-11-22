@@ -81,5 +81,17 @@ public class CalendarManager {
         return offset / 60 / 1000;
     }
 
+    public  static boolean isToday(long date) {
+        Calendar calcSet = Calendar.getInstance();
+        calcSet.setTimeInMillis(date);
 
+        Calendar calcNow = Calendar.getInstance();
+
+        if (calcSet.get(Calendar.YEAR) != calcNow.get(Calendar.YEAR))
+            return false;
+        if (calcSet.get(Calendar.DAY_OF_YEAR) != calcNow.get(Calendar.DAY_OF_YEAR))
+            return false;
+
+        return true;
+    }
 }

@@ -17,6 +17,7 @@ import com.kidsdynamic.swing.view.calendar.ViewCalendarDaily;
 import com.kidsdynamic.swing.view.calendar.ViewCalendarSelector;
 import com.kidsdynamic.swing.view.calendar.ViewCalendarWeek;
 
+import java.util.Calendar;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -84,7 +85,10 @@ public class CalendarDailyFragment extends CalendarBaseFragment {
 
     @OnClick(R.id.main_toolbar_action2)
     public void onToolbarAction2() {
-        WatchEvent event = new WatchEvent(mViewCalendar.getDate());
+//        WatchEvent event = new WatchEvent(mViewCalendar.getDate());
+
+        WatchEvent event = EventManager.getWatchEventForAdd(mViewCalendar.getDate());
+
         event.mUserId = LoginManager.getCurrentLoginUserId(getContext());
 
         mainFrameActivity.mEventStack.push(event);
@@ -145,6 +149,9 @@ public class CalendarDailyFragment extends CalendarBaseFragment {
     private ViewCalendarSelector.OnSelectListener mSelectorListener = new ViewCalendarSelector.OnSelectListener() {
         @Override
         public void OnSelect(View view, long offset, long date) {
+
+            date = getFormatSelectData(date);
+
             mDefaultDate = date;//更新为选择日期
 
             mViewCalendar.setDate(date);
@@ -158,14 +165,28 @@ public class CalendarDailyFragment extends CalendarBaseFragment {
     private ViewCalendarWeek.OnSelectListener mCalendarListener = new ViewCalendarWeek.OnSelectListener() {
         @Override
         public void onSelect(ViewCalendarWeek calendar, ViewCalendarCellWeek cell) {
+            long date = getFormatSelectData(cell.getDate());
 
-            mDefaultDate = cell.getDate();//更新为选择日期
+            mDefaultDate = date;//更新为选择日期
 
-            mViewSelector.setDate(cell.getDate());
-            mViewSchedule.setDate(cell.getDate());
-            loadEventList(cell.getDate());
+            mViewSelector.setDate(date);
+            mViewSchedule.setDate(date);
+            loadEventList(date);
         }
     };
+
+    private long getFormatSelectData(long selectData){
+        Calendar calc = Calendar.getInstance();
+        calc.setTimeInMillis(selectData);
+
+        calc.set(Calendar.HOUR_OF_DAY, 6);
+        calc.set(Calendar.MINUTE, 0);
+        calc.set(Calendar.SECOND, 0);
+        calc.set(Calendar.MILLISECOND, 0);
+
+        return calc.getTimeInMillis();
+
+    }
 
     private ViewCalendarDaily.OnSelectListener mScheduleListener = new ViewCalendarDaily.OnSelectListener() {
         @Override

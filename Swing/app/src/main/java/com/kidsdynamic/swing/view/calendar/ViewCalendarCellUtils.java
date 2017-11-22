@@ -18,7 +18,7 @@ public class ViewCalendarCellUtils {
 
         float size = viewCalendarCell.getTextSize();
         int radius = (int) Math.floor(size * 0.3 / 2);
-        int gap = (int) Math.floor(size * 0.3 / 2);
+        int gap = (int) Math.floor(size * 0.5 / 2);
 
         int baseLine = viewCalendarCell.getLayout().getLineBounds(0, rect);
 

@@ -59,16 +59,20 @@ public class WatchEvent implements Serializable {
         Calendar calc = Calendar.getInstance();
         long now = calc.getTimeInMillis();
         int hour = calc.get(Calendar.HOUR_OF_DAY);
+        int minute = calc.get(Calendar.MINUTE);
 
         calc.setTimeInMillis(date);
         calc.set(Calendar.HOUR_OF_DAY, hour);
-        calc.set(Calendar.MINUTE, 0);
+        calc.set(Calendar.MINUTE, minute);
         calc.set(Calendar.SECOND, 0);
         calc.set(Calendar.MILLISECOND, 0);
 
         long start = calc.getTimeInMillis();
 
-        calc.add(Calendar.HOUR_OF_DAY, 1);
+        //根据要求，event的start，end之间默认间隔1分钟
+//        calc.add(Calendar.HOUR_OF_DAY, 1);
+        calc.add(Calendar.MINUTE, 1);
+
         long end = calc.getTimeInMillis();
 
         int color = ColorList[4];

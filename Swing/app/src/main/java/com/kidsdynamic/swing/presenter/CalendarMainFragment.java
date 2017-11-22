@@ -173,9 +173,10 @@ public class CalendarMainFragment extends CalendarBaseFragment {
 
     @OnClick(R.id.main_toolbar_action2)
     public void onToolbarAction2() {
-        WatchEvent event = new WatchEvent(mViewCalendarWeek.getDate());
-        event.mUserId = currentUserId;
+//        WatchEvent event = new WatchEvent(mViewCalendarWeek.getDate());
+        WatchEvent event = EventManager.getWatchEventForAdd(mViewCalendarWeek.getDate());
 
+        event.mUserId = currentUserId;
         mainFrameActivity.mEventStack.push(event);
 
         selectFragment(CalendarAddEventFragment.class.getName(),null,true);
