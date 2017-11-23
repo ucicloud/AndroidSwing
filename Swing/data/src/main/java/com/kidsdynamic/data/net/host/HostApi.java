@@ -51,7 +51,7 @@ public interface HostApi {
 
 //200	Accept successfully
 //400	Bad request. Missing some parameters, or the type is wrong
-//403	Forbidden. The user doesn't have permission
+//401	Unauthorized. The user doesn't have permission
 //500	Internal error. Please send me the error. I will fix it
     //It will delete a kid under the SubHost
     @PUT("v1/subHost/removeKid")
@@ -60,7 +60,7 @@ public interface HostApi {
 
 //200	Delete successfully
 //400	Bad request. Missing some parameters, or the type is wrong
-//403	Forbidden. The user doesn't have permission
+//401	Unauthorized. The user doesn't have permission
 //500	Internal error. Please send me the error. I will fix it
     @DELETE("v1/subHost/delete")
     Call<RequestAddSubHostEntity> subHostDelete(@Query("subHostId") int subHostId);

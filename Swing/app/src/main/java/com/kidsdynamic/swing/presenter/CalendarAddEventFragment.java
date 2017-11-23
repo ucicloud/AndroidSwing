@@ -424,7 +424,7 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
                     EventManager.delEventById(mEvent.mId);
                     getFragmentManager().popBackStack();
 
-                }else if(code == 403){//无权限删除
+                }else if(code == 401){//无权限删除
                     ToastCommon.makeText(getContext(),
                             R.string.error_api_event_delete_403);
                 }else if(code == 400){
@@ -803,7 +803,7 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
 
                     getFragmentManager().popBackStack();
                     showSyncDialog();
-                }else if(response.code() == 403){
+                }else if(response.code() == 401){
                     ToastCommon.makeText(getContext(),R.string.error_api_event_update_403);
                 }else {
                     String msg = getResources().getString(R.string.save_todo_done_statue_err, response.code());

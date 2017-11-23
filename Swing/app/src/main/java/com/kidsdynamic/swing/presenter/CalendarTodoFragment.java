@@ -352,7 +352,7 @@ public class CalendarTodoFragment extends CalendarBaseFragment {
                         EventManager.delEventById(mEvent.mId);
                         getFragmentManager().popBackStack();
 
-                    }else if(code == 403){//无权限删除
+                    }else if(code == 401){//无权限删除
                         ToastCommon.makeText(getContext(),
                                 R.string.error_api_event_delete_403);
                     }else if(code == 400){

@@ -22,7 +22,7 @@ import retrofit2.http.Query;
 
 public interface EventApi {
 //200	Added successfully
-//403	Forbidden. The user doesn't have permission to add event
+//401	Unauthorized. The user doesn't have permission to add event
 //400	Bad request. Missing some parameters, or the type is wrong
 //500	Internal error. Please send me the error. I will fix it
     @POST("v1/event/add")
@@ -30,7 +30,7 @@ public interface EventApi {
 
 
 //    200	Updated successfully
-//    403	Forbidden. The user doesn't have permission to update
+//    401	Unauthorized. The user doesn't have permission to update
 //    400	Bad request. Missing some parameters, or the type is wrong
 //    500	Internal error. Please send me the error. I will fix it
 //    Send the parameter even user does not change it
@@ -38,7 +38,7 @@ public interface EventApi {
     Call<EventEditRep> eventUpdate(@Body EventInfo eventInfo);
 
 //200	Delete successfully
-//403	Forbidden. The user doesn't have permission to delete
+//401	Unauthorized. The user doesn't have permission to delete
 //400	Bad request. Missing some parameters, or the type is wrong
 //500	Internal error. Please send me the error. I will fix it
     @DELETE("v1/event/delete")
@@ -51,7 +51,7 @@ public interface EventApi {
 
 
 //    200	Retrieve successfully
-//    403	The user doesn't have access to the kid
+//    401	The user doesn't have access to the kid
 //    500	Internal error. Please send me the error. I will fix it
     @GET("v1/event/retrieveAllEventsByKid")
     Call<List<EventWithTodo>> retrieveAllEventsByKid(@Query("kidId")int kidId);
