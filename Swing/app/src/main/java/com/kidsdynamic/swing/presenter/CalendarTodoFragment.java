@@ -17,7 +17,7 @@ import com.kidsdynamic.swing.domain.LoginManager;
 import com.kidsdynamic.swing.model.WatchEvent;
 import com.kidsdynamic.swing.model.WatchTodo;
 import com.kidsdynamic.swing.net.BaseRetrofitCallback;
-import com.kidsdynamic.swing.view.ViewTodo;
+import com.kidsdynamic.swing.view.ViewTodoForDetail;
 import com.kidsdynamic.swing.view.calendar.ViewCalendarCellWeek;
 import com.kidsdynamic.swing.view.calendar.ViewCalendarSelector;
 import com.kidsdynamic.swing.view.calendar.ViewCalendarWeek;
@@ -73,10 +73,12 @@ public class CalendarTodoFragment extends CalendarBaseFragment {
         ButterKnife.bind(this,mViewMain);
 
         mViewSelector = mViewMain.findViewById(R.id.calendar_main_selector);
-        mViewSelector.setOnSelectListener(mSelectorListener);
+        //详情界面不允许切换日期
+//        mViewSelector.setOnSelectListener(mSelectorListener);
 
         mViewCalendar = mViewMain.findViewById(R.id.calendar_todo_calendar);
-        mViewCalendar.setOnSelectListener(mCalendarListener);
+        //详情界面不允许切换日期
+//        mViewCalendar.setOnSelectListener(mCalendarListener);
 
         mViewTitle = mViewMain.findViewById(R.id.calendar_todo_title);
         mViewEventName = mViewMain.findViewById(R.id.calendar_todo_name);
@@ -202,7 +204,7 @@ public class CalendarTodoFragment extends CalendarBaseFragment {
     }
 
     private void addTodo(WatchTodo todo) {
-        ViewTodo viewTodo = new ViewTodo(mActivityMain);
+        ViewTodoForDetail viewTodo = new ViewTodoForDetail(mActivityMain);
         viewTodo.setTag(todo);
         viewTodo.load(todo);
         if (todo.mStatus.equals(WatchTodo.STATUS_DONE))
@@ -246,7 +248,7 @@ public class CalendarTodoFragment extends CalendarBaseFragment {
             doneWatchTodoQueue.clear();
 
             for (int idx = 0; idx < count; idx++) {
-                ViewTodo viewTodo = (ViewTodo) mViewContainer.getChildAt(idx);
+                ViewTodoForDetail viewTodo = (ViewTodoForDetail) mViewContainer.getChildAt(idx);
                 WatchTodo todo = (WatchTodo) viewTodo.getTag();
 
                 viewTodo.save(todo);

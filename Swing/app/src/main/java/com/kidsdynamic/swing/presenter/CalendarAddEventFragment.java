@@ -471,6 +471,8 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
 
     public void openDatePicker() {
         Calendar now = Calendar.getInstance();
+        now.setTimeInMillis(mEvent.mStartDate);
+
         DatePickerDialog dpd = DatePickerDialog.newInstance(
                 mDateSetListener,
                 now.get(Calendar.YEAR),

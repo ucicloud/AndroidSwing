@@ -78,6 +78,7 @@ public class CalendarMainFragment extends CalendarBaseFragment {
     private long mDefaultDate = System.currentTimeMillis();
 
     private List<WatchEvent> mEventList;
+    private List<WatchEvent> mEventListInToday;
     private WatchEvent mNearbyEven;
     private long currentUserId;
 
@@ -256,6 +257,8 @@ public class CalendarMainFragment extends CalendarBaseFragment {
         mEventList = EventManager.getEventList(currentUserId,
                 mViewCalendarWeek.getDateBegin(), mViewCalendarWeek.getDateEnd());
 
+        mEventListInToday = EventManager.getEventList(currentUserId,start, end);
+
         updateAlert();
 
         loadEvents();
@@ -265,7 +268,8 @@ public class CalendarMainFragment extends CalendarBaseFragment {
     private void updateAlert() {
         Calendar cale = Calendar.getInstance();
 
-        WatchEvent event = WatchEvent.earliestInDay(cale.getTimeInMillis(), mEventList);
+        //只显示今日即将发生的event
+        WatchEvent event = WatchEvent.earliestInDay(cale.getTimeInMillis(), mEventListInToday);
 
         setAlertMessage(event);
         setAlertClock(event);

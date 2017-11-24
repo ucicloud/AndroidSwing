@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
+import android.widget.FrameLayout;
 
 import com.kidsdynamic.data.dao.DB_Kids;
 import com.kidsdynamic.data.persistent.PreferencesUtil;
@@ -32,6 +33,7 @@ public class MainFrameActivity extends BaseFragmentActivity {
     private AvatarImageView view_tab_profile;
 
     protected View view_info;
+    protected FrameLayout view_container;
 
     private View [] tabViews = {view_tab_device,view_tab_calendar, view_tab_dashboard, view_tab_profile};
     private int [] tabViews_res_id = {R.id.main_console_device,  R.id.main_console_calendar,
@@ -109,13 +111,29 @@ public class MainFrameActivity extends BaseFragmentActivity {
         view_tab_profile = findViewById(R.id.main_control_profile);
         initTabView();
 
-        view_info = findViewById(R.id.view_bg);
+       /* view_info = findViewById(R.id.view_bg);
         view_info.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 viewInfoClick();
             }
-        });
+        });*/
+
+       //功能引导UI显示
+        /*view_container = findViewById(R.id.view_bg);
+        ViewIntroductionSync viewIntroductionSync = new ViewIntroductionSync(this.getApplication());
+        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+
+        view_container.addView(viewIntroductionSync,layoutParams);
+        view_container.setVisibility(View.VISIBLE);
+        view_container.requestFocus();
+
+        view_container.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                view_container.setVisibility(View.INVISIBLE);
+            }
+        });*/
     }
 
     private void initTabView(){

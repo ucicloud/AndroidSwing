@@ -74,7 +74,7 @@ public class ViewCalendarDaily extends ViewCalendar {
         Calendar cale = Calendar.getInstance();
 
         cale.setTimeInMillis(event.mStartDate);
-        layoutParams.start_hour = cale.get(Calendar.HOUR_OF_DAY);
+        layoutParams.start_hour = cale.get(Calendar.HOUR_OF_DAY) + 1;
         layoutParams.start_minute = cale.get(Calendar.MINUTE);
 
         long endDate = event.mEndDate;
@@ -83,7 +83,7 @@ public class ViewCalendarDaily extends ViewCalendar {
         endDate = Math.min(endDate, getDateEnd());
 
         cale.setTimeInMillis(endDate);
-        layoutParams.end_hour = cale.get(Calendar.HOUR_OF_DAY);
+        layoutParams.end_hour = cale.get(Calendar.HOUR_OF_DAY) + 1;
         layoutParams.end_minute = cale.get(Calendar.MINUTE);
 
         ViewCalendarCellDaily cell = new ViewCalendarCellDaily(getContext());

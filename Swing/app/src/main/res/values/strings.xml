@@ -455,4 +455,6 @@
     <string name="calendar_okay">Okay</string>
     <string name="event_time_select_error">event end time invalid</string>
 
+    <string name="down_arrow">\u2193</string>
+
 </resources>
