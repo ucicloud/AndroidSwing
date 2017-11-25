@@ -31,7 +31,8 @@
             android:textSize="20sp"
             android:includeFontPadding="false"
             android:text="@string/dashboard_emotion_hello"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:layout_marginTop="@dimen/base_15"/>
 
         <RelativeLayout
             android:id="@+id/layout_tips"

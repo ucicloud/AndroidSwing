@@ -11,37 +11,36 @@ import android.widget.TextView;
 import com.kidsdynamic.swing.R;
 
 /**
- * ViewIntroductionSync
+ * ViewIntroductionAlarmList
  */
 
-public class ViewIntroductionSync extends RelativeLayout {
-
+public class ViewIntroductionAlarmList extends RelativeLayout {
     private TextView tv_Info;
     private Button btn_ok;
     private View layout_tips;
 
     private OnBtnClickListener mOnClickListener = null;
 
-    public ViewIntroductionSync(Context context) {
+    public ViewIntroductionAlarmList(Context context) {
         super(context);
         init(context, null);
     }
 
-    public ViewIntroductionSync(Context context, AttributeSet attrs) {
+    public ViewIntroductionAlarmList(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context, attrs);
     }
 
-    public ViewIntroductionSync(Context context, AttributeSet attrs, int defStyle) {
+    public ViewIntroductionAlarmList(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         init(context, attrs);
     }
 
     private void init(Context context, AttributeSet attrs) {
-        inflate(getContext(), R.layout.layout_instruction_calendar_month, this);
+        inflate(getContext(), R.layout.layout_instruction_info_alarm_list, this);
 
         tv_Info = findViewById(R.id.tv_introduction_info);
-        tv_Info.setText(R.string.introduction_calendar_month);
+        tv_Info.setText(R.string.introduction_alarm);
         tv_Info.setGravity(Gravity.CENTER);
 
         layout_tips = findViewById(R.id.layout_tips);
@@ -53,7 +52,7 @@ public class ViewIntroductionSync extends RelativeLayout {
 
     }
 
-    public void setOnClickListener(ViewIntroductionSync.OnBtnClickListener listener) {
+    public void setOnClickListener(OnBtnClickListener listener) {
         mOnClickListener = listener;
     }
 
@@ -69,6 +68,5 @@ public class ViewIntroductionSync extends RelativeLayout {
     public interface OnBtnClickListener {
         void onClick(View view);
     }
-
 
 }

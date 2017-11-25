@@ -20,6 +20,8 @@ public class ConfigUtil {
 	public static final String value_notify_getreqward_nomore = "nomore";
 	public static final String login_state = "login";
 	public static final String calendar_first_time = "calendar";
+	public static final String event_list_first_time = "event_list";
+	public static final String calendar_month_first_time = "calendar_month_list";
 
 
 	/**
@@ -45,6 +47,19 @@ public class ConfigUtil {
 		/*PreferencesUtil.getInstance(SwingApplication.getAppContext()).
 				setPreferenceBooleanValue(login_state, false);*/
 
+		clearIntroFlag();
+
+	}
+
+	private static void clearIntroFlag(){
+		PreferencesUtil.getInstance(SwingApplication.getAppContext()).
+				setPreferenceBooleanValue(ConfigUtil.event_list_first_time,true);
+
+		PreferencesUtil.getInstance(SwingApplication.getAppContext()).
+				setPreferenceBooleanValue(ConfigUtil.calendar_first_time,true);
+
+		PreferencesUtil.getInstance(SwingApplication.getAppContext()).
+				setPreferenceBooleanValue(ConfigUtil.calendar_month_first_time,true);
 	}
 
 }

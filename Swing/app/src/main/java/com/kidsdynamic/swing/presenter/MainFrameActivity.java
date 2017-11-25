@@ -4,8 +4,10 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 
 import com.kidsdynamic.data.dao.DB_Kids;
 import com.kidsdynamic.data.persistent.PreferencesUtil;
@@ -15,6 +17,8 @@ import com.kidsdynamic.swing.domain.UserManager;
 import com.kidsdynamic.swing.model.WatchEvent;
 import com.kidsdynamic.swing.utils.ConfigUtil;
 import com.kidsdynamic.swing.utils.GlideHelper;
+import com.kidsdynamic.swing.view.ViewIntroductionAlarmList;
+import com.kidsdynamic.swing.view.ViewIntroductionSync;
 import com.yy.base.BaseFragmentActivity;
 
 import java.util.HashMap;
@@ -120,8 +124,8 @@ public class MainFrameActivity extends BaseFragmentActivity {
         });*/
 
        //功能引导UI显示
-        /*view_container = findViewById(R.id.view_bg);
-        ViewIntroductionSync viewIntroductionSync = new ViewIntroductionSync(this.getApplication());
+       view_container = findViewById(R.id.view_bg);
+         /*ViewIntroductionSync viewIntroductionSync = new ViewIntroductionSync(this.getApplication());
         RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.MATCH_PARENT);
 
         view_container.addView(viewIntroductionSync,layoutParams);
@@ -175,11 +179,90 @@ public class MainFrameActivity extends BaseFragmentActivity {
     private void showIntroductionUI() {
         Boolean calendarFirstTime = PreferencesUtil.getInstance(getApplicationContext()).
                 gPrefBooleanValue(ConfigUtil.calendar_first_time, true);
-        if(calendarFirstTime){
+        view_container.setVisibility(View.VISIBLE);
+        view_container.setBackgroundResource(R.drawable.calendar_landing_instructions);
+
+        /*if(calendarFirstTime){
             view_info.setVisibility(View.VISIBLE);
             PreferencesUtil.getInstance(getApplicationContext()).
                     setPreferenceBooleanValue(ConfigUtil.calendar_first_time,false);
+        }*/
+    }
+
+    //eventlist 界面的介绍页
+    public void showAlarmIntroductionUI(){
+        ViewIntroductionAlarmList viewIntroductionAlarmList = new ViewIntroductionAlarmList(this.getApplication());
+        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+
+        viewIntroductionAlarmList.setOnClickListener(new ViewIntroductionAlarmList.OnBtnClickListener() {
+            @Override
+            public void onClick(View view) {
+                hideIntroView();
+            }
+        });
+
+        view_container.addView(viewIntroductionAlarmList,layoutParams);
+        view_container.setVisibility(View.VISIBLE);
+        view_container.requestFocus();
+
+        view_container.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                hideIntroView();
+            }
+        });
+
+        PreferencesUtil.getInstance(getApplicationContext()).
+                setPreferenceBooleanValue(ConfigUtil.event_list_first_time,false);
+    }
+
+    //eventlist 界面的介绍页
+    public void showCalendarMonthIntroductionUI(){
+        ViewIntroductionSync viewIntroductionAlarmList = new ViewIntroductionSync(this.getApplication());
+        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,
+                RelativeLayout.LayoutParams.MATCH_PARENT);
+
+        viewIntroductionAlarmList.setOnClickListener(new ViewIntroductionSync.OnBtnClickListener() {
+            @Override
+            public void onClick(View view) {
+                hideIntroView();
+            }
+        });
+
+        view_container.addView(viewIntroductionAlarmList,layoutParams);
+        view_container.setVisibility(View.VISIBLE);
+        view_container.requestFocus();
+
+        view_container.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                hideIntroView();
+            }
+        });
+
+        PreferencesUtil.getInstance(getApplicationContext()).
+                setPreferenceBooleanValue(ConfigUtil.calendar_month_first_time,false);
+    }
+
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+        if(keyCode == KeyEvent.KEYCODE_BACK){
+            if(view_container.getVisibility() == View.VISIBLE){
+                hideIntroView();
+
+                return true;
+            }
         }
+
+        return super.onKeyDown(keyCode, event);
+    }
+
+    private void hideIntroView() {
+        view_container.setVisibility(View.INVISIBLE);
+        view_container.removeAllViews();
+        view_container.setOnClickListener(null);
     }
 
     private int getTabItemIndexFromResId(int resId){

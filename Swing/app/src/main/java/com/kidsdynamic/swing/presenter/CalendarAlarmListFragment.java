@@ -15,11 +15,13 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.kidsdynamic.data.persistent.PreferencesUtil;
 import com.kidsdynamic.swing.R;
 import com.kidsdynamic.swing.domain.CalendarManager;
 import com.kidsdynamic.swing.domain.DeviceManager;
 import com.kidsdynamic.swing.model.KidsEntityBean;
 import com.kidsdynamic.swing.model.WatchEvent;
+import com.kidsdynamic.swing.utils.ConfigUtil;
 import com.kidsdynamic.swing.view.AvenirTextView;
 
 import butterknife.ButterKnife;
@@ -51,6 +53,20 @@ public class CalendarAlarmListFragment extends CalendarBaseFragment {
         mLineMarginEnd = getResources().getDisplayMetrics().widthPixels / 16;
 
         kidId = getArguments().getLong("kidId");
+
+        checkIsShowIntro();
+    }
+
+    private void checkIsShowIntro(){
+        Boolean eventFirstTime = PreferencesUtil.getInstance(getContext()).
+                gPrefBooleanValue(ConfigUtil.event_list_first_time, true);
+
+        if(eventFirstTime){
+            if (getActivity() instanceof MainFrameActivity) {
+                ((MainFrameActivity) getActivity()).showAlarmIntroductionUI();
+            }
+        }
+
     }
 
     private void initTitleBar() {

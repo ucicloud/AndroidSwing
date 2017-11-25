@@ -9,10 +9,12 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 
+import com.kidsdynamic.data.persistent.PreferencesUtil;
 import com.kidsdynamic.swing.R;
 import com.kidsdynamic.swing.domain.EventManager;
 import com.kidsdynamic.swing.domain.LoginManager;
 import com.kidsdynamic.swing.model.WatchEvent;
+import com.kidsdynamic.swing.utils.ConfigUtil;
 import com.kidsdynamic.swing.view.calendar.ViewCalendarCellMonth;
 import com.kidsdynamic.swing.view.calendar.ViewCalendarMonth;
 import com.kidsdynamic.swing.view.calendar.ViewCalendarSelector;
@@ -45,6 +47,20 @@ public class CalendarMonthFragment extends CalendarBaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        checkIsShowIntro();
+    }
+
+    private void checkIsShowIntro(){
+        Boolean calendarMonthFirstTime = PreferencesUtil.getInstance(getContext()).
+                gPrefBooleanValue(ConfigUtil.calendar_month_first_time, true);
+
+        if(calendarMonthFirstTime){
+            if (getActivity() instanceof MainFrameActivity) {
+                ((MainFrameActivity) getActivity()).showCalendarMonthIntroductionUI();
+            }
+        }
+
     }
 
     @Override

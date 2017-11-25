@@ -10,7 +10,6 @@ import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -23,8 +22,10 @@ import com.kidsdynamic.swing.model.WatchTodo;
  */
 
 public class ViewTodoForDetail extends RelativeLayout {
+
+    private View mView;
     private ImageView mViewCheck;
-    private EditText mViewText;
+    private TextView mViewText;
     private TextView mViewDelete;
     private View mViewSeparator;
 
@@ -49,9 +50,11 @@ public class ViewTodoForDetail extends RelativeLayout {
     private void init(Context context, AttributeSet attrs) {
         inflate(getContext(), R.layout.view_todo_for_detail, this);
 
+        mView = findViewById(R.id.view_todo_for_detail);
+
         mViewCheck = (ImageView) findViewById(R.id.todo_check);
 
-        mViewText = (EditText) findViewById(R.id.todo_text);
+        mViewText = findViewById(R.id.todo_text);
         mViewText.addTextChangedListener(mTextWatch);
         mViewText.setOnFocusChangeListener(mFocusListener);
 
@@ -80,6 +83,7 @@ public class ViewTodoForDetail extends RelativeLayout {
     }
 
     public void setEditMode() {
+        mView.setEnabled(true);
         mViewCheck.setEnabled(true);
         mViewText.setEnabled(true);
         mViewDelete.setEnabled(true);
@@ -87,12 +91,14 @@ public class ViewTodoForDetail extends RelativeLayout {
         mViewText.setTypeface(mViewText.getTypeface(), Typeface.NORMAL);
         mViewText.setTextColor(ContextCompat.getColor(getContext(), R.color.color_gray_deep));
 
-        mViewCheck.setOnClickListener(mCheckListener);
+        mView.setOnClickListener(mCheckListener);
+//        mViewCheck.setOnClickListener(mCheckListener);
         mViewText.setOnTouchListener(mOnTouchListener);
         mViewDelete.setOnClickListener(mDeleteListener);
     }
 
     public void setCheckMode() {
+        mView.setEnabled(true);
         mViewCheck.setEnabled(true);
         mViewText.setEnabled(false);
         mViewDelete.setEnabled(false);
@@ -100,12 +106,14 @@ public class ViewTodoForDetail extends RelativeLayout {
         mViewText.setTypeface(mViewText.getTypeface(), Typeface.BOLD);
         mViewText.setTextColor(ContextCompat.getColor(getContext(), R.color.color_white));
 
-        mViewCheck.setOnClickListener(mCheckListener);
+        mView.setOnClickListener(mCheckListener);
+//        mViewCheck.setOnClickListener(mCheckListener);
         mViewText.setOnTouchListener(null);
         mViewDelete.setOnClickListener(null);
     }
 
     public void setLockMode() {
+        mView.setEnabled(false);
         mViewCheck.setEnabled(false);
         mViewText.setEnabled(false);
         mViewDelete.setEnabled(false);
@@ -113,7 +121,8 @@ public class ViewTodoForDetail extends RelativeLayout {
         mViewText.setTypeface(mViewText.getTypeface(), Typeface.NORMAL);
         mViewText.setTextColor(ContextCompat.getColor(getContext(), R.color.color_gray_light));
 
-        mViewCheck.setOnClickListener(null);
+        mView.setOnClickListener(null);
+//        mViewCheck.setOnClickListener(null);
         mViewText.setOnTouchListener(null);
         mViewDelete.setOnClickListener(null);
     }

@@ -457,4 +457,7 @@
 
     <string name="down_arrow">\u2193</string>
 
+    <string name="introduction_alarm">Events will have sound alerts on your watch</string>
+    <string name="introduction_calendar_month">Please sync with your watch after editing events.</string>
+
 </resources>
