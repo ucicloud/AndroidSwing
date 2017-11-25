@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
@@ -19,6 +20,7 @@ import com.kidsdynamic.swing.utils.ConfigUtil;
 import com.kidsdynamic.swing.utils.GlideHelper;
 import com.kidsdynamic.swing.view.ViewIntroductionAlarmList;
 import com.kidsdynamic.swing.view.ViewIntroductionSync;
+import com.kidsdynamic.swing.view.ViewIntroductionTodoDetail;
 import com.yy.base.BaseFragmentActivity;
 
 import java.util.HashMap;
@@ -201,9 +203,7 @@ public class MainFrameActivity extends BaseFragmentActivity {
             }
         });
 
-        view_container.addView(viewIntroductionAlarmList,layoutParams);
-        view_container.setVisibility(View.VISIBLE);
-        view_container.requestFocus();
+        addIntroductionView(viewIntroductionAlarmList, layoutParams);
 
         view_container.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -218,20 +218,18 @@ public class MainFrameActivity extends BaseFragmentActivity {
 
     //eventlist 界面的介绍页
     public void showCalendarMonthIntroductionUI(){
-        ViewIntroductionSync viewIntroductionAlarmList = new ViewIntroductionSync(this.getApplication());
+        ViewIntroductionSync viewIntroductionSync = new ViewIntroductionSync(this.getApplication());
         RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,
                 RelativeLayout.LayoutParams.MATCH_PARENT);
 
-        viewIntroductionAlarmList.setOnClickListener(new ViewIntroductionSync.OnBtnClickListener() {
+        viewIntroductionSync.setOnClickListener(new ViewIntroductionSync.OnBtnClickListener() {
             @Override
             public void onClick(View view) {
                 hideIntroView();
             }
         });
 
-        view_container.addView(viewIntroductionAlarmList,layoutParams);
-        view_container.setVisibility(View.VISIBLE);
-        view_container.requestFocus();
+        addIntroductionView(viewIntroductionSync, layoutParams);
 
         view_container.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -242,6 +240,38 @@ public class MainFrameActivity extends BaseFragmentActivity {
 
         PreferencesUtil.getInstance(getApplicationContext()).
                 setPreferenceBooleanValue(ConfigUtil.calendar_month_first_time,false);
+    }
+    //todoDetail 界面的介绍页
+    public void showTodoDetailIntroductionUI(){
+        ViewIntroductionTodoDetail viewIntroductionTodoDetail = new ViewIntroductionTodoDetail(this.getApplication());
+        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,
+                RelativeLayout.LayoutParams.MATCH_PARENT);
+
+        viewIntroductionTodoDetail.setOnClickListener(new ViewIntroductionTodoDetail.OnBtnClickListener() {
+            @Override
+            public void onClick(View view) {
+                hideIntroView();
+            }
+        });
+
+        addIntroductionView(viewIntroductionTodoDetail, layoutParams);
+
+        view_container.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                hideIntroView();
+            }
+        });
+
+        PreferencesUtil.getInstance(getApplicationContext()).
+                setPreferenceBooleanValue(ConfigUtil.todo_detail_first_time,false);
+    }
+
+    private void addIntroductionView(ViewGroup viewIntroductionAlarmList,
+                                     RelativeLayout.LayoutParams layoutParams) {
+        view_container.addView(viewIntroductionAlarmList, layoutParams);
+        view_container.setVisibility(View.VISIBLE);
+        view_container.requestFocus();
     }
 
 

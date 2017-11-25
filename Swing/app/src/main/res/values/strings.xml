@@ -456,8 +456,10 @@
     <string name="event_time_select_error">event end time invalid</string>
 
     <string name="down_arrow">\u2193</string>
+    <string name="up_arrow">\u2191</string>
 
     <string name="introduction_alarm">Events will have sound alerts on your watch</string>
     <string name="introduction_calendar_month">Please sync with your watch after editing events.</string>
+    <string name="introduction_todo_detail">Edit your existing schedule by tapping on the pen icon.</string>
 
 </resources>

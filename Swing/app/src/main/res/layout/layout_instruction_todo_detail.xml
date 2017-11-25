@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/introduction_layout_bg">
+
+    <RelativeLayout
+        android:id="@+id/normal_title_bar"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/multiplex_title_bar_height"
+        >
+
+        <com.kidsdynamic.swing.view.AvenirTextView
+            android:id="@+id/main_toolbar_title"
+            style="@style/textview_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textStyle="bold"
+            android:gravity="center" />
+
+        <ImageView
+            android:id="@+id/main_toolbar_action1"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:adjustViewBounds="true" />
+
+        <ImageView
+            android:id="@+id/main_toolbar_action2"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:adjustViewBounds="true"
+            android:cropToPadding="false"
+            android:src="@drawable/icon_pen"
+            android:layout_margin="@dimen/base_3"
+            android:background="@drawable/contact_background"/>
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tv_down_arrow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/normal_title_bar"
+        android:gravity="center_vertical|end"
+        android:paddingEnd="@dimen/base_15"
+        android:text="@string/up_arrow"
+        android:textColor="@color/color_white"
+        android:textSize="50sp" />
+
+    <include layout="@layout/layout_instruction_info"
+        android:id="@+id/layout_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="@dimen/base_48"/>
+</RelativeLayout>

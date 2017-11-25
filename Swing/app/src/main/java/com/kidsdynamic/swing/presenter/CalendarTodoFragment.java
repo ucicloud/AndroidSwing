@@ -11,12 +11,14 @@ import android.widget.TextView;
 import com.kidsdynamic.data.net.ApiGen;
 import com.kidsdynamic.data.net.event.EventApi;
 import com.kidsdynamic.data.net.event.model.TodoDoneEntity;
+import com.kidsdynamic.data.persistent.PreferencesUtil;
 import com.kidsdynamic.swing.R;
 import com.kidsdynamic.swing.domain.EventManager;
 import com.kidsdynamic.swing.domain.LoginManager;
 import com.kidsdynamic.swing.model.WatchEvent;
 import com.kidsdynamic.swing.model.WatchTodo;
 import com.kidsdynamic.swing.net.BaseRetrofitCallback;
+import com.kidsdynamic.swing.utils.ConfigUtil;
 import com.kidsdynamic.swing.view.ViewTodoForDetail;
 import com.kidsdynamic.swing.view.calendar.ViewCalendarCellWeek;
 import com.kidsdynamic.swing.view.calendar.ViewCalendarSelector;
@@ -64,6 +66,21 @@ public class CalendarTodoFragment extends CalendarBaseFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mActivityMain = (MainFrameActivity) getActivity();
+
+        checkIsShowIntro();
+    }
+
+
+    private void checkIsShowIntro(){
+        Boolean calendarMonthFirstTime = PreferencesUtil.getInstance(getContext()).
+                gPrefBooleanValue(ConfigUtil.todo_detail_first_time, true);
+
+        if(calendarMonthFirstTime){
+            if (getActivity() instanceof MainFrameActivity) {
+                ((MainFrameActivity) getActivity()).showTodoDetailIntroductionUI();
+            }
+        }
+
     }
 
     @Override
