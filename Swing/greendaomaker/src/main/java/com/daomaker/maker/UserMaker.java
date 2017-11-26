@@ -38,9 +38,14 @@ public class UserMaker implements Maker {
         kids.addStringProperty("name").columnName("name");
         kids.addLongProperty("dateCreated").columnName("dateCreated");
         kids.addStringProperty("macId").columnName("macId");
+        kids.addStringProperty("currentVersion").columnName("currentVersion");
         kids.addStringProperty("firmwareVersion").columnName("firmwareVersion");
         kids.addStringProperty("profile").columnName("profile");
         kids.addStringProperty("state").columnName("state");
+        kids.addIntProperty("battery").columnName("battery");
+        kids.addLongProperty("subHostId").columnName("subHostId");
+        kids.addIntProperty("shareType").columnName("shareType");//分享类型：0 无；1 自己分享给别人；2 别人分享给自己
+
 
 
         //建立user表与kids表一对多关系

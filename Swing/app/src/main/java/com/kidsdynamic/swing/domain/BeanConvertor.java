@@ -18,6 +18,7 @@ import com.kidsdynamic.data.net.event.model.EventWithTodo;
 import com.kidsdynamic.data.net.event.model.TodoEntity;
 import com.kidsdynamic.data.net.kids.model.KidsWithParent;
 import com.kidsdynamic.data.net.user.model.KidInfo;
+import com.kidsdynamic.data.net.user.model.UserInfo;
 import com.kidsdynamic.data.net.user.model.UserProfileRep;
 import com.kidsdynamic.data.repository.disk.ActivityCloudDataStore;
 import com.kidsdynamic.data.repository.disk.RawActivityDataStore;
@@ -48,8 +49,8 @@ public class BeanConvertor {
 
         db_user.setUserId(userEntity.getId());
         db_user.setEmail(userEntity.getEmail());
-        db_user.setFirstName(userEntity.getName());
-        db_user.setLastName(userEntity.getName());
+        db_user.setFirstName(userEntity.getFirstName());
+        db_user.setLastName(userEntity.getLastName());
 
         //dataCreate, lastUpdate 使用utc时间
         db_user.setDataCreate(getUTCTimeStamp(userEntity.getDateCreated()));
@@ -61,6 +62,43 @@ public class BeanConvertor {
 
         return db_user;
     }
+    public static DB_User getDBUser(@NonNull UserInfo userEntity){
+        DB_User db_user = new DB_User();
+
+        db_user.setUserId(userEntity.getId());
+        db_user.setEmail(userEntity.getEmail());
+        db_user.setFirstName(userEntity.getFirstName());
+        db_user.setLastName(userEntity.getLastName());
+
+        //dataCreate, lastUpdate 使用utc时间
+        db_user.setDataCreate(getUTCTimeStamp(userEntity.getDateCreated()));
+        db_user.setLastUpdate(getUTCTimeStamp(userEntity.getLastUpdate()));
+
+        db_user.setPhoneNum(userEntity.getPhoneNumber());
+        db_user.setProfile(userEntity.getProfile());
+        db_user.setZipCode(userEntity.getZipCode());
+
+        return db_user;
+    }
+    public static DB_User updateDBUser(@NonNull DB_User db_user, @NonNull UserInfo userEntity){
+
+        db_user.setUserId(userEntity.getId());
+        db_user.setEmail(userEntity.getEmail());
+        db_user.setFirstName(userEntity.getFirstName());
+        db_user.setLastName(userEntity.getLastName());
+
+        //dataCreate, lastUpdate 使用utc时间
+        db_user.setDataCreate(getUTCTimeStamp(userEntity.getDateCreated()));
+        db_user.setLastUpdate(getUTCTimeStamp(userEntity.getLastUpdate()));
+
+        db_user.setPhoneNum(userEntity.getPhoneNumber());
+        db_user.setProfile(userEntity.getProfile());
+        db_user.setZipCode(userEntity.getZipCode());
+
+        return db_user;
+    }
+
+
 
     public static List<DB_Kids> getDBKidsList(@NonNull UserProfileRep userProfileRep){
         List<DB_Kids> db_kidsList = new ArrayList<>(3);

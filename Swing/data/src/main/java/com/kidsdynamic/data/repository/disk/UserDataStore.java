@@ -60,6 +60,21 @@ public class UserDataStore {
         userDao.insert(db_user);
     }
 
+    public void update(@NonNull DB_User db_user){
+        UserDao userDao = dbUtil.getDaoSession().getUserDao();
+
+        /*List<DB_User> users = userDao.queryBuilder().where(UserDao.Properties.UserId.eq(db_user.getUserId()))
+                .build().list();
+        if(ObjectUtils.isListEmpty(users)){
+           return;
+        }
+
+        DB_User dbUserInDB = users.get(0);*/
+
+
+        userDao.update(db_user);
+    }
+
     public DB_User getById(long userId){
         UserDao userDao = dbUtil.getDaoSession().getUserDao();
         List<DB_User> list = userDao.queryBuilder().

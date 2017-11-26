@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/introduction_layout_bg">
+
+    <include layout="@layout/base_title_bar"
+        android:visibility="invisible"/>
+
+    <include layout="@layout/view_calendar_topbar"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:visibility="invisible"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:paddingEnd="10dp"
+        android:paddingStart="10dp">
+
+
+        <com.kidsdynamic.swing.view.calendar.ViewCalendarWeek
+            android:id="@+id/calendar_week"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            style="@style/calendar_week"
+            android:visibility="gone"/>
+
+        <LinearLayout
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="@dimen/base_5"
+            android:layout_marginStart="100dp"
+            android:padding="@dimen/base_5"
+            android:background="@drawable/contact_background">
+
+            <com.kidsdynamic.swing.view.AvenirTextView
+                style="@style/textview_toolbar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:textColor="@color/color_white"
+                android:textSize="18sp"
+                android:background="@drawable/circle_bg_orange"
+                android:text="01"/>
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_event_oper"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="9"
+        android:padding="10dp"
+        android:orientation="vertical"
+        android:visibility="visible">
+        <!--today almost now event-->
+        <RelativeLayout
+            android:id="@+id/nearby_event_layout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="4"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_marginLeft="@dimen/base_56"
+            android:layout_marginRight="@dimen/base_56">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:paddingEnd="10dp"
+                android:paddingStart="10dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="2">
+
+                    <com.kidsdynamic.swing.view.AvenirTextView
+                        android:id="@+id/introduction_alert_time"
+                        style="@style/textview_main"
+                        android:background="@drawable/contact_background"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:paddingStart="@dimen/base_15"
+                        android:paddingEnd="@dimen/base_15"
+                        android:gravity="center"
+                        android:textSize="28sp"
+                        android:text="03:30"/>
+
+                    <com.kidsdynamic.swing.view.AvenirTextView
+                        style="@style/textview_toolbar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal|top"
+                        android:layout_alignStart="@id/introduction_alert_time"
+                        android:textStyle="bold"
+                        android:textColor="@color/color_white"
+                        android:textSize="35sp"
+                        android:text="@string/up_arrow"
+                        android:gravity="top" />
+
+                </RelativeLayout>
+
+
+                <com.kidsdynamic.swing.view.AvenirTextView
+                    style="@style/textview_toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_gravity="center_horizontal|top"
+                    android:layout_weight="1"
+                    android:textStyle="bold"
+                    android:textColor="@color/color_white"
+                    android:textSize="35sp"
+                    android:text="@string/up_arrow"
+                    android:gravity="center" />
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="6">
+
+            <include layout="@layout/layout_instruction_info"
+                android:id="@+id/layout_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"/>
+
+        </RelativeLayout>
+    </LinearLayout>
+</LinearLayout>

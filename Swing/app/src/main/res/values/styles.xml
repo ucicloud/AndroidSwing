@@ -242,8 +242,8 @@
 
     <style name="edittext_profile" parent="@android:style/Widget.EditText">
         <item name="android:background">@android:color/transparent</item>
-        <item name="android:textColorHint">@color/color_gray</item>
-        <item name="android:textColor">@color/color_black</item>
+        <item name="android:textColorHint">@color/color_gray_light</item>
+        <item name="android:textColor">@color/color_gray</item>
         <item name="android:textSize">16sp</item>
         <item name="android:textStyle">normal</item>
         <item name="android:singleLine">true</item>

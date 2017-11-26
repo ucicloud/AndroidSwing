@@ -50,6 +50,22 @@ public class EventMaker implements Maker {
         event.addToMany(todo,property).setName("todoList");
 
 
+        //event kids list table
+        Entity eventKid = schema.addEntity("DB_EventKids");
+        eventKid.setTableName("t_event_kids");
+        eventKid.setClassNameDao("EventKidsDao");
+        eventKid.addLongProperty("kidsId").columnName("kids_id").notNull().primaryKey();
+        eventKid.addStringProperty("name").columnName("name");
+        eventKid.addStringProperty("macId").columnName("macId");
+        eventKid.addStringProperty("firmwareVersion").columnName("firmwareVersion");
+        eventKid.addStringProperty("profile").columnName("profile");
+
+        //建立event表与eventKids表间的一对多关系
+        Property property2 = eventKid.addLongProperty("eventId").columnName("event_id").getProperty();
+        eventKid.addToOne(event,property2);
+
+        event.addToMany(eventKid,property2).setName("eventKids");
+
         return event;
     }
 }

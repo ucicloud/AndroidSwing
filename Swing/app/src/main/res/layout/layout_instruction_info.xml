@@ -38,7 +38,8 @@
             android:id="@+id/layout_tips"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:layout_marginTop="@dimen/base_5">
+            android:layout_marginTop="@dimen/base_5"
+            android:visibility="gone">
 
             <ImageView
                 android:id="@+id/todo_check"

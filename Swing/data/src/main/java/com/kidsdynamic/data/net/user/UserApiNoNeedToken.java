@@ -6,7 +6,7 @@ import com.kidsdynamic.data.net.user.model.LoginSuccessRep;
 import com.kidsdynamic.data.net.user.model.RegisterEntity;
 import com.kidsdynamic.data.net.user.model.RegisterFailResponse;
 import com.kidsdynamic.data.net.user.model.UpdateProfileEntity;
-import com.kidsdynamic.data.net.user.model.UpdateProfileSuccess;
+import com.kidsdynamic.data.net.user.model.UserInfo;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -52,7 +52,7 @@ public interface UserApiNoNeedToken {
 
     @Headers("Content-Type: application/json; charset=UTF-8")
     @PUT("v1/user/updateProfile")
-    Call<UpdateProfileSuccess> updateProfile (@Body UpdateProfileEntity updateProfileEntity);
+    Call<UserInfo> updateProfile (@Body UpdateProfileEntity updateProfileEntity);
 
 
 

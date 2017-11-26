@@ -22,6 +22,7 @@ public class ConfigUtil {
 	public static final String calendar_first_time = "calendar";
 	public static final String event_list_first_time = "event_list";
 	public static final String calendar_month_first_time = "calendar_month_list";
+	public static final String calendar_main_first_time = "calendar_main_month_list";
 	public static final String todo_detail_first_time = "todo_detail";
 
 
@@ -61,6 +62,9 @@ public class ConfigUtil {
 
 		PreferencesUtil.getInstance(SwingApplication.getAppContext()).
 				setPreferenceBooleanValue(ConfigUtil.calendar_month_first_time,true);
+
+		PreferencesUtil.getInstance(SwingApplication.getAppContext()).
+				setPreferenceBooleanValue(ConfigUtil.calendar_main_first_time,true);
 
 		PreferencesUtil.getInstance(SwingApplication.getAppContext()).
 				setPreferenceBooleanValue(ConfigUtil.todo_detail_first_time,true);

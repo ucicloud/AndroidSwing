@@ -13,10 +13,12 @@ import android.widget.TextView;
 
 import com.kidsdynamic.data.net.event.model.EventUtils;
 import com.kidsdynamic.data.net.event.model.TodoEntity;
+import com.kidsdynamic.data.persistent.PreferencesUtil;
 import com.kidsdynamic.swing.R;
 import com.kidsdynamic.swing.domain.EventManager;
 import com.kidsdynamic.swing.domain.LoginManager;
 import com.kidsdynamic.swing.model.WatchEvent;
+import com.kidsdynamic.swing.utils.ConfigUtil;
 import com.kidsdynamic.swing.view.ViewCircle;
 import com.kidsdynamic.swing.view.calendar.ViewCalendar;
 import com.kidsdynamic.swing.view.calendar.ViewCalendarCellWeek;
@@ -99,7 +101,21 @@ public class CalendarMainFragment extends CalendarBaseFragment {
         initTitleBar();
         initCalendar();
 
+        checkIsShowIntro();
+
         return mViewMain;
+    }
+
+    private void checkIsShowIntro(){
+        Boolean calendarMonthFirstTime = PreferencesUtil.getInstance(getContext()).
+                gPrefBooleanValue(ConfigUtil.calendar_main_first_time, true);
+
+        if(calendarMonthFirstTime){
+            if (getActivity() instanceof MainFrameActivity) {
+                ((MainFrameActivity) getActivity()).showCalendarMainIntroductionUI();
+            }
+        }
+
     }
 
     private void initTitleBar() {

@@ -461,5 +461,6 @@
     <string name="introduction_alarm">Events will have sound alerts on your watch</string>
     <string name="introduction_calendar_month">Please sync with your watch after editing events.</string>
     <string name="introduction_todo_detail">Edit your existing schedule by tapping on the pen icon.</string>
+    <string name="introduction_calendar_today">Tap on the date or event to see today\'s full schedule.</string>
 
 </resources>

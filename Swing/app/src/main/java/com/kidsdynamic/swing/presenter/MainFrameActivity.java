@@ -19,6 +19,7 @@ import com.kidsdynamic.swing.model.WatchEvent;
 import com.kidsdynamic.swing.utils.ConfigUtil;
 import com.kidsdynamic.swing.utils.GlideHelper;
 import com.kidsdynamic.swing.view.ViewIntroductionAlarmList;
+import com.kidsdynamic.swing.view.ViewIntroductionCalendarToday;
 import com.kidsdynamic.swing.view.ViewIntroductionSync;
 import com.kidsdynamic.swing.view.ViewIntroductionTodoDetail;
 import com.yy.base.BaseFragmentActivity;
@@ -255,6 +256,31 @@ public class MainFrameActivity extends BaseFragmentActivity {
         });
 
         addIntroductionView(viewIntroductionTodoDetail, layoutParams);
+
+        view_container.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                hideIntroView();
+            }
+        });
+
+        PreferencesUtil.getInstance(getApplicationContext()).
+                setPreferenceBooleanValue(ConfigUtil.todo_detail_first_time,false);
+    }
+    //calendar 首界面的介绍页
+    public void showCalendarMainIntroductionUI(){
+        ViewIntroductionCalendarToday viewIntroductionCalendar = new ViewIntroductionCalendarToday(this.getApplication());
+        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,
+                RelativeLayout.LayoutParams.MATCH_PARENT);
+
+        viewIntroductionCalendar.setOnClickListener(new ViewIntroductionCalendarToday.OnBtnClickListener() {
+            @Override
+            public void onClick(View view) {
+                hideIntroView();
+            }
+        });
+
+        addIntroductionView(viewIntroductionCalendar, layoutParams);
 
         view_container.setOnClickListener(new View.OnClickListener() {
             @Override

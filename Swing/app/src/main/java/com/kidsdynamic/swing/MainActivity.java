@@ -29,7 +29,6 @@ import com.kidsdynamic.data.net.user.model.RegisterEntity;
 import com.kidsdynamic.data.net.user.model.RegisterFailResponse;
 import com.kidsdynamic.data.net.user.model.UpdateKidAvatarRepEntity;
 import com.kidsdynamic.data.net.user.model.UpdateProfileEntity;
-import com.kidsdynamic.data.net.user.model.UpdateProfileSuccess;
 import com.kidsdynamic.data.net.user.model.UserInfo;
 import com.kidsdynamic.data.net.user.model.UserProfileRep;
 import com.kidsdynamic.data.utils.LogUtil2;
@@ -328,15 +327,15 @@ public class MainActivity extends Activity {
         });
 
 
-        userApi.updateProfile(new UpdateProfileEntity()).enqueue(new Callback<UpdateProfileSuccess>() {
+        userApi.updateProfile(new UpdateProfileEntity()).enqueue(new Callback<UserInfo>() {
             @Override
-            public void onResponse(Call<UpdateProfileSuccess> call, Response<UpdateProfileSuccess> response) {
+            public void onResponse(Call<UserInfo> call, Response<UserInfo> response) {
 
                 //code >= 200 && code < 300
                 if (response.isSuccessful()) {
                     // use response data and do some fancy stuff :)
 
-                    response.body().getUser();
+//                    response.body().getUser();
                     //show msg
                 } else {
                     // parse the response body …
@@ -360,7 +359,7 @@ public class MainActivity extends Activity {
             }
 
             @Override
-            public void onFailure(Call<UpdateProfileSuccess> call, Throwable t) {
+            public void onFailure(Call<UserInfo> call, Throwable t) {
 
             }
         });

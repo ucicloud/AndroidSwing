@@ -155,7 +155,7 @@ public class ProfileMainFragment extends ProfileBaseFragment {
    @OnClick(R.id.main_toolbar_action1)
     public void onToolbarAction1() {
         //修改个人信息界面
-//        mActivityMain.selectFragment(FragmentProfileEditor.class.getName(), null);
+//        selectFragment(ProfileEditorFragment.class.getName(), null,true);
     }
 
     @OnClick(R.id.main_toolbar_action2)

@@ -35,24 +35,37 @@ public class UserProfileRep {
 
     public static class UserEntity {
         /**
-         * id : 29
-         * email : lwz1@swing.com
-         * name : KIDLLE
-         * lastUpdate : 2016-12-18T21:24:57Z
-         * dateCreated : 2016-12-06T00:40:10Z
-         * zipCode : 11111
-         * phoneNumber :
-         * profile :
+         "user": {
+         "id": 169,
+         "email": "lwz3@swing.com",
+         "firstName": "q",
+         "lastName": "s",
+         "lastUpdate": "2017-05-18T13:25:14Z",
+         "dateCreated": "2017-03-30T02:07:14Z",
+         "zipCode": "",
+         "phoneNumber": "",
+         "profile": "",
+         "language": "es",
+         "ios_registration_id": "0E6C48FCF11FCE28C6501F5819FEF348246936DB6F5BFC10AE86981DC19F30A1",
+         "android_registration_id": "",
+         "country": "CN"
+         }
          */
 
         private long id;
         private String email;
-        private String name;
+        private String firstName;
+        private String lastName;
         private String lastUpdate;
         private String dateCreated;
         private String zipCode;
         private String phoneNumber;
         private String profile;
+        private String registrationId;
+        private String language;
+        private String ios_registration_id;
+        private String android_registration_id;
+        private String country;
 
         public long getId() {
             return id;
@@ -70,12 +83,60 @@ public class UserProfileRep {
             this.email = email;
         }
 
-        public String getName() {
-            return name;
+        public String getFirstName() {
+            return firstName;
         }
 
-        public void setName(String name) {
-            this.name = name;
+        public void setFirstName(String firstName) {
+            this.firstName = firstName;
+        }
+
+        public String getLastName() {
+            return lastName;
+        }
+
+        public void setLastName(String lastName) {
+            this.lastName = lastName;
+        }
+
+        public String getRegistrationId() {
+            return registrationId;
+        }
+
+        public void setRegistrationId(String registrationId) {
+            this.registrationId = registrationId;
+        }
+
+        public String getLanguage() {
+            return language;
+        }
+
+        public void setLanguage(String language) {
+            this.language = language;
+        }
+
+        public String getIos_registration_id() {
+            return ios_registration_id;
+        }
+
+        public void setIos_registration_id(String ios_registration_id) {
+            this.ios_registration_id = ios_registration_id;
+        }
+
+        public String getAndroid_registration_id() {
+            return android_registration_id;
+        }
+
+        public void setAndroid_registration_id(String android_registration_id) {
+            this.android_registration_id = android_registration_id;
+        }
+
+        public String getCountry() {
+            return country;
+        }
+
+        public void setCountry(String country) {
+            this.country = country;
         }
 
         public String getLastUpdate() {
