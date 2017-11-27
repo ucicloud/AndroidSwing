@@ -51,6 +51,9 @@ public class ConfigUtil {
 
 		clearIntroFlag();
 
+		//清除缓存的头像
+		GlideHelper.clearCache();
+
 	}
 
 	private static void clearIntroFlag(){

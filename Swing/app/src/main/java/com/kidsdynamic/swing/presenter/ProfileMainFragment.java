@@ -97,15 +97,27 @@ public class ProfileMainFragment extends ProfileBaseFragment {
         delAllContact(mViewRequestToContainer);
         delAllContact(mViewRequestFromContainer);
 
-//        WatchContact.User parent = mActivityMain.mOperator.getUser();
         DB_User parent = LoginManager.getCurrentLoginUserInfo();
 
         if (parent != null) {
             mViewName.setText(LoginManager.getUserName(parent));
             mViewMail.setText(parent.getEmail());
         }
-        if (parent != null && !TextUtils.isEmpty(parent.getProfile())) {
+
+        WatchContact watchContact = null;
+        if(!mActivityMain.mWatchContactStack.isEmpty()){
+            watchContact = mActivityMain.mWatchContactStack.pop();
+        }
+
+
+        if (watchContact == null && parent != null && !TextUtils.isEmpty(parent.getProfile())) {
             GlideHelper.getBitMap(getContext(), UserManager.getProfileRealUri(parent.getProfile()),
+                    String.valueOf(parent.getLastUpdate()), userAvatarSimpleTarget);
+        }
+
+        if(watchContact != null && watchContact.mPhoto != null){
+            mViewPhoto.setBitmap(watchContact.mPhoto);
+            GlideHelper.getBitMapFromCloud(getContext(), UserManager.getProfileRealUri(parent.getProfile()),
                     userAvatarSimpleTarget);
         }
 

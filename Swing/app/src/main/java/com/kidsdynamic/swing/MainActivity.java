@@ -29,6 +29,7 @@ import com.kidsdynamic.data.net.user.model.RegisterEntity;
 import com.kidsdynamic.data.net.user.model.RegisterFailResponse;
 import com.kidsdynamic.data.net.user.model.UpdateKidAvatarRepEntity;
 import com.kidsdynamic.data.net.user.model.UpdateProfileEntity;
+import com.kidsdynamic.data.net.user.model.UpdateProfileSuccess;
 import com.kidsdynamic.data.net.user.model.UserInfo;
 import com.kidsdynamic.data.net.user.model.UserProfileRep;
 import com.kidsdynamic.data.utils.LogUtil2;
@@ -395,16 +396,16 @@ public class MainActivity extends Activity {
         String filePath = "/sdcard/1.jpg";
         MultipartBody.Part filePart = PartUtils.prepareFilePart("upload", "avatar_t01", new File(filePath));
 
-        avatarApi.uploadUserAvatar(filePart).enqueue(new Callback<UserInfo>() {
+        avatarApi.uploadUserAvatar(filePart).enqueue(new Callback<UpdateProfileSuccess>() {
             @Override
-            public void onResponse(Call<UserInfo> call, Response<UserInfo> response) {
+            public void onResponse(Call<UpdateProfileSuccess> call, Response<UpdateProfileSuccess> response) {
                 LogUtil2.getUtils().d("uploadUserAvatar onResponse");
                 LogUtil2.getUtils().d("uploadUserAvatar  code: " + response.code());
                 //code == 200 upload ok
             }
 
             @Override
-            public void onFailure(Call<UserInfo> call, Throwable t) {
+            public void onFailure(Call<UpdateProfileSuccess> call, Throwable t) {
                 LogUtil2.getUtils().d("uploadUserAvatar onFailure");
                 t.printStackTrace();
             }

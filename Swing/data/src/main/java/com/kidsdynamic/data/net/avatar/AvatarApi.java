@@ -2,7 +2,7 @@ package com.kidsdynamic.data.net.avatar;
 
 import com.kidsdynamic.data.BuildConfig;
 import com.kidsdynamic.data.net.user.model.UpdateKidAvatarRepEntity;
-import com.kidsdynamic.data.net.user.model.UserInfo;
+import com.kidsdynamic.data.net.user.model.UpdateProfileSuccess;
 
 import java.util.Map;
 
@@ -32,7 +32,7 @@ public interface AvatarApi {
 //    500    Internal error. Please send me the error. I will fix it
     @Multipart
     @POST("v1/user/avatar/upload")
-    Call<UserInfo> uploadUserAvatar(@Part MultipartBody.Part filePart);
+    Call<UpdateProfileSuccess> uploadUserAvatar(@Part MultipartBody.Part filePart);
 
 //    200    File upload successfully
 //    400    Bad request. Missing some parameters

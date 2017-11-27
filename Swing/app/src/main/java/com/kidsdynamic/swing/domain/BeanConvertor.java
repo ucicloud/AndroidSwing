@@ -89,7 +89,10 @@ public class BeanConvertor {
 
         //dataCreate, lastUpdate 使用utc时间
         db_user.setDataCreate(getUTCTimeStamp(userEntity.getDateCreated()));
-        db_user.setLastUpdate(getUTCTimeStamp(userEntity.getLastUpdate()));
+
+        //因为目前服务端不更新lastupdate，客户端本地更新
+//        db_user.setLastUpdate(getUTCTimeStamp(userEntity.getLastUpdate()));
+        db_user.setLastUpdate(System.currentTimeMillis());
 
         db_user.setPhoneNum(userEntity.getPhoneNumber());
         db_user.setProfile(userEntity.getProfile());

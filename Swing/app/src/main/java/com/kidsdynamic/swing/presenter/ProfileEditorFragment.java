@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
@@ -29,11 +30,13 @@ import com.kidsdynamic.data.net.avatar.AvatarApi;
 import com.kidsdynamic.data.net.avatar.PartUtils;
 import com.kidsdynamic.data.net.user.UserApiNoNeedToken;
 import com.kidsdynamic.data.net.user.model.UpdateProfileEntity;
+import com.kidsdynamic.data.net.user.model.UpdateProfileSuccess;
 import com.kidsdynamic.data.net.user.model.UserInfo;
 import com.kidsdynamic.data.utils.LogUtil2;
 import com.kidsdynamic.swing.R;
 import com.kidsdynamic.swing.domain.LoginManager;
 import com.kidsdynamic.swing.domain.UserManager;
+import com.kidsdynamic.swing.model.WatchContact;
 import com.kidsdynamic.swing.net.BaseRetrofitCallback;
 import com.kidsdynamic.swing.utils.GlideHelper;
 import com.kidsdynamic.swing.utils.SwingFontsCache;
@@ -116,6 +119,13 @@ public class ProfileEditorFragment extends ProfileBaseFragment {
         return mViewMain;
     }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        initValue();
+    }
+
     private void initTitleBar() {
         tv_title.setTextColor(getResources().getColor(R.color.colorAccent));
         tv_title.setText(R.string.profile_option_edit);
@@ -149,6 +159,11 @@ public class ProfileEditorFragment extends ProfileBaseFragment {
     public void onResume() {
         super.onResume();
 
+        //如果用户新选择了头像
+
+    }
+
+    private void initValue() {
         mUserAvatar = null;
         mUserAvatarChanged = false;
 
@@ -170,7 +185,7 @@ public class ProfileEditorFragment extends ProfileBaseFragment {
     private void loadAvatar() {
         if(!TextUtils.isEmpty(mUserAvatarFileName)){
             GlideHelper.getBitMap(getContext(), UserManager.getProfileRealUri(mUserAvatarFileName),
-                    userAvatarSimpleTarget);
+                    String.valueOf(mProfileInfo.getLastUpdate()),userAvatarSimpleTarget);
         }
     }
 
@@ -201,6 +216,13 @@ public class ProfileEditorFragment extends ProfileBaseFragment {
         mViewMail.setText(mProfileInfo.getEmail());
         mViewZip.setText(mProfileInfo.getZipCode());
         mUserAvatarFileName = mProfileInfo.getProfile();
+
+
+        //加载现有头像
+        if(!TextUtils.isEmpty(mUserAvatarFileName)){
+            GlideHelper.getBitMap(getContext(), UserManager.getProfileRealUri(mUserAvatarFileName),
+                    String.valueOf(mProfileInfo.getLastUpdate()),userAvatarSimpleTarget);
+        }
     }
 
     @OnClick(R.id.btn_update_profile)
@@ -226,8 +248,10 @@ public class ProfileEditorFragment extends ProfileBaseFragment {
 
             saveProfileChange(updateProfileEntity);
         } else if (mUserAvatar != null && mUserAvatarChanged) {
-//            mUserAvatarFilename = ServerMachine.createAvatarFile(mUserAvatar, "User", ".jpg");
-//            mActivityMain.mServiceMachine.userAvatarUpload(mUserAvatarUploadListener, mUserAvatarFilename);
+
+            showLoadingDialog(R.string.signup_profile_wait);
+            //更新头像，如果变更
+            updateUserAvatar();
         } else {
             getFragmentManager().popBackStack();
         }
@@ -282,20 +306,18 @@ public class ProfileEditorFragment extends ProfileBaseFragment {
                 generateApi4Avatar(AvatarApi.class);
         MultipartBody.Part filePart =
                 PartUtils.prepareFilePart("upload", avatarFile.getName(), avatarFile);
-        avatarApi.uploadUserAvatar(filePart).enqueue(new BaseRetrofitCallback<UserInfo>() {
+        avatarApi.uploadUserAvatar(filePart).enqueue(new BaseRetrofitCallback<UpdateProfileSuccess>() {
             @Override
-            public void onResponse(Call<UserInfo> call, Response<UserInfo> response) {
+            public void onResponse(Call<UpdateProfileSuccess> call, Response<UpdateProfileSuccess> response) {
                 LogUtil2.getUtils().d("uploadUserAvatar onResponse");
 
                 //code == 200 upload ok
                 int code = response.code();
                 //头像上传成功后
                 if(code == 200){
-                    //更新本地数据库
-                    UserManager.updateProfile2DB(response.body());
 
-                    finishLoadingDialog();
-                    ToastCommon.makeText(getContext(), R.string.profile_editor_avatar_failed);
+                    uploadAvatarOK(response);
+
                 }else {
                     finishLoadingDialog();
                     ToastCommon.makeText(getContext(),R.string.profile_editor_avatar_failed);
@@ -306,7 +328,7 @@ public class ProfileEditorFragment extends ProfileBaseFragment {
             }
 
             @Override
-            public void onFailure(Call<UserInfo> call, Throwable t) {
+            public void onFailure(Call<UpdateProfileSuccess> call, Throwable t) {
                 finishLoadingDialog();
 
                 super.onFailure(call, t);
@@ -314,6 +336,26 @@ public class ProfileEditorFragment extends ProfileBaseFragment {
 
             }
         });
+    }
+
+    private void uploadAvatarOK(Response<UpdateProfileSuccess> response) {
+        if(response.body() != null){
+            //更新本地数据库
+            UserManager.updateProfile2DB(response.body().getUser());
+
+            WatchContact watchContact = new WatchContact();
+            watchContact.mPhoto = mUserAvatar;
+            watchContact.mLabel = "editProfile";
+
+            mActivityMain.mWatchContactStack.push(watchContact);
+
+            ToastCommon.makeText(getContext(), R.string.profile_editor_save_success);
+            finishLoadingDialog();
+            getFragmentManager().popBackStack();
+        }else {
+            finishLoadingDialog();
+            ToastCommon.makeText(getContext(),R.string.profile_editor_avatar_failed);
+        }
     }
 
     @OnClick(R.id.profile_editor_photo)
@@ -421,7 +463,11 @@ public class ProfileEditorFragment extends ProfileBaseFragment {
                 mViewPhoto.setStrokeWidth(4.0f);
                 mViewPhoto.setCrossWidth(0.0f);
                 mViewPhoto.setBitmap(result.bitmap);
+
+                mUserAvatar = result.bitmap;
                 avatarFile = file;
+
+                mUserAvatarChanged = true;
             }
         });
     }
