@@ -20,9 +20,10 @@
             android:id="@+id/view_sync_complete"
             android:layout_width="200dp"
             android:layout_height="180dp"
-            android:background="@drawable/sync_complete_bg"
             android:layout_centerInParent="true"
-            android:visibility="gone"/>
+            android:background="@drawable/sync_complete_bg"
+            android:contentDescription="@null"
+            android:visibility="gone" />
 
         <com.kidsdynamic.swing.view.AvenirTextView
             android:id="@+id/tv_message"
@@ -31,20 +32,20 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:text="@string/dashboard_progress_searching"
-            android:visibility="visible"/>
+            android:visibility="visible" />
 
         <com.kidsdynamic.swing.view.ViewCircle
             android:id="@+id/dashboard_progress_circle"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:visibility="visible"
             app:strokeBegin="100"
             app:strokeColorActive="@color/color_orange_main"
             app:strokeColorNormal="@color/color_white_snow"
             app:strokeCount="100"
             app:strokeEnd="-1"
             app:strokeType="arc"
-            app:strokeWidth="10dp"
-            android:visibility="visible"/>
+            app:strokeWidth="10dp" />
     </RelativeLayout>
 
     <View

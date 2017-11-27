@@ -15,6 +15,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.kidsdynamic.swing.R;
+import com.kidsdynamic.swing.domain.KidActivityManager;
 import com.kidsdynamic.swing.model.WatchActivity;
 import com.kidsdynamic.swing.utils.SwingFontsCache;
 import com.kidsdynamic.swing.view.ViewChartBarHorizontal;
@@ -24,9 +25,8 @@ import com.kidsdynamic.swing.view.ViewTextSelector;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
-import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -76,6 +76,8 @@ public class DashboardChartTripleFragment extends DashboardBaseFragment {
     private int mEmotionColor;
     private int mCurrentChart;
 
+    private boolean isOnlyShowSteps = true;
+
     public static DashboardChartTripleFragment newInstance(int doorType) {
         Bundle args = new Bundle();
         args.putInt(DOOR_TYPE, doorType);
@@ -112,14 +114,12 @@ public class DashboardChartTripleFragment extends DashboardBaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-//        int step = getStepToday(INDOOR).mSteps + getStepToday(OUTDOOR).mSteps;
-        int step = new Random().nextInt(15000);
+        long step = getStepToday(INDOOR).mSteps + getStepToday(OUTDOOR).mSteps;
 
-        // 依KD要求, 12000為達標, 我自己認為6000算是接近吧.
         int emotion = EMOTION_LOW;
-        if (step > 6000)
+        if (step > WatchActivity.STEP_ALMOST)
             emotion = EMOTION_ALMOST;
-        if (step > 12000)
+        if (step > WatchActivity.STEP_EXCELLENT)
             emotion = EMOTION_EXCELLENT;
 
         mViewSelector.setOnSelectListener(mSelectorListener);
@@ -282,8 +282,14 @@ public class DashboardChartTripleFragment extends DashboardBaseFragment {
         if (CHART_TODAY != mCurrentChart) {
             mViewPager.setCurrentItem(CHART_TODAY, true);
         }
-        mViewChartToday.setHorizontalBars(getStepToday(getDoor()));
-        mViewChartToday.setGoal(12000);
+        List<String> barTitles = Arrays.asList(
+                getString(R.string.dashboard_chart_steps)/*,
+                getString(R.string.dashboard_chart_distance),
+                getString(R.string.dashboard_chart_flights)*/);
+        WatchActivity.Act act = getStepToday(getDoor());
+        List<WatchActivity.Act> acts = Collections.singletonList(act);
+        mViewChartToday.setHorizontalBars(getCartBars(barTitles, acts));
+        mViewChartToday.setGoal(WatchActivity.STEP_GOAL);
         mViewChartToday.mChartColor = mEmotionColor;
         mViewChartToday.postInvalidate();
     }
@@ -293,15 +299,19 @@ public class DashboardChartTripleFragment extends DashboardBaseFragment {
             mViewPager.setCurrentItem(CHART_WEEK, true);
         }
         mViewChartWeekSteps.setValue(getStepWeek(getDoor()));
-        mViewChartWeekSteps.setGoal(12000);
+        mViewChartWeekSteps.setGoal(WatchActivity.STEP_GOAL);
         mViewChartWeekSteps.invalidate();
 
+        if (isOnlyShowSteps) {
+            return;
+        }
+
         mViewChartWeekDistance.setValue(getStepWeek(getDoor()));
-        mViewChartWeekDistance.setGoal(12000);
+        mViewChartWeekDistance.setGoal(WatchActivity.STEP_GOAL);
         mViewChartWeekDistance.invalidate();
 
         mViewChartWeekFloors.setValue(getStepWeek(getDoor()));
-        mViewChartWeekFloors.setGoal(12000);
+        mViewChartWeekFloors.setGoal(WatchActivity.STEP_GOAL);
         mViewChartWeekFloors.invalidate();
     }
 
@@ -310,15 +320,19 @@ public class DashboardChartTripleFragment extends DashboardBaseFragment {
             mViewPager.setCurrentItem(CHART_MONTH, true);
         }
         mViewChartMonthSteps.setValue(getStepMonth(getDoor()));
-        mViewChartMonthSteps.setGoal(12000);
+        mViewChartMonthSteps.setGoal(WatchActivity.STEP_GOAL);
         mViewChartMonthSteps.invalidate();
 
+        if (isOnlyShowSteps) {
+            return;
+        }
+
         mViewChartMonthDistance.setValue(getStepMonth(getDoor()));
-        mViewChartMonthDistance.setGoal(12000);
+        mViewChartMonthDistance.setGoal(WatchActivity.STEP_GOAL);
         mViewChartMonthDistance.invalidate();
 
         mViewChartMonthFloors.setValue(getStepMonth(getDoor()));
-        mViewChartMonthFloors.setGoal(12000);
+        mViewChartMonthFloors.setGoal(WatchActivity.STEP_GOAL);
         mViewChartMonthFloors.invalidate();
     }
 
@@ -328,71 +342,72 @@ public class DashboardChartTripleFragment extends DashboardBaseFragment {
         }
 
         mViewChartYearSteps.setValue(getStepYear(getDoor()));
-        mViewChartYearSteps.setGoal(12000);
+        mViewChartYearSteps.setGoal(WatchActivity.STEP_GOAL);
         mViewChartYearSteps.invalidate();
 
+        if (isOnlyShowSteps) {
+            return;
+        }
+
         mViewChartYearDistance.setValue(getStepYear(getDoor()));
-        mViewChartYearDistance.setGoal(12000);
+        mViewChartYearDistance.setGoal(WatchActivity.STEP_GOAL);
         mViewChartYearDistance.invalidate();
 
         mViewChartYearFloors.setValue(getStepYear(getDoor()));
-        mViewChartYearFloors.setGoal(12000);
+        mViewChartYearFloors.setGoal(WatchActivity.STEP_GOAL);
         mViewChartYearFloors.invalidate();
     }
 
-    private List<ViewChartBarHorizontal.HorizontalBar> getStepToday(int door) {
-        List<String> barTitles = Arrays.asList(
-                getString(R.string.dashboard_chart_steps),
-                getString(R.string.dashboard_chart_distance),
-                getString(R.string.dashboard_chart_flights));
+    private List<ViewChartBarHorizontal.HorizontalBar> getCartBars(List<String> barTitles,
+                                                                   List<WatchActivity.Act> acts) {
         List<ViewChartBarHorizontal.HorizontalBar> bars = new ArrayList<>();
-        Random random = new Random();
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < acts.size(); i++) {
+            WatchActivity.Act act = acts.get(i);
             ViewChartBarHorizontal.HorizontalBar bar = new ViewChartBarHorizontal.HorizontalBar();
             bar.title = barTitles.get(i);
-            bar.value = random.nextFloat() * 12000;
+            bar.value = act.mSteps;
             bar.unit = "";
             bars.add(bar);
         }
         return bars;
     }
 
+    private WatchActivity.Act getStepToday(int door) {
+        WatchActivity act = new KidActivityManager().getActivityOfDay(getContext());
+        return door == INDOOR ? act.mIndoor : act.mOutdoor;
+    }
+
     private List<WatchActivity.Act> getStepWeek(int door) {
+        List<WatchActivity> thisWeek = new KidActivityManager().getActivityOfWeek(getContext());
         List<WatchActivity.Act> rtn = new ArrayList<>();
-        Random random = new Random();
-        for (int i = 0; i < 7; i++) {
-            WatchActivity.Act act = new WatchActivity.Act();
-            act.mSteps = random.nextInt(12000);
-            act.mTimestamp = System.currentTimeMillis();
-            act.mDistance = random.nextInt(8000);
-            rtn.add(act);
-        }
+
+        for (WatchActivity activity : thisWeek)
+            rtn.add(new WatchActivity.Act(door == INDOOR ? activity.mIndoor : activity.mOutdoor));
+
         return rtn;
     }
 
     private List<WatchActivity.Act> getStepMonth(int door) {
+        List<WatchActivity> thisWeek = new KidActivityManager().getActivityOfMonth(getContext());
         List<WatchActivity.Act> rtn = new ArrayList<>();
-        Random random = new Random();
-        for (int i = 0; i < 30; i++) {
-            WatchActivity.Act act = new WatchActivity.Act();
-            act.mSteps = random.nextInt(12000);
-            act.mTimestamp = System.currentTimeMillis();
-            act.mDistance = random.nextInt(8000);
-            rtn.add(act);
-        }
+
+        for (WatchActivity activity : thisWeek)
+            rtn.add(new WatchActivity.Act(door == INDOOR ? activity.mIndoor : activity.mOutdoor));
+
+//        for (WatchActivity.Act act : rtn) {
+//            act.mSteps = (int) (Math.random() * mViewChartMonth.mAxisVMax);
+//        }
+
         return rtn;
     }
 
     private List<WatchActivity.Act> getStepYear(int door) {
+        List<WatchActivity> thisWeek = new KidActivityManager().getActivityOfYear(getContext());
         List<WatchActivity.Act> rtn = new ArrayList<>();
-        Random random = new Random();
-        for (int i = 0; i < 12; i++) {
-            WatchActivity.Act act = new WatchActivity.Act();
-            act.mSteps = random.nextInt(12000);
-            act.mTimestamp = System.currentTimeMillis();
-            act.mDistance = random.nextInt(8000);
-            rtn.add(act);
-        }
+
+        for (WatchActivity activity : thisWeek)
+            rtn.add(new WatchActivity.Act(door == INDOOR ? activity.mIndoor : activity.mOutdoor));
+
         return rtn;
     }
 
@@ -417,9 +432,11 @@ public class DashboardChartTripleFragment extends DashboardBaseFragment {
         mViewChartWeekDistance = (ViewChartBarVertical) chartWeek.findViewById(R.id.dashboard_chart_vertical_distance);
         mViewChartWeekDistance.setTitle(chartTitleDistance);
         mViewChartWeekDistance.setOnBarClickListener(new OnChartBarVerticalListener(CHART_DISTANCE));
+        mViewChartWeekDistance.setVisibility(isOnlyShowSteps ? View.GONE : View.VISIBLE);
         mViewChartWeekFloors = (ViewChartBarVertical) chartWeek.findViewById(R.id.dashboard_chart_vertical_floors);
         mViewChartWeekFloors.setTitle(chartTitleFloors);
         mViewChartWeekFloors.setOnBarClickListener(new OnChartBarVerticalListener(CHART_FLOORS));
+        mViewChartYearFloors.setVisibility(isOnlyShowSteps ? View.GONE : View.VISIBLE);
         list.add(chartWeek);
 
         View chartMonth = inflater.inflate(R.layout.layout_chart_vertical_triple, mViewPager, false);
@@ -429,9 +446,11 @@ public class DashboardChartTripleFragment extends DashboardBaseFragment {
         mViewChartMonthDistance = (ViewChartBarVertical) chartMonth.findViewById(R.id.dashboard_chart_vertical_distance);
         mViewChartMonthDistance.setTitle(chartTitleDistance);
         mViewChartMonthDistance.setOnBarClickListener(new OnChartBarVerticalListener(CHART_DISTANCE));
+        mViewChartMonthDistance.setVisibility(isOnlyShowSteps ? View.GONE : View.VISIBLE);
         mViewChartMonthFloors = (ViewChartBarVertical) chartMonth.findViewById(R.id.dashboard_chart_vertical_floors);
         mViewChartMonthFloors.setTitle(chartTitleFloors);
         mViewChartMonthFloors.setOnBarClickListener(new OnChartBarVerticalListener(CHART_FLOORS));
+        mViewChartMonthFloors.setVisibility(isOnlyShowSteps ? View.GONE : View.VISIBLE);
         list.add(chartMonth);
 
         View chartYear = inflater.inflate(R.layout.layout_chart_vertical_triple, mViewPager, false);
@@ -441,9 +460,11 @@ public class DashboardChartTripleFragment extends DashboardBaseFragment {
         mViewChartYearDistance = (ViewChartBarVertical) chartYear.findViewById(R.id.dashboard_chart_vertical_distance);
         mViewChartYearDistance.setTitle(chartTitleDistance);
         mViewChartYearDistance.setOnBarClickListener(new OnChartBarVerticalListener(CHART_DISTANCE));
+        mViewChartYearDistance.setVisibility(isOnlyShowSteps ? View.GONE : View.VISIBLE);
         mViewChartYearFloors = (ViewChartBarVertical) chartYear.findViewById(R.id.dashboard_chart_vertical_floors);
         mViewChartYearFloors.setTitle(chartTitleFloors);
         mViewChartYearFloors.setOnBarClickListener(new OnChartBarVerticalListener(CHART_FLOORS));
+        mViewChartYearFloors.setVisibility(isOnlyShowSteps ? View.GONE : View.VISIBLE);
         list.add(chartYear);
 
         ChartPagerAdapter adapter = new ChartPagerAdapter(list);

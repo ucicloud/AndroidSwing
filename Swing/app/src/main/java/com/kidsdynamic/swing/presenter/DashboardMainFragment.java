@@ -88,8 +88,7 @@ public class DashboardMainFragment extends DashboardBaseFragment {
 
     @OnClick(R.id.watch_sync_yes)
     public void yes() {
-//        setFragment(DashboardProgressFragment.newInstance(), true);
-        setFragment(DashboardEmotionFragment.newInstance(), true);
+        setFragment(DashboardProgressFragment.newInstance(), true);
     }
 
     @OnClick(R.id.watch_sync_no)

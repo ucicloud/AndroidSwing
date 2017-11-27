@@ -545,4 +545,29 @@ public class BeanConvertor {
 
         return rawActivityDataEntity;
     }
+
+    public static WatchActivity getWatchActivity(DB_FormatActivity db_formatActivity){
+        WatchActivity watchActivity = new WatchActivity();
+        watchActivity.mIndoor.mId = db_formatActivity.getIndoorId();
+        watchActivity.mIndoor.mSteps = db_formatActivity.getIndoorSteps();
+        watchActivity.mOutdoor.mId = db_formatActivity.getOutdoorId();
+        watchActivity.mOutdoor.mSteps = db_formatActivity.getOutdoorSteps();
+        watchActivity.mIndoor.mMacId = db_formatActivity.getMacId();
+        watchActivity.mOutdoor.mMacId = watchActivity.mIndoor.mMacId;
+        watchActivity.mIndoor.mKidId = db_formatActivity.getKidId();
+        watchActivity.mOutdoor.mKidId = watchActivity.mIndoor.mKidId;
+        watchActivity.mIndoor.mTimestamp = db_formatActivity.getTime();
+        watchActivity.mOutdoor.mTimestamp = watchActivity.mIndoor.mTimestamp;
+        return watchActivity;
+    }
+
+    public static List<WatchActivity> getWatchActivity(List<DB_FormatActivity> db_formatActivities){
+        List<WatchActivity> list = new ArrayList<>();
+        for (DB_FormatActivity db_formatActivity : db_formatActivities){
+            WatchActivity watchActivity = getWatchActivity(db_formatActivity);
+            list.add(watchActivity);
+        }
+        return list;
+    }
+
 }

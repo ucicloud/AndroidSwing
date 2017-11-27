@@ -45,4 +45,11 @@ public class ActivityFormatDataStore {
         }
     }
 
+    public List<DB_FormatActivity> getByKidId(long kidsId){
+        FormatActivityDao formatActivityDao = dbUtil.getDaoSession().getFormatActivityDao();
+        return formatActivityDao.queryBuilder().
+                where(FormatActivityDao.Properties.KidId.eq(kidsId)).
+                list();
+    }
+
 }

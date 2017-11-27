@@ -5,15 +5,19 @@ import android.util.Log;
 
 import com.kidsdynamic.commonlib.utils.ObjectUtils;
 import com.kidsdynamic.data.dao.DB_FormatActivity;
+import com.kidsdynamic.data.dao.DB_RawActivity;
 import com.kidsdynamic.data.net.ApiGen;
 import com.kidsdynamic.data.net.activity.ActivityApi;
 import com.kidsdynamic.data.net.activity.model.RetrieveDataRep;
+import com.kidsdynamic.data.net.activity.model.RetrieveHourlyDataRep;
 import com.kidsdynamic.data.persistent.DbUtil;
 import com.kidsdynamic.data.repository.disk.ActivityCloudDataStore;
 import com.kidsdynamic.data.repository.disk.ActivityFormatDataStore;
 import com.kidsdynamic.data.repository.disk.RawActivityDataStore;
 import com.kidsdynamic.swing.SwingApplication;
+import com.kidsdynamic.swing.model.KidsEntityBean;
 import com.kidsdynamic.swing.model.WatchActivity;
+import com.kidsdynamic.swing.model.WatchContact;
 import com.kidsdynamic.swing.net.BaseRetrofitCallback;
 
 import java.util.ArrayList;
@@ -37,7 +41,7 @@ public class KidActivityManager {
     private List<WatchActivity> mActivities;
     private long kidId;
 
-    public void getActivityDataFromCloud(Context context, final long kidId, final IFinishListener finishListener){
+    public void getActivityDataFromCloud(Context context, final long kidId, final IFinishListener finishListener) {
 
         Calendar cal = Calendar.getInstance();
         mTimezoneOffset = cal.getTimeZone().getOffset(cal.getTimeInMillis());
@@ -71,12 +75,12 @@ public class KidActivityManager {
             public void onResponse(Call<RetrieveDataRep> call, Response<RetrieveDataRep> response) {
 
                 //如果获取数据成功，则开始更新本地数据
-                if(response.code() == 200
-                        && response.body() != null){
+                if (response.code() == 200
+                        && response.body() != null) {
                     handleRetrieveActivityData(kidId, response);
                 }
 
-                if(finishListener != null){
+                if (finishListener != null) {
                     finishListener.onFinish(response.code());
                 }
 
@@ -88,8 +92,8 @@ public class KidActivityManager {
             public void onFailure(Call<RetrieveDataRep> call, Throwable t) {
                 super.onFailure(call, t);
 
-                if(finishListener != null){
-                    finishListener.onFailed("net error",-1);
+                if (finishListener != null) {
+                    finishListener.onFailed("net error", -1);
                 }
             }
         });
@@ -99,7 +103,7 @@ public class KidActivityManager {
     private void handleRetrieveActivityData(long kidId, Response<RetrieveDataRep> response) {
         RetrieveDataRep retrieveDataRep = response.body();
 
-        if(ObjectUtils.isListEmpty(retrieveDataRep.getActivities())){
+        if (ObjectUtils.isListEmpty(retrieveDataRep.getActivities())) {
             return;
         }
 
@@ -153,7 +157,7 @@ public class KidActivityManager {
 
         List<DB_FormatActivity> dbFormatActivitys = BeanConvertor.getDBFormatActivity(list);
 
-        if(!ObjectUtils.isListEmpty(dbFormatActivitys)){
+        if (!ObjectUtils.isListEmpty(dbFormatActivitys)) {
             activityFormatDataStore.saveAll(dbFormatActivitys);
         }
 
@@ -164,6 +168,215 @@ public class KidActivityManager {
 
     public interface IFinishListener {
         void onFinish(Object arg);
+
+        void onFailed(String Command, int statusCode);
+    }
+
+    public List<WatchActivity> loadActivityWithLocal(Context context) {
+        KidsEntityBean kid = DeviceManager.getFocusKidsInfo(context);
+        List<WatchActivity> rtn = new ArrayList<>();
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.HOUR_OF_DAY, 23);
+        cal.set(Calendar.MINUTE, 59);
+        cal.set(Calendar.SECOND, 59);
+        long end = cal.getTimeInMillis();
+        cal.add(Calendar.YEAR, -1);
+        cal.add(Calendar.SECOND, 1);
+        long start = cal.getTimeInMillis();
+
+        start = (start / 1000) * 1000;
+        end = (end / 1000) * 1000;
+
+        while (start < end) {
+            //Log.d("swing", "Start Time(" + start + ") " + WatchOperator.getDefaultTimeString(start));
+            rtn.add(new WatchActivity(kid == null ? 0 : kid.getKidsId(), start));
+            start += 86400000;
+        }
+
+        Collections.reverse(rtn);
+        if (kid == null)
+            return rtn;
+
+        DbUtil dbUtil = DbUtil.getInstance(SwingApplication.getAppContext());
+        ActivityFormatDataStore activityFormatDataStore = new ActivityFormatDataStore(dbUtil);
+        List<DB_FormatActivity> formatActivities = activityFormatDataStore.getByKidId(kidId);
+        List<WatchActivity> exportList;
+        if (!ObjectUtils.isListEmpty(formatActivities)) {
+            exportList = BeanConvertor.getWatchActivity(formatActivities);
+            for (WatchActivity exportActivity : exportList) {
+                for (WatchActivity preloadActivity : rtn) {
+                    long actEnd = preloadActivity.mIndoor.mTimestamp + 86400000;
+                    if (exportActivity.mIndoor.mTimestamp >= preloadActivity.mIndoor.mTimestamp && exportActivity.mIndoor.mTimestamp < actEnd) {
+                        preloadActivity.mIndoor.mSteps += exportActivity.mIndoor.mSteps;
+                        preloadActivity.mOutdoor.mSteps += exportActivity.mOutdoor.mSteps;
+                        break;
+                    }
+                }
+            }
+        }
+
+        RawActivityDataStore rawActivityDataStore = new RawActivityDataStore(dbUtil);
+        List<DB_RawActivity> uploadList = rawActivityDataStore.getByMacId(kid.getMacId());
+        for (DB_RawActivity raw : uploadList) {
+            for (WatchActivity preloadActivity : rtn) {
+                long actEnd = preloadActivity.mIndoor.mTimestamp + 86400000;
+                long rawTime = raw.getTime();
+                rawTime *= 1000;
+
+                if (rawTime >= preloadActivity.mIndoor.mTimestamp && rawTime < actEnd) {
+                    String[] arg = raw.getIndoorActivity().split(",");
+                    int indoor = Integer.valueOf(arg[2]);
+                    arg = raw.getOutdoorActivity().split(",");
+                    int outdoor = Integer.valueOf(arg[2]);
+
+                    preloadActivity.mIndoor.mSteps += indoor;
+                    preloadActivity.mOutdoor.mSteps += outdoor;
+
+                    break;
+                }
+            }
+        }
+
+        return rtn;
+    }
+
+    public WatchActivity getActivityOfDay(Context context) {
+        List<WatchActivity> list = loadActivityWithLocal(context);
+
+        return list.get(0);
+    }
+
+    public List<WatchActivity> getActivityOfWeek(Context context) {
+        List<WatchActivity> rtn = new ArrayList<>();
+        List<WatchActivity> list = loadActivityWithLocal(context);
+
+        for (int idx = 0; idx < 7; idx++)
+            rtn.add(list.get(idx));
+
+        Collections.reverse(rtn);
+
+        return rtn;
+    }
+
+    public List<WatchActivity> getActivityOfMonth(Context context) {
+        List<WatchActivity> rtn = new ArrayList<>();
+        List<WatchActivity> list = loadActivityWithLocal(context);
+
+        for (int idx = 0; idx < 30; idx++)
+            rtn.add(list.get(idx));
+        Collections.reverse(rtn);
+
+        return rtn;
+    }
+
+    public List<WatchActivity> getActivityOfYear(Context context) {
+        List<WatchActivity> rtn = new ArrayList<>();
+        long startTimestamp;
+        long endTimestamp;
+
+        KidsEntityBean kid = DeviceManager.getFocusKidsInfo(context);
+        List<WatchActivity> list = null;
+        if (kid == null)
+            list = new ArrayList<>();
+        else {
+            DbUtil dbUtil = DbUtil.getInstance(SwingApplication.getAppContext());
+            ActivityFormatDataStore activityFormatDataStore = new ActivityFormatDataStore(dbUtil);
+            List<DB_FormatActivity> formatActivities = activityFormatDataStore.getByKidId(kidId);
+            if (!ObjectUtils.isListEmpty(formatActivities)) {
+                list = BeanConvertor.getWatchActivity(formatActivities);
+            }
+        }
+
+        if (null == list) {
+            list = new ArrayList<>();
+        }
+
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.YEAR, -1);
+        cal.set(Calendar.DATE, 1);
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.add(Calendar.SECOND, -1);
+        cal.add(Calendar.MONTH, 2);
+        endTimestamp = cal.getTimeInMillis();
+
+        cal.add(Calendar.SECOND, 1);
+        cal.add(Calendar.MONTH, -1);
+        startTimestamp = cal.getTimeInMillis();
+
+        for (int idx = 0; idx < 12; idx++) {
+            //Log.d("swing", "Start Time("+startTimestamp+") " + WatchOperator.getDefaultTimeString(startTimestamp));
+            //Log.d("swing", "End Time("+endTimestamp+") " + WatchOperator.getDefaultTimeString(endTimestamp));
+            WatchActivity watchActivity = new WatchActivity(0, startTimestamp);
+
+            for (WatchActivity src : list)
+                watchActivity.addInTimeRange(src, startTimestamp, endTimestamp);
+            rtn.add(watchActivity);
+
+            cal.setTimeInMillis(startTimestamp);
+            cal.add(Calendar.MONTH, 1);
+            startTimestamp = cal.getTimeInMillis();
+
+            cal.setTimeInMillis(endTimestamp);
+            cal.add(Calendar.MONTH, 1);
+            endTimestamp = cal.getTimeInMillis();
+        }
+        return rtn;
+    }
+
+    public void getHorylyDataFromCloud(Context context, final long kidId, final ICompleteListener completeListener) {
+        Calendar cal = Calendar.getInstance();
+        mTimezoneOffset = cal.getTimeZone().getOffset(cal.getTimeInMillis());
+
+        cal.set(Calendar.HOUR_OF_DAY, 23);
+        cal.set(Calendar.MINUTE, 59);
+        cal.set(Calendar.SECOND, 59);
+        mSearchEnd = cal.getTimeInMillis() + mTimezoneOffset;
+        cal.add(Calendar.DAY_OF_MONTH, -1);
+        cal.add(Calendar.SECOND, 1);
+        mSearchStart = cal.getTimeInMillis() + mTimezoneOffset;
+
+        ActivityApi activityApi = ApiGen.getInstance(
+                context.getApplicationContext()).
+                generateApi(ActivityApi.class, true);
+
+        activityApi.retrieveHourlyDataByTime(
+                (long) (mSearchStart / 1000),
+                (long) (mSearchEnd / 1000),
+                kidId).enqueue(new BaseRetrofitCallback<RetrieveHourlyDataRep>() {
+            @Override
+            public void onResponse(Call<RetrieveHourlyDataRep> call, Response<RetrieveHourlyDataRep> response) {
+                RetrieveHourlyDataRep retrieveHourlyDataRep = response.body();
+                //如果获取数据成功，则开始更新本地数据
+                if (response.code() == 200
+                        && retrieveHourlyDataRep != null) {
+                    if (completeListener != null) {
+                        completeListener.onFinish(retrieveHourlyDataRep.getActivities(), response.code());
+                    }
+                } else {
+                    if (completeListener != null) {
+                        completeListener.onFinish(null, response.code());
+                    }
+                }
+
+                super.onResponse(call, response);
+
+            }
+
+            @Override
+            public void onFailure(Call<RetrieveHourlyDataRep> call, Throwable t) {
+                super.onFailure(call, t);
+
+                if (completeListener != null) {
+                    completeListener.onFailed("net error", -1);
+                }
+            }
+        });
+    }
+
+    public interface ICompleteListener {
+        void onFinish(Object arg, int statusCode);
 
         void onFailed(String Command, int statusCode);
     }

@@ -7,7 +7,8 @@ import java.io.Serializable;
  */
 
 public class WatchActivity implements Serializable {
-    public static final int STEP_ALMOST = 9000;
+    public static final int STEP_ALMOST = 7000;
+    public static final int STEP_EXCELLENT = 10000;
     public static final int STEP_GOAL = 12000;
 
     public Act mIndoor = new Act();
@@ -39,7 +40,7 @@ public class WatchActivity implements Serializable {
         }
     }
 
-    WatchActivity() {
+    public WatchActivity() {
         init(0, "", "", 0, 0, "", "", 0, 0, 0, 0);
     }
 
