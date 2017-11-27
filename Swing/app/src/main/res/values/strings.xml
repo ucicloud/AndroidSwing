@@ -447,6 +447,7 @@
     <string name="dashboard_chart_distance">Distance</string>
     <string name="dashboard_chart_floors">Floors</string>
     <string name="dashboard_chart_flights">Flights</string>
+    <string name="dashboard_enqueue_fail_common">user, please try again</string>
 
     <string name="save_todo_done_statue_err">save fail, try again[%1$d]</string>
     <string name="calendar_todo_del">Delete</string>

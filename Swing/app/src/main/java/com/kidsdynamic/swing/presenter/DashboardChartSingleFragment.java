@@ -15,6 +15,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.kidsdynamic.swing.R;
+import com.kidsdynamic.swing.domain.KidActivityManager;
 import com.kidsdynamic.swing.model.WatchActivity;
 import com.kidsdynamic.swing.utils.SwingFontsCache;
 import com.kidsdynamic.swing.view.ViewChartBarVertical;
@@ -25,7 +26,6 @@ import com.kidsdynamic.swing.view.ViewTextSelector;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -63,7 +63,6 @@ public class DashboardChartSingleFragment extends DashboardBaseFragment {
     private ViewChartBarVertical mViewChartYear;
 
     private int mEmotion;
-    private int mEmotionColor;
     private int mCurrentChart;
 
     public static DashboardChartSingleFragment newInstance(int doorType, int chartType) {
@@ -103,13 +102,12 @@ public class DashboardChartSingleFragment extends DashboardBaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        int step = new Random().nextInt(15000);
+        long step = getStepToday(INDOOR).mSteps + getStepToday(OUTDOOR).mSteps;
 
-        // 依KD要求, 12000為達標, 我自己認為6000算是接近吧.
         int emotion = EMOTION_LOW;
-        if (step > 6000)
+        if (step > WatchActivity.STEP_ALMOST)
             emotion = EMOTION_ALMOST;
-        if (step > 12000)
+        if (step > WatchActivity.STEP_EXCELLENT)
             emotion = EMOTION_EXCELLENT;
 
         mViewSelector.setOnSelectListener(mSelectorListener);
@@ -184,6 +182,7 @@ public class DashboardChartSingleFragment extends DashboardBaseFragment {
     };
 
     private void setEmotion(int emotion) {
+        int mEmotionColor;
         int mBorderButtonBg;
         ColorStateList mBorderButtonTextColorStateList;
         switch (emotion) {
@@ -255,8 +254,8 @@ public class DashboardChartSingleFragment extends DashboardBaseFragment {
             mViewPager.setCurrentItem(CHART_TODAY, true);
         }
         mViewChartToday.setValue(getStepToday(getDoor()));
-        mViewChartToday.setTotal(3562f);
-        mViewChartToday.setGoal(12000);
+        mViewChartToday.setTotal(getStepToday(INDOOR).mSteps + getStepToday(OUTDOOR).mSteps);
+        mViewChartToday.setGoal(WatchActivity.STEP_GOAL);
         mViewChartToday.invalidate();
     }
 
@@ -265,7 +264,7 @@ public class DashboardChartSingleFragment extends DashboardBaseFragment {
             mViewPager.setCurrentItem(CHART_WEEK, true);
         }
         mViewChartWeek.setValue(getStepWeek(getDoor()));
-        mViewChartWeek.setGoal(12000);
+        mViewChartWeek.setGoal(WatchActivity.STEP_GOAL);
         mViewChartWeek.invalidate();
     }
 
@@ -274,7 +273,7 @@ public class DashboardChartSingleFragment extends DashboardBaseFragment {
             mViewPager.setCurrentItem(CHART_MONTH, true);
         }
         mViewChartMonth.setValue(getStepMonth(getDoor()));
-        mViewChartMonth.setGoal(12000);
+        mViewChartMonth.setGoal(WatchActivity.STEP_GOAL);
         mViewChartMonth.invalidate();
     }
 
@@ -283,55 +282,46 @@ public class DashboardChartSingleFragment extends DashboardBaseFragment {
             mViewPager.setCurrentItem(CHART_YEAR, true);
         }
         mViewChartYear.setValue(getStepYear(getDoor()));
-        mViewChartYear.setGoal(12000);
+        mViewChartYear.setGoal(WatchActivity.STEP_GOAL);
         mViewChartYear.invalidate();
     }
 
     private WatchActivity.Act getStepToday(int door) {
-        Random random = new Random();
-        WatchActivity.Act act = new WatchActivity.Act();
-        act.mSteps = random.nextInt(12000);
-        act.mTimestamp = System.currentTimeMillis();
-        act.mDistance = random.nextInt(8000);
-        return act;
+        WatchActivity act = new KidActivityManager().getActivityOfDay(getContext());
+        return door == INDOOR ? act.mIndoor : act.mOutdoor;
     }
 
     private List<WatchActivity.Act> getStepWeek(int door) {
+        List<WatchActivity> thisWeek = new KidActivityManager().getActivityOfWeek(getContext());
         List<WatchActivity.Act> rtn = new ArrayList<>();
-        Random random = new Random();
-        for (int i = 0; i < 7; i++) {
-            WatchActivity.Act act = new WatchActivity.Act();
-            act.mSteps = random.nextInt(12000);
-            act.mTimestamp = System.currentTimeMillis();
-            act.mDistance = random.nextInt(8000);
-            rtn.add(act);
-        }
+
+        for (WatchActivity activity : thisWeek)
+            rtn.add(new WatchActivity.Act(door == INDOOR ? activity.mIndoor : activity.mOutdoor));
+
         return rtn;
     }
 
     private List<WatchActivity.Act> getStepMonth(int door) {
+        List<WatchActivity> thisWeek = new KidActivityManager().getActivityOfMonth(getContext());
         List<WatchActivity.Act> rtn = new ArrayList<>();
-        Random random = new Random();
-        for (int i = 0; i < 30; i++) {
-            WatchActivity.Act act = new WatchActivity.Act();
-            act.mSteps = random.nextInt(12000);
-            act.mTimestamp = System.currentTimeMillis();
-            act.mDistance = random.nextInt(8000);
-            rtn.add(act);
-        }
+
+        for (WatchActivity activity : thisWeek)
+            rtn.add(new WatchActivity.Act(door == INDOOR ? activity.mIndoor : activity.mOutdoor));
+
+//        for (WatchActivity.Act act : rtn) {
+//            act.mSteps = (int) (Math.random() * mViewChartMonth.mAxisVMax);
+//        }
+
         return rtn;
     }
 
     private List<WatchActivity.Act> getStepYear(int door) {
+        List<WatchActivity> thisWeek = new KidActivityManager().getActivityOfYear(getContext());
         List<WatchActivity.Act> rtn = new ArrayList<>();
-        Random random = new Random();
-        for (int i = 0; i < 12; i++) {
-            WatchActivity.Act act = new WatchActivity.Act();
-            act.mSteps = random.nextInt(12000);
-            act.mTimestamp = System.currentTimeMillis();
-            act.mDistance = random.nextInt(8000);
-            rtn.add(act);
-        }
+
+        for (WatchActivity activity : thisWeek)
+            rtn.add(new WatchActivity.Act(door == INDOOR ? activity.mIndoor : activity.mOutdoor));
+
         return rtn;
     }
 

@@ -14,12 +14,15 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.kidsdynamic.data.net.activity.model.RetrieveHourlyDataRep;
 import com.kidsdynamic.swing.R;
+import com.kidsdynamic.swing.domain.DeviceManager;
+import com.kidsdynamic.swing.domain.KidActivityManager;
 import com.kidsdynamic.swing.utils.SwingFontsCache;
+import com.yy.base.utils.ToastCommon;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -80,36 +83,19 @@ public class DashboardListFragment extends DashboardBaseFragment {
         mEmotion = args.getInt(EMOTION_INT, EMOTION_LOW);
         setEmotion(mEmotion);
 
-        int count = 0;
-        Random random = new Random();
+        long kidId = DeviceManager.getFocusKidsId();
         int listType = args.getInt(LIST_TYPE, LIST_TODAY);
         if (LIST_TODAY == listType) {
             tv_title.setText(R.string.dashboard_chart_today);
-            count = random.nextInt(24);
+            showLoadingDialog(R.string.signup_login_wait);
+            new KidActivityManager().getHorylyDataFromCloud(getContext(), kidId, iCompleteListener);
         } else if (LIST_WEEK == listType) {
             tv_title.setText(R.string.dashboard_chart_this_week);
-            count = 7;
         } else if (LIST_MONTH == listType) {
             tv_title.setText(R.string.dashboard_chart_this_month);
-            int value = random.nextInt();
-            if (value % 3 == 0) {
-                count = 31;
-            } else if (value % 3 == 1) {
-                count = 30;
-            } else {
-                count = 28;
-            }
         } else {
             tv_title.setText(R.string.dashboard_chart_this_year);
-            count = 12;
         }
-
-        List<Object> list = new ArrayList<>();
-        for (int i = 0; i < count; i++) {
-            list.add(new Object());
-        }
-        setDataAdapter(list, listType);
-
     }
 
     private RadioGroup.OnCheckedChangeListener onCheckedChangeListener = new RadioGroup.OnCheckedChangeListener() {
@@ -158,23 +144,47 @@ public class DashboardListFragment extends DashboardBaseFragment {
         mEmotion = emotion;
     }
 
-    private void setDataAdapter(List<Object> list, int type) {
-        if (null == dataAdapter) {
-            dataAdapter = new DataAdapter(getContext(), list, type);
-        } else {
-            dataAdapter.setData(list);
-            dataAdapter.setType(type);
-        }
+    private void setDataAdapter(List<?> list, int type) {
+        dataAdapter = new DataAdapter<>(getContext(), list, type);
         mListView.setAdapter(dataAdapter);
     }
 
-    private class DataAdapter extends BaseAdapter {
+    private KidActivityManager.ICompleteListener iCompleteListener = new KidActivityManager.ICompleteListener() {
+        @Override
+        public void onFinish(Object arg, int statusCode) {
+            if (200 == statusCode && null != arg && arg instanceof List) {
+                List<RetrieveHourlyDataRep.ActivitiesEntity> entities = new ArrayList<>();
+                List list = (List) arg;
+                for (int i = 0; i < list.size(); i++) {
+                    Object obj = list.get(i);
+                    if (obj instanceof RetrieveHourlyDataRep.ActivitiesEntity) {
+                        RetrieveHourlyDataRep.ActivitiesEntity entity =
+                                (RetrieveHourlyDataRep.ActivitiesEntity) obj;
+                        entities.add(entity);
+                    }
+                }
+                setDataAdapter(entities, LIST_TODAY);
+                finishLoadingDialog();
+            } else {
+                finishLoadingDialog();
+                ToastCommon.makeText(getContext(), R.string.dashboard_enqueue_fail_common);
+            }
+        }
+
+        @Override
+        public void onFailed(String Command, int statusCode) {
+            finishLoadingDialog();
+            ToastCommon.showToast(getContext(), Command);
+        }
+    };
+
+    private class DataAdapter<T> extends BaseAdapter {
 
         private Context context;
-        private List<Object> items = new ArrayList<>();
+        private List<T> items = new ArrayList<>();
         private int type;
 
-        DataAdapter(Context context, List<Object> items, int type) {
+        DataAdapter(Context context, List<T> items, int type) {
             this.context = context;
             this.items.addAll(items);
             this.type = type;
@@ -182,11 +192,6 @@ public class DashboardListFragment extends DashboardBaseFragment {
 
         void setType(int type) {
             this.type = type;
-        }
-
-        void setData(List<Object> items) {
-            this.items.clear();
-            this.items.addAll(items);
         }
 
         @Override
