@@ -59,7 +59,7 @@ import retrofit2.Response;
 public class DashboardProgressFragment extends DashboardBaseFragment {
     private final int PROGRESS_INTERVAL = 100;
 
-    private final static int SEARCH_TIMEOUT = 150;     // 150 * PROGRESS_INTERVAL milliseconds
+    private final static int SEARCH_TIMEOUT = 200;     // 200 * PROGRESS_INTERVAL milliseconds
     private int mSearchTimeout;
     private final static int SYNC_TIMEOUT = 1000;      // 1000 * PROGRESS_INTERVAL milliseconds
     private int mSyncTimeout;

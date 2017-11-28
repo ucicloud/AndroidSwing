@@ -6,6 +6,8 @@ import android.content.res.Configuration;
 import android.support.v4.content.LocalBroadcastManager;
 
 import com.kidsdynamic.data.net.ApiGen;
+import com.vise.log.ViseLog;
+import com.vise.log.inner.LogcatTree;
 import com.yy.base.ActivityController;
 import com.yy.base.handleException.CrashHandler;
 
@@ -36,6 +38,11 @@ public class SwingApplication extends Application {
             CrashHandler crashHandler = CrashHandler.getInstance();
             crashHandler.setEnable(true);
             crashHandler.init(getApplicationContext());
+        }
+        else {
+            //Debug时打印蓝牙
+            ViseLog.getLogConfig().configAllowLog(true);//配置日志信息
+            ViseLog.plant(new LogcatTree());//添加Logcat打印信息
         }
 
     }
