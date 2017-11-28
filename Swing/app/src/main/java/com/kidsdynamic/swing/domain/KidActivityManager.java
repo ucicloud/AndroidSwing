@@ -175,22 +175,24 @@ public class KidActivityManager {
     public List<WatchActivity> loadActivityWithLocal(Context context) {
         KidsEntityBean kid = DeviceManager.getFocusKidsInfo(context);
         List<WatchActivity> rtn = new ArrayList<>();
+        // 结束时间为今天的23时59分59秒
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.HOUR_OF_DAY, 23);
         cal.set(Calendar.MINUTE, 59);
         cal.set(Calendar.SECOND, 59);
-        long end = cal.getTimeInMillis();
+        long endTimestamp = cal.getTimeInMillis();
+        // 起始时间为一年前今天的23时59分59秒，再加一秒
         cal.add(Calendar.YEAR, -1);
         cal.add(Calendar.SECOND, 1);
-        long start = cal.getTimeInMillis();
+        long startTimestamp = cal.getTimeInMillis();
 
-        start = (start / 1000) * 1000;
-        end = (end / 1000) * 1000;
+        // 一天（24小时）的毫秒数
+        // 毫秒*秒*分*时
+        int millsInDay = 1000 * 60 * 60 * 24;
 
-        while (start < end) {
-            //Log.d("swing", "Start Time(" + start + ") " + WatchOperator.getDefaultTimeString(start));
-            rtn.add(new WatchActivity(kid == null ? 0 : kid.getKidsId(), start));
-            start += 86400000;
+        while (startTimestamp < endTimestamp) {
+            rtn.add(new WatchActivity(kid == null ? 0 : kid.getKidsId(), startTimestamp));
+            startTimestamp += millsInDay;
         }
 
         Collections.reverse(rtn);
@@ -299,33 +301,44 @@ public class KidActivityManager {
         cal.set(Calendar.SECOND, 0);
         cal.add(Calendar.SECOND, -1);
         cal.add(Calendar.MONTH, 2);
+        // 结束时间为一年前下个月最后一天 23时59分59秒
         endTimestamp = cal.getTimeInMillis();
 
         cal.add(Calendar.SECOND, 1);
         cal.add(Calendar.MONTH, -1);
+        // 起始时间为一年前下个月的第一天 0时0分0秒
         startTimestamp = cal.getTimeInMillis();
 
         for (int idx = 0; idx < 12; idx++) {
-            //Log.d("swing", "Start Time("+startTimestamp+") " + WatchOperator.getDefaultTimeString(startTimestamp));
-            //Log.d("swing", "End Time("+endTimestamp+") " + WatchOperator.getDefaultTimeString(endTimestamp));
             WatchActivity watchActivity = new WatchActivity(0, startTimestamp);
 
             for (WatchActivity src : list)
                 watchActivity.addInTimeRange(src, startTimestamp, endTimestamp);
             rtn.add(watchActivity);
 
+            // 本次起始时间加一个月，作为下一个起始时间
             cal.setTimeInMillis(startTimestamp);
             cal.add(Calendar.MONTH, 1);
+            cal.set(Calendar.DATE, 1);
+            cal.set(Calendar.HOUR_OF_DAY, 0);
+            cal.set(Calendar.MINUTE, 0);
+            cal.set(Calendar.SECOND, 0);
             startTimestamp = cal.getTimeInMillis();
 
-            cal.setTimeInMillis(endTimestamp);
+            // 下一个起始时间加一个月后，再减去一秒，作为本月的结束时间
+            cal.setTimeInMillis(startTimestamp);
             cal.add(Calendar.MONTH, 1);
+            cal.set(Calendar.DATE, 1);
+            cal.set(Calendar.HOUR_OF_DAY, 0);
+            cal.set(Calendar.MINUTE, 0);
+            cal.set(Calendar.SECOND, 0);
+            cal.add(Calendar.SECOND, -1);
             endTimestamp = cal.getTimeInMillis();
         }
         return rtn;
     }
 
-    public void getHorylyDataFromCloud(Context context, final long kidId, final ICompleteListener completeListener) {
+    public void getHourlyDataFromCloud(Context context, final long kidId, final ICompleteListener completeListener) {
         Calendar cal = Calendar.getInstance();
         mTimezoneOffset = cal.getTimeZone().getOffset(cal.getTimeInMillis());
 
