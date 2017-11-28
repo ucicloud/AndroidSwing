@@ -302,10 +302,10 @@ public class DashboardChartSingleFragment extends DashboardBaseFragment {
     }
 
     private List<WatchActivity.Act> getStepMonth(int door) {
-        List<WatchActivity> thisWeek = new KidActivityManager().getActivityOfMonth(getContext());
+        List<WatchActivity> thisMonth = new KidActivityManager().getActivityOfMonth(getContext());
         List<WatchActivity.Act> rtn = new ArrayList<>();
 
-        for (WatchActivity activity : thisWeek)
+        for (WatchActivity activity : thisMonth)
             rtn.add(new WatchActivity.Act(door == INDOOR ? activity.mIndoor : activity.mOutdoor));
 
 //        for (WatchActivity.Act act : rtn) {
@@ -316,10 +316,10 @@ public class DashboardChartSingleFragment extends DashboardBaseFragment {
     }
 
     private List<WatchActivity.Act> getStepYear(int door) {
-        List<WatchActivity> thisWeek = new KidActivityManager().getActivityOfYear(getContext());
+        List<WatchActivity> thisYear= new KidActivityManager().getActivityOfYear(getContext());
         List<WatchActivity.Act> rtn = new ArrayList<>();
 
-        for (WatchActivity activity : thisWeek)
+        for (WatchActivity activity : thisYear)
             rtn.add(new WatchActivity.Act(door == INDOOR ? activity.mIndoor : activity.mOutdoor));
 
         return rtn;

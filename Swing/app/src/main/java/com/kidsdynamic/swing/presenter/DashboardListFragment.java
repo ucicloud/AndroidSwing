@@ -88,7 +88,7 @@ public class DashboardListFragment extends DashboardBaseFragment {
         if (LIST_TODAY == listType) {
             tv_title.setText(R.string.dashboard_chart_today);
             showLoadingDialog(R.string.signup_login_wait);
-            new KidActivityManager().getHorylyDataFromCloud(getContext(), kidId, iCompleteListener);
+            new KidActivityManager().getHourlyDataFromCloud(getContext(), kidId, iCompleteListener);
         } else if (LIST_WEEK == listType) {
             tv_title.setText(R.string.dashboard_chart_this_week);
         } else if (LIST_MONTH == listType) {
