@@ -1,5 +1,6 @@
 package com.kidsdynamic.swing.presenter;
 
+import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
 import android.content.ComponentName;
@@ -7,9 +8,14 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.Gravity;
@@ -58,6 +64,9 @@ import retrofit2.Response;
  */
 
 public class DashboardProgressFragment extends DashboardBaseFragment {
+
+    private static final int REQUEST_CODE_BLE = 1128;
+
     private final int PROGRESS_INTERVAL = 100;
 
     private final static int SEARCH_TIMEOUT = 150;     // 150 * PROGRESS_INTERVAL milliseconds
@@ -172,6 +181,12 @@ public class DashboardProgressFragment extends DashboardBaseFragment {
     }
 
     @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        startFlow();
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
 
@@ -183,7 +198,9 @@ public class DashboardProgressFragment extends DashboardBaseFragment {
         /*mDevice = mActivityMain.mContactStack.isEmpty() ?
                 mActivityMain.mOperator.getFocusKid() :
                 (WatchContact.Kid) mActivityMain.mContactStack.pop();*/
+    }
 
+    private void startFlow() {
         mDevice = DeviceManager.getFocusKidsInfo(getContext());
 
         if (mDevice == null)
@@ -420,16 +437,67 @@ public class DashboardProgressFragment extends DashboardBaseFragment {
 
     private void bleSearchStart() {
         mSearchWatchResult = null;
-        if (mBluetoothService == null) {
+        /*if (mBluetoothService == null) {
             bindService(bindBlePurpose_search_device);
         } else {
             //start search dev
             searchWatch();
 
-        }
-        /*mActivityMain.mBLEMachine.Search(mOnSearchListener, mMacAddress);
-        mSearchResult = null;*/
+        }*/
+
+        //check access gps permission
+        checkPermissions();
     }
+
+    @Override
+    public final void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                                 @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case REQUEST_CODE_BLE:
+                if (grantResults.length > 0) {
+                    for (int i = 0; i < grantResults.length; i++) {
+                        if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
+                            onPermissionGranted(permissions[i]);
+                        }
+                    }
+                }
+                break;
+        }
+    }
+
+    private void checkPermissions() {
+        Context context = getContext();
+        String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION};
+        List<String> permissionDeniedList = new ArrayList<>();
+        for (String permission : permissions) {
+            int permissionCheck = ContextCompat.checkSelfPermission(context, permission);
+            if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
+                onPermissionGranted(permission);
+            } else {
+                permissionDeniedList.add(permission);
+            }
+        }
+
+        if (!permissionDeniedList.isEmpty()) {
+            String[] deniedPermissions = permissionDeniedList.toArray(new String[permissionDeniedList.size()]);
+            ActivityCompat.requestPermissions(getActivity(), deniedPermissions, REQUEST_CODE_BLE);
+        }
+    }
+
+    private void onPermissionGranted(String permission) {
+        switch (permission) {
+            case Manifest.permission.ACCESS_FINE_LOCATION:
+                if (mBluetoothService == null) {
+                    bindService(bindBlePurpose_search_device);
+                } else {
+                    searchWatch();
+                }
+                break;
+        }
+    }
+
+
 
     private void searchWatch() {
         mBluetoothService.closeConnect();
