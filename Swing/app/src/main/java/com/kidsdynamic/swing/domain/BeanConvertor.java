@@ -25,6 +25,7 @@ import com.kidsdynamic.data.repository.disk.RawActivityDataStore;
 import com.kidsdynamic.swing.ble.ActivityModel;
 import com.kidsdynamic.swing.model.KidsEntityBean;
 import com.kidsdynamic.swing.model.WatchActivity;
+import com.kidsdynamic.swing.model.WatchContact;
 import com.kidsdynamic.swing.model.WatchEvent;
 import com.kidsdynamic.swing.model.WatchTodo;
 
@@ -114,6 +115,7 @@ public class BeanConvertor {
 
             db_kids.setKidsId(kidsEntity.getId());
             db_kids.setName(kidsEntity.getName());
+            // TODO: 2017/11/28 数据库修改
             db_kids.setDateCreated(getUTCTimeStamp(kidsEntity.getDateCreated()));
             db_kids.setMacId(kidsEntity.getMacId());
             db_kids.setProfile(kidsEntity.getProfile());
@@ -568,6 +570,21 @@ public class BeanConvertor {
             list.add(watchActivity);
         }
         return list;
+    }
+
+    static WatchContact.Kid getKidsForUI(KidsEntityBean kidsEntityBean){
+        WatchContact.Kid kid = new WatchContact.Kid();
+        kid.mId = kidsEntityBean.getKidsId();
+        kid.mName = kidsEntityBean.getName();
+        kid.mLastUpdate = kidsEntityBean.getLastUpdate();
+        kid.mDateCreated = kidsEntityBean.getDateCreated();
+        kid.mMacId = kidsEntityBean.getMacId();
+        kid.mUserId = kidsEntityBean.getParentId();
+        kid.mFirmwareVersion = kidsEntityBean.getFirmwareVersion();
+        kid.mProfile = kidsEntityBean.getProfile();
+
+        return kid;
+
     }
 
 }

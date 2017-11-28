@@ -36,19 +36,21 @@ public class WatchContact implements Serializable {
     }
 
     public static class Kid extends WatchContact {
-        public int mId;
+        public long mId;
         public String mName;
+        public long mLastUpdate;
         public long mDateCreated;
         public String mMacId;
         public String mFirmwareVersion;
         public String mProfile;
-        public int mUserId;
+        public long mUserId;
         public boolean mBound = false;
 
         public Kid() {
             super(null, "");
             mId = 0;
             mName = "";
+            mLastUpdate = 0;
             mDateCreated = 0;
             mMacId = "";
             mUserId = 0;
@@ -62,6 +64,7 @@ public class WatchContact implements Serializable {
             super(photo, label);
             mId = 0;
             mName = "";
+            mLastUpdate = 0;
             mDateCreated = 0;
             mMacId = "";
             mUserId = 0;
@@ -70,11 +73,12 @@ public class WatchContact implements Serializable {
             mBound = false;
         }
 
-        public Kid(Bitmap photo, int id, String firstName, String lastName, long dateCreated, String macId, int parentId) {
+        public Kid(Bitmap photo, int id, String firstName, String lastName, long lastUpdate,long dateCreated, String macId, int parentId) {
             super(photo, firstName + " " + lastName);
 
             mId = id;
             mName = firstName;
+            mLastUpdate = lastUpdate;
             mDateCreated = dateCreated;
             mMacId = macId;
             mUserId = parentId;

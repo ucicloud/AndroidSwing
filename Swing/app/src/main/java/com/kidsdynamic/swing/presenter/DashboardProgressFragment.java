@@ -724,8 +724,9 @@ public class DashboardProgressFragment extends DashboardBaseFragment {
         mViewProgress.setOnProgressListener(null);
         mViewProgress.setActive(true);
 
-        mViewLabel.setVisibility(View.INVISIBLE);
-        mViewProgress.setVisibility(View.INVISIBLE);
+        //显示同步成功通过另外一种方式实现
+        /*mViewLabel.setVisibility(View.INVISIBLE);
+        mViewProgress.setVisibility(View.INVISIBLE);*/
 //        view_sync_complete.setVisibility(View.VISIBLE);
     }
 

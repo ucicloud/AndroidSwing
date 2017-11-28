@@ -7,12 +7,16 @@ package com.kidsdynamic.swing.model;
 public class KidsEntityBean {
     private long kidsId;
     private String name;
-    private Long dateCreated;
+    private long lastUpdate;
+    private long dateCreated;
     private String macId;
     private String firmwareVersion;
     private String profile;
     private String state;
     private long parentId;
+    private int battery;
+    private long subHostId;
+    private int shareType;
 
     public long getKidsId() {
         return kidsId;
@@ -28,6 +32,14 @@ public class KidsEntityBean {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Long getLastUpdate() {
+        return lastUpdate;
+    }
+
+    public void setLastUpdate(Long lastUpdate) {
+        this.lastUpdate = lastUpdate;
     }
 
     public Long getDateCreated() {
@@ -76,5 +88,29 @@ public class KidsEntityBean {
 
     public void setParentId(long parentId) {
         this.parentId = parentId;
+    }
+
+    public int getBattery() {
+        return battery;
+    }
+
+    public void setBattery(int battery) {
+        this.battery = battery;
+    }
+
+    public long getSubHostId() {
+        return subHostId;
+    }
+
+    public void setSubHostId(long subHostId) {
+        this.subHostId = subHostId;
+    }
+
+    public int getShareType() {
+        return shareType;
+    }
+
+    public void setShareType(int shareType) {
+        this.shareType = shareType;
     }
 }

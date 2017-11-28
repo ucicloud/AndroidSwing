@@ -1,5 +1,6 @@
 package com.kidsdynamic.swing.presenter;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -7,11 +8,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.kidsdynamic.data.dao.DB_User;
 import com.kidsdynamic.swing.R;
 import com.kidsdynamic.swing.domain.LoginManager;
 import com.kidsdynamic.swing.domain.RawActivityManager;
+import com.kidsdynamic.swing.domain.UserManager;
 import com.kidsdynamic.swing.utils.ConfigUtil;
+import com.kidsdynamic.swing.utils.GlideHelper;
+import com.kidsdynamic.swing.view.ViewCircle;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -23,6 +29,8 @@ import butterknife.OnClick;
  */
 
 public class LogoutConfirmFragment extends ProfileBaseFragment {
+    @BindView(R.id.signup_profile_photo)
+    protected ViewCircle mViewPhoto;
 
     @BindView(R.id.tv_logout_account_name)
     protected TextView tv_accountName;
@@ -59,9 +67,23 @@ public class LogoutConfirmFragment extends ProfileBaseFragment {
         if(currentLoginUserInfo != null){
             tv_accountEmail.setText(currentLoginUserInfo.getEmail());
             tv_accountName.setText(LoginManager.getUserName(currentLoginUserInfo));
+
+            GlideHelper.getBitMap(getContext(), UserManager.getProfileRealUri(currentLoginUserInfo.getProfile()),
+                    String.valueOf(currentLoginUserInfo.getLastUpdate()), userAvatarSimpleTarget);
         }
 
     }
+
+    private SimpleTarget<Bitmap> userAvatarSimpleTarget = new SimpleTarget<Bitmap>(){
+
+        @Override
+        public void onResourceReady(Bitmap bitmap, Transition<? super Bitmap> transition) {
+
+            if (!getActivity().isDestroyed()) {
+                mViewPhoto.setBitmap(bitmap);
+            }
+        }
+    };
 
     @OnClick(R.id.btn_confirm_logout)
     protected void logout(){

@@ -15,12 +15,14 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.kidsdynamic.data.dao.DB_User;
 import com.kidsdynamic.swing.R;
+import com.kidsdynamic.swing.domain.DeviceManager;
 import com.kidsdynamic.swing.domain.LoginManager;
 import com.kidsdynamic.swing.domain.UserManager;
 import com.kidsdynamic.swing.model.WatchContact;
 import com.kidsdynamic.swing.utils.GlideHelper;
 import com.kidsdynamic.swing.view.ViewCircle;
 
+import java.util.List;
 import java.util.Locale;
 
 import butterknife.ButterKnife;
@@ -123,8 +125,12 @@ public class ProfileMainFragment extends ProfileBaseFragment {
         }
 
         // 載入用戶的所有手錶
-        /*for (WatchContact device : mActivityMain.mOperator.getDeviceList())
-            addContact(mViewDeviceContainer, device, mContactListener);*/
+        if(parent != null){
+            List<WatchContact.Kid> kidsForUI = DeviceManager.getKidsForUI(getContext(), parent.getUserId());
+            for (WatchContact device : kidsForUI)
+                addContact(mViewDeviceContainer, device, mContactListener);
+        }
+
 
         // TODO: 2017/11/20 二期
         // 載入所有其它用戶與當前用戶分享的手錶
@@ -153,10 +159,28 @@ public class ProfileMainFragment extends ProfileBaseFragment {
 
         @Override
         public void onResourceReady(Bitmap bitmap, Transition<? super Bitmap> transition) {
-            mViewPhoto.setBitmap(bitmap);
+            if (!getActivity().isDestroyed()) {
+                mViewPhoto.setBitmap(bitmap);
+            }
         }
     };
 
+
+    private class AvatarSimpleTarget extends SimpleTarget<Bitmap>{
+
+        ViewCircle viewCircle;
+
+        public AvatarSimpleTarget(ViewCircle viewCircle){
+            this.viewCircle = viewCircle;
+        }
+
+        @Override
+        public void onResourceReady(Bitmap bitmap, Transition<? super Bitmap> transition) {
+            if(viewCircle != null && !getActivity().isDestroyed()){
+                viewCircle.setBitmap(bitmap);
+            }
+        }
+    }
 
    /* @Override
     public ViewFragmentConfig getConfig() {
@@ -218,8 +242,18 @@ public class ProfileMainFragment extends ProfileBaseFragment {
 
     private void addContact(LinearLayout layout, WatchContact contact, View.OnClickListener listener) {
 
+        layout.removeAllViews();
+
         ViewCircle photo = new ViewCircle(mActivityMain);
         photo.setBitmap(contact.mPhoto);
+
+        if(contact instanceof WatchContact.Kid){
+            WatchContact.Kid kid = (WatchContact.Kid) contact;
+            GlideHelper.getBitMap(getContext().getApplicationContext(),
+                    UserManager.getProfileRealUri(kid.mProfile),
+                    kid.mLastUpdate+"",new AvatarSimpleTarget(photo));
+        }
+
         photo.setStrokeCount(12);
         photo.setStrokeBeginEnd(12, -1);
         photo.setStrokeType(ViewCircle.STROKE_TYPE_ARC);

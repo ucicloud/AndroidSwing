@@ -36,6 +36,7 @@ public class UserMaker implements Maker {
         kids.setClassNameDao("KidsDao");
         kids.addLongProperty("kidsId").columnName("kids_id").notNull().primaryKey();
         kids.addStringProperty("name").columnName("name");
+        kids.addLongProperty("lastUpdate").columnName("last_update");
         kids.addLongProperty("dateCreated").columnName("dateCreated");
         kids.addStringProperty("macId").columnName("macId");
         kids.addStringProperty("currentVersion").columnName("currentVersion");

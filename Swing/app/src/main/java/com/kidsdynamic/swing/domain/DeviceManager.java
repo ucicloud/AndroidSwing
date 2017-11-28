@@ -12,6 +12,7 @@ import com.kidsdynamic.data.persistent.PreferencesUtil;
 import com.kidsdynamic.data.repository.disk.KidsDataStore;
 import com.kidsdynamic.swing.SwingApplication;
 import com.kidsdynamic.swing.model.KidsEntityBean;
+import com.kidsdynamic.swing.model.WatchContact;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -140,6 +141,7 @@ public class DeviceManager {
         return kidsEntityBeanList;
     }
 
+
     public KidsEntityBean  getKidsInfo(Context context, long kidId){
         DbUtil dbUtil = DbUtil.getInstance(context.getApplicationContext());
 
@@ -165,4 +167,27 @@ public class DeviceManager {
 
         return null;
     }
+
+
+    //界面显示需要的kids信息list
+    public static List<WatchContact.Kid> getKidsForUI(Context context, long parentId){
+        List<KidsEntityBean> kidsByUserId = getAllKidsByUserId(context, parentId);
+
+        List<WatchContact.Kid> kidsForUI = new ArrayList<>();
+        if(!ObjectUtils.isListEmpty(kidsByUserId)){
+            for (KidsEntityBean kidsEntityBean :
+                    kidsByUserId) {
+                WatchContact.Kid kidsForUIRaw = BeanConvertor.getKidsForUI(kidsEntityBean);
+                kidsForUIRaw.mBound = true;
+                kidsForUIRaw.mLabel = kidsForUIRaw.mName;
+
+                kidsForUI.add(kidsForUIRaw);
+            }
+        }
+
+        return kidsForUI;
+
+    }
+
+
 }

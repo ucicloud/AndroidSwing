@@ -12,6 +12,8 @@ import com.bumptech.glide.signature.ObjectKey;
 import com.kidsdynamic.swing.R;
 import com.kidsdynamic.swing.SwingApplication;
 
+import java.util.concurrent.Executors;
+
 /**
  * GlideHelper
  * <p>
@@ -80,8 +82,15 @@ public class GlideHelper {
     /*$$$$$$$$$$$$$$$$$$$$$$$$$*/
     public static void clearCache(){
         try {
-            Glide.get(SwingApplication.getAppContext()).clearDiskCache();
+
             Glide.get(SwingApplication.getAppContext()).clearMemory();
+
+            Executors.newSingleThreadExecutor().execute(new Runnable() {
+                @Override
+                public void run() {
+                    Glide.get(SwingApplication.getAppContext()).clearDiskCache();
+                }
+            });
 
         }catch (Exception e){
             e.printStackTrace();
