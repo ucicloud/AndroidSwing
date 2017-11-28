@@ -68,4 +68,11 @@ public class RawActivityDataStore {
         rawActivityDao.deleteAll();
     }
 
+    public List<DB_RawActivity> getByMacId(String macId){
+        RawActivityDao rawActivityDao = dbUtil.getDaoSession().getRawActivityDao();
+        return rawActivityDao.queryBuilder().
+                where(RawActivityDao.Properties.MacId.eq(macId)).
+                list();
+    }
+
 }

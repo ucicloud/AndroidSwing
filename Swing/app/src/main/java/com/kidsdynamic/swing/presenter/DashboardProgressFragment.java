@@ -1,5 +1,6 @@
 package com.kidsdynamic.swing.presenter;
 
+import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
 import android.content.ComponentName;
@@ -7,11 +8,17 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,6 +64,9 @@ import retrofit2.Response;
  */
 
 public class DashboardProgressFragment extends DashboardBaseFragment {
+
+    private static final int REQUEST_CODE_BLE = 1128;
+
     private final int PROGRESS_INTERVAL = 100;
 
     private final static int SEARCH_TIMEOUT = 200;     // 200 * PROGRESS_INTERVAL milliseconds
@@ -72,8 +82,8 @@ public class DashboardProgressFragment extends DashboardBaseFragment {
     private MainFrameActivity mActivityMain;
     private View mViewMain;
 
-    @BindView(R.id.view_sync_complete)
-    protected View view_sync_complete;
+    //    @BindView(R.id.view_sync_complete)
+//    protected View view_sync_complete;
     @BindView(R.id.tv_message)
     protected TextView mViewLabel;
     @BindView(R.id.dashboard_progress_button_first)
@@ -86,7 +96,7 @@ public class DashboardProgressFragment extends DashboardBaseFragment {
     private KidsEntityBean mDevice;
     private String mMacAddress;
     private BluetoothLeDevice mSearchWatchResult = null;
-//    private List<WatchVoiceAlertEntity> mVoiceAlertList;
+    //    private List<WatchVoiceAlertEntity> mVoiceAlertList;
     private List<EventModel> mVoiceAlertList;
     private final static int SYNC_STATE_INIT = 0;
     private final static int SYNC_STATE_SUCCESS = 1;
@@ -106,6 +116,12 @@ public class DashboardProgressFragment extends DashboardBaseFragment {
     //绑定蓝牙service目的--同步数据
     private final int bindBlePurpose_sync_data = 2;
 
+    public static DashboardProgressFragment newInstance() {
+        Bundle args = new Bundle();
+        DashboardProgressFragment fragment = new DashboardProgressFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -142,14 +158,13 @@ public class DashboardProgressFragment extends DashboardBaseFragment {
         }
 
 
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mViewMain = inflater.inflate(R.layout.fragment_dashboard_progress, container, false);
 
-        ButterKnife.bind(this,mViewMain);
+        ButterKnife.bind(this, mViewMain);
         initTitleBar();
        /* Bundle bundle = new Bundle();
         bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "Sync Start");
@@ -166,6 +181,12 @@ public class DashboardProgressFragment extends DashboardBaseFragment {
     }
 
     @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        startFlow();
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
 
@@ -177,7 +198,9 @@ public class DashboardProgressFragment extends DashboardBaseFragment {
         /*mDevice = mActivityMain.mContactStack.isEmpty() ?
                 mActivityMain.mOperator.getFocusKid() :
                 (WatchContact.Kid) mActivityMain.mContactStack.pop();*/
+    }
 
+    private void startFlow() {
         mDevice = DeviceManager.getFocusKidsInfo(getContext());
 
         if (mDevice == null)
@@ -239,7 +262,7 @@ public class DashboardProgressFragment extends DashboardBaseFragment {
     }
 
     //从服务端获取用户数据，更新本地缓存
-    private void syncUserData(){
+    private void syncUserData() {
         final UserApiNeedToken userApiNeedToken = ApiGen.getInstance(
                 getActivity().getApplicationContext()).
                 generateApi(UserApiNeedToken.class, true);
@@ -294,7 +317,7 @@ public class DashboardProgressFragment extends DashboardBaseFragment {
     private ViewCircle.OnProgressListener mServerSyncProgressListener = new ViewCircle.OnProgressListener() {
         @Override
         public void onProgress(ViewCircle view, int begin, int end) {
-            switch(mServerSyncState) {
+            switch (mServerSyncState) {
                 case 0:
                     if (mServerSyncFinish) {
 
@@ -304,7 +327,7 @@ public class DashboardProgressFragment extends DashboardBaseFragment {
 
                         //开始从服务器获取activity数据
                         new KidActivityManager().getActivityDataFromCloud
-                                (getContext(),mDevice.getKidsId(),mActivityUpdateListener);
+                                (getContext(), mDevice.getKidsId(), mActivityUpdateListener);
                         mServerSyncState = 1;
                     }
                     break;
@@ -414,18 +437,69 @@ public class DashboardProgressFragment extends DashboardBaseFragment {
 
     private void bleSearchStart() {
         mSearchWatchResult = null;
-        if (mBluetoothService == null) {
+        /*if (mBluetoothService == null) {
             bindService(bindBlePurpose_search_device);
-        }else {
+        } else {
             //start search dev
             searchWatch();
 
-        }
-        /*mActivityMain.mBLEMachine.Search(mOnSearchListener, mMacAddress);
-        mSearchResult = null;*/
+        }*/
+
+        //check access gps permission
+        checkPermissions();
     }
 
-    private void searchWatch(){
+    @Override
+    public final void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                                 @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case REQUEST_CODE_BLE:
+                if (grantResults.length > 0) {
+                    for (int i = 0; i < grantResults.length; i++) {
+                        if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
+                            onPermissionGranted(permissions[i]);
+                        }
+                    }
+                }
+                break;
+        }
+    }
+
+    private void checkPermissions() {
+        Context context = getContext();
+        String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION};
+        List<String> permissionDeniedList = new ArrayList<>();
+        for (String permission : permissions) {
+            int permissionCheck = ContextCompat.checkSelfPermission(context, permission);
+            if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
+                onPermissionGranted(permission);
+            } else {
+                permissionDeniedList.add(permission);
+            }
+        }
+
+        if (!permissionDeniedList.isEmpty()) {
+            String[] deniedPermissions = permissionDeniedList.toArray(new String[permissionDeniedList.size()]);
+            ActivityCompat.requestPermissions(getActivity(), deniedPermissions, REQUEST_CODE_BLE);
+        }
+    }
+
+    private void onPermissionGranted(String permission) {
+        switch (permission) {
+            case Manifest.permission.ACCESS_FINE_LOCATION:
+                if (mBluetoothService == null) {
+                    bindService(bindBlePurpose_search_device);
+                } else {
+                    searchWatch();
+                }
+                break;
+        }
+    }
+
+
+
+    private void searchWatch() {
         mBluetoothService.closeConnect();
         //一直扫描，直到该界面被压栈或是被关闭
         mBluetoothService.scanDevice(0, new IDeviceScanCallback() {
@@ -444,8 +518,8 @@ public class DashboardProgressFragment extends DashboardBaseFragment {
 
                 Log.d("dashProgress", "onScanning " + scanResult);
                 //如果查找到指定的设备
-                if(scanResult != null
-                        && scanResult.getAddress().equals(mMacAddress)){
+                if (scanResult != null
+                        && scanResult.getAddress().equals(mMacAddress)) {
                     mSearchWatchResult = scanResult;
                 }
             }
@@ -454,7 +528,7 @@ public class DashboardProgressFragment extends DashboardBaseFragment {
 
     private void bleSearchCancel() {
 //        mActivityMain.mBLEMachine.Search(null, "");
-        if(mBluetoothService != null){
+        if (mBluetoothService != null) {
             mBluetoothService.cancelScan();
         }
     }
@@ -466,14 +540,14 @@ public class DashboardProgressFragment extends DashboardBaseFragment {
             mActivityMain.mBLEMachine.Sync(mOnSyncListener, mSearchResult, mVoiceAlertList);*/
         mSyncState = SYNC_STATE_INIT;
 
-        if(mBluetoothService == null){
+        if (mBluetoothService == null) {
             bindService(bindBlePurpose_sync_data);
-        }else {
+        } else {
             syncData2Watch();
         }
     }
 
-    private void syncData2Watch(){
+    private void syncData2Watch() {
 //        List<EventModel> list = genEvents();
 
         mBluetoothService.closeConnect();
@@ -527,6 +601,8 @@ public class DashboardProgressFragment extends DashboardBaseFragment {
 
     private void viewSync() {
         mViewLabel.setText(getResources().getString(R.string.signup_profile_processing));
+        mViewLabel.setGravity(Gravity.CENTER);
+        mViewLabel.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
 
         mViewButton1.setVisibility(View.INVISIBLE);
         mViewButton1.setOnClickListener(null);
@@ -541,6 +617,8 @@ public class DashboardProgressFragment extends DashboardBaseFragment {
 
     private void viewSearching() {
         mViewLabel.setText(getResources().getString(R.string.dashboard_progress_searching));
+        mViewLabel.setGravity(Gravity.CENTER);
+        mViewLabel.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
 
         mViewButton1.setVisibility(View.INVISIBLE);
         mViewButton1.setOnClickListener(null);
@@ -631,6 +709,9 @@ public class DashboardProgressFragment extends DashboardBaseFragment {
         mActivityMain.FirebaseLog(LogEvent.Event.SYNC_WATCH_DATA, bundle);*/
 
         mViewLabel.setText(getResources().getString(R.string.dashboard_progress_completed));
+        mViewLabel.setGravity(Gravity.CENTER);
+        mViewLabel.setCompoundDrawablesWithIntrinsicBounds(
+                0, 0, 0, R.drawable.monster_yellow);
         mViewButton1.setText(getResources().getString(R.string.dashboard_progress_dashboard));
 
         mViewButton1.setVisibility(View.VISIBLE);
@@ -645,7 +726,7 @@ public class DashboardProgressFragment extends DashboardBaseFragment {
 
         mViewLabel.setVisibility(View.INVISIBLE);
         mViewProgress.setVisibility(View.INVISIBLE);
-        view_sync_complete.setVisibility(View.VISIBLE);
+//        view_sync_complete.setVisibility(View.VISIBLE);
     }
 
     private void viewNotFound(int errMsgStrId) {
@@ -656,6 +737,10 @@ public class DashboardProgressFragment extends DashboardBaseFragment {
 
 //        mViewLabel.setText(getResources().getString(R.string.dashboard_progress_not_found));
         mViewLabel.setText(getResources().getString(errMsgStrId));
+        mViewLabel.setGravity(Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL);
+        mViewLabel.setPadding(0, 0, 0, 0);
+        mViewLabel.setCompoundDrawablesWithIntrinsicBounds(
+                0, 0, 0, R.drawable.monster_green);
 
         mViewButton1.setText(getResources().getString(R.string.dashboard_progress_again));
         mViewButton2.setText(getResources().getString(R.string.dashboard_progress_last));
@@ -769,7 +854,7 @@ public class DashboardProgressFragment extends DashboardBaseFragment {
         @Override
         public void onFailed(String Command, int statusCode) {
             mSyncState = SYNC_STATE_FAIL;
-            Log.d("dashboardProgress","upload raw activity fail: " + Command);
+            Log.d("dashboardProgress", "upload raw activity fail: " + Command);
 //            Toast.makeText(mActivityMain, Command, Toast.LENGTH_SHORT).show();
         }
     };
@@ -795,9 +880,9 @@ public class DashboardProgressFragment extends DashboardBaseFragment {
         public void onServiceConnected(ComponentName name, IBinder service) {
             mBluetoothService = ((SwingBLEService.BluetoothBinder) service).getService();
 
-            if(mBindBlePurpose == bindBlePurpose_search_device){//搜索设备
+            if (mBindBlePurpose == bindBlePurpose_search_device) {//搜索设备
                 searchWatch();
-            }else if(mBindBlePurpose == bindBlePurpose_sync_data){//同步数据
+            } else if (mBindBlePurpose == bindBlePurpose_sync_data) {//同步数据
                 syncData2Watch();
             }
 

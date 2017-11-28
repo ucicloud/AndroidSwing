@@ -15,6 +15,7 @@ public class RawActivityMaker implements Maker {
         Entity entity = schema.addEntity("DB_RawActivity");
         entity.setTableName("t_raw_activity");
         entity.setClassNameDao("RawActivityDao");
+
         entity.addIdProperty().primaryKey().autoincrement().unique();
         entity.addStringProperty("indoorActivity").columnName("indoor_activity").notNull();
         entity.addStringProperty("outdoorActivity").columnName("outdoor_activity");

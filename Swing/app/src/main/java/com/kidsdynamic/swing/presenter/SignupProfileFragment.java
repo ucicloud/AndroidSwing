@@ -25,7 +25,7 @@ import com.kidsdynamic.data.net.user.model.LoginEntity;
 import com.kidsdynamic.data.net.user.model.LoginSuccessRep;
 import com.kidsdynamic.data.net.user.model.RegisterEntity;
 import com.kidsdynamic.data.net.user.model.RegisterFailResponse;
-import com.kidsdynamic.data.net.user.model.UserInfo;
+import com.kidsdynamic.data.net.user.model.UpdateProfileSuccess;
 import com.kidsdynamic.data.net.user.model.UserProfileRep;
 import com.kidsdynamic.data.utils.LogUtil2;
 import com.kidsdynamic.swing.BaseFragment;
@@ -273,9 +273,9 @@ public class SignupProfileFragment extends BaseFragment {
                 generateApi4Avatar(AvatarApi.class);
         MultipartBody.Part filePart =
                 PartUtils.prepareFilePart("upload", profile.getName(), profile);
-        avatarApi.uploadUserAvatar(filePart).enqueue(new BaseRetrofitCallback<UserInfo>() {
+        avatarApi.uploadUserAvatar(filePart).enqueue(new BaseRetrofitCallback<UpdateProfileSuccess>() {
             @Override
-            public void onResponse(Call<UserInfo> call, Response<UserInfo> response) {
+            public void onResponse(Call<UpdateProfileSuccess> call, Response<UpdateProfileSuccess> response) {
                 LogUtil2.getUtils().d("uploadUserAvatar onResponse");
                 super.onResponse(call, response);
 
@@ -284,7 +284,7 @@ public class SignupProfileFragment extends BaseFragment {
             }
 
             @Override
-            public void onFailure(Call<UserInfo> call, Throwable t) {
+            public void onFailure(Call<UpdateProfileSuccess> call, Throwable t) {
                 super.onFailure(call, t);
 
                 t.printStackTrace();

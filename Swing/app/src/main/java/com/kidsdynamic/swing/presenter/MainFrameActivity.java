@@ -15,6 +15,7 @@ import com.kidsdynamic.data.persistent.PreferencesUtil;
 import com.kidsdynamic.swing.R;
 import com.kidsdynamic.swing.domain.DeviceManager;
 import com.kidsdynamic.swing.domain.UserManager;
+import com.kidsdynamic.swing.model.WatchContact;
 import com.kidsdynamic.swing.model.WatchEvent;
 import com.kidsdynamic.swing.utils.ConfigUtil;
 import com.kidsdynamic.swing.utils.GlideHelper;
@@ -58,6 +59,8 @@ public class MainFrameActivity extends BaseFragmentActivity {
     public Stack<Bundle> mCalendarBundleStack;
 
     public Stack<WatchEvent> mEventStack;
+    public Stack<WatchContact> mWatchContactStack;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,6 +107,8 @@ public class MainFrameActivity extends BaseFragmentActivity {
         mCalendarBundleStack = new Stack<>();
 
         mEventStack = new Stack<>();
+
+        mWatchContactStack = new Stack<>();
     }
 
     private void initFragments(){
@@ -290,7 +295,7 @@ public class MainFrameActivity extends BaseFragmentActivity {
         });
 
         PreferencesUtil.getInstance(getApplicationContext()).
-                setPreferenceBooleanValue(ConfigUtil.todo_detail_first_time,false);
+                setPreferenceBooleanValue(ConfigUtil.calendar_main_first_time,false);
     }
 
     private void addIntroductionView(ViewGroup viewIntroductionAlarmList,

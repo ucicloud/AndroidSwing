@@ -1,5 +1,7 @@
 package com.kidsdynamic.data.repository.disk;
 
+import android.util.Log;
+
 import com.kidsdynamic.commonlib.utils.ObjectUtils;
 import com.kidsdynamic.data.dao.DB_FormatActivity;
 import com.kidsdynamic.data.dao.FormatActivityDao;
@@ -40,9 +42,18 @@ public class ActivityFormatDataStore {
                 where(FormatActivityDao.Properties.KidId.eq(kidsId)).
                 list();
 
+        Log.w("DB", "del " + list);
+
         if(!ObjectUtils.isListEmpty(list)){
             formatActivityDao.deleteInTx(list);
         }
+    }
+
+    public List<DB_FormatActivity> getByKidId(long kidsId){
+        FormatActivityDao formatActivityDao = dbUtil.getDaoSession().getFormatActivityDao();
+        return formatActivityDao.queryBuilder().
+                where(FormatActivityDao.Properties.KidId.eq(kidsId)).
+                list();
     }
 
 }

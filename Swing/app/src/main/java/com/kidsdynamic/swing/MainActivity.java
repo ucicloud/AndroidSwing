@@ -29,8 +29,11 @@ import com.kidsdynamic.data.net.user.model.RegisterEntity;
 import com.kidsdynamic.data.net.user.model.RegisterFailResponse;
 import com.kidsdynamic.data.net.user.model.UpdateKidAvatarRepEntity;
 import com.kidsdynamic.data.net.user.model.UpdateProfileEntity;
+import com.kidsdynamic.data.net.user.model.UpdateProfileSuccess;
 import com.kidsdynamic.data.net.user.model.UserInfo;
 import com.kidsdynamic.data.net.user.model.UserProfileRep;
+import com.kidsdynamic.data.persistent.DbUtil;
+import com.kidsdynamic.data.repository.disk.ActivityFormatDataStore;
 import com.kidsdynamic.data.utils.LogUtil2;
 import com.kidsdynamic.swing.domain.LoginManager;
 import com.kidsdynamic.swing.domain.UserManager;
@@ -39,6 +42,7 @@ import com.kidsdynamic.swing.utils.GlideHelper;
 import com.kidsdynamic.swing.utils.SwingFontsCache;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -51,6 +55,9 @@ import butterknife.OnClick;
 import cn.carbs.android.avatarimageview.library.AvatarImageView;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import okio.BufferedSink;
+import okio.Okio;
+import okio.Sink;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -103,6 +110,49 @@ public class MainActivity extends Activity {
     }
 
     @OnClick(R.id.button_test_login)
+    void testFunc() {
+        DbUtil dbUtil = DbUtil.getInstance(SwingApplication.getAppContext());
+//        ActivityCloudDataStore activityCloudDataStore = new ActivityCloudDataStore(dbUtil);
+        ActivityFormatDataStore activityFormatDataStore = new ActivityFormatDataStore(dbUtil);
+
+        activityFormatDataStore.deleteByKidId(123);
+
+//        File file = new File("/sdcard/20171128.txt");
+
+        File file = new File(this.getExternalCacheDir() + "/20171128.txt");
+
+        boolean creatRes = false;
+        if (!file.exists()) {
+            try {
+                creatRes = file.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        BufferedSink buffer = null;
+        if (creatRes) {
+            try {
+                Sink sink = Okio.sink(file);
+
+                buffer = Okio.buffer(sink);
+                buffer.write("activityFormatDataStore".getBytes());
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }finally {
+                if(buffer != null){
+                    try {
+                        buffer.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+    }
+
+//    @OnClick(R.id.button_test_login)
     void loginTest2(){
         //show waiting dialog
 
@@ -395,16 +445,16 @@ public class MainActivity extends Activity {
         String filePath = "/sdcard/1.jpg";
         MultipartBody.Part filePart = PartUtils.prepareFilePart("upload", "avatar_t01", new File(filePath));
 
-        avatarApi.uploadUserAvatar(filePart).enqueue(new Callback<UserInfo>() {
+        avatarApi.uploadUserAvatar(filePart).enqueue(new Callback<UpdateProfileSuccess>() {
             @Override
-            public void onResponse(Call<UserInfo> call, Response<UserInfo> response) {
+            public void onResponse(Call<UpdateProfileSuccess> call, Response<UpdateProfileSuccess> response) {
                 LogUtil2.getUtils().d("uploadUserAvatar onResponse");
                 LogUtil2.getUtils().d("uploadUserAvatar  code: " + response.code());
                 //code == 200 upload ok
             }
 
             @Override
-            public void onFailure(Call<UserInfo> call, Throwable t) {
+            public void onFailure(Call<UpdateProfileSuccess> call, Throwable t) {
                 LogUtil2.getUtils().d("uploadUserAvatar onFailure");
                 t.printStackTrace();
             }

@@ -12,8 +12,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.kidsdynamic.swing.R;
-
-import java.util.Random;
+import com.kidsdynamic.swing.domain.KidActivityManager;
+import com.kidsdynamic.swing.model.WatchActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -101,9 +101,16 @@ public class DashboardEmotionFragment extends DashboardBaseFragment {
         animLoading = (Animatable) view_left_action.getDrawable();
         animLoading.start();
 
-        //Test
-        int random = new Random().nextInt();
-        setViews(random % 3);
+        WatchActivity act = new KidActivityManager().getActivityOfDay(getContext());
+        long step = act.mIndoor.mSteps + act.mOutdoor.mSteps;
+        int emotion;
+        if (step < WatchActivity.STEP_ALMOST)
+            emotion = EMOTION_LOW;
+        else if (step < WatchActivity.STEP_EXCELLENT)
+            emotion = EMOTION_ALMOST;
+        else
+            emotion = EMOTION_EXCELLENT;
+        setViews(emotion);
     }
 
     @Override
