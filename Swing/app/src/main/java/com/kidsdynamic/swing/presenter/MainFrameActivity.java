@@ -295,7 +295,7 @@ public class MainFrameActivity extends BaseFragmentActivity {
         });
 
         PreferencesUtil.getInstance(getApplicationContext()).
-                setPreferenceBooleanValue(ConfigUtil.todo_detail_first_time,false);
+                setPreferenceBooleanValue(ConfigUtil.calendar_main_first_time,false);
     }
 
     private void addIntroductionView(ViewGroup viewIntroductionAlarmList,
