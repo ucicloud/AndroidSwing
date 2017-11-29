@@ -3,6 +3,7 @@ package com.kidsdynamic.swing;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -110,6 +111,14 @@ public class MainActivity extends Activity {
     }
 
     @OnClick(R.id.button_test_login)
+    void testCallPhone(){
+        String serNumber = "400181181";
+        Intent intent=new Intent(Intent.ACTION_DIAL, Uri.parse("tel:"+serNumber));
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+    }
+
+//    @OnClick(R.id.button_test_login)
     void testFunc() {
         DbUtil dbUtil = DbUtil.getInstance(SwingApplication.getAppContext());
 //        ActivityCloudDataStore activityCloudDataStore = new ActivityCloudDataStore(dbUtil);

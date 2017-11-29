@@ -213,11 +213,19 @@ public class ViewCalendarSelector extends ViewCalendar implements View.OnClickLi
         else if (mode == MODE_MONTH)
             format = "MMMM yyyy";
         else if (mode == MODE_DAY || mode == MODE_WEEK)
-            format = "MMM dd, yyyy";
+//            format = "MMM dd, yyyy";
+            format = getWeekFormat();
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format, Locale.getDefault());
 
         return simpleDateFormat.format(date);
+    }
+
+    private String getWeekFormat(){
+        String format = "MMM dd";
+        format += getContext().getString(R.string.calendar_day_word) + ", yyyy";
+
+        return format;
     }
 
     public void updateText() {

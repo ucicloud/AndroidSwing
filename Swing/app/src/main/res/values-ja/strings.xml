@@ -395,4 +395,5 @@
     <!--new string 20171027-->
     <string name="net_err">Net Error</string>
     <string name="ok_str">OK</string>
+    <string name="calendar_day_word">日</string>
 </resources>

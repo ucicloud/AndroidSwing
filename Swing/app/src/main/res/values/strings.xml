@@ -465,5 +465,6 @@
     <string name="introduction_calendar_today">Tap on the date or event to see today\'s full schedule.</string>
 
     <string name="profile_editor_save_success">save change success</string>
+    <string name="calendar_day_word"></string>
 
 </resources>

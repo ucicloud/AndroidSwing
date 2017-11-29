@@ -73,7 +73,7 @@ public class LanguageSpUtils {
         int index = LanguageSpUtils.getLocalIndex(context);
         Locale locale = Locale.getDefault();
 
-        //modify 2017年6月1日19:27:17 weizg 因为在mate8升级到最新系统后，发现当前语言为中文是，Locale.getDefault()
+        //modify 2017年6月1日19:27:17 因为在mate8升级到最新系统后，发现当前语言为中文时，Locale.getDefault()
         //方法返回的是en，导致客户端默认显示成英文，先删除跟随系统，默认是中文显示
         if (index ==0){
             locale =Locale.SIMPLIFIED_CHINESE;
