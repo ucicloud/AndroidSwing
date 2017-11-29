@@ -466,5 +466,8 @@
 
     <string name="profile_editor_save_success">save change success</string>
     <string name="calendar_day_word"></string>
+    <string name="profile_edit_kids_profile">Edit kid\'s profile</string>
+    <string name="profile_switch_to_account">Switch to this account</string>
+    <string name="title_kids_profile">Kid\'s profile</string>
 
 </resources>

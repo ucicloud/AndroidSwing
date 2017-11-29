@@ -69,7 +69,7 @@ public class DashboardProgressFragment extends DashboardBaseFragment {
 
     private final int PROGRESS_INTERVAL = 100;
 
-    private final static int SEARCH_TIMEOUT = 200;     // 200 * PROGRESS_INTERVAL milliseconds
+    private final static int SEARCH_TIMEOUT = 300;     // 200 * PROGRESS_INTERVAL milliseconds
     private int mSearchTimeout;
     private final static int SYNC_TIMEOUT = 1000;      // 1000 * PROGRESS_INTERVAL milliseconds
     private int mSyncTimeout;
@@ -427,6 +427,16 @@ public class DashboardProgressFragment extends DashboardBaseFragment {
         }
     };
 
+    private Button.OnClickListener mSyncCompleteListener = new Button.OnClickListener(){
+
+        @Override
+        public void onClick(View view) {
+            //modify 2017年11月29日22:49:17 only
+            //同步完成后，点击exit，只是pop fragment
+            getFragmentManager().popBackStack();
+        }
+    };
+
     private Button.OnClickListener mSyncListener = new Button.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -715,7 +725,7 @@ public class DashboardProgressFragment extends DashboardBaseFragment {
         mViewButton1.setText(getResources().getString(R.string.dashboard_progress_dashboard));
 
         mViewButton1.setVisibility(View.VISIBLE);
-        mViewButton1.setOnClickListener(mExitListener);
+        mViewButton1.setOnClickListener(mSyncCompleteListener);
 
         mViewButton2.setVisibility(View.INVISIBLE);
         mViewButton2.setOnClickListener(null);
