@@ -153,6 +153,9 @@ public class CalendarTodoFragment extends CalendarBaseFragment {
 
         // 載入需要編輯的事件
         if (mActivityMain.mEventStack.isEmpty()){
+
+            mEvent = null;
+
             if(currentEventId > 0){
                 mEvent = EventManager.getEventById(currentEventId);
             }

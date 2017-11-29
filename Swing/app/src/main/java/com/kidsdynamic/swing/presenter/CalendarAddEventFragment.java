@@ -223,7 +223,9 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
     @Override
     public void onStop() {
         super.onStop();
-        mainFrameActivity.mEventStack.push(mEvent);
+        //修改为每次跳转界面时，push到stack中；因为下面这样实现，当本界面关闭时，会把导致stack里面有
+        //event，导致上个界面流程有问题。
+//        mainFrameActivity.mEventStack.push(mEvent);
     }
 
     private void loadWatchEvent() {
@@ -450,7 +452,7 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
 
     @OnClick(R.id.calendar_event_alarm_name_layout)
    protected void onClickSelectEvent(){
-//       mainFrameActivity.mEventStack.push(mEvent);
+       mainFrameActivity.mEventStack.push(mEvent);
 
        Bundle bundle = new Bundle();
        bundle.putLong("kidId", mEvent.mKids.get(0));
@@ -571,7 +573,7 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
     //repeat
     @OnClick(R.id.calendar_event_repeat_line)
     protected void onClickEventRepeat(){
-//        mainFrameActivity.mEventStack.push(mEvent);
+        mainFrameActivity.mEventStack.push(mEvent);
         selectFragment(EventRepeatOptionFragment.class.getName(),null,true);
     }
 
@@ -584,7 +586,7 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
         args.putLong(DeviceManager.BUNDLE_KEY_USER_ID,mEvent.mUserId);
         args.putLong(DeviceManager.BUNDLE_KEY_KID_ID,123);*/
 
-//        mainFrameActivity.mEventStack.push(mEvent);
+        mainFrameActivity.mEventStack.push(mEvent);
         selectFragment(EventAssignToFragment.class.getName(),null,true);
     }
 
