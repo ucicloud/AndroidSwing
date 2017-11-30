@@ -208,7 +208,7 @@ public class ViewChartBarHorizontal extends ViewChart {
             sb.append(bar.title);
             sb.append(" ");
         }
-        sb.append(String.format(Locale.US, "%d", (int) value));
+        sb.append(String.format(Locale.getDefault(), "%,d", (int) value));
         if (!TextUtils.isEmpty(bar.unit)) {
             sb.append(" ");
             sb.append(bar.unit);

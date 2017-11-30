@@ -15,6 +15,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 
 import com.kidsdynamic.swing.model.WatchActivity;
+import com.kidsdynamic.swing.utils.SwingFontsCache;
 
 import java.util.Locale;
 
@@ -197,9 +198,9 @@ public class ViewChartToday extends ViewChart {
 
         int textX, textY;
         Rect textRect = new Rect();
-        String text = String.format(Locale.US, "Step %d", (int) value);
+        String text = String.format(Locale.getDefault(), "Step %,d", (int) value);
 
-        mPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
+        mPaint.setTypeface(SwingFontsCache.getBoldType(getContext()));
         mPaint.setTextSize(mChartTextSize + 1);
         mPaint.getTextBounds(text, 0, text.length(), textRect);
 
@@ -252,9 +253,9 @@ public class ViewChartToday extends ViewChart {
 
         int textX, textY;
         Rect textRect = new Rect();
-        String text = String.format(Locale.US, "Total %d", (int) mTotal);
+        String text = String.format(Locale.getDefault(), "Total %,d", (int) mTotal);
 
-        mPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
+        mPaint.setTypeface(SwingFontsCache.getBoldType(getContext()));
         mPaint.setTextSize(mChartTextSize + 1);
         mPaint.getTextBounds(text, 0, text.length(), textRect);
         mPaint.setColor(mChartColor);
@@ -295,7 +296,7 @@ public class ViewChartToday extends ViewChart {
         String text = "Goal";
 
         mPaint.reset();
-        mPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
+        mPaint.setTypeface(SwingFontsCache.getBoldType(getContext()));
         mPaint.setTextSize(mChartTextSize - 2);
         mPaint.getTextBounds(text, 0, text.length(), textRect);
         mPaint.setColor(Color.RED);

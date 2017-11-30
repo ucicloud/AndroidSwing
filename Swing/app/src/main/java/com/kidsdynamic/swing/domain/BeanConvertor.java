@@ -271,6 +271,10 @@ public class BeanConvertor {
         return format.format(date);
     }
 
+    public static String getLocalTimeString(long timestamp, String pattern) {
+        SimpleDateFormat sdf = new SimpleDateFormat(pattern, Locale.getDefault());
+        return sdf.format(new Date(timestamp));
+    }
 
     static List<WatchEvent> getWatchEvent(List<DB_Event> dbEvents){
         List<WatchEvent> watchEvents = new ArrayList<>(dbEvents.size());

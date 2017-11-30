@@ -249,7 +249,7 @@ public class ViewChartBarVertical extends ViewChart {
 
         int textX, textY;
         Rect textRect = new Rect();
-        String text = String.format(Locale.US, "%d", (int) value);
+        String text = String.format(Locale.getDefault(), "%,d", (int) value);
 
         mPaint.setTypeface(SwingFontsCache.getNormalType(getContext()));
         mPaint.setTextSize(mChartTextSize + 1);
@@ -316,7 +316,7 @@ public class ViewChartBarVertical extends ViewChart {
 
         cale.setTimeInMillis(date);
 
-        String text = String.format(Locale.US, "%d/%d", cale.get(Calendar.MONTH) + 1, cale.get(Calendar.DAY_OF_MONTH));
+        String text = String.format(Locale.getDefault(), "%d/%d", cale.get(Calendar.MONTH) + 1, cale.get(Calendar.DAY_OF_MONTH));
 
         mPaint.reset();
         mPaint.setAntiAlias(true);

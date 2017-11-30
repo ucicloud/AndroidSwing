@@ -37,7 +37,7 @@
                 android:layout_marginStart="@dimen/base_15"
                 android:gravity="start"
                 android:includeFontPadding="false"
-                android:text="07:30 am"
+                android:text=""
                 android:textColor="@color/color_orange_main"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -69,7 +69,7 @@
                 android:layout_marginStart="@dimen/base_15"
                 android:gravity="start"
                 android:includeFontPadding="false"
-                android:text="08:30 am"
+                android:text=""
                 android:textColor="@color/color_orange_main"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -96,7 +96,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="1,234"
+                android:text=""
                 android:textColor="@color/color_orange_main"
                 android:textSize="20sp"
                 android:textStyle="bold" />

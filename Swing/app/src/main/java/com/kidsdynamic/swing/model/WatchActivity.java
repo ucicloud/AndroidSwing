@@ -48,7 +48,7 @@ public class WatchActivity implements Serializable {
         init(0, "", kidId + "", 0, 0, "", kidId + "", 0, timestamp, 0, 0);
     }
 
-    WatchActivity(WatchActivity src) {
+    public WatchActivity(WatchActivity src) {
         init(src.mIndoor.mId,
                 src.mIndoor.mMacId,
                 src.mIndoor.mKidId,
@@ -112,4 +112,5 @@ public class WatchActivity implements Serializable {
                 .append(" Outdoor mStep:").append(mOutdoor.mSteps)
                 .append("}").toString();
     }
+
 }

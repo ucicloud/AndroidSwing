@@ -27,18 +27,18 @@ public interface ActivityApi {
     Call<Object> uploadRawData(@Body RawActivityDataEntity rawActivityDataEntity);
 
 
-//    kidId	Yes	Integer	20
-//    period	Yes	String	DAILY, WEEKLY MONTHLY, YEARLY
+//    kidId	 Yes	Integer	20
+//    period Yes	String	DAILY, WEEKLY MONTHLY, YEARLY
 
 //    200	Receiving Data successfully
 //    400	Bad request. Missing some parameters, or the type is wrong
 //    500	Internal error. Please send me the error. I will fix it
     @GET("v1/activity/retrieveData")
-    Call<RetrieveDataRep> retrieveData(@Query("kidId") String kidId, @Query("period") String period);
+    Call<RetrieveDataRep> retrieveData(@Query("kidId") long kidId, @Query("period") String period);
 
 
 //    start	Yes	Long Timestamp	1491599032
-//    end	    Yes	Long Timestamp	1498089090
+//    end	Yes	Long Timestamp	1498089090
 //    kidId	Yes	Integer	1
 
 //    200	Receiving Data successfully
@@ -46,7 +46,7 @@ public interface ActivityApi {
 //    500	Internal error. Please send me the error. I will fix it
     @GET("v1/activity/retrieveDataByTime")
     Call<RetrieveDataRep> retrieveDataByTime (@Query("start") long start, @Query("end") long end,
-                                              @Query("kidId")long kidId);
+                                              @Query("kidId") long kidId);
 
 
 //    start	Yes	Long Timestamp	1491599032

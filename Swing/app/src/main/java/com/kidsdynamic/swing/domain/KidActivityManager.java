@@ -14,10 +14,10 @@ import com.kidsdynamic.data.persistent.DbUtil;
 import com.kidsdynamic.data.repository.disk.ActivityCloudDataStore;
 import com.kidsdynamic.data.repository.disk.ActivityFormatDataStore;
 import com.kidsdynamic.data.repository.disk.RawActivityDataStore;
+import com.kidsdynamic.swing.R;
 import com.kidsdynamic.swing.SwingApplication;
 import com.kidsdynamic.swing.model.KidsEntityBean;
 import com.kidsdynamic.swing.model.WatchActivity;
-import com.kidsdynamic.swing.model.WatchContact;
 import com.kidsdynamic.swing.net.BaseRetrofitCallback;
 
 import java.util.ArrayList;
@@ -39,9 +39,8 @@ public class KidActivityManager {
     private long mSearchEnd;
     private long mSearchStart;
     private List<WatchActivity> mActivities;
-    private long kidId;
 
-    public void getActivityDataFromCloud(Context context, final long kidId, final IFinishListener finishListener) {
+    public void getActivityDataFromCloud(final Context context, final long kidId, final IFinishListener finishListener) {
 
         Calendar cal = Calendar.getInstance();
         mTimezoneOffset = cal.getTimeZone().getOffset(cal.getTimeInMillis());
@@ -93,7 +92,7 @@ public class KidActivityManager {
                 super.onFailure(call, t);
 
                 if (finishListener != null) {
-                    finishListener.onFailed("net error", -1);
+                    finishListener.onFailed(context.getString(R.string.net_err), -1);
                 }
             }
         });
@@ -155,10 +154,10 @@ public class KidActivityManager {
         //按照kids删除
         activityFormatDataStore.deleteByKidId(kidId);
 
-        List<DB_FormatActivity> dbFormatActivitys = BeanConvertor.getDBFormatActivity(list);
+        List<DB_FormatActivity> dbFormatActivities = BeanConvertor.getDBFormatActivity(list);
 
-        if (!ObjectUtils.isListEmpty(dbFormatActivitys)) {
-            activityFormatDataStore.saveAll(dbFormatActivitys);
+        if (!ObjectUtils.isListEmpty(dbFormatActivities)) {
+            activityFormatDataStore.saveAll(dbFormatActivities);
         }
 
         RawActivityDataStore rawActivityDataStore = new RawActivityDataStore(dbUtil);
@@ -201,7 +200,7 @@ public class KidActivityManager {
 
         DbUtil dbUtil = DbUtil.getInstance(SwingApplication.getAppContext());
         ActivityFormatDataStore activityFormatDataStore = new ActivityFormatDataStore(dbUtil);
-        List<DB_FormatActivity> formatActivities = activityFormatDataStore.getByKidId(kidId);
+        List<DB_FormatActivity> formatActivities = activityFormatDataStore.getByKidId(kid.getKidsId());
         List<WatchActivity> exportList;
         if (!ObjectUtils.isListEmpty(formatActivities)) {
             exportList = BeanConvertor.getWatchActivity(formatActivities);
@@ -283,7 +282,7 @@ public class KidActivityManager {
         else {
             DbUtil dbUtil = DbUtil.getInstance(SwingApplication.getAppContext());
             ActivityFormatDataStore activityFormatDataStore = new ActivityFormatDataStore(dbUtil);
-            List<DB_FormatActivity> formatActivities = activityFormatDataStore.getByKidId(kidId);
+            List<DB_FormatActivity> formatActivities = activityFormatDataStore.getByKidId(kid.getKidsId());
             if (!ObjectUtils.isListEmpty(formatActivities)) {
                 list = BeanConvertor.getWatchActivity(formatActivities);
             }
@@ -338,59 +337,116 @@ public class KidActivityManager {
         return rtn;
     }
 
-    public void getHourlyDataFromCloud(Context context, final long kidId, final ICompleteListener completeListener) {
-        Calendar cal = Calendar.getInstance();
-        mTimezoneOffset = cal.getTimeZone().getOffset(cal.getTimeInMillis());
+    public void retrieveHourlyDataByTime(final Context context, final long start, final long end,
+                                         final long kidId, final ICompleteListener completeListener) {
+        ActivityApi activityApi = ApiGen
+                .getInstance(context.getApplicationContext())
+                .generateApi(ActivityApi.class, true);
 
-        cal.set(Calendar.HOUR_OF_DAY, 23);
-        cal.set(Calendar.MINUTE, 59);
-        cal.set(Calendar.SECOND, 59);
-        mSearchEnd = cal.getTimeInMillis() + mTimezoneOffset;
-        cal.add(Calendar.DAY_OF_MONTH, -1);
-        cal.add(Calendar.SECOND, 1);
-        mSearchStart = cal.getTimeInMillis() + mTimezoneOffset;
+        activityApi
+                .retrieveHourlyDataByTime(start / 1000, end / 1000, kidId)
+                .enqueue(new BaseRetrofitCallback<RetrieveHourlyDataRep>() {
+                    @Override
+                    public void onResponse(Call<RetrieveHourlyDataRep> call, Response<RetrieveHourlyDataRep> response) {
+                        RetrieveHourlyDataRep retrieveHourlyDataRep = response.body();
+                        int code = response.code();
+                        if (code == 200 && retrieveHourlyDataRep != null) {
+                            if (completeListener != null) {
+                                completeListener.onComplete(retrieveHourlyDataRep.getActivities(), code);
+                            }
+                        } else {
+                            if (completeListener != null) {
+                                completeListener.onComplete(null, code);
+                            }
+                        }
 
-        ActivityApi activityApi = ApiGen.getInstance(
-                context.getApplicationContext()).
-                generateApi(ActivityApi.class, true);
-
-        activityApi.retrieveHourlyDataByTime(
-                (long) (mSearchStart / 1000),
-                (long) (mSearchEnd / 1000),
-                kidId).enqueue(new BaseRetrofitCallback<RetrieveHourlyDataRep>() {
-            @Override
-            public void onResponse(Call<RetrieveHourlyDataRep> call, Response<RetrieveHourlyDataRep> response) {
-                RetrieveHourlyDataRep retrieveHourlyDataRep = response.body();
-                //如果获取数据成功，则开始更新本地数据
-                if (response.code() == 200
-                        && retrieveHourlyDataRep != null) {
-                    if (completeListener != null) {
-                        completeListener.onFinish(retrieveHourlyDataRep.getActivities(), response.code());
+                        super.onResponse(call, response);
                     }
-                } else {
-                    if (completeListener != null) {
-                        completeListener.onFinish(null, response.code());
+
+                    @Override
+                    public void onFailure(Call<RetrieveHourlyDataRep> call, Throwable t) {
+                        super.onFailure(call, t);
+
+                        if (completeListener != null) {
+                            completeListener.onFailed(context.getString(R.string.net_err), -1);
+                        }
                     }
-                }
+                });
+    }
 
-                super.onResponse(call, response);
+    public void retrieveDataByTime(final Context context, final long kidId, final long start,
+                                   final long end, final ICompleteListener completeListener) {
+        ActivityApi activityApi = ApiGen
+                .getInstance(context.getApplicationContext())
+                .generateApi(ActivityApi.class, true);
+        activityApi
+                .retrieveDataByTime(start / 1000, end / 1000, kidId)
+                .enqueue(new BaseRetrofitCallback<RetrieveDataRep>() {
+                    @Override
+                    public void onResponse(Call<RetrieveDataRep> call, Response<RetrieveDataRep> response) {
+                        super.onResponse(call, response);
+                        RetrieveDataRep retrieveDataRep = response.body();
+                        int code = response.code();
+                        if (200 == code && null != retrieveDataRep) {
+                            if (completeListener != null) {
+                                completeListener.onComplete(retrieveDataRep, code);
+                            }
+                        } else {
+                            if (completeListener != null) {
+                                completeListener.onComplete(null, code);
+                            }
+                        }
+                    }
 
-            }
+                    @Override
+                    public void onFailure(Call<RetrieveDataRep> call, Throwable t) {
+                        super.onFailure(call, t);
+                        if (completeListener != null) {
+                            completeListener.onFailed(context.getString(R.string.net_err), -1);
+                        }
+                    }
+                });
 
-            @Override
-            public void onFailure(Call<RetrieveHourlyDataRep> call, Throwable t) {
-                super.onFailure(call, t);
+    }
 
-                if (completeListener != null) {
-                    completeListener.onFailed("net error", -1);
-                }
-            }
-        });
+    public void retrieveData(final Context context, final String period, final long kidId,
+                             final ICompleteListener completeListener) {
+        ActivityApi activityApi = ApiGen
+                .getInstance(context.getApplicationContext())
+                .generateApi(ActivityApi.class, true);
+        activityApi
+                .retrieveData(kidId, period)
+                .enqueue(new BaseRetrofitCallback<RetrieveDataRep>() {
+                    @Override
+                    public void onResponse(Call<RetrieveDataRep> call, Response<RetrieveDataRep> response) {
+                        super.onResponse(call, response);
+                        RetrieveDataRep retrieveDataRep = response.body();
+                        int code = response.code();
+                        if (200 == code && null != retrieveDataRep) {
+                            if (completeListener != null) {
+                                completeListener.onComplete(retrieveDataRep, code);
+                            }
+                        } else {
+                            if (completeListener != null) {
+                                completeListener.onComplete(null, code);
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<RetrieveDataRep> call, Throwable t) {
+                        super.onFailure(call, t);
+                        if (completeListener != null) {
+                            completeListener.onFailed(context.getString(R.string.net_err), -1);
+                        }
+                    }
+                });
     }
 
     public interface ICompleteListener {
-        void onFinish(Object arg, int statusCode);
+        void onComplete(Object arg, int statusCode);
 
         void onFailed(String Command, int statusCode);
     }
+
 }

@@ -13,20 +13,20 @@
         android:orientation="vertical">
 
         <com.kidsdynamic.swing.view.AvenirTextView
-            android:id="@+id/tvTimeDisplay"
+            android:id="@+id/tvTimeMain"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/base_6"
             android:layout_marginStart="@dimen/base_15"
             android:gravity="start"
             android:includeFontPadding="false"
-            android:text="November 21,2017"
+            android:text=""
             android:textColor="@color/color_orange_main"
             android:textSize="16sp"
             android:textStyle="bold" />
 
         <com.kidsdynamic.swing.view.AvenirTextView
-            android:id="@+id/tvTimeDesc"
+            android:id="@+id/tvTimeSub"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/base_15"
@@ -54,7 +54,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="1,234"
+            android:text=""
             android:textColor="@color/color_orange_main"
             android:textSize="20sp"
             android:textStyle="bold" />
