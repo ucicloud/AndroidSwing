@@ -210,7 +210,7 @@
     <string name="signup_login_wait">"请稍候&#8230;"</string>
 
     <string name="signup_login_enter">Enter</string>
-    <string name="singup_login_reset_password">Reset password</string>
+    <string name="signup_login_reset_password">Reset password</string>
 
     <!-- FragmentSignupLanguage -->
     <string name="signup_language_message">"请选择语言"</string>

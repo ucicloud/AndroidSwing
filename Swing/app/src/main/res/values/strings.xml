@@ -429,11 +429,11 @@
     <string name="profile_take_photo">Take a new picture</string>
     <string name="profile_choose_from_library">Choose from Library</string>
     <string name="profile_cut_pic_note">Use your finger to adjust picture position</string>
-    <string name="profile_login_fail">login fail, please try again</string>
+    <string name="profile_login_fail">Login fail, please try again</string>
     <string name="token_invalid">Token invalid, please login again</string>
     <string name="login_data_invalid">Login state invalid, please login again</string>
-    <string name="cloud_api_call_net_error">net error, please check and try again</string>
-    <string name="user_register_fail_common">register, please try again</string>
+    <string name="cloud_api_call_net_error">Net error, please check and try again</string>
+    <string name="user_register_fail_common">Register, please try again</string>
     <string name="dashboard_progress_completed">Completed</string>
     <string name="dashboard_emotion_today_summary">Today\'s Summary</string>
     <string name="dashboard_emotion_indoor_steps">Indoor\nsteps</string>
@@ -447,14 +447,14 @@
     <string name="dashboard_chart_distance">Distance</string>
     <string name="dashboard_chart_floors">Floors</string>
     <string name="dashboard_chart_flights">Flights</string>
-    <string name="dashboard_enqueue_fail_common">user, please try again</string>
+    <string name="dashboard_enqueue_fail_common">User, please try again</string>
 
-    <string name="save_todo_done_statue_err">save fail, try again[%1$d]</string>
+    <string name="save_todo_done_statue_err">Save fail, try again[%1$d]</string>
     <string name="calendar_todo_del">Delete</string>
     <string name="dashboard_progress_sync_fail">Sync Fail</string>
     <string name="calendar_hide_this_reminder">Hide this reminder</string>
     <string name="calendar_okay">Okay</string>
-    <string name="event_time_select_error">event end time invalid</string>
+    <string name="event_time_select_error">Event end time invalid</string>
 
     <string name="down_arrow">\u2193</string>
     <string name="up_arrow">\u2191</string>
