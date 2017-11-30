@@ -184,6 +184,11 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
     }
 
     @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
 
@@ -201,21 +206,32 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
         //缓存当前登录者id
         currentUserId = LoginManager.getCurrentLoginUserId(getContext());
 
-        // 若Stack不為空, 表示Stack中保存當前需進行編輯的事件
-        // 若為空, 表示需要新增一個新的事件
-        if (mainFrameActivity.mEventStack.isEmpty()) {
-            mEvent = new WatchEvent(mDefaultDate);
-            mEvent.mUserId = currentUserId;
-            //如果初始化获取当前登录者id和focusKidsId为空，则退出该界面
-           if(!initValue(mEvent.mUserId)){
-               return;
-           }
-        } else {
-            mEvent = mainFrameActivity.mEventStack.pop();
-            if(!initValue(mEvent.mUserId)){
-                return;
+        if(mEvent == null){
+            // 若Stack不為空, 表示Stack中保存當前需進行編輯的事件
+            // 若為空, 表示需要新增一個新的事件
+            if (mainFrameActivity.mEventStack.isEmpty()) {
+                mEvent = new WatchEvent(mDefaultDate);
+                mEvent.mUserId = currentUserId;
+                //如果初始化获取当前登录者id和focusKidsId为空，则退出该界面
+                if(!initValue(mEvent.mUserId)){
+                    return;
+                }
+            } else {
+                mEvent = mainFrameActivity.mEventStack.pop();
+                if(!initValue(mEvent.mUserId)){
+                    return;
+                }
+            }
+        }else{
+            //如果mEvent不为null，则表示正在编辑event，可能因为是选择去界面去选择项，可能是因为应用被暂停
+            if(! mainFrameActivity.mEventStack.isEmpty()){
+                mEvent = mainFrameActivity.mEventStack.pop();
+                if(!initValue(mEvent.mUserId)){
+                    return;
+                }
             }
         }
+
 
         loadWatchEvent();
     }

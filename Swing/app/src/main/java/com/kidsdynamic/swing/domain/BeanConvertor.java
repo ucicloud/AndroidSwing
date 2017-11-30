@@ -577,7 +577,7 @@ public class BeanConvertor {
         return list;
     }
 
-    static WatchContact.Kid getKidsForUI(KidsEntityBean kidsEntityBean) {
+    public static WatchContact.Kid getKidsForUI(KidsEntityBean kidsEntityBean) {
         WatchContact.Kid kid = new WatchContact.Kid();
         kid.mId = kidsEntityBean.getKidsId();
         kid.mName = kidsEntityBean.getName();

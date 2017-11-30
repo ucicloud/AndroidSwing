@@ -142,7 +142,7 @@ public class DeviceManager {
     }
 
 
-    public KidsEntityBean  getKidsInfo(Context context, long kidId){
+    public static KidsEntityBean  getKidsInfo(Context context, long kidId){
         DbUtil dbUtil = DbUtil.getInstance(context.getApplicationContext());
 
         KidsDataStore kidsDataStore = new KidsDataStore(dbUtil);
