@@ -11,9 +11,20 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.kidsdynamic.data.net.activity.model.RetrieveDataRep;
+import com.kidsdynamic.data.repository.disk.ActivityCloudDataStore;
 import com.kidsdynamic.swing.R;
+import com.kidsdynamic.swing.domain.BeanConvertor;
+import com.kidsdynamic.swing.domain.DeviceManager;
 import com.kidsdynamic.swing.domain.KidActivityManager;
+import com.kidsdynamic.swing.model.KidsEntityBean;
 import com.kidsdynamic.swing.model.WatchActivity;
+import com.yy.base.utils.ToastCommon;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -101,16 +112,30 @@ public class DashboardEmotionFragment extends DashboardBaseFragment {
         animLoading = (Animatable) view_left_action.getDrawable();
         animLoading.start();
 
-        WatchActivity act = new KidActivityManager().getActivityOfDay(getContext());
-        long step = act.mIndoor.mSteps + act.mOutdoor.mSteps;
-        int emotion;
-        if (step < WatchActivity.STEP_ALMOST)
-            emotion = EMOTION_LOW;
-        else if (step < WatchActivity.STEP_EXCELLENT)
-            emotion = EMOTION_ALMOST;
-        else
-            emotion = EMOTION_EXCELLENT;
-        setViews(emotion);
+        WatchActivity wa = new KidActivityManager().getActivityOfDay(getContext());
+        if (null != wa) {
+            setWatchActivity(wa);
+        } else {
+            KidsEntityBean kid = DeviceManager.getFocusKidsInfo(getContext());
+            if (null == kid) {
+                return;
+            }
+            showLoadingDialog(R.string.signup_login_wait);
+            Calendar cld = Calendar.getInstance();
+            int timezoneOffset = cld.getTimeZone().getOffset(cld.getTimeInMillis());
+
+            cld.set(Calendar.HOUR_OF_DAY, 23);
+            cld.set(Calendar.MINUTE, 59);
+            cld.set(Calendar.SECOND, 59);
+            long end = cld.getTimeInMillis() + timezoneOffset;
+
+            cld.add(Calendar.DAY_OF_MONTH, -1);
+            cld.add(Calendar.SECOND, 1);
+            long start = cld.getTimeInMillis() + timezoneOffset;
+
+            new KidActivityManager().retrieveDataByTime(getContext(), start, end, kid.getKidsId(),
+                    new IRetrieveCompleteListener(start, end, timezoneOffset, kid.getKidsId()));
+        }
     }
 
     @Override
@@ -144,6 +169,43 @@ public class DashboardEmotionFragment extends DashboardBaseFragment {
     @OnClick({R.id.ib_uv_detection, R.id.tv_uv_detection})
     public void clickUVDetection() {
 
+    }
+
+    private void setWatchActivity(WatchActivity wa) {
+        long steps = wa.mIndoor.mSteps + wa.mOutdoor.mSteps;
+        setData(wa);
+        setEmotion(steps);
+    }
+
+    private void setData(WatchActivity wa) {
+        tv_indoor_steps_value.setText(BeanConvertor.getStepString(wa.mIndoor.mSteps));
+        tv_outdoor_steps_value.setText(BeanConvertor.getStepString(wa.mOutdoor.mSteps));
+        String today = getString(R.string.dashboard_chart_today);
+        long indoorTimestamp = wa.mIndoor.mTimestamp;
+        if (indoorTimestamp > 0) {
+            StringBuilder sb = new StringBuilder(today);
+            sb.append(",");
+            sb.append(BeanConvertor.getLocalTimeString(indoorTimestamp, "K:mm a"));
+            tv_indoor_time.setText(sb);
+        }
+        long outdoorTimestamp = wa.mOutdoor.mTimestamp;
+        if (outdoorTimestamp > 0) {
+            StringBuilder sb = new StringBuilder(today);
+            sb.append(",");
+            sb.append(BeanConvertor.getLocalTimeString(outdoorTimestamp, "K:mm a"));
+            tv_outdoor_time.setText(sb);
+        }
+    }
+
+    private void setEmotion(long steps) {
+        int emotion;
+        if (steps < WatchActivity.STEP_ALMOST)
+            emotion = EMOTION_LOW;
+        else if (steps < WatchActivity.STEP_EXCELLENT)
+            emotion = EMOTION_ALMOST;
+        else
+            emotion = EMOTION_EXCELLENT;
+        setViews(emotion);
     }
 
     private void setViews(int emotion) {
@@ -197,6 +259,79 @@ public class DashboardEmotionFragment extends DashboardBaseFragment {
         tv_uv_detection.setTextColor(color);
         ib_activity.setBackgroundResource(activityBgId);
         ib_uv_detection.setBackgroundResource(uvDetectionBgId);
+    }
+
+    private class IRetrieveCompleteListener implements KidActivityManager.ICompleteListener {
+
+        private long start, end, timezoneOffset, kidId;
+
+        IRetrieveCompleteListener(long start, long end, long timezoneOffset, long kidId) {
+            this.start = start;
+            this.end = end;
+            this.timezoneOffset = timezoneOffset;
+            this.kidId = kidId;
+        }
+
+        @Override
+        public void onComplete(Object arg, int statusCode) {
+            if (200 == statusCode && null != arg && arg instanceof RetrieveDataRep) {
+                handleRetrieveData(arg, start, end, timezoneOffset, kidId);
+            } else {
+                finishLoadingDialog();
+                ToastCommon.makeText(getContext(), R.string.dashboard_enqueue_fail_common);
+            }
+            finishLoadingDialog();
+        }
+
+        @Override
+        public void onFailed(String Command, int statusCode) {
+            finishLoadingDialog();
+            ToastCommon.showToast(getContext(), Command);
+        }
+    }
+
+    private void handleRetrieveData(Object arg, long start, long end, long timezoneOffset, long kidId) {
+        RetrieveDataRep rep = (RetrieveDataRep) arg;
+        List<RetrieveDataRep.ActivitiesEntity> activitiesEntities = rep.getActivities();
+        if (null == activitiesEntities || activitiesEntities.isEmpty()) {
+            setEmotion(0);
+            return;
+        }
+        List<WatchActivity> watchActivities = new ArrayList<>();
+        long millisInDay = 1000 * 60 * 60 * 24;
+        long timestamp = start;
+        while (timestamp < end) {
+            watchActivities.add(new WatchActivity(kidId, timestamp));
+            timestamp += millisInDay;
+        }
+        for (WatchActivity act : watchActivities) {
+            for (RetrieveDataRep.ActivitiesEntity entity : activitiesEntities) {
+                long receiveDate = BeanConvertor.getLocalTimeStamp(entity.getReceivedDate());
+                long actEnd = act.mIndoor.mTimestamp + millisInDay;
+                if (receiveDate >= act.mIndoor.mTimestamp && receiveDate < actEnd) {
+                    if (entity.type.equals(ActivityCloudDataStore.Activity_type_indoor)) {
+                        act.mIndoor.mId = entity.getId();
+                        act.mIndoor.mMacId = entity.getMacId();
+                        act.mIndoor.mSteps += entity.getSteps();
+                        act.mIndoor.mDistance += entity.getDistance();
+                    } else if (entity.type.equals(ActivityCloudDataStore.Activity_type_outdoor)) {
+                        act.mOutdoor.mId = entity.getId();
+                        act.mOutdoor.mMacId = entity.getMacId();
+                        act.mOutdoor.mSteps += entity.getSteps();
+                        act.mOutdoor.mDistance += entity.getDistance();
+                    }
+                }
+            }
+        }
+
+        Collections.reverse(watchActivities);
+
+        for (WatchActivity act : watchActivities) {
+            act.mIndoor.mTimestamp -= timezoneOffset;
+            act.mOutdoor.mTimestamp -= timezoneOffset;
+        }
+
+        setData(watchActivities.get(0));
     }
 
 }

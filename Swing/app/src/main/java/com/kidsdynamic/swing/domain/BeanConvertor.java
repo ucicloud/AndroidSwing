@@ -44,7 +44,7 @@ import java.util.TimeZone;
 public class BeanConvertor {
     public static final String db_kids_split = "#";
 
-    public static DB_User getDBUser(@NonNull UserProfileRep userProfileRep){
+    public static DB_User getDBUser(@NonNull UserProfileRep userProfileRep) {
         DB_User db_user = new DB_User();
         UserProfileRep.UserEntity userEntity = userProfileRep.getUser();
 
@@ -63,7 +63,8 @@ public class BeanConvertor {
 
         return db_user;
     }
-    public static DB_User getDBUser(@NonNull UserInfo userEntity){
+
+    public static DB_User getDBUser(@NonNull UserInfo userEntity) {
         DB_User db_user = new DB_User();
 
         db_user.setUserId(userEntity.getId());
@@ -81,7 +82,8 @@ public class BeanConvertor {
 
         return db_user;
     }
-    public static DB_User updateDBUser(@NonNull DB_User db_user, @NonNull UserInfo userEntity){
+
+    public static DB_User updateDBUser(@NonNull DB_User db_user, @NonNull UserInfo userEntity) {
 
         db_user.setUserId(userEntity.getId());
         db_user.setEmail(userEntity.getEmail());
@@ -103,8 +105,7 @@ public class BeanConvertor {
     }
 
 
-
-    public static List<DB_Kids> getDBKidsList(@NonNull UserProfileRep userProfileRep){
+    public static List<DB_Kids> getDBKidsList(@NonNull UserProfileRep userProfileRep) {
         List<DB_Kids> db_kidsList = new ArrayList<>(3);
         List<UserProfileRep.KidsEntity> kidsList = userProfileRep.getKids();
 
@@ -129,7 +130,7 @@ public class BeanConvertor {
     }
 
 
-    public static List<DB_Event> getDBEventList(@NonNull List<EventWithTodo> eventWithTodoList){
+    public static List<DB_Event> getDBEventList(@NonNull List<EventWithTodo> eventWithTodoList) {
         List<DB_Event> db_eventList = new ArrayList<>();
         for (EventWithTodo eventWithTodo : eventWithTodoList) {
             db_eventList.add(getDBEvent(eventWithTodo));
@@ -138,7 +139,7 @@ public class BeanConvertor {
         return db_eventList;
     }
 
-    public static DB_Event getDBEvent(@NonNull EventWithTodo eventWithTodo){
+    public static DB_Event getDBEvent(@NonNull EventWithTodo eventWithTodo) {
         DB_Event db_event = new DB_Event();
 
         db_event.setEventId(eventWithTodo.getId());
@@ -164,12 +165,12 @@ public class BeanConvertor {
         return db_event;
     }
 
-    private static String getAllKidsIdFromList(@NonNull List<KidInfo> kidInfoList){
+    private static String getAllKidsIdFromList(@NonNull List<KidInfo> kidInfoList) {
         StringBuilder stringBuilder = new StringBuilder();
 
         for (int i = 0; i < kidInfoList.size(); i++) {
             stringBuilder.append(kidInfoList.get(i).getId());
-            if(i != (kidInfoList.size() -1)){
+            if (i != (kidInfoList.size() - 1)) {
                 stringBuilder.append(db_kids_split);
             }
         }
@@ -178,14 +179,14 @@ public class BeanConvertor {
     }
 
 
-    public static List<DB_Todo> getDBTodo(@NonNull List<EventWithTodo> eventWithTodoList){
+    public static List<DB_Todo> getDBTodo(@NonNull List<EventWithTodo> eventWithTodoList) {
         List<DB_Todo> db_todoList = new ArrayList<>();
 
         for (EventWithTodo eventWithTodo : eventWithTodoList) {
 
             List<TodoEntity> todoEntityList = eventWithTodo.getTodo();
 
-            if(!ObjectUtils.isListEmpty(todoEntityList)){
+            if (!ObjectUtils.isListEmpty(todoEntityList)) {
                 for (TodoEntity todoEntity : todoEntityList) {
                     DB_Todo db_todo = new DB_Todo();
 
@@ -204,17 +205,17 @@ public class BeanConvertor {
         return db_todoList;
     }
 
-    public static DB_Kids getDBKidsInfo(@NonNull KidsWithParent kidsWithParent){
+    public static DB_Kids getDBKidsInfo(@NonNull KidsWithParent kidsWithParent) {
 
-            DB_Kids db_kids = new DB_Kids();
+        DB_Kids db_kids = new DB_Kids();
 
-            db_kids.setKidsId(kidsWithParent.getId());
-            db_kids.setName(kidsWithParent.getName());
-            db_kids.setDateCreated(getUTCTimeStamp(kidsWithParent.getDateCreated()));
-            db_kids.setMacId(kidsWithParent.getMacId());
-            db_kids.setProfile(kidsWithParent.getProfile());
-            db_kids.setParentId(kidsWithParent.getParent().getId());
-            db_kids.setFirmwareVersion(kidsWithParent.getFirmwareVersion());
+        db_kids.setKidsId(kidsWithParent.getId());
+        db_kids.setName(kidsWithParent.getName());
+        db_kids.setDateCreated(getUTCTimeStamp(kidsWithParent.getDateCreated()));
+        db_kids.setMacId(kidsWithParent.getMacId());
+        db_kids.setProfile(kidsWithParent.getProfile());
+        db_kids.setParentId(kidsWithParent.getParent().getId());
+        db_kids.setFirmwareVersion(kidsWithParent.getFirmwareVersion());
 
         return db_kids;
     }
@@ -276,16 +277,16 @@ public class BeanConvertor {
         return sdf.format(new Date(timestamp));
     }
 
-    static List<WatchEvent> getWatchEvent(List<DB_Event> dbEvents){
+    static List<WatchEvent> getWatchEvent(List<DB_Event> dbEvents) {
         List<WatchEvent> watchEvents = new ArrayList<>(dbEvents.size());
-        for (DB_Event db_event: dbEvents) {
+        for (DB_Event db_event : dbEvents) {
             watchEvents.add(getWatchEvent(db_event));
         }
 
         return watchEvents;
     }
 
-    static WatchEvent getWatchEvent(DB_Event db_event){
+    static WatchEvent getWatchEvent(DB_Event db_event) {
 
         WatchEvent watchEvent = new WatchEvent();
         watchEvent.mId = db_event.getEventId();
@@ -302,21 +303,21 @@ public class BeanConvertor {
         watchEvent.mTimezoneOffset = db_event.getTimezoneOffset();
         watchEvent.mAlertTimeStamp = watchEvent.mStartDate;
 
-        if(db_event.getDateCreated() != null){
+        if (db_event.getDateCreated() != null) {
             watchEvent.mDateCreated = db_event.getDateCreated();
         }
 
-        if(db_event.getLastUpdate() != null){
+        if (db_event.getLastUpdate() != null) {
             watchEvent.mLastUpdated = db_event.getLastUpdate();
         }
 
-        watchEvent.mTodoList = getWatchTodos(db_event.getUserId(),db_event.getTodoList());
+        watchEvent.mTodoList = getWatchTodos(db_event.getUserId(), db_event.getTodoList());
 
         return watchEvent;
 
     }
 
-    private static List<Long> getEventKidsList(DB_Event db_event){
+    private static List<Long> getEventKidsList(DB_Event db_event) {
         List<Long> kidsList = new ArrayList<>();
         String kidIds = db_event.getKidIds();
         String[] kidsArray = kidIds.split(db_kids_split);
@@ -328,16 +329,16 @@ public class BeanConvertor {
         return kidsList;
     }
 
-    public static List<WatchTodo> getWatchTodos(long userId, List<DB_Todo> dbTodos){
+    public static List<WatchTodo> getWatchTodos(long userId, List<DB_Todo> dbTodos) {
         List<WatchTodo> watchTodos = new ArrayList<>(dbTodos.size());
-        for (DB_Todo db_todo: dbTodos) {
-            watchTodos.add(getWatchTodo(userId,db_todo));
+        for (DB_Todo db_todo : dbTodos) {
+            watchTodos.add(getWatchTodo(userId, db_todo));
         }
 
         return watchTodos;
     }
 
-    public static WatchTodo getWatchTodo(long userId,DB_Todo db_todo){
+    public static WatchTodo getWatchTodo(long userId, DB_Todo db_todo) {
 //        new WatchTodo(1, 452, 0, "1 ", WatchTodo.STATUS_DONE);
         WatchTodo watchTodo = new WatchTodo();
         watchTodo.mId = db_todo.getTodoId();
@@ -345,16 +346,16 @@ public class BeanConvertor {
         watchTodo.mEventId = db_todo.getEventId();
         watchTodo.mText = db_todo.getText();
 
-        if(!TextUtils.isEmpty(db_todo.getStatus())){
+        if (!TextUtils.isEmpty(db_todo.getStatus())) {
             watchTodo.mStatus = db_todo.getStatus();
-        }else {
+        } else {
             watchTodo.mStatus = WatchTodo.STATUS_PENDING;
         }
 
         return watchTodo;
     }
 
-    public static KidsEntityBean convert(@NonNull DB_Kids db_kids){
+    public static KidsEntityBean convert(@NonNull DB_Kids db_kids) {
 
         KidsEntityBean kidsEntityBean = new KidsEntityBean();
         kidsEntityBean.setKidsId(db_kids.getKidsId());
@@ -369,7 +370,7 @@ public class BeanConvertor {
         return kidsEntityBean;
     }
 
-    public static EventAddEntity getEventAddBean(@NonNull WatchEvent event){
+    public static EventAddEntity getEventAddBean(@NonNull WatchEvent event) {
 
         EventAddEntity eventAddEntity = new EventAddEntity();
 
@@ -392,7 +393,7 @@ public class BeanConvertor {
         return eventAddEntity;
     }
 
-    public static EventInfo getEventInfo4Update(@NonNull WatchEvent event){
+    public static EventInfo getEventInfo4Update(@NonNull WatchEvent event) {
 
         EventInfo eventInfo = new EventInfo();
 
@@ -416,7 +417,7 @@ public class BeanConvertor {
         return eventInfo;
     }
 
-    public static DB_Todo getDBTodo(@NonNull WatchTodo watchTodo){
+    public static DB_Todo getDBTodo(@NonNull WatchTodo watchTodo) {
         DB_Todo db_todo = new DB_Todo();
 
         db_todo.setTodoId(watchTodo.mId);
@@ -429,15 +430,15 @@ public class BeanConvertor {
         return db_todo;
     }
 
-    static List<DB_FormatActivity> getDBFormatActivity(@NonNull List<WatchActivity> watchActivityList){
+    static List<DB_FormatActivity> getDBFormatActivity(@NonNull List<WatchActivity> watchActivityList) {
         List<DB_FormatActivity> dbFormatActivities = new ArrayList<>(1);
-        if(ObjectUtils.isListEmpty(watchActivityList)){
+        if (ObjectUtils.isListEmpty(watchActivityList)) {
             return dbFormatActivities;
         }
 
         for (WatchActivity watchActivity :
                 watchActivityList) {
-            if(watchActivity.mOutdoor.mId <= 0 && watchActivity.mIndoor.mId <= 0){
+            if (watchActivity.mOutdoor.mId <= 0 && watchActivity.mIndoor.mId <= 0) {
                 continue;
             }
 
@@ -447,7 +448,7 @@ public class BeanConvertor {
         return dbFormatActivities;
     }
 
-    static DB_FormatActivity getDBFormatActivity(WatchActivity watchActivity){
+    static DB_FormatActivity getDBFormatActivity(WatchActivity watchActivity) {
         DB_FormatActivity db_formatActivity = new DB_FormatActivity();
 
         long actvId = watchActivity.mIndoor.mId > 0 ? watchActivity.mIndoor.mId : watchActivity.mOutdoor.mId;
@@ -457,12 +458,12 @@ public class BeanConvertor {
         db_formatActivity.setOutdoorId(watchActivity.mOutdoor.mId);
         db_formatActivity.setOutdoorSteps(watchActivity.mOutdoor.mSteps);
 
-        if(watchActivity.mIndoor.mId > 0){
+        if (watchActivity.mIndoor.mId > 0) {
             db_formatActivity.setMacId(watchActivity.mIndoor.mMacId);
             db_formatActivity.setKidId(watchActivity.mIndoor.mKidId);
             db_formatActivity.setTime(watchActivity.mIndoor.mTimestamp);
             db_formatActivity.setDistance(watchActivity.mIndoor.mDistance);
-        }else {
+        } else {
             db_formatActivity.setMacId(watchActivity.mOutdoor.mMacId);
             db_formatActivity.setKidId(watchActivity.mOutdoor.mKidId);
             db_formatActivity.setTime(watchActivity.mOutdoor.mTimestamp);
@@ -472,9 +473,9 @@ public class BeanConvertor {
         return db_formatActivity;
     }
 
-    static List<DB_CloudActivity> getDBCloudActivity(@NonNull List<WatchActivity> watchActivityList){
+    static List<DB_CloudActivity> getDBCloudActivity(@NonNull List<WatchActivity> watchActivityList) {
         List<DB_CloudActivity> dbCloudActivities = new ArrayList<>(1);
-        if(ObjectUtils.isListEmpty(watchActivityList)){
+        if (ObjectUtils.isListEmpty(watchActivityList)) {
             return dbCloudActivities;
         }
 
@@ -486,7 +487,7 @@ public class BeanConvertor {
         return dbCloudActivities;
     }
 
-    static DB_CloudActivity getDBCloudActivity(@NonNull WatchActivity watchActivity){
+    static DB_CloudActivity getDBCloudActivity(@NonNull WatchActivity watchActivity) {
         DB_CloudActivity db_cloudActivity = new DB_CloudActivity();
 
         WatchActivity.Act dataAct = null;
@@ -494,7 +495,7 @@ public class BeanConvertor {
         if (watchActivity.mIndoor.mId > 0) {
             dataAct = watchActivity.mIndoor;
             type = ActivityCloudDataStore.Activity_type_indoor;
-        }else if(watchActivity.mOutdoor.mId > 0){
+        } else if (watchActivity.mOutdoor.mId > 0) {
             dataAct = watchActivity.mOutdoor;
             type = ActivityCloudDataStore.Activity_type_outdoor;
         }
@@ -552,7 +553,7 @@ public class BeanConvertor {
         return rawActivityDataEntity;
     }
 
-    public static WatchActivity getWatchActivity(DB_FormatActivity db_formatActivity){
+    public static WatchActivity getWatchActivity(DB_FormatActivity db_formatActivity) {
         WatchActivity watchActivity = new WatchActivity();
         watchActivity.mIndoor.mId = db_formatActivity.getIndoorId();
         watchActivity.mIndoor.mSteps = db_formatActivity.getIndoorSteps();
@@ -567,16 +568,16 @@ public class BeanConvertor {
         return watchActivity;
     }
 
-    public static List<WatchActivity> getWatchActivity(List<DB_FormatActivity> db_formatActivities){
+    public static List<WatchActivity> getWatchActivity(List<DB_FormatActivity> db_formatActivities) {
         List<WatchActivity> list = new ArrayList<>();
-        for (DB_FormatActivity db_formatActivity : db_formatActivities){
+        for (DB_FormatActivity db_formatActivity : db_formatActivities) {
             WatchActivity watchActivity = getWatchActivity(db_formatActivity);
             list.add(watchActivity);
         }
         return list;
     }
 
-    static WatchContact.Kid getKidsForUI(KidsEntityBean kidsEntityBean){
+    static WatchContact.Kid getKidsForUI(KidsEntityBean kidsEntityBean) {
         WatchContact.Kid kid = new WatchContact.Kid();
         kid.mId = kidsEntityBean.getKidsId();
         kid.mName = kidsEntityBean.getName();
@@ -589,6 +590,10 @@ public class BeanConvertor {
 
         return kid;
 
+    }
+
+    public static String getStepString(long steps) {
+        return String.format(Locale.getDefault(), "%,d", steps);
     }
 
 }

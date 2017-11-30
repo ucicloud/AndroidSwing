@@ -28,6 +28,7 @@ import com.yy.base.utils.ToastCommon;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -113,7 +114,7 @@ public class DashboardListFragment extends DashboardBaseFragment {
             long start = cld.getTimeInMillis() + timezoneOffset;
 
             new KidActivityManager().retrieveHourlyDataByTime(getContext(), start, end, kidId,
-                    new iRetrieveCompleteListener(start, end, timezoneOffset));
+                    new IRetrieveCompleteListener(start, end, timezoneOffset));
         } else if (LIST_WEEK == listType) {
             tv_title.setText(R.string.dashboard_chart_this_week);
             showLoadingDialog(R.string.signup_login_wait);
@@ -132,7 +133,7 @@ public class DashboardListFragment extends DashboardBaseFragment {
             long start = cld.getTimeInMillis() + timezoneOffset;
 
             new KidActivityManager().retrieveDataByTime(getContext(), start, end, kidId,
-                    new iRetrieveCompleteListener(start, end, timezoneOffset));
+                    new IRetrieveCompleteListener(start, end, timezoneOffset));
         } else if (LIST_MONTH == listType) {
             tv_title.setText(R.string.dashboard_chart_this_month);
             showLoadingDialog(R.string.signup_login_wait);
@@ -151,7 +152,7 @@ public class DashboardListFragment extends DashboardBaseFragment {
             long start = cld.getTimeInMillis() + timezoneOffset;
 
             new KidActivityManager().retrieveDataByTime(getContext(), start, end, kidId,
-                    new iRetrieveCompleteListener(start, end, timezoneOffset));
+                    new IRetrieveCompleteListener(start, end, timezoneOffset));
         } else {
             tv_title.setText(R.string.dashboard_chart_this_year);
             showLoadingDialog(R.string.signup_login_wait);
@@ -170,7 +171,7 @@ public class DashboardListFragment extends DashboardBaseFragment {
             long start = cld.getTimeInMillis() + timezoneOffset;
 
             new KidActivityManager().retrieveData(getContext(), "YEARLY", kidId,
-                    new iRetrieveCompleteListener(start, end, timezoneOffset));
+                    new IRetrieveCompleteListener(start, end, timezoneOffset));
         }
     }
 
@@ -233,11 +234,11 @@ public class DashboardListFragment extends DashboardBaseFragment {
         mListView.setAdapter(dataAdapter);
     }
 
-    private class iRetrieveCompleteListener implements KidActivityManager.ICompleteListener {
+    private class IRetrieveCompleteListener implements KidActivityManager.ICompleteListener {
 
         private long start, end, timezoneOffset;
 
-        iRetrieveCompleteListener(long start, long end, long timezoneOffset) {
+        IRetrieveCompleteListener(long start, long end, long timezoneOffset) {
             this.start = start;
             this.end = end;
             this.timezoneOffset = timezoneOffset;
@@ -300,6 +301,8 @@ public class DashboardListFragment extends DashboardBaseFragment {
             }
         }
 
+        Collections.reverse(watchActivities);
+
         for (WatchActivity act : watchActivities) {
             act.mIndoor.mTimestamp -= timezoneOffset;
             act.mOutdoor.mTimestamp -= timezoneOffset;
@@ -348,16 +351,14 @@ public class DashboardListFragment extends DashboardBaseFragment {
             validDaysInMonthArray.put(act.mIndoor.mTimestamp, days);
         }
 
+        Collections.reverse(watchActivities);
+
         for (WatchActivity act : watchActivities) {
             act.mIndoor.mTimestamp -= timezoneOffset;
             act.mOutdoor.mTimestamp -= timezoneOffset;
         }
 
         setDataAdapter(watchActivities, listType, OUTDOOR, mEmotionColor);
-    }
-
-    private String getFormatStepString(long steps) {
-        return String.format(Locale.getDefault(), "%,d", steps);
     }
 
     private class DataAdapter<E> extends BaseAdapter {
@@ -426,7 +427,7 @@ public class DashboardListFragment extends DashboardBaseFragment {
                     holder.tvTimeStart.setText(strStart);
                     holder.tvTimeEnd.setText(strEnd);
                     long steps = door == INDOOR ? wa.mIndoor.mSteps : wa.mOutdoor.mSteps;
-                    holder.tvStepsValue.setText(getFormatStepString(steps));
+                    holder.tvStepsValue.setText(BeanConvertor.getStepString(steps));
                 }
             } else {
                 CommonHolder holder;
@@ -462,9 +463,9 @@ public class DashboardListFragment extends DashboardBaseFragment {
                         validDays = validDaysInMonthArray.get(timestamp, 0);
                     }
                     if (validDays <= 0) {
-                        holder.tvStepsValue.setText(getFormatStepString(steps));
+                        holder.tvStepsValue.setText(BeanConvertor.getStepString(steps));
                     } else {
-                        holder.tvStepsValue.setText(getFormatStepString(steps / validDays));
+                        holder.tvStepsValue.setText(BeanConvertor.getStepString(steps / validDays));
                     }
                 }
             }

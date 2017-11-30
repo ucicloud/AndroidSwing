@@ -436,7 +436,7 @@ public class DashboardChartTripleFragment extends DashboardBaseFragment {
         mViewChartWeekFloors = (ViewChartBarVertical) chartWeek.findViewById(R.id.dashboard_chart_vertical_floors);
         mViewChartWeekFloors.setTitle(chartTitleFloors);
         mViewChartWeekFloors.setOnBarClickListener(new OnChartBarVerticalListener(CHART_FLOORS));
-        mViewChartYearFloors.setVisibility(isOnlyShowSteps ? View.GONE : View.VISIBLE);
+        mViewChartWeekFloors.setVisibility(isOnlyShowSteps ? View.GONE : View.VISIBLE);
         list.add(chartWeek);
 
         View chartMonth = inflater.inflate(R.layout.layout_chart_vertical_triple, mViewPager, false);

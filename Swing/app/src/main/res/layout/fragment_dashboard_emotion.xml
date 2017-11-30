@@ -359,7 +359,8 @@
             android:layout_height="wrap_content"
             android:layout_toEndOf="@+id/v_sponge"
             android:gravity="center_horizontal"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="gone">
 
             <ImageButton
                 android:id="@+id/ib_uv_detection"
