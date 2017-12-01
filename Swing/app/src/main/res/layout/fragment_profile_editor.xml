@@ -130,6 +130,7 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center_vertical"
                     android:inputType="none"
+                    android:editable="false"
                     android:hint="@string/profile_editor_mail_address" />
             </LinearLayout>
 

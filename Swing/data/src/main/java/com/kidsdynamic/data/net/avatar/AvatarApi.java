@@ -1,7 +1,7 @@
 package com.kidsdynamic.data.net.avatar;
 
 import com.kidsdynamic.data.BuildConfig;
-import com.kidsdynamic.data.net.user.model.UpdateKidAvatarRepEntity;
+import com.kidsdynamic.data.net.user.model.UpdateKidRepEntity;
 import com.kidsdynamic.data.net.user.model.UpdateProfileSuccess;
 
 import java.util.Map;
@@ -39,7 +39,7 @@ public interface AvatarApi {
 //    500    Internal error. Please send me the error. I will fix it
     @Multipart
     @POST("v1/user/avatar/uploadKid")
-    Call<UpdateKidAvatarRepEntity> uploadKidAvatar(
+    Call<UpdateKidRepEntity> uploadKidAvatar(
             @PartMap() Map<String, RequestBody> pramPart,
             @Part MultipartBody.Part filePart);
 

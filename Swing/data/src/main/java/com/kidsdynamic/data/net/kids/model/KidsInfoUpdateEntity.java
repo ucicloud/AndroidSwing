@@ -12,7 +12,7 @@ public class KidsInfoUpdateEntity {
      */
 
     private String name;
-    private int kidId;
+    private long kidId;
 
     public String getName() {
         return name;
@@ -22,11 +22,11 @@ public class KidsInfoUpdateEntity {
         this.name = name;
     }
 
-    public int getKidId() {
+    public long getKidId() {
         return kidId;
     }
 
-    public void setKidId(int kidId) {
+    public void setKidId(long kidId) {
         this.kidId = kidId;
     }
 }

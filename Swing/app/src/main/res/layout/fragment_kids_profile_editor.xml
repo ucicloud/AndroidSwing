@@ -69,7 +69,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="38dp"
                 android:layout_marginBottom="10dp"
-                android:background="@drawable/contact_background">
+                android:background="@drawable/contact_background"
+                android:visibility="gone">
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -106,7 +107,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_gravity="center_vertical"
-                    android:inputType="none" />
+                    android:inputType="none"
+                    android:editable="false"/>
             </LinearLayout>
 
 

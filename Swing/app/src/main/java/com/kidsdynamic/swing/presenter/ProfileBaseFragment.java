@@ -46,4 +46,24 @@ public class ProfileBaseFragment extends BaseFragment {
         fragmentTransaction .commit();
 
     }
+
+    public void selectFragment(Fragment fragment, boolean isAddToBackStack) {
+
+        /*Bundle bundle = new Bundle();
+        String[] pageName = className.split("\\.");
+        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, pageName[pageName.length-1]);
+        FirebaseLog(LogEvent.Event.SWITCH_PAGE, bundle);*/
+
+        FragmentTransaction fragmentTransaction = getFragmentManager()
+                .beginTransaction()
+                .replace(R.id.profile_fragment_container, fragment);
+
+        if(isAddToBackStack){
+            fragmentTransaction
+                    .addToBackStack(null);
+        }
+
+        fragmentTransaction .commit();
+
+    }
 }

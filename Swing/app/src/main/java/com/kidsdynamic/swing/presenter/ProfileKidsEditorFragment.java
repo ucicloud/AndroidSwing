@@ -29,9 +29,7 @@ import com.kidsdynamic.data.net.avatar.AvatarApi;
 import com.kidsdynamic.data.net.avatar.PartUtils;
 import com.kidsdynamic.data.net.kids.KidsApi;
 import com.kidsdynamic.data.net.kids.model.KidsInfoUpdateEntity;
-import com.kidsdynamic.data.net.kids.model.KidsWithParent;
-import com.kidsdynamic.data.net.user.model.UpdateKidAvatarRepEntity;
-import com.kidsdynamic.data.net.user.model.UpdateProfileSuccess;
+import com.kidsdynamic.data.net.user.model.UpdateKidRepEntity;
 import com.kidsdynamic.data.utils.LogUtil2;
 import com.kidsdynamic.swing.R;
 import com.kidsdynamic.swing.domain.DeviceManager;
@@ -110,7 +108,7 @@ public class ProfileKidsEditorFragment extends ProfileBaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mViewMain = inflater.inflate(R.layout.fragment_profile_editor, container, false);
+        mViewMain = inflater.inflate(R.layout.fragment_kids_profile_editor, container, false);
 
         ButterKnife.bind(this,mViewMain);
 
@@ -215,7 +213,7 @@ public class ProfileKidsEditorFragment extends ProfileBaseFragment {
     private void profileLoad() {
         mViewFirst.setText(watchKidsInfo.mName);
         mViewLast.setText(watchKidsInfo.mName);
-        mVieKidsId.setText(String.valueOf(watchKidsInfo.mUserId));
+        mVieKidsId.setText(String.valueOf(watchKidsInfo.mId));
         mUserAvatarFileName = watchKidsInfo.mProfile;
 
 
@@ -240,6 +238,7 @@ public class ProfileKidsEditorFragment extends ProfileBaseFragment {
             // TODO: 2017/11/30 kids 
             KidsInfoUpdateEntity kidsInfoUpdateEntity = new KidsInfoUpdateEntity();
             kidsInfoUpdateEntity.setName(first);
+            kidsInfoUpdateEntity.setKidId(watchKidsInfo.mId);
 
             saveProfileChange(kidsInfoUpdateEntity);
         } else if (mUserAvatar != null && mUserAvatarChanged) {
@@ -257,15 +256,15 @@ public class ProfileKidsEditorFragment extends ProfileBaseFragment {
 
         KidsApi kidsApi = ApiGen.getInstance(getContext().getApplicationContext()).
                 generateApi(KidsApi.class, true);
-        kidsApi.kidsUpdate(kidsInfoUpdateEntity).enqueue(new BaseRetrofitCallback<KidsWithParent>() {
+        kidsApi.kidsUpdate(kidsInfoUpdateEntity).enqueue(new BaseRetrofitCallback<UpdateKidRepEntity>() {
             @Override
-            public void onResponse(Call<KidsWithParent> call, Response<KidsWithParent> response) {
+            public void onResponse(Call<UpdateKidRepEntity> call, Response<UpdateKidRepEntity> response) {
                 //code == 200 update ok
                 int code = response.code();
                 Log.d("profile","update code:" + code);
                 if(code == 200){
                     //更新本地数据库
-                    DeviceManager.updateKidsProfile2DB(response.body());
+                    DeviceManager.updateKidsProfile2DB(response.body().getKid());
 
                     if(mUserAvatar != null && mUserAvatarChanged){
                         //更新头像，如果变更
@@ -284,7 +283,7 @@ public class ProfileKidsEditorFragment extends ProfileBaseFragment {
             }
 
             @Override
-            public void onFailure(Call<KidsWithParent> call, Throwable t) {
+            public void onFailure(Call<UpdateKidRepEntity> call, Throwable t) {
                 ToastCommon.makeText(getContext(), R.string.profile_editor_avatar_failed);
                 
                 super.onFailure(call, t);
@@ -302,9 +301,9 @@ public class ProfileKidsEditorFragment extends ProfileBaseFragment {
                 generateApi4Avatar(AvatarApi.class);
         MultipartBody.Part filePart =
                 PartUtils.prepareFilePart("upload", avatarFile.getName(), avatarFile);
-        avatarApi.uploadKidAvatar(paramMap,filePart).enqueue(new BaseRetrofitCallback<UpdateKidAvatarRepEntity>() {
+        avatarApi.uploadKidAvatar(paramMap,filePart).enqueue(new BaseRetrofitCallback<UpdateKidRepEntity>() {
             @Override
-            public void onResponse(Call<UpdateKidAvatarRepEntity> call, Response<UpdateKidAvatarRepEntity> response) {
+            public void onResponse(Call<UpdateKidRepEntity> call, Response<UpdateKidRepEntity> response) {
                 LogUtil2.getUtils().d("uploadUserAvatar onResponse");
 
                 //code == 200 upload ok
@@ -324,7 +323,7 @@ public class ProfileKidsEditorFragment extends ProfileBaseFragment {
             }
 
             @Override
-            public void onFailure(Call<UpdateKidAvatarRepEntity> call, Throwable t) {
+            public void onFailure(Call<UpdateKidRepEntity> call, Throwable t) {
                 finishLoadingDialog();
                 
                 super.onFailure(call, t);
@@ -333,7 +332,7 @@ public class ProfileKidsEditorFragment extends ProfileBaseFragment {
         
     }
 
-    private void uploadAvatarOK(Response<UpdateKidAvatarRepEntity> response) {
+    private void uploadAvatarOK(Response<UpdateKidRepEntity> response) {
         if(response.body() != null){
             //更新本地数据库
             DeviceManager.updateKidsProfile2DB(response.body().getKid());
@@ -354,7 +353,7 @@ public class ProfileKidsEditorFragment extends ProfileBaseFragment {
         }
     }
 
-    @OnClick(R.id.profile_editor_photo)
+    @OnClick(R.id.kids_profile_editor_photo)
     public void addPhoto() {
         CharSequence array[] = new CharSequence[]{getString(R.string.profile_take_photo),
                 getString(R.string.profile_choose_from_library)};

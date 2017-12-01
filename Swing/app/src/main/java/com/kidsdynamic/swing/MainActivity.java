@@ -28,7 +28,7 @@ import com.kidsdynamic.data.net.user.model.LoginEntity;
 import com.kidsdynamic.data.net.user.model.LoginSuccessRep;
 import com.kidsdynamic.data.net.user.model.RegisterEntity;
 import com.kidsdynamic.data.net.user.model.RegisterFailResponse;
-import com.kidsdynamic.data.net.user.model.UpdateKidAvatarRepEntity;
+import com.kidsdynamic.data.net.user.model.UpdateKidRepEntity;
 import com.kidsdynamic.data.net.user.model.UpdateProfileEntity;
 import com.kidsdynamic.data.net.user.model.UpdateProfileSuccess;
 import com.kidsdynamic.data.net.user.model.UserInfo;
@@ -43,7 +43,6 @@ import com.kidsdynamic.swing.utils.GlideHelper;
 import com.kidsdynamic.swing.utils.SwingFontsCache;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -480,9 +479,9 @@ public class MainActivity extends Activity {
         String filePath = "/sdcard/1.jpg";
         MultipartBody.Part filePart = PartUtils.prepareFilePart("upload", "avatar_t01", new File(filePath));
 
-        avatarApi.uploadKidAvatar(getUploadKidAvatarPram(),filePart).enqueue(new Callback<UpdateKidAvatarRepEntity>() {
+        avatarApi.uploadKidAvatar(getUploadKidAvatarPram(),filePart).enqueue(new Callback<UpdateKidRepEntity>() {
             @Override
-            public void onResponse(Call<UpdateKidAvatarRepEntity> call, Response<UpdateKidAvatarRepEntity> response) {
+            public void onResponse(Call<UpdateKidRepEntity> call, Response<UpdateKidRepEntity> response) {
                 LogUtil2.getUtils().d("uploadKidAvatar onResponse");
                 LogUtil2.getUtils().d("uploadKidAvatar  code: " + response.code());
                 //code == 200 upload ok
@@ -497,7 +496,7 @@ public class MainActivity extends Activity {
             }
 
             @Override
-            public void onFailure(Call<UpdateKidAvatarRepEntity> call, Throwable t) {
+            public void onFailure(Call<UpdateKidRepEntity> call, Throwable t) {
                 LogUtil2.getUtils().d("uploadKidAvatar onFailure");
                 t.printStackTrace();
             }

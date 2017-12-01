@@ -8,6 +8,7 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -221,24 +222,33 @@ public class ProfileMainFragment extends ProfileBaseFragment {
     private View.OnClickListener mContactListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            /*ViewCircle viewCircle = (ViewCircle) view;
+            ViewCircle viewCircle = (ViewCircle) view;
             ViewParent viewContainer = view.getParent();
             WatchContact contact = (WatchContact) viewCircle.getTag();
 
             if (viewContainer == mViewDeviceContainer) {
-                focusContact(contact, false);
+//                focusContact(contact, false);
+                showKidsProfile(contact);
 
             } else if (viewContainer == mViewSharedContainer) {
                 focusContact(contact, false);
 
             } else if (viewContainer == mViewRequestToContainer) {
 
-            } else if (viewContainer == mViewRequestFromContainer) {
+            }/* else if (viewContainer == mViewRequestFromContainer) {
                 mActivityMain.mContactStack.push(contact);
                 mActivityMain.selectFragment(FragmentProfileRequestFrom.class.getName(), null);
             }*/
         }
     };
+
+    private void showKidsProfile(WatchContact contact){
+
+        if(contact instanceof WatchContact.Kid){
+            WatchContact.Kid watchKidsInfo = (WatchContact.Kid) contact;
+            selectFragment(ProfileKidsInfoFragment.newInstance(watchKidsInfo.mId),true);
+        }
+    }
 
     private void addContact(LinearLayout layout, WatchContact contact, View.OnClickListener listener) {
 

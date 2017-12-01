@@ -6,6 +6,7 @@ import com.kidsdynamic.data.net.kids.model.KidsInfoUpdateEntity;
 import com.kidsdynamic.data.net.kids.model.KidsWithParent;
 import com.kidsdynamic.data.net.kids.model.WhoRegisterMacIDResp;
 import com.kidsdynamic.data.net.user.model.KidInfo;
+import com.kidsdynamic.data.net.user.model.UpdateKidRepEntity;
 
 import java.util.List;
 
@@ -34,7 +35,7 @@ public interface KidsApi {
 //400	Bad request. Missing some parameters
 //500	Internal error. Please send me the error. I will fix it
     @PUT("v1/kids/update")
-    Call<KidsWithParent> kidsUpdate(@Body KidsInfoUpdateEntity kidsInfoUpdateEntity);
+    Call<UpdateKidRepEntity> kidsUpdate(@Body KidsInfoUpdateEntity kidsInfoUpdateEntity);
 
 //    200	Delete successfully
 //    400	Bad request. Missing some parameters

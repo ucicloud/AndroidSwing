@@ -19,7 +19,7 @@ import com.kidsdynamic.data.net.avatar.PartUtils;
 import com.kidsdynamic.data.net.kids.KidsApi;
 import com.kidsdynamic.data.net.kids.model.KidsAddRequest;
 import com.kidsdynamic.data.net.kids.model.KidsWithParent;
-import com.kidsdynamic.data.net.user.model.UpdateKidAvatarRepEntity;
+import com.kidsdynamic.data.net.user.model.UpdateKidRepEntity;
 import com.kidsdynamic.data.utils.LogUtil2;
 import com.kidsdynamic.swing.BaseFragment;
 import com.kidsdynamic.swing.R;
@@ -250,10 +250,10 @@ public class WatchProfileFragment extends BaseFragment {
                 PartUtils.prepareFilePart("upload", profile.getName(), profile);
         avatarApi
                 .uploadKidAvatar(getUploadKidAvatarPram(kidsId), filePart)
-                .enqueue(new Callback<UpdateKidAvatarRepEntity>() {
+                .enqueue(new Callback<UpdateKidRepEntity>() {
                     @Override
-                    public void onResponse(Call<UpdateKidAvatarRepEntity> call,
-                                           Response<UpdateKidAvatarRepEntity> response) {
+                    public void onResponse(Call<UpdateKidRepEntity> call,
+                                           Response<UpdateKidRepEntity> response) {
                         LogUtil2.getUtils().d("uploadKidAvatar onResponse");
 
                         finishLoadingDialog();
@@ -275,7 +275,7 @@ public class WatchProfileFragment extends BaseFragment {
                     }
 
                     @Override
-                    public void onFailure(Call<UpdateKidAvatarRepEntity> call, Throwable t) {
+                    public void onFailure(Call<UpdateKidRepEntity> call, Throwable t) {
                         finishLoadingDialog();
                         LogUtil2.getUtils().d("uploadKidAvatar onFailure");
                         t.printStackTrace();

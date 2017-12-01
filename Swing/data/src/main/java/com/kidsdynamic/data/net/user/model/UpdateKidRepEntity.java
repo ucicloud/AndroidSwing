@@ -6,7 +6,7 @@ import com.kidsdynamic.data.net.kids.model.KidsWithParent;
  * Created by Administrator on 2017/10/18.
  */
 
-public class UpdateKidAvatarRepEntity {
+public class UpdateKidRepEntity {
 
     /**
      * kid : {"id":13,"name":"kid13","dateCreated":"2017-01-29T23:07:38Z","macId":"Mac_ID3","profile":"kid_avatar_13.jpg","parent":{"id":5,"email":"jack08301@gmail.com","name":"Jay","lastUpdate":"2017-01-11T04:16:44Z","dateCreated":"2017-01-11T04:16:44Z","zipCode":"11111","phoneNumber":"11111","profile":"avatar_5.jpg","registrationId":"123test"}}

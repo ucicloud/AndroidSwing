@@ -12,7 +12,6 @@ import android.widget.TextView;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.kidsdynamic.swing.R;
-import com.kidsdynamic.swing.domain.BeanConvertor;
 import com.kidsdynamic.swing.domain.DeviceManager;
 import com.kidsdynamic.swing.domain.UserManager;
 import com.kidsdynamic.swing.model.KidsEntityBean;
@@ -27,15 +26,15 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
- * ProfileKidsInfoFragment
+ * ProfileSwitchKidsFragment
  * Created by Administrator on 2017/11/29.
  */
 
-public class ProfileKidsInfoFragment extends ProfileBaseFragment {
+public class ProfileSwitchKidsFragment extends ProfileBaseFragment {
     private MainFrameActivity mActivityMain;
     private static final String TAG_KIDS_ID = "kids_id";
 
-    @BindView(R.id.profile_photo)
+    @BindView(R.id.kids_profile_photo)
     protected ViewCircle mViewPhoto;
 
     @BindView(R.id.tv_kids_name)
@@ -44,22 +43,22 @@ public class ProfileKidsInfoFragment extends ProfileBaseFragment {
     @BindView(R.id.tv_kids_id)
     protected TextView tv_kids_id;
 
-    @BindView(R.id.btn_edit_kid_profile)
-    protected Button btn_editKidsProfile;
+    @BindView(R.id.switch_confirm_note)
+    protected TextView tv_note;
 
-    @BindView(R.id.btn_switch_to_account)
-    protected Button btn_switchAccount;
+    @BindView(R.id.btn_confirm_switch)
+    protected Button btn_switch_confirm;
 
-    @BindView(R.id.btn_remove)
-    protected Button btn_remove;
+    @BindView(R.id.btn_cancel)
+    protected Button btn_cancel;
 
     private long kidsId;
     private KidsEntityBean kidsInfo;
 
-    public static ProfileKidsInfoFragment newInstance(long kidsId) {
+    public static ProfileSwitchKidsFragment newInstance(long kidsId) {
         Bundle args = new Bundle();
         args.putLong(TAG_KIDS_ID,kidsId);
-        ProfileKidsInfoFragment fragment = new ProfileKidsInfoFragment();
+        ProfileSwitchKidsFragment fragment = new ProfileSwitchKidsFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -87,7 +86,7 @@ public class ProfileKidsInfoFragment extends ProfileBaseFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View mView = inflater.inflate(R.layout.fragment_kids_profile, container, false);
+        View mView = inflater.inflate(R.layout.fragment_kids_switch, container, false);
 
         ButterKnife.bind(this,mView);
         initTitleBar();
@@ -98,14 +97,13 @@ public class ProfileKidsInfoFragment extends ProfileBaseFragment {
     }
 
     private void initView() {
-        btn_editKidsProfile.setTypeface(SwingFontsCache.getBoldType(getContext()));
-        btn_switchAccount.setTypeface(SwingFontsCache.getBoldType(getContext()));
-        btn_remove.setTypeface(SwingFontsCache.getBoldType(getContext()));
+        btn_switch_confirm.setTypeface(SwingFontsCache.getBoldType(getContext()));
+        btn_cancel.setTypeface(SwingFontsCache.getBoldType(getContext()));
     }
 
     private void initTitleBar() {
         tv_title.setTextColor(getResources().getColor(R.color.colorAccent));
-        tv_title.setText(R.string.title_kids_profile);
+        tv_title.setText(R.string.profile_title_switch_account);
         view_left_action.setImageResource(R.drawable.icon_left);
 
         /*view_right_action.setImageResource(R.drawable.icon_add);
@@ -164,25 +162,22 @@ public class ProfileKidsInfoFragment extends ProfileBaseFragment {
         }
     };
 
-    @OnClick(R.id.btn_edit_kid_profile)
-    protected void onEditProfileClick(){
-        //跳转到编辑kids 信息界面
-        WatchContact.Kid watchKidsInfo =
-                BeanConvertor.getKidsForUI(kidsInfo);
+    @OnClick(R.id.btn_confirm_switch)
+    protected void onConfirmSwitch(){
+        //confirm to switch account
+        // TODO: 2017/12/1
 
-        if(mViewPhoto.getBitmap() != null){
-            watchKidsInfo.mPhoto = mViewPhoto.getBitmap();
-        }
 
-        mActivityMain.mWatchContactStack.push(watchKidsInfo);
-
-        selectFragment(ProfileKidsEditorFragment.class.getName(),null,true);
+        //切换kids成功后，隐藏btn，更新note
+        btn_switch_confirm.setVisibility(View.INVISIBLE);
+        btn_cancel.setVisibility(View.INVISIBLE);
+        tv_note.setText(R.string.profile_kids_switch_done_tip);
 
     }
 
-    @OnClick(R.id.btn_switch_to_account)
-    protected void onSwitchAccount(){
-        selectFragment(ProfileSwitchKidsFragment.newInstance(kidsId),true);
+    @OnClick(R.id.btn_cancel)
+    protected void onCancel(){
+        getFragmentManager().popBackStack();
     }
 
 
