@@ -2,7 +2,6 @@ package com.kidsdynamic.data.net.activity;
 
 import com.kidsdynamic.data.net.activity.model.RawActivityDataEntity;
 import com.kidsdynamic.data.net.activity.model.RetrieveDataRep;
-import com.kidsdynamic.data.net.activity.model.RetrieveHourlyDataRep;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -57,6 +56,6 @@ public interface ActivityApi {
 //    400	Bad request. Missing some parameters, or the type is wrong
 //    500	Internal error. Please send me the error. I will fix it
      @GET("v1/activity/retrieveHourlyDataByTime")
-    Call<RetrieveHourlyDataRep> retrieveHourlyDataByTime(@Query("start") long start, @Query("end") long end,
+    Call<RetrieveDataRep> retrieveHourlyDataByTime(@Query("start") long start, @Query("end") long end,
                                                          @Query("kidId") long kidId);
 }

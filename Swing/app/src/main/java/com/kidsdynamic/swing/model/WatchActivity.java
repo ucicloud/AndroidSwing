@@ -91,11 +91,13 @@ public class WatchActivity implements Serializable {
         mOutdoor.mTimestamp = timestamp;
     }
 
-    public void addInTimeRange(WatchActivity src, long rangeStart, long rangeEnd) {
+    public boolean addInTimeRange(WatchActivity src, long rangeStart, long rangeEnd) {
         if (src.mIndoor.mTimestamp >= rangeStart && src.mIndoor.mTimestamp <= rangeEnd) {
             mIndoor.mSteps += src.mIndoor.mSteps;
             mOutdoor.mSteps += src.mOutdoor.mSteps;
+            return true;
         }
+        return false;
     }
 
     @Override

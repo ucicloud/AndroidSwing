@@ -15,7 +15,6 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.kidsdynamic.swing.R;
-import com.kidsdynamic.swing.domain.KidActivityManager;
 import com.kidsdynamic.swing.model.WatchActivity;
 import com.kidsdynamic.swing.utils.SwingFontsCache;
 import com.kidsdynamic.swing.view.ViewChartBarHorizontal;
@@ -155,7 +154,7 @@ public class DashboardChartTripleFragment extends DashboardBaseFragment {
                 @Override
                 public void onBarClick(int index, float x, float y) {
                     if (0 == index) {
-                        setFragment(DashboardChartSingleFragment.newInstance(getDoor(), mCurrentChart), true);
+                        setFragment(DashboardChartSingleFragment.newInstance(getDoor(), mCurrentChart, null), true);
                     }
                 }
             };
@@ -373,12 +372,12 @@ public class DashboardChartTripleFragment extends DashboardBaseFragment {
     }
 
     private WatchActivity.Act getStepToday(int door) {
-        WatchActivity act = new KidActivityManager().getActivityOfDay(getContext());
+        WatchActivity act = new WatchActivity();
         return door == INDOOR ? act.mIndoor : act.mOutdoor;
     }
 
     private List<WatchActivity.Act> getStepWeek(int door) {
-        List<WatchActivity> thisWeek = new KidActivityManager().getActivityOfWeek(getContext());
+        List<WatchActivity> thisWeek = new ArrayList<>();
         List<WatchActivity.Act> rtn = new ArrayList<>();
 
         for (WatchActivity activity : thisWeek)
@@ -388,7 +387,7 @@ public class DashboardChartTripleFragment extends DashboardBaseFragment {
     }
 
     private List<WatchActivity.Act> getStepMonth(int door) {
-        List<WatchActivity> thisWeek = new KidActivityManager().getActivityOfMonth(getContext());
+        List<WatchActivity> thisWeek = new ArrayList<>();
         List<WatchActivity.Act> rtn = new ArrayList<>();
 
         for (WatchActivity activity : thisWeek)
@@ -402,7 +401,7 @@ public class DashboardChartTripleFragment extends DashboardBaseFragment {
     }
 
     private List<WatchActivity.Act> getStepYear(int door) {
-        List<WatchActivity> thisWeek = new KidActivityManager().getActivityOfYear(getContext());
+        List<WatchActivity> thisWeek = new ArrayList<>();
         List<WatchActivity.Act> rtn = new ArrayList<>();
 
         for (WatchActivity activity : thisWeek)

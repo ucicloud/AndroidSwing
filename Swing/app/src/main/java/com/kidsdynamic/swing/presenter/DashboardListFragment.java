@@ -5,7 +5,6 @@ import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
-import android.util.LongSparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,12 +15,12 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.kidsdynamic.data.net.activity.model.RetrieveDataRep;
-import com.kidsdynamic.data.net.activity.model.RetrieveHourlyDataRep;
 import com.kidsdynamic.data.repository.disk.ActivityCloudDataStore;
 import com.kidsdynamic.swing.R;
 import com.kidsdynamic.swing.domain.BeanConvertor;
 import com.kidsdynamic.swing.domain.DeviceManager;
 import com.kidsdynamic.swing.domain.KidActivityManager;
+import com.kidsdynamic.swing.model.KidsEntityBean;
 import com.kidsdynamic.swing.model.WatchActivity;
 import com.kidsdynamic.swing.utils.SwingFontsCache;
 import com.yy.base.utils.ToastCommon;
@@ -29,12 +28,11 @@ import com.yy.base.utils.ToastCommon;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * DashboardListFragment
@@ -64,7 +62,6 @@ public class DashboardListFragment extends DashboardBaseFragment {
     private long kidId;
     private int listType;
     private DataAdapter dataAdapter;
-    private LongSparseArray<Integer> validDaysInMonthArray;
 
     public static DashboardListFragment newInstance(int listType, int emotion) {
         Bundle args = new Bundle();
@@ -96,7 +93,10 @@ public class DashboardListFragment extends DashboardBaseFragment {
         mEmotion = args.getInt(EMOTION_INT, EMOTION_LOW);
         setEmotion(mEmotion);
 
-        kidId = DeviceManager.getFocusKidsId();
+        KidsEntityBean kid = DeviceManager.getFocusKidsInfo(getContext());
+        if (null != kid) {
+            kidId = kid.getKidsId();
+        }
         listType = args.getInt(LIST_TYPE, LIST_TODAY);
         if (LIST_TODAY == listType) {
             tv_title.setText(R.string.dashboard_chart_today);
@@ -170,9 +170,15 @@ public class DashboardListFragment extends DashboardBaseFragment {
             cld.set(Calendar.SECOND, 0);
             long start = cld.getTimeInMillis() + timezoneOffset;
 
-            new KidActivityManager().retrieveData(getContext(), "YEARLY", kidId,
+            new KidActivityManager().retrieveDataByTime(getContext(), start, end, kidId,
                     new IRetrieveCompleteListener(start, end, timezoneOffset));
         }
+    }
+
+    @OnClick(R.id.main_toolbar_action1)
+    public void onToolbarAction1() {
+//        mActivityMain.popFragment();
+        getFragmentManager().popBackStack();
     }
 
     private RadioGroup.OnCheckedChangeListener onCheckedChangeListener =
@@ -246,11 +252,13 @@ public class DashboardListFragment extends DashboardBaseFragment {
 
         @Override
         public void onComplete(Object arg, int statusCode) {
-            if (200 == statusCode && null != arg) {
-                if (LIST_TODAY == listType && arg instanceof RetrieveHourlyDataRep) {
+            if (200 == statusCode && null != arg && arg instanceof RetrieveDataRep) {
+                if (LIST_TODAY == listType) {
                     handleHourlyData(arg, start, end, timezoneOffset);
-                } else if (arg instanceof RetrieveDataRep) {
-                    handleRetrieveData(arg, start, end, timezoneOffset);
+                } else if (LIST_WEEK == listType || LIST_MONTH == listType) {
+                    handleWeeklyAndMonthlyData(arg, start, end, timezoneOffset);
+                } else {
+                    handleYearlyData(arg, start, end, timezoneOffset);
                 }
                 finishLoadingDialog();
             } else {
@@ -267,8 +275,8 @@ public class DashboardListFragment extends DashboardBaseFragment {
     }
 
     private void handleHourlyData(Object arg, long start, long end, long timezoneOffset) {
-        RetrieveHourlyDataRep rep = (RetrieveHourlyDataRep) arg;
-        List<RetrieveHourlyDataRep.ActivitiesEntity> activitiesEntities = rep.getActivities();
+        RetrieveDataRep rep = (RetrieveDataRep) arg;
+        List<RetrieveDataRep.ActivitiesEntity> activitiesEntities = rep.getActivities();
         if (null == activitiesEntities || activitiesEntities.isEmpty()) {
             setDataAdapter(null, LIST_TODAY, OUTDOOR, mEmotionColor);
             return;
@@ -281,7 +289,7 @@ public class DashboardListFragment extends DashboardBaseFragment {
             timestamp += millisInHour;
         }
         for (WatchActivity act : watchActivities) {
-            for (RetrieveHourlyDataRep.ActivitiesEntity entity : activitiesEntities) {
+            for (RetrieveDataRep.ActivitiesEntity entity : activitiesEntities) {
                 long receiveDate = BeanConvertor.getLocalTimeStamp(entity.getReceivedDate());
                 long actEnd = act.mIndoor.mTimestamp + millisInHour;
                 if (receiveDate >= act.mIndoor.mTimestamp && receiveDate < actEnd) {
@@ -311,7 +319,7 @@ public class DashboardListFragment extends DashboardBaseFragment {
         setDataAdapter(watchActivities, LIST_TODAY, OUTDOOR, mEmotionColor);
     }
 
-    private void handleRetrieveData(Object arg, long start, long end, long timezoneOffset) {
+    private void handleWeeklyAndMonthlyData(Object arg, long start, long end, long timezoneOffset) {
         RetrieveDataRep rep = (RetrieveDataRep) arg;
         List<RetrieveDataRep.ActivitiesEntity> activitiesEntities = rep.getActivities();
         if (null == activitiesEntities || activitiesEntities.isEmpty()) {
@@ -325,11 +333,7 @@ public class DashboardListFragment extends DashboardBaseFragment {
             watchActivities.add(new WatchActivity(kidId, timestamp));
             timestamp += millisInDay;
         }
-        if (LIST_YEAR == listType) {
-            validDaysInMonthArray = new LongSparseArray<>();
-        }
         for (WatchActivity act : watchActivities) {
-            int days = 0;
             for (RetrieveDataRep.ActivitiesEntity entity : activitiesEntities) {
                 long receiveDate = BeanConvertor.getLocalTimeStamp(entity.getReceivedDate());
                 long actEnd = act.mIndoor.mTimestamp + millisInDay;
@@ -346,9 +350,7 @@ public class DashboardListFragment extends DashboardBaseFragment {
                         act.mOutdoor.mDistance += entity.getDistance();
                     }
                 }
-                days += 1;
             }
-            validDaysInMonthArray.put(act.mIndoor.mTimestamp, days);
         }
 
         Collections.reverse(watchActivities);
@@ -359,6 +361,105 @@ public class DashboardListFragment extends DashboardBaseFragment {
         }
 
         setDataAdapter(watchActivities, listType, OUTDOOR, mEmotionColor);
+    }
+
+    private void handleYearlyData(Object arg, long start, long end, long timezoneOffset) {
+        RetrieveDataRep rep = (RetrieveDataRep) arg;
+        List<RetrieveDataRep.ActivitiesEntity> activitiesEntities = rep.getActivities();
+        if (null == activitiesEntities || activitiesEntities.isEmpty()) {
+            setDataAdapter(null, listType, OUTDOOR, mEmotionColor);
+            return;
+        }
+        List<WatchActivity> watchActivities = new ArrayList<>();
+        long millisInDay = 1000 * 60 * 60 * 24;
+        long timestamp = start;
+        while (timestamp < end) {
+            watchActivities.add(new WatchActivity(kidId, timestamp));
+            timestamp += millisInDay;
+        }
+        for (WatchActivity act : watchActivities) {
+            for (RetrieveDataRep.ActivitiesEntity entity : activitiesEntities) {
+                long receiveDate = BeanConvertor.getLocalTimeStamp(entity.getReceivedDate());
+                long actEnd = act.mIndoor.mTimestamp + millisInDay;
+                if (receiveDate >= act.mIndoor.mTimestamp && receiveDate < actEnd) {
+                    if (entity.type.equals(ActivityCloudDataStore.Activity_type_indoor)) {
+                        act.mIndoor.mId = entity.getId();
+                        act.mIndoor.mMacId = entity.getMacId();
+                        act.mIndoor.mSteps += entity.getSteps();
+                        act.mIndoor.mDistance += entity.getDistance();
+                    } else if (entity.type.equals(ActivityCloudDataStore.Activity_type_outdoor)) {
+                        act.mOutdoor.mId = entity.getId();
+                        act.mOutdoor.mMacId = entity.getMacId();
+                        act.mOutdoor.mSteps += entity.getSteps();
+                        act.mOutdoor.mDistance += entity.getDistance();
+                    }
+                }
+            }
+        }
+
+        List<WatchActivity> thisYear = new ArrayList<>();
+        long startTimestamp;
+        long endTimestamp;
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.YEAR, -1);
+        cal.set(Calendar.DATE, 1);
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.add(Calendar.SECOND, -1);
+        cal.add(Calendar.MONTH, 2);
+        // 结束时间为一年前下个月最后一天 23时59分59秒
+        endTimestamp = cal.getTimeInMillis();
+
+        cal.add(Calendar.SECOND, 1);
+        cal.add(Calendar.MONTH, -1);
+        // 起始时间为一年前下个月的第一天 0时0分0秒
+        startTimestamp = cal.getTimeInMillis();
+
+        for (int i = 0; i < 12; i++) {
+            WatchActivity watchActivity = new WatchActivity(0, startTimestamp);
+
+            int days = 0;
+            for (WatchActivity src : watchActivities) {
+                boolean isInTimeRange = watchActivity.addInTimeRange(src, startTimestamp, endTimestamp);
+                if (isInTimeRange) {
+                    days += 1;
+                }
+            }
+            if (days > 0) {
+                watchActivity.mOutdoor.mSteps = watchActivity.mOutdoor.mSteps / days;
+                watchActivity.mIndoor.mSteps = watchActivity.mIndoor.mSteps / days;
+            }
+            thisYear.add(watchActivity);
+
+            // 本次起始时间加一个月，作为下一个起始时间
+            cal.setTimeInMillis(startTimestamp);
+            cal.add(Calendar.MONTH, 1);
+            cal.set(Calendar.DATE, 1);
+            cal.set(Calendar.HOUR_OF_DAY, 0);
+            cal.set(Calendar.MINUTE, 0);
+            cal.set(Calendar.SECOND, 0);
+            startTimestamp = cal.getTimeInMillis();
+
+            // 下一个起始时间加一个月后，再减去一秒，作为本月的结束时间
+            cal.setTimeInMillis(startTimestamp);
+            cal.add(Calendar.MONTH, 1);
+            cal.set(Calendar.DATE, 1);
+            cal.set(Calendar.HOUR_OF_DAY, 0);
+            cal.set(Calendar.MINUTE, 0);
+            cal.set(Calendar.SECOND, 0);
+            cal.add(Calendar.SECOND, -1);
+            endTimestamp = cal.getTimeInMillis();
+        }
+
+        Collections.reverse(watchActivities);
+
+        for (WatchActivity act : watchActivities) {
+            act.mIndoor.mTimestamp -= timezoneOffset;
+            act.mOutdoor.mTimestamp -= timezoneOffset;
+        }
+
+        setDataAdapter(thisYear, listType, OUTDOOR, mEmotionColor);
     }
 
     private class DataAdapter<E> extends BaseAdapter {
@@ -372,7 +473,9 @@ public class DashboardListFragment extends DashboardBaseFragment {
 
         DataAdapter(Context context, List<E> items, int type, int door, int emotionColor) {
             this.context = context;
-            this.items.addAll(items);
+            if (null != items) {
+                this.items.addAll(items);
+            }
             this.type = type;
             this.door = door;
             this.emotionColor = emotionColor;
@@ -457,16 +560,8 @@ public class DashboardListFragment extends DashboardBaseFragment {
                     }
                     holder.tvTimeMain.setText(strTimeMain);
                     holder.tvTimeSub.setText(strTimeSub);
-                    int validDays = 0;
                     long steps = INDOOR == door ? wa.mIndoor.mSteps : wa.mOutdoor.mSteps;
-                    if (null != validDaysInMonthArray) {
-                        validDays = validDaysInMonthArray.get(timestamp, 0);
-                    }
-                    if (validDays <= 0) {
-                        holder.tvStepsValue.setText(BeanConvertor.getStepString(steps));
-                    } else {
-                        holder.tvStepsValue.setText(BeanConvertor.getStepString(steps / validDays));
-                    }
+                    holder.tvStepsValue.setText(BeanConvertor.getStepString(steps));
                 }
             }
             return convertView;

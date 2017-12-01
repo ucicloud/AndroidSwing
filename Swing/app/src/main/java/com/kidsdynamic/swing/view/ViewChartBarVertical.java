@@ -41,7 +41,7 @@ public class ViewChartBarVertical extends ViewChart {
 
     private float mGoal;
     private List<WatchActivity.Act> mValue;
-    private String mTitle = "Step";
+    private String mTitle = "Steps";
 
     private List<Rect> barRectList;
     private MotionEvent mCurrentEvent;
@@ -77,7 +77,9 @@ public class ViewChartBarVertical extends ViewChart {
 
     public void setValue(List<WatchActivity.Act> list) {
         mValue.clear();
-        mValue.addAll(list);
+        if (null != list) {
+            mValue.addAll(list);
+        }
     }
 
     public void setTitle(String title) {
@@ -206,8 +208,6 @@ public class ViewChartBarVertical extends ViewChart {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         int action = event.getAction();
-        float x = event.getX();
-        float y = event.getY();
         switch (action) {
             case MotionEvent.ACTION_UP:
                 mCurrentEvent = event;

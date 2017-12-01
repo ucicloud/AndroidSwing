@@ -10,7 +10,6 @@ import android.graphics.Path;
 import android.graphics.PathEffect;
 import android.graphics.Rect;
 import android.graphics.Shader;
-import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 
@@ -63,7 +62,7 @@ public class ViewChartToday extends ViewChart {
     }
 
     public void setValue(WatchActivity.Act value) {
-        mValue = new WatchActivity.Act(value);
+        mValue = null != value ? new WatchActivity.Act(value) : new WatchActivity.Act();
     }
 
     public float getGoal() {

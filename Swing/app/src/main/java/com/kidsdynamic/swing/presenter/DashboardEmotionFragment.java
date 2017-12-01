@@ -85,7 +85,8 @@ public class DashboardEmotionFragment extends DashboardBaseFragment {
     @BindView(R.id.tv_uv_detection)
     TextView tv_uv_detection;
 
-    private Animatable animLoading;
+    //    private Animatable animLoading;
+    private WatchActivity watchActivity;
 
     public static DashboardEmotionFragment newInstance() {
         Bundle args = new Bundle();
@@ -108,52 +109,47 @@ public class DashboardEmotionFragment extends DashboardBaseFragment {
         super.onActivityCreated(savedInstanceState);
         tv_title.setTextColor(getResources().getColor(R.color.colorAccent));
         tv_title.setText(R.string.title_dashboard);
-        view_left_action.setImageResource(R.drawable.progress_loading);
-        animLoading = (Animatable) view_left_action.getDrawable();
-        animLoading.start();
+//        view_left_action.setImageResource(R.drawable.progress_loading);
+//        animLoading = (Animatable) view_left_action.getDrawable();
+//        animLoading.start();
 
-        WatchActivity wa = new KidActivityManager().getActivityOfDay(getContext());
-        if (null != wa) {
-            setWatchActivity(wa);
-        } else {
-            KidsEntityBean kid = DeviceManager.getFocusKidsInfo(getContext());
-            if (null == kid) {
-                return;
-            }
-            showLoadingDialog(R.string.signup_login_wait);
-            Calendar cld = Calendar.getInstance();
-            int timezoneOffset = cld.getTimeZone().getOffset(cld.getTimeInMillis());
-
-            cld.set(Calendar.HOUR_OF_DAY, 23);
-            cld.set(Calendar.MINUTE, 59);
-            cld.set(Calendar.SECOND, 59);
-            long end = cld.getTimeInMillis() + timezoneOffset;
-
-            cld.add(Calendar.DAY_OF_MONTH, -1);
-            cld.add(Calendar.SECOND, 1);
-            long start = cld.getTimeInMillis() + timezoneOffset;
-
-            new KidActivityManager().retrieveDataByTime(getContext(), start, end, kid.getKidsId(),
-                    new IRetrieveCompleteListener(start, end, timezoneOffset, kid.getKidsId()));
+        KidsEntityBean kid = DeviceManager.getFocusKidsInfo(getContext());
+        if (null == kid) {
+            return;
         }
+        showLoadingDialog(R.string.signup_login_wait);
+        Calendar cld = Calendar.getInstance();
+        int timezoneOffset = cld.getTimeZone().getOffset(cld.getTimeInMillis());
+
+        cld.set(Calendar.HOUR_OF_DAY, 23);
+        cld.set(Calendar.MINUTE, 59);
+        cld.set(Calendar.SECOND, 59);
+        long end = cld.getTimeInMillis() + timezoneOffset;
+
+        cld.add(Calendar.DAY_OF_MONTH, -1);
+        cld.add(Calendar.SECOND, 1);
+        long start = cld.getTimeInMillis() + timezoneOffset;
+
+        new KidActivityManager().retrieveDataByTime(getContext(), kid.getKidsId(), start, end,
+                new IRetrieveCompleteListener(start, end, timezoneOffset, kid.getKidsId()));
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        if (null != animLoading && animLoading.isRunning()) {
-            animLoading.stop();
-        }
+//        if (null != animLoading && animLoading.isRunning()) {
+//            animLoading.stop();
+//        }
     }
 
     @OnClick(R.id.rl_indoor_steps)
     public void clickIndoorSteps() {
-        setFragment(DashboardChartSingleFragment.newInstance(INDOOR, CHART_TODAY), true);
+        setFragment(DashboardChartSingleFragment.newInstance(INDOOR, CHART_TODAY, watchActivity), true);
     }
 
     @OnClick(R.id.rl_outdoor_steps)
     public void clickOutdoorSteps() {
-        setFragment(DashboardChartSingleFragment.newInstance(OUTDOOR, CHART_TODAY), true);
+        setFragment(DashboardChartSingleFragment.newInstance(OUTDOOR, CHART_TODAY, watchActivity), true);
     }
 
     @OnClick(R.id.rl_uv_explosure)
@@ -163,7 +159,8 @@ public class DashboardEmotionFragment extends DashboardBaseFragment {
 
     @OnClick({R.id.ib_activity, R.id.tv_activity})
     public void clickActivity() {
-        setFragment(DashboardChartTripleFragment.newInstance(OUTDOOR), true);
+//        setFragment(DashboardChartTripleFragment.newInstance(OUTDOOR), true);
+        setFragment(DashboardChartSingleFragment.newInstance(OUTDOOR, CHART_TODAY, watchActivity), true);
     }
 
     @OnClick({R.id.ib_uv_detection, R.id.tv_uv_detection})
@@ -175,26 +172,27 @@ public class DashboardEmotionFragment extends DashboardBaseFragment {
         long steps = wa.mIndoor.mSteps + wa.mOutdoor.mSteps;
         setData(wa);
         setEmotion(steps);
+        watchActivity = wa;
     }
 
     private void setData(WatchActivity wa) {
         tv_indoor_steps_value.setText(BeanConvertor.getStepString(wa.mIndoor.mSteps));
         tv_outdoor_steps_value.setText(BeanConvertor.getStepString(wa.mOutdoor.mSteps));
-        String today = getString(R.string.dashboard_chart_today);
-        long indoorTimestamp = wa.mIndoor.mTimestamp;
-        if (indoorTimestamp > 0) {
-            StringBuilder sb = new StringBuilder(today);
-            sb.append(",");
-            sb.append(BeanConvertor.getLocalTimeString(indoorTimestamp, "K:mm a"));
-            tv_indoor_time.setText(sb);
-        }
-        long outdoorTimestamp = wa.mOutdoor.mTimestamp;
-        if (outdoorTimestamp > 0) {
-            StringBuilder sb = new StringBuilder(today);
-            sb.append(",");
-            sb.append(BeanConvertor.getLocalTimeString(outdoorTimestamp, "K:mm a"));
-            tv_outdoor_time.setText(sb);
-        }
+//        String today = getString(R.string.dashboard_chart_today);
+//        long indoorTimestamp = wa.mIndoor.mTimestamp;
+//        if (indoorTimestamp > 0) {
+//            StringBuilder sb = new StringBuilder(today);
+//            sb.append(",");
+//            sb.append(BeanConvertor.getLocalTimeString(indoorTimestamp, "K:mm a"));
+//            tv_indoor_time.setText(sb);
+//        }
+//        long outdoorTimestamp = wa.mOutdoor.mTimestamp;
+//        if (outdoorTimestamp > 0) {
+//            StringBuilder sb = new StringBuilder(today);
+//            sb.append(",");
+//            sb.append(BeanConvertor.getLocalTimeString(outdoorTimestamp, "K:mm a"));
+//            tv_outdoor_time.setText(sb);
+//        }
     }
 
     private void setEmotion(long steps) {
@@ -331,7 +329,7 @@ public class DashboardEmotionFragment extends DashboardBaseFragment {
             act.mOutdoor.mTimestamp -= timezoneOffset;
         }
 
-        setData(watchActivities.get(0));
+        setWatchActivity(watchActivities.get(0));
     }
 
 }

@@ -5,18 +5,15 @@ import android.util.Log;
 
 import com.kidsdynamic.commonlib.utils.ObjectUtils;
 import com.kidsdynamic.data.dao.DB_FormatActivity;
-import com.kidsdynamic.data.dao.DB_RawActivity;
 import com.kidsdynamic.data.net.ApiGen;
 import com.kidsdynamic.data.net.activity.ActivityApi;
 import com.kidsdynamic.data.net.activity.model.RetrieveDataRep;
-import com.kidsdynamic.data.net.activity.model.RetrieveHourlyDataRep;
 import com.kidsdynamic.data.persistent.DbUtil;
 import com.kidsdynamic.data.repository.disk.ActivityCloudDataStore;
 import com.kidsdynamic.data.repository.disk.ActivityFormatDataStore;
 import com.kidsdynamic.data.repository.disk.RawActivityDataStore;
 import com.kidsdynamic.swing.R;
 import com.kidsdynamic.swing.SwingApplication;
-import com.kidsdynamic.swing.model.KidsEntityBean;
 import com.kidsdynamic.swing.model.WatchActivity;
 import com.kidsdynamic.swing.net.BaseRetrofitCallback;
 
@@ -54,12 +51,10 @@ public class KidActivityManager {
         mSearchStart = cal.getTimeInMillis() + mTimezoneOffset;
         mActivities = new ArrayList<>();
 
-
         //每天一个activity对象
         for (long activityTimeStamp = mSearchStart; activityTimeStamp < mSearchEnd; activityTimeStamp += 86400000) {
             mActivities.add(new WatchActivity(kidId, activityTimeStamp));
         }
-
 
         ActivityApi activityApi = ApiGen.getInstance(
                 context.getApplicationContext()).
@@ -84,7 +79,6 @@ public class KidActivityManager {
                 }
 
                 super.onResponse(call, response);
-
             }
 
             @Override
@@ -113,7 +107,6 @@ public class KidActivityManager {
                 Log.d("swing", "Retrieve activity wrong time! " + activity.getReceivedDate());
                 continue;
             }
-
 
             for (WatchActivity act : mActivities) {
                 long actEnd = act.mIndoor.mTimestamp + 86400000;
@@ -171,172 +164,6 @@ public class KidActivityManager {
         void onFailed(String Command, int statusCode);
     }
 
-    public List<WatchActivity> loadActivityWithLocal(Context context) {
-        KidsEntityBean kid = DeviceManager.getFocusKidsInfo(context);
-        List<WatchActivity> rtn = new ArrayList<>();
-        // 结束时间为今天的23时59分59秒
-        Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.HOUR_OF_DAY, 23);
-        cal.set(Calendar.MINUTE, 59);
-        cal.set(Calendar.SECOND, 59);
-        long endTimestamp = cal.getTimeInMillis();
-        // 起始时间为一年前今天的23时59分59秒，再加一秒
-        cal.add(Calendar.YEAR, -1);
-        cal.add(Calendar.SECOND, 1);
-        long startTimestamp = cal.getTimeInMillis();
-
-        // 一天（24小时）的毫秒数
-        // 毫秒*秒*分*时
-        int millsInDay = 1000 * 60 * 60 * 24;
-
-        while (startTimestamp < endTimestamp) {
-            rtn.add(new WatchActivity(kid == null ? 0 : kid.getKidsId(), startTimestamp));
-            startTimestamp += millsInDay;
-        }
-
-        Collections.reverse(rtn);
-        if (kid == null)
-            return rtn;
-
-        DbUtil dbUtil = DbUtil.getInstance(SwingApplication.getAppContext());
-        ActivityFormatDataStore activityFormatDataStore = new ActivityFormatDataStore(dbUtil);
-        List<DB_FormatActivity> formatActivities = activityFormatDataStore.getByKidId(kid.getKidsId());
-        List<WatchActivity> exportList;
-        if (!ObjectUtils.isListEmpty(formatActivities)) {
-            exportList = BeanConvertor.getWatchActivity(formatActivities);
-            for (WatchActivity exportActivity : exportList) {
-                for (WatchActivity preloadActivity : rtn) {
-                    long actEnd = preloadActivity.mIndoor.mTimestamp + 86400000;
-                    if (exportActivity.mIndoor.mTimestamp >= preloadActivity.mIndoor.mTimestamp && exportActivity.mIndoor.mTimestamp < actEnd) {
-                        preloadActivity.mIndoor.mSteps += exportActivity.mIndoor.mSteps;
-                        preloadActivity.mOutdoor.mSteps += exportActivity.mOutdoor.mSteps;
-                        break;
-                    }
-                }
-            }
-        }
-
-        RawActivityDataStore rawActivityDataStore = new RawActivityDataStore(dbUtil);
-        List<DB_RawActivity> uploadList = rawActivityDataStore.getByMacId(kid.getMacId());
-        for (DB_RawActivity raw : uploadList) {
-            for (WatchActivity preloadActivity : rtn) {
-                long actEnd = preloadActivity.mIndoor.mTimestamp + 86400000;
-                long rawTime = raw.getTime();
-                rawTime *= 1000;
-
-                if (rawTime >= preloadActivity.mIndoor.mTimestamp && rawTime < actEnd) {
-                    String[] arg = raw.getIndoorActivity().split(",");
-                    int indoor = Integer.valueOf(arg[2]);
-                    arg = raw.getOutdoorActivity().split(",");
-                    int outdoor = Integer.valueOf(arg[2]);
-
-                    preloadActivity.mIndoor.mSteps += indoor;
-                    preloadActivity.mOutdoor.mSteps += outdoor;
-
-                    break;
-                }
-            }
-        }
-
-        return rtn;
-    }
-
-    public WatchActivity getActivityOfDay(Context context) {
-        List<WatchActivity> list = loadActivityWithLocal(context);
-
-        return list.get(0);
-    }
-
-    public List<WatchActivity> getActivityOfWeek(Context context) {
-        List<WatchActivity> rtn = new ArrayList<>();
-        List<WatchActivity> list = loadActivityWithLocal(context);
-
-        for (int idx = 0; idx < 7; idx++)
-            rtn.add(list.get(idx));
-
-        Collections.reverse(rtn);
-
-        return rtn;
-    }
-
-    public List<WatchActivity> getActivityOfMonth(Context context) {
-        List<WatchActivity> rtn = new ArrayList<>();
-        List<WatchActivity> list = loadActivityWithLocal(context);
-
-        for (int idx = 0; idx < 30; idx++)
-            rtn.add(list.get(idx));
-        Collections.reverse(rtn);
-
-        return rtn;
-    }
-
-    public List<WatchActivity> getActivityOfYear(Context context) {
-        List<WatchActivity> rtn = new ArrayList<>();
-        long startTimestamp;
-        long endTimestamp;
-
-        KidsEntityBean kid = DeviceManager.getFocusKidsInfo(context);
-        List<WatchActivity> list = null;
-        if (kid == null)
-            list = new ArrayList<>();
-        else {
-            DbUtil dbUtil = DbUtil.getInstance(SwingApplication.getAppContext());
-            ActivityFormatDataStore activityFormatDataStore = new ActivityFormatDataStore(dbUtil);
-            List<DB_FormatActivity> formatActivities = activityFormatDataStore.getByKidId(kid.getKidsId());
-            if (!ObjectUtils.isListEmpty(formatActivities)) {
-                list = BeanConvertor.getWatchActivity(formatActivities);
-            }
-        }
-
-        if (null == list) {
-            list = new ArrayList<>();
-        }
-
-        Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.YEAR, -1);
-        cal.set(Calendar.DATE, 1);
-        cal.set(Calendar.HOUR_OF_DAY, 0);
-        cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.SECOND, 0);
-        cal.add(Calendar.SECOND, -1);
-        cal.add(Calendar.MONTH, 2);
-        // 结束时间为一年前下个月最后一天 23时59分59秒
-        endTimestamp = cal.getTimeInMillis();
-
-        cal.add(Calendar.SECOND, 1);
-        cal.add(Calendar.MONTH, -1);
-        // 起始时间为一年前下个月的第一天 0时0分0秒
-        startTimestamp = cal.getTimeInMillis();
-
-        for (int idx = 0; idx < 12; idx++) {
-            WatchActivity watchActivity = new WatchActivity(0, startTimestamp);
-
-            for (WatchActivity src : list)
-                watchActivity.addInTimeRange(src, startTimestamp, endTimestamp);
-            rtn.add(watchActivity);
-
-            // 本次起始时间加一个月，作为下一个起始时间
-            cal.setTimeInMillis(startTimestamp);
-            cal.add(Calendar.MONTH, 1);
-            cal.set(Calendar.DATE, 1);
-            cal.set(Calendar.HOUR_OF_DAY, 0);
-            cal.set(Calendar.MINUTE, 0);
-            cal.set(Calendar.SECOND, 0);
-            startTimestamp = cal.getTimeInMillis();
-
-            // 下一个起始时间加一个月后，再减去一秒，作为本月的结束时间
-            cal.setTimeInMillis(startTimestamp);
-            cal.add(Calendar.MONTH, 1);
-            cal.set(Calendar.DATE, 1);
-            cal.set(Calendar.HOUR_OF_DAY, 0);
-            cal.set(Calendar.MINUTE, 0);
-            cal.set(Calendar.SECOND, 0);
-            cal.add(Calendar.SECOND, -1);
-            endTimestamp = cal.getTimeInMillis();
-        }
-        return rtn;
-    }
-
     public void retrieveHourlyDataByTime(final Context context, final long start, final long end,
                                          final long kidId, final ICompleteListener completeListener) {
         ActivityApi activityApi = ApiGen
@@ -345,14 +172,14 @@ public class KidActivityManager {
 
         activityApi
                 .retrieveHourlyDataByTime(start / 1000, end / 1000, kidId)
-                .enqueue(new BaseRetrofitCallback<RetrieveHourlyDataRep>() {
+                .enqueue(new BaseRetrofitCallback<RetrieveDataRep>() {
                     @Override
-                    public void onResponse(Call<RetrieveHourlyDataRep> call, Response<RetrieveHourlyDataRep> response) {
-                        RetrieveHourlyDataRep retrieveHourlyDataRep = response.body();
+                    public void onResponse(Call<RetrieveDataRep> call, Response<RetrieveDataRep> response) {
+                        RetrieveDataRep retrieveDataRep = response.body();
                         int code = response.code();
-                        if (code == 200 && retrieveHourlyDataRep != null) {
+                        if (code == 200 && retrieveDataRep != null) {
                             if (completeListener != null) {
-                                completeListener.onComplete(retrieveHourlyDataRep.getActivities(), code);
+                                completeListener.onComplete(retrieveDataRep, code);
                             }
                         } else {
                             if (completeListener != null) {
@@ -364,7 +191,7 @@ public class KidActivityManager {
                     }
 
                     @Override
-                    public void onFailure(Call<RetrieveHourlyDataRep> call, Throwable t) {
+                    public void onFailure(Call<RetrieveDataRep> call, Throwable t) {
                         super.onFailure(call, t);
 
                         if (completeListener != null) {
@@ -406,7 +233,6 @@ public class KidActivityManager {
                         }
                     }
                 });
-
     }
 
     public void retrieveData(final Context context, final String period, final long kidId,

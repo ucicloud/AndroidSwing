@@ -79,7 +79,7 @@
                 android:id="@+id/dashboard_chart_indoor"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/border_button_bg_orange"
+                android:background="@drawable/border_button_bg_blue"
                 android:button="@null"
                 android:paddingBottom="@dimen/base_6"
                 android:paddingLeft="@dimen/base_30"
@@ -87,7 +87,7 @@
                 android:paddingTop="@dimen/base_6"
                 android:text="@string/dashboard_chart_indoor"
                 android:textAllCaps="false"
-                android:textColor="@color/text_orange_white_change_selector"
+                android:textColor="@color/text_blue_white_change_selector"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
@@ -96,7 +96,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/base_10"
-                android:background="@drawable/border_button_bg_orange"
+                android:background="@drawable/border_button_bg_blue"
                 android:button="@null"
                 android:paddingBottom="@dimen/base_6"
                 android:paddingLeft="@dimen/base_30"
@@ -104,7 +104,7 @@
                 android:paddingTop="@dimen/base_6"
                 android:text="@string/dashboard_chart_outdoor"
                 android:textAllCaps="false"
-                android:textColor="@color/text_orange_white_change_selector"
+                android:textColor="@color/text_blue_white_change_selector"
                 android:textSize="16sp"
                 android:textStyle="bold" />
         </RadioGroup>
