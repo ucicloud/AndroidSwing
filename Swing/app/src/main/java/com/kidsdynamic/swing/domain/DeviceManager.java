@@ -189,5 +189,24 @@ public class DeviceManager {
 
     }
 
+    //因为kids的info会在两张表中保存（DB_Kids，DB_eventKids）,需要都更新
+    public static void updateKidsProfile2DB(@NonNull KidsWithParent kidsWithParent){
+        DbUtil dbUtil = DbUtil.getInstance(SwingApplication.getAppContext());
+        KidsDataStore kidsDataStore = new KidsDataStore(dbUtil);
+
+        DB_Kids dbKids = kidsDataStore.getKidsInfo(kidsWithParent.getId());
+
+        if(dbKids == null){
+            return;
+        }
+
+
+        //开始更新
+        kidsDataStore.update(BeanConvertor.updateDBKids(dbKids, kidsWithParent));
+
+        //todo db_eventKids表更新
+
+    }
+
 
 }

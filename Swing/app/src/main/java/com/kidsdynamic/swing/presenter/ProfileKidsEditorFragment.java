@@ -34,6 +34,7 @@ import com.kidsdynamic.data.net.user.model.UpdateKidAvatarRepEntity;
 import com.kidsdynamic.data.net.user.model.UpdateProfileSuccess;
 import com.kidsdynamic.data.utils.LogUtil2;
 import com.kidsdynamic.swing.R;
+import com.kidsdynamic.swing.domain.DeviceManager;
 import com.kidsdynamic.swing.domain.UserManager;
 import com.kidsdynamic.swing.model.WatchContact;
 import com.kidsdynamic.swing.net.BaseRetrofitCallback;
@@ -130,20 +131,13 @@ public class ProfileKidsEditorFragment extends ProfileBaseFragment {
 
     private void initTitleBar() {
         tv_title.setTextColor(getResources().getColor(R.color.colorAccent));
-        tv_title.setText(R.string.profile_option_edit);
+        tv_title.setText(R.string.profile_edit_kids_profile);
         view_left_action.setImageResource(R.drawable.icon_left);
 
         view_right_action.setImageResource(R.drawable.icon_delete);
         view_right_action.setVisibility(View.INVISIBLE);
        /* view_right_action.setTag(R.drawable.icon_add);*/
     }
-
-   /* @Override
-    public ViewFragmentConfig getConfig() {
-        return new ViewFragmentConfig(
-                getResources().getString(R.string.title_profile), true, true, false,
-                ActivityMain.RESOURCE_IGNORE, R.mipmap.icon_left, R.mipmap.icon_ok);
-    }*/
 
     @OnClick(R.id.main_toolbar_action1)
     public void onTopLeftBtnClick() {
@@ -270,9 +264,8 @@ public class ProfileKidsEditorFragment extends ProfileBaseFragment {
                 int code = response.code();
                 Log.d("profile","update code:" + code);
                 if(code == 200){
-                    // TODO: 2017/11/30  
                     //更新本地数据库
-//                    UserManager.updateProfile2DB(response.body());
+                    DeviceManager.updateKidsProfile2DB(response.body());
 
                     if(mUserAvatar != null && mUserAvatarChanged){
                         //更新头像，如果变更
@@ -320,7 +313,7 @@ public class ProfileKidsEditorFragment extends ProfileBaseFragment {
                 if(code == 200){
 
                     // TODO: 2017/11/30
-//                    uploadAvatarOK(response);
+                    uploadAvatarOK(response);
                 }else {
                     finishLoadingDialog();
                     ToastCommon.makeText(getContext(),R.string.profile_editor_avatar_failed);
@@ -340,15 +333,16 @@ public class ProfileKidsEditorFragment extends ProfileBaseFragment {
         
     }
 
-    private void uploadAvatarOK(Response<UpdateProfileSuccess> response) {
+    private void uploadAvatarOK(Response<UpdateKidAvatarRepEntity> response) {
         if(response.body() != null){
             //更新本地数据库
-            UserManager.updateProfile2DB(response.body().getUser());
+            DeviceManager.updateKidsProfile2DB(response.body().getKid());
 
             WatchContact watchContact = new WatchContact();
             watchContact.mPhoto = mUserAvatar;
             watchContact.mLabel = "editProfile";
 
+            // TODO: 2017/12/1
             mActivityMain.mWatchContactStack.push(watchContact);
 
             ToastCommon.makeText(getContext(), R.string.profile_editor_save_success);

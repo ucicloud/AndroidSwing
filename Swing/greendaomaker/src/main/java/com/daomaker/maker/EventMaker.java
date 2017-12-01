@@ -59,6 +59,7 @@ public class EventMaker implements Maker {
         eventKid.addStringProperty("macId").columnName("macId");
         eventKid.addStringProperty("firmwareVersion").columnName("firmwareVersion");
         eventKid.addStringProperty("profile").columnName("profile");
+        eventKid.addLongProperty("lastUpdate").columnName("last_update");
 
         //建立event表与eventKids表间的一对多关系
         Property property2 = eventKid.addLongProperty("eventId").columnName("event_id").getProperty();

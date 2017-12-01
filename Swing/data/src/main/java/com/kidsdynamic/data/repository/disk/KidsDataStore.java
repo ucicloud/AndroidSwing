@@ -51,4 +51,9 @@ public class KidsDataStore {
     }
 
 
+    public void update(@NonNull DB_Kids db_kids){
+        KidsDao kidsDao = dbUtil.getDaoSession().getKidsDao();
+
+        kidsDao.update(db_kids);
+    }
 }

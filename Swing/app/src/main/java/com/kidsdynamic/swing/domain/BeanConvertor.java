@@ -596,4 +596,18 @@ public class BeanConvertor {
         return String.format(Locale.getDefault(), "%,d", steps);
     }
 
+    public static DB_Kids updateDBKids(@NonNull DB_Kids db_kids, @NonNull KidsWithParent kidsWithParent) {
+        db_kids.setKidsId(kidsWithParent.getId());
+        db_kids.setName(kidsWithParent.getName());
+        db_kids.setMacId(kidsWithParent.getMacId());
+        db_kids.setDateCreated(getUTCTimeStamp(kidsWithParent.getDateCreated()));
+        db_kids.setProfile(kidsWithParent.getProfile());
+
+        // TODO: 2017/12/1
+        //因为目前服务端不更新lastupdate，客户端本地更新
+//        db_kids.setLastUpdate(System.currentTimeMillis());
+
+        return db_kids;
+    }
+
 }
