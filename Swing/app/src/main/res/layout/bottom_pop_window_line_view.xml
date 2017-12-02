@@ -7,4 +7,4 @@
     android:paddingLeft="@dimen/base_18"
     android:paddingRight="@dimen/base_18"
     android:scaleType="fitCenter"
-    android:src="@color/color_e0" />
+    android:src="@color/color_gray_light" />

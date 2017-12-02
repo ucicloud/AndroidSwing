@@ -4,9 +4,9 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 
-import com.yy.base.BaseActivity;
+import com.yy.base.BaseFragmentActivity;
 
-public class VirtualResultActivity extends BaseActivity {
+public class VirtualResultActivity extends BaseFragmentActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -16,7 +16,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 
-import com.yy.base.BaseActivity;
+import com.yy.base.BaseFragmentActivity;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -28,7 +28,7 @@ import java.util.List;
  * Created by Stefan on 2017/11/6.
  */
 
-public class VirtualAlbumActivity extends BaseActivity {
+public class VirtualAlbumActivity extends BaseFragmentActivity {
 
     public static final String FILE = "file";
 

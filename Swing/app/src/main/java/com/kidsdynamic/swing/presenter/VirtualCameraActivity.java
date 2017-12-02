@@ -14,9 +14,8 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.widget.Toast;
 
-import com.yy.base.BaseActivity;
+import com.yy.base.BaseFragmentActivity;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -25,7 +24,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class VirtualCameraActivity extends BaseActivity {
+public class VirtualCameraActivity extends BaseFragmentActivity {
 
     public static final String FILE = "file";
     private static final String STATE = "state";

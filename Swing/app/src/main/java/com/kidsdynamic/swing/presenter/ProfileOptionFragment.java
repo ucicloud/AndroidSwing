@@ -48,15 +48,14 @@ public class ProfileOptionFragment extends ProfileBaseFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View mView = inflater.inflate(R.layout.fragment_profile_option, container, false);
 
-        ButterKnife.bind(this,mView);
+        ButterKnife.bind(this, mView);
         initTitleBar();
         initView();
         return mView;
-
     }
 
     private void initView() {
-        tv_version.setText(BuildConfig.VERSION_NAME + " " + BuildConfig.BUILD_TYPE);
+        tv_version.setText(String.format("%s %s", BuildConfig.VERSION_NAME, BuildConfig.BUILD_TYPE));
     }
 
     private void initTitleBar() {
@@ -76,13 +75,13 @@ public class ProfileOptionFragment extends ProfileBaseFragment {
 
 
     @OnClick(R.id.profile_option_logout)
-    protected void logout(){
+    protected void logout() {
         //show dialog to confirm
-        selectFragment(LogoutConfirmFragment.class.getName(),null,true);
+        selectFragment(LogoutConfirmFragment.class.getName(), null, true);
     }
 
     @OnClick(R.id.profile_option_contact)
-    protected void contactUs(){
+    protected void contactUs() {
 
         /*String url = "http://www.kidsdynamic.com";
         String language = mActivityMain.mConfig.getString(ActivityConfig.KEY_LANGUAGE);
@@ -102,7 +101,7 @@ public class ProfileOptionFragment extends ProfileBaseFragment {
     }
 
     @OnClick(R.id.profile_option_manual)
-    protected void UserManual(){
+    protected void UserManual() {
         String url = "https://childrenlab.s3.amazonaws.com/pdf/Swing_User_Guide.pdf";
 
         Intent i = new Intent(Intent.ACTION_VIEW);
@@ -115,7 +114,7 @@ public class ProfileOptionFragment extends ProfileBaseFragment {
     public void resetPsw() {
         DB_User currentLoginUserInfo = LoginManager.getCurrentLoginUserInfo();
         String email = "";
-        if(currentLoginUserInfo != null){
+        if (currentLoginUserInfo != null) {
             email = currentLoginUserInfo.getEmail();
         }
 
@@ -138,6 +137,11 @@ public class ProfileOptionFragment extends ProfileBaseFragment {
                     }
                 }).show();
 
+    }
+
+    @OnClick(R.id.profile_option_language)
+    public void startLanguageFragment() {
+        selectFragment(ProfileLanguageFragment.newInstance(), true);
     }
 
     private void exeResetPswFlow(@NonNull final String email) {

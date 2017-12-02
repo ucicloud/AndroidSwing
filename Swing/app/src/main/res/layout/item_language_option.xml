@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/holder_item_shape_selector"
+    android:orientation="vertical"
+    android:paddingEnd="@dimen/base_5"
+    android:paddingStart="@dimen/base_5">
+
+    <com.kidsdynamic.swing.view.AvenirTextView
+        android:id="@+id/tv_language_option"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/base_40"
+        android:layout_marginStart="@dimen/base_5"
+        android:gravity="center_vertical|start"
+        android:lines="1"
+        android:text=""
+        android:textColor="@color/color_gray_main"
+        android:textSize="14sp"
+        android:textStyle="bold" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/base_1"
+        android:background="@color/color_gray_light" />
+
+</LinearLayout>

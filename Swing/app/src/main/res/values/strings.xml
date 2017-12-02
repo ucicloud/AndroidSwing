@@ -2,7 +2,7 @@
     <string name="app_name">Swing</string>
 
     <!-- Language: Warning DO NOT translate below -->
-    <string name="language_en_us" translatable="false">"English"</string>
+    <string name="language_en" translatable="false">"English"</string>
     <string name="language_zh_tw" translatable="false">"繁體中文"</string>
     <string name="language_zh_cn" translatable="false">"简体中文"</string>
     <string name="language_ru" translatable="false">"русский"</string>
@@ -91,7 +91,7 @@
     <string name="dashboard_progress_found">Found\nYour\nWatch</string>
     <string name="dashboard_progress_sync_now">Sync Now</string>
     <string name="dashboard_progress_syncing">Syncing</string>
-    <!--<string name="dashboard_progress_completed">Completed</string>-->
+    <string name="dashboard_progress_completed">Completed</string>
     <string name="dashboard_progress_dashboard">Go to Dashboard</string>
     <string name="dashboard_progress_not_found">We can\'t find\nyour Watch!</string>
     <string name="dashboard_progress_again">Try Again</string>
@@ -434,7 +434,6 @@
     <string name="login_data_invalid">Login state invalid, please login again</string>
     <string name="cloud_api_call_net_error">Net error, please check and try again</string>
     <string name="user_register_fail_common">Register, please try again</string>
-    <string name="dashboard_progress_completed">Completed</string>
     <string name="dashboard_emotion_today_summary">Today\'s Summary</string>
     <string name="dashboard_emotion_indoor_steps">Indoor\nsteps</string>
     <string name="dashboard_emotion_outdoor_steps">Outdoor\nsteps</string>
