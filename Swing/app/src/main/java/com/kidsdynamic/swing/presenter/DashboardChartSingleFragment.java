@@ -205,7 +205,7 @@ public class DashboardChartSingleFragment extends DashboardBaseFragment {
         }
     }
 
-    private static class DataTask extends AsyncTask<Object, Integer, Void> {
+    private static class DataTask extends AsyncTask<Object, Integer, List<WatchActivity>> {
 
         private DashboardChartSingleFragment theFragment;
 
@@ -215,23 +215,23 @@ public class DashboardChartSingleFragment extends DashboardBaseFragment {
         }
 
         @Override
-        protected Void doInBackground(Object... params) {
+        protected List<WatchActivity> doInBackground(Object... params) {
             RetrieveDataRep rep = (RetrieveDataRep) params[0];
             List<RetrieveDataRep.ActivitiesEntity> activitiesEntities = rep.getActivities();
             if (null == activitiesEntities || activitiesEntities.isEmpty()) {
                 return null;
             }
+            List<WatchActivity> watchActivities = new ArrayList<>();
             long start = (Long) params[1];
             long end = (Long) params[2];
             long timezoneOffset = (Long) params[3];
-            theFragment.watchActivities = new ArrayList<>();
             long millisInDay = 1000 * 60 * 60 * 24;
             long timestamp = start;
             while (timestamp < end) {
-                theFragment.watchActivities.add(new WatchActivity(theFragment.kidId, timestamp));
+                watchActivities.add(new WatchActivity(theFragment.kidId, timestamp));
                 timestamp += millisInDay;
             }
-            for (WatchActivity act : theFragment.watchActivities) {
+            for (WatchActivity act : watchActivities) {
                 for (RetrieveDataRep.ActivitiesEntity entity : activitiesEntities) {
                     long receiveDate = BeanConvertor.getLocalTimeStamp(entity.getReceivedDate());
                     long actEnd = act.mIndoor.mTimestamp + millisInDay;
@@ -251,25 +251,27 @@ public class DashboardChartSingleFragment extends DashboardBaseFragment {
                 }
             }
 
-            Collections.reverse(theFragment.watchActivities);
+            Collections.reverse(watchActivities);
 
-            for (WatchActivity act : theFragment.watchActivities) {
-                act.mIndoor.mTimestamp -= timezoneOffset;
-                act.mOutdoor.mTimestamp -= timezoneOffset;
-            }
-            return null;
+//            for (WatchActivity act : theFragment.watchActivities) {
+//                act.mIndoor.mTimestamp -= timezoneOffset;
+//                act.mOutdoor.mTimestamp -= timezoneOffset;
+//            }
+
+            return watchActivities;
         }
 
         @Override
-        protected void onPostExecute(Void o) {
-            super.onPostExecute(o);
-            theFragment.handlePostExecute();
+        protected void onPostExecute(List<WatchActivity> watchActivities) {
+            super.onPostExecute(watchActivities);
+            theFragment.handlePostExecute(watchActivities);
             theFragment.finishLoadingDialog();
         }
     }
 
-    private void handlePostExecute() {
-        int emotion = getEmotionWithTodayActivity(watchActivities.get(0));
+    private void handlePostExecute(List<WatchActivity> watchActivities) {
+        this.watchActivities = watchActivities;
+        int emotion = getEmotionWithTodayActivity(null != watchActivities ? watchActivities.get(0) : null);
         setEmotion(emotion);
         showChart(mCurrentChart);
     }
@@ -533,26 +535,27 @@ public class DashboardChartSingleFragment extends DashboardBaseFragment {
             return null;
         }
         List<WatchActivity> thisYear = new ArrayList<>();
-        long startTimestamp;
-        long endTimestamp;
-        Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.YEAR, -1);
-        cal.set(Calendar.DATE, 1);
-        cal.set(Calendar.HOUR_OF_DAY, 0);
-        cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.SECOND, 0);
-        cal.add(Calendar.SECOND, -1);
-        cal.add(Calendar.MONTH, 2);
-        // 结束时间为一年前下个月最后一天 23时59分59秒
-        endTimestamp = cal.getTimeInMillis();
+        Calendar cld = Calendar.getInstance();
 
-        cal.add(Calendar.SECOND, 1);
-        cal.add(Calendar.MONTH, -1);
-        // 起始时间为一年前下个月的第一天 0时0分0秒
-        startTimestamp = cal.getTimeInMillis();
+        cld.add(Calendar.MONTH, -11);
+        cld.set(Calendar.DATE, 1);
+        cld.set(Calendar.HOUR_OF_DAY, 0);
+        cld.set(Calendar.MINUTE, 0);
+        cld.set(Calendar.SECOND, 0);
+        long startTimestamp = cld.getTimeInMillis();
 
         for (int i = 0; i < 12; i++) {
             WatchActivity watchActivity = new WatchActivity(0, startTimestamp);
+
+            // 下一个起始时间加一个月后，再减去一秒，作为本月的结束时间
+            cld.setTimeInMillis(startTimestamp);
+            cld.add(Calendar.MONTH, 1);
+            cld.set(Calendar.DATE, 1);
+            cld.set(Calendar.HOUR_OF_DAY, 0);
+            cld.set(Calendar.MINUTE, 0);
+            cld.set(Calendar.SECOND, 0);
+            cld.add(Calendar.SECOND, -1);
+            long endTimestamp = cld.getTimeInMillis();
 
             int days = 0;
             for (WatchActivity src : watchActivities) {
@@ -568,30 +571,20 @@ public class DashboardChartSingleFragment extends DashboardBaseFragment {
             thisYear.add(watchActivity);
 
             // 本次起始时间加一个月，作为下一个起始时间
-            cal.setTimeInMillis(startTimestamp);
-            cal.add(Calendar.MONTH, 1);
-            cal.set(Calendar.DATE, 1);
-            cal.set(Calendar.HOUR_OF_DAY, 0);
-            cal.set(Calendar.MINUTE, 0);
-            cal.set(Calendar.SECOND, 0);
-            startTimestamp = cal.getTimeInMillis();
-
-            // 下一个起始时间加一个月后，再减去一秒，作为本月的结束时间
-            cal.setTimeInMillis(startTimestamp);
-            cal.add(Calendar.MONTH, 1);
-            cal.set(Calendar.DATE, 1);
-            cal.set(Calendar.HOUR_OF_DAY, 0);
-            cal.set(Calendar.MINUTE, 0);
-            cal.set(Calendar.SECOND, 0);
-            cal.add(Calendar.SECOND, -1);
-            endTimestamp = cal.getTimeInMillis();
+            cld.setTimeInMillis(startTimestamp);
+            cld.add(Calendar.MONTH, 1);
+            cld.set(Calendar.DATE, 1);
+            cld.set(Calendar.HOUR_OF_DAY, 0);
+            cld.set(Calendar.MINUTE, 0);
+            cld.set(Calendar.SECOND, 0);
+            startTimestamp = cld.getTimeInMillis();
         }
-        List<WatchActivity.Act> rtn = new ArrayList<>();
 
+        List<WatchActivity.Act> rtn = new ArrayList<>();
         for (WatchActivity activity : thisYear)
             rtn.add(new WatchActivity.Act(door == INDOOR ? activity.mIndoor : activity.mOutdoor));
 
-        Collections.reverse(rtn);
+//        Collections.reverse(rtn);
 
         return rtn;
     }

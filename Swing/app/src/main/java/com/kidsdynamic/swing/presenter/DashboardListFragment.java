@@ -2,6 +2,7 @@ package com.kidsdynamic.swing.presenter;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -25,6 +26,7 @@ import com.kidsdynamic.swing.model.WatchActivity;
 import com.kidsdynamic.swing.utils.SwingFontsCache;
 import com.yy.base.utils.ToastCommon;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -256,13 +258,15 @@ public class DashboardListFragment extends DashboardBaseFragment {
         public void onComplete(Object arg, int statusCode) {
             if (200 == statusCode && null != arg && arg instanceof RetrieveDataRep) {
                 if (LIST_TODAY == listType) {
-                    handleHourlyData(arg, start, end, timezoneOffset);
+                    new HourlyTask(DashboardListFragment.this)
+                            .execute(arg, start, end, timezoneOffset, kidId);
                 } else if (LIST_WEEK == listType || LIST_MONTH == listType) {
-                    handleWeeklyAndMonthlyData(arg, start, end, timezoneOffset);
+                    new WeeklyAndMonthlyTask(DashboardListFragment.this)
+                            .execute(arg, start, end, timezoneOffset, kidId);
                 } else {
-                    handleYearlyData(arg, start, end, timezoneOffset);
+                    new YearlyTask(DashboardListFragment.this)
+                            .execute(arg, start, end, timezoneOffset, kidId);
                 }
-                finishLoadingDialog();
             } else {
                 finishLoadingDialog();
                 ToastCommon.makeText(getContext(), R.string.dashboard_enqueue_fail_common);
@@ -276,197 +280,261 @@ public class DashboardListFragment extends DashboardBaseFragment {
         }
     }
 
-    private void handleHourlyData(Object arg, long start, long end, long timezoneOffset) {
-        RetrieveDataRep rep = (RetrieveDataRep) arg;
-        List<RetrieveDataRep.ActivitiesEntity> activitiesEntities = rep.getActivities();
-        if (null == activitiesEntities || activitiesEntities.isEmpty()) {
-            setDataAdapter(null, LIST_TODAY, OUTDOOR, mEmotionColor);
-            return;
+    private static class HourlyTask extends AsyncTask<Object, Integer, List<WatchActivity>> {
+
+        private DashboardListFragment theFragment;
+
+        HourlyTask(DashboardListFragment instance) {
+            WeakReference<DashboardListFragment> wr = new WeakReference<>(instance);
+            theFragment = wr.get();
         }
-        List<WatchActivity> watchActivities = new ArrayList<>();
-        long millisInHour = 1000 * 60 * 60;
-        long timestamp = start;
-        while (timestamp < end) {
-            watchActivities.add(new WatchActivity(kidId, timestamp));
-            timestamp += millisInHour;
-        }
-        for (WatchActivity act : watchActivities) {
-            for (RetrieveDataRep.ActivitiesEntity entity : activitiesEntities) {
-                long receiveDate = BeanConvertor.getLocalTimeStamp(entity.getReceivedDate());
-                long actEnd = act.mIndoor.mTimestamp + millisInHour;
-                if (receiveDate >= act.mIndoor.mTimestamp && receiveDate < actEnd) {
-                    if (entity.type.equals(ActivityCloudDataStore.Activity_type_indoor)) {
-                        act.mIndoor.mId = entity.getId();
-                        act.mIndoor.mMacId = entity.getMacId();
-                        act.mIndoor.mSteps = entity.getSteps();
-                        act.mIndoor.mDistance = entity.getDistance();
-                    } else if (entity.type.equals(ActivityCloudDataStore.Activity_type_outdoor)) {
-                        act.mOutdoor.mId = entity.getId();
-                        act.mOutdoor.mMacId = entity.getMacId();
-                        act.mOutdoor.mSteps = entity.getSteps();
-                        act.mOutdoor.mDistance = entity.getDistance();
+
+        @Override
+        protected List<WatchActivity> doInBackground(Object... params) {
+            RetrieveDataRep rep = (RetrieveDataRep) params[0];
+            List<RetrieveDataRep.ActivitiesEntity> activitiesEntities = rep.getActivities();
+            if (null == activitiesEntities || activitiesEntities.isEmpty()) {
+                return null;
+            }
+            long start = (Long) params[1];
+            long end = (Long) params[2];
+            long timezoneOffset = (Long) params[3];
+            List<WatchActivity> watchActivities = new ArrayList<>();
+            long millisInHour = 1000 * 60 * 60;
+            long timestamp = start;
+            while (timestamp < end) {
+                watchActivities.add(new WatchActivity((Long) params[4], timestamp));
+                timestamp += millisInHour;
+            }
+            for (WatchActivity act : watchActivities) {
+                for (RetrieveDataRep.ActivitiesEntity entity : activitiesEntities) {
+                    long receiveDate = BeanConvertor.getLocalTimeStamp(entity.getReceivedDate());
+                    long actEnd = act.mIndoor.mTimestamp + millisInHour;
+                    if (receiveDate >= act.mIndoor.mTimestamp && receiveDate < actEnd) {
+                        if (entity.type.equals(ActivityCloudDataStore.Activity_type_indoor)) {
+                            act.mIndoor.mId = entity.getId();
+                            act.mIndoor.mMacId = entity.getMacId();
+                            act.mIndoor.mSteps = entity.getSteps();
+                            act.mIndoor.mDistance = entity.getDistance();
+                        } else if (entity.type.equals(ActivityCloudDataStore.Activity_type_outdoor)) {
+                            act.mOutdoor.mId = entity.getId();
+                            act.mOutdoor.mMacId = entity.getMacId();
+                            act.mOutdoor.mSteps = entity.getSteps();
+                            act.mOutdoor.mDistance = entity.getDistance();
+                        }
+                        break;
                     }
-                    break;
                 }
             }
+
+//            Collections.reverse(watchActivities);
+
+//            for (WatchActivity act : watchActivities) {
+//                act.mIndoor.mTimestamp -= timezoneOffset;
+//                act.mOutdoor.mTimestamp -= timezoneOffset;
+//            }
+
+            return watchActivities;
         }
 
-        Collections.reverse(watchActivities);
-
-        for (WatchActivity act : watchActivities) {
-            act.mIndoor.mTimestamp -= timezoneOffset;
-            act.mOutdoor.mTimestamp -= timezoneOffset;
+        @Override
+        protected void onPostExecute(List<WatchActivity> watchActivities) {
+            super.onPostExecute(watchActivities);
+            theFragment.handleHourlyData(watchActivities);
+            theFragment.finishLoadingDialog();
         }
+    }
+
+    private void handleHourlyData(List<WatchActivity> watchActivities) {
         Bundle args = getArguments();
         int door = null != args ? args.getInt(DOOR_TYPE, INDOOR) : INDOOR;
         setDataAdapter(watchActivities, LIST_TODAY, door, mEmotionColor);
     }
 
-    private void handleWeeklyAndMonthlyData(Object arg, long start, long end, long timezoneOffset) {
-        RetrieveDataRep rep = (RetrieveDataRep) arg;
-        List<RetrieveDataRep.ActivitiesEntity> activitiesEntities = rep.getActivities();
-        if (null == activitiesEntities || activitiesEntities.isEmpty()) {
-            setDataAdapter(null, listType, OUTDOOR, mEmotionColor);
-            return;
+    private static class WeeklyAndMonthlyTask extends AsyncTask<Object, Integer, List<WatchActivity>> {
+
+        private DashboardListFragment theFragment;
+
+        WeeklyAndMonthlyTask(DashboardListFragment instance) {
+            WeakReference<DashboardListFragment> wr = new WeakReference<>(instance);
+            theFragment = wr.get();
         }
-        List<WatchActivity> watchActivities = new ArrayList<>();
-        long millisInDay = 1000 * 60 * 60 * 24;
-        long timestamp = start;
-        while (timestamp < end) {
-            watchActivities.add(new WatchActivity(kidId, timestamp));
-            timestamp += millisInDay;
-        }
-        for (WatchActivity act : watchActivities) {
-            for (RetrieveDataRep.ActivitiesEntity entity : activitiesEntities) {
-                long receiveDate = BeanConvertor.getLocalTimeStamp(entity.getReceivedDate());
-                long actEnd = act.mIndoor.mTimestamp + millisInDay;
-                if (receiveDate >= act.mIndoor.mTimestamp && receiveDate < actEnd) {
-                    if (entity.type.equals(ActivityCloudDataStore.Activity_type_indoor)) {
-                        act.mIndoor.mId = entity.getId();
-                        act.mIndoor.mMacId = entity.getMacId();
-                        act.mIndoor.mSteps += entity.getSteps();
-                        act.mIndoor.mDistance += entity.getDistance();
-                    } else if (entity.type.equals(ActivityCloudDataStore.Activity_type_outdoor)) {
-                        act.mOutdoor.mId = entity.getId();
-                        act.mOutdoor.mMacId = entity.getMacId();
-                        act.mOutdoor.mSteps += entity.getSteps();
-                        act.mOutdoor.mDistance += entity.getDistance();
+
+        @Override
+        protected List<WatchActivity> doInBackground(Object... params) {
+            RetrieveDataRep rep = (RetrieveDataRep) params[0];
+            List<RetrieveDataRep.ActivitiesEntity> activitiesEntities = rep.getActivities();
+            if (null == activitiesEntities || activitiesEntities.isEmpty()) {
+                return null;
+            }
+            List<WatchActivity> watchActivities = new ArrayList<>();
+            long start = (Long) params[1];
+            long end = (Long) params[2];
+            long timezoneOffset = (Long) params[3];
+            long millisInDay = 1000 * 60 * 60 * 24;
+            long timestamp = start;
+            while (timestamp < end) {
+                watchActivities.add(new WatchActivity((Long) params[4], timestamp));
+                timestamp += millisInDay;
+            }
+            for (WatchActivity act : watchActivities) {
+                for (RetrieveDataRep.ActivitiesEntity entity : activitiesEntities) {
+                    long receiveDate = BeanConvertor.getLocalTimeStamp(entity.getReceivedDate());
+                    long actEnd = act.mIndoor.mTimestamp + millisInDay;
+                    if (receiveDate >= act.mIndoor.mTimestamp && receiveDate < actEnd) {
+                        if (entity.type.equals(ActivityCloudDataStore.Activity_type_indoor)) {
+                            act.mIndoor.mId = entity.getId();
+                            act.mIndoor.mMacId = entity.getMacId();
+                            act.mIndoor.mSteps += entity.getSteps();
+                            act.mIndoor.mDistance += entity.getDistance();
+                        } else if (entity.type.equals(ActivityCloudDataStore.Activity_type_outdoor)) {
+                            act.mOutdoor.mId = entity.getId();
+                            act.mOutdoor.mMacId = entity.getMacId();
+                            act.mOutdoor.mSteps += entity.getSteps();
+                            act.mOutdoor.mDistance += entity.getDistance();
+                        }
                     }
                 }
             }
+
+//            Collections.reverse(watchActivities);
+
+//            for (WatchActivity act : watchActivities) {
+//                act.mIndoor.mTimestamp -= timezoneOffset;
+//                act.mOutdoor.mTimestamp -= timezoneOffset;
+//            }
+
+            return watchActivities;
         }
 
-        Collections.reverse(watchActivities);
-
-        for (WatchActivity act : watchActivities) {
-            act.mIndoor.mTimestamp -= timezoneOffset;
-            act.mOutdoor.mTimestamp -= timezoneOffset;
+        @Override
+        protected void onPostExecute(List<WatchActivity> watchActivities) {
+            super.onPostExecute(watchActivities);
+            theFragment.handleWeeklyAndMonthlyData(watchActivities);
+            theFragment.finishLoadingDialog();
         }
+    }
 
+    private void handleWeeklyAndMonthlyData(List<WatchActivity> watchActivities) {
         Bundle args = getArguments();
         int door = null != args ? args.getInt(DOOR_TYPE, INDOOR) : INDOOR;
         setDataAdapter(watchActivities, listType, door, mEmotionColor);
     }
 
-    private void handleYearlyData(Object arg, long start, long end, long timezoneOffset) {
-        RetrieveDataRep rep = (RetrieveDataRep) arg;
-        List<RetrieveDataRep.ActivitiesEntity> activitiesEntities = rep.getActivities();
-        if (null == activitiesEntities || activitiesEntities.isEmpty()) {
-            setDataAdapter(null, listType, OUTDOOR, mEmotionColor);
-            return;
+    private static class YearlyTask extends AsyncTask<Object, Integer, List<WatchActivity>> {
+
+        private DashboardListFragment theFragment;
+
+        YearlyTask(DashboardListFragment instance) {
+            WeakReference<DashboardListFragment> wr = new WeakReference<>(instance);
+            theFragment = wr.get();
         }
-        List<WatchActivity> watchActivities = new ArrayList<>();
-        long millisInDay = 1000 * 60 * 60 * 24;
-        long timestamp = start;
-        while (timestamp < end) {
-            watchActivities.add(new WatchActivity(kidId, timestamp));
-            timestamp += millisInDay;
-        }
-        for (WatchActivity act : watchActivities) {
-            for (RetrieveDataRep.ActivitiesEntity entity : activitiesEntities) {
-                long receiveDate = BeanConvertor.getLocalTimeStamp(entity.getReceivedDate());
-                long actEnd = act.mIndoor.mTimestamp + millisInDay;
-                if (receiveDate >= act.mIndoor.mTimestamp && receiveDate < actEnd) {
-                    if (entity.type.equals(ActivityCloudDataStore.Activity_type_indoor)) {
-                        act.mIndoor.mId = entity.getId();
-                        act.mIndoor.mMacId = entity.getMacId();
-                        act.mIndoor.mSteps += entity.getSteps();
-                        act.mIndoor.mDistance += entity.getDistance();
-                    } else if (entity.type.equals(ActivityCloudDataStore.Activity_type_outdoor)) {
-                        act.mOutdoor.mId = entity.getId();
-                        act.mOutdoor.mMacId = entity.getMacId();
-                        act.mOutdoor.mSteps += entity.getSteps();
-                        act.mOutdoor.mDistance += entity.getDistance();
+
+        @Override
+        protected List<WatchActivity> doInBackground(Object... params) {
+            RetrieveDataRep rep = (RetrieveDataRep) params[0];
+            List<RetrieveDataRep.ActivitiesEntity> activitiesEntities = rep.getActivities();
+            if (null == activitiesEntities || activitiesEntities.isEmpty()) {
+                return null;
+            }
+            List<WatchActivity> watchActivities = new ArrayList<>();
+            long start = (Long) params[1];
+            long end = (Long) params[2];
+            long timezoneOffset = (Long) params[3];
+            long millisInDay = 1000 * 60 * 60 * 24;
+            long timestamp = start;
+            while (timestamp < end) {
+                watchActivities.add(new WatchActivity((Long) params[4], timestamp));
+                timestamp += millisInDay;
+            }
+            for (WatchActivity act : watchActivities) {
+                for (RetrieveDataRep.ActivitiesEntity entity : activitiesEntities) {
+                    long receiveDate = BeanConvertor.getLocalTimeStamp(entity.getReceivedDate());
+                    long actEnd = act.mIndoor.mTimestamp + millisInDay;
+                    if (receiveDate >= act.mIndoor.mTimestamp && receiveDate < actEnd) {
+                        if (entity.type.equals(ActivityCloudDataStore.Activity_type_indoor)) {
+                            act.mIndoor.mId = entity.getId();
+                            act.mIndoor.mMacId = entity.getMacId();
+                            act.mIndoor.mSteps += entity.getSteps();
+                            act.mIndoor.mDistance += entity.getDistance();
+                        } else if (entity.type.equals(ActivityCloudDataStore.Activity_type_outdoor)) {
+                            act.mOutdoor.mId = entity.getId();
+                            act.mOutdoor.mMacId = entity.getMacId();
+                            act.mOutdoor.mSteps += entity.getSteps();
+                            act.mOutdoor.mDistance += entity.getDistance();
+                        }
                     }
                 }
             }
-        }
 
-        List<WatchActivity> thisYear = new ArrayList<>();
-        long startTimestamp;
-        long endTimestamp;
-        Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.YEAR, -1);
-        cal.set(Calendar.DATE, 1);
-        cal.set(Calendar.HOUR_OF_DAY, 0);
-        cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.SECOND, 0);
-        cal.add(Calendar.SECOND, -1);
-        cal.add(Calendar.MONTH, 2);
-        // 结束时间为一年前下个月最后一天 23时59分59秒
-        endTimestamp = cal.getTimeInMillis();
+            List<WatchActivity> thisYear = new ArrayList<>();
+            Calendar cld = Calendar.getInstance();
 
-        cal.add(Calendar.SECOND, 1);
-        cal.add(Calendar.MONTH, -1);
-        // 起始时间为一年前下个月的第一天 0时0分0秒
-        startTimestamp = cal.getTimeInMillis();
+            cld.add(Calendar.MONTH, -11);
+            cld.set(Calendar.DATE, 1);
+            cld.set(Calendar.HOUR_OF_DAY, 0);
+            cld.set(Calendar.MINUTE, 0);
+            cld.set(Calendar.SECOND, 0);
+            long startTimestamp = cld.getTimeInMillis();
 
-        for (int i = 0; i < 12; i++) {
-            WatchActivity watchActivity = new WatchActivity(0, startTimestamp);
+            for (int i = 0; i < 12; i++) {
+                WatchActivity watchActivity = new WatchActivity(0, startTimestamp);
 
-            int days = 0;
-            for (WatchActivity src : watchActivities) {
-                boolean isInTimeRange = watchActivity.addInTimeRange(src, startTimestamp, endTimestamp);
-                if (isInTimeRange) {
-                    days += 1;
+                // 下一个起始时间加一个月后，再减去一秒，作为本月的结束时间
+                cld.setTimeInMillis(startTimestamp);
+                cld.add(Calendar.MONTH, 1);
+                cld.set(Calendar.DATE, 1);
+                cld.set(Calendar.HOUR_OF_DAY, 0);
+                cld.set(Calendar.MINUTE, 0);
+                cld.set(Calendar.SECOND, 0);
+                cld.add(Calendar.SECOND, -1);
+                long endTimestamp = cld.getTimeInMillis();
+
+                int days = 0;
+                for (WatchActivity src : watchActivities) {
+                    boolean isInTimeRange = watchActivity.addInTimeRange(src, startTimestamp, endTimestamp);
+                    if (isInTimeRange) {
+                        days += 1;
+                    }
                 }
-            }
-            if (days > 0) {
-                watchActivity.mOutdoor.mSteps = watchActivity.mOutdoor.mSteps / days;
-                watchActivity.mIndoor.mSteps = watchActivity.mIndoor.mSteps / days;
-            }
-            thisYear.add(watchActivity);
+                if (days > 0) {
+                    watchActivity.mOutdoor.mSteps = watchActivity.mOutdoor.mSteps / days;
+                    watchActivity.mIndoor.mSteps = watchActivity.mIndoor.mSteps / days;
+                }
+                thisYear.add(watchActivity);
 
-            // 本次起始时间加一个月，作为下一个起始时间
-            cal.setTimeInMillis(startTimestamp);
-            cal.add(Calendar.MONTH, 1);
-            cal.set(Calendar.DATE, 1);
-            cal.set(Calendar.HOUR_OF_DAY, 0);
-            cal.set(Calendar.MINUTE, 0);
-            cal.set(Calendar.SECOND, 0);
-            startTimestamp = cal.getTimeInMillis();
+                // 本次起始时间加一个月，作为下一个起始时间
+                cld.setTimeInMillis(startTimestamp);
+                cld.add(Calendar.MONTH, 1);
+                cld.set(Calendar.DATE, 1);
+                cld.set(Calendar.HOUR_OF_DAY, 0);
+                cld.set(Calendar.MINUTE, 0);
+                cld.set(Calendar.SECOND, 0);
+                startTimestamp = cld.getTimeInMillis();
+            }
 
-            // 下一个起始时间加一个月后，再减去一秒，作为本月的结束时间
-            cal.setTimeInMillis(startTimestamp);
-            cal.add(Calendar.MONTH, 1);
-            cal.set(Calendar.DATE, 1);
-            cal.set(Calendar.HOUR_OF_DAY, 0);
-            cal.set(Calendar.MINUTE, 0);
-            cal.set(Calendar.SECOND, 0);
-            cal.add(Calendar.SECOND, -1);
-            endTimestamp = cal.getTimeInMillis();
+//            Collections.reverse(thisYear);
+
+//            for (WatchActivity act : thisYear) {
+//                act.mIndoor.mTimestamp -= timezoneOffset;
+//                act.mOutdoor.mTimestamp -= timezoneOffset;
+//            }
+
+            return thisYear;
         }
 
-        Collections.reverse(thisYear);
-
-        for (WatchActivity act : thisYear) {
-            act.mIndoor.mTimestamp -= timezoneOffset;
-            act.mOutdoor.mTimestamp -= timezoneOffset;
+        @Override
+        protected void onPostExecute(List<WatchActivity> watchActivities) {
+            super.onPostExecute(watchActivities);
+            theFragment.handleYearlyData(watchActivities);
+            theFragment.finishLoadingDialog();
         }
+    }
 
+    private void handleYearlyData(List<WatchActivity> watchActivities) {
         Bundle args = getArguments();
         int door = null != args ? args.getInt(DOOR_TYPE, INDOOR) : INDOOR;
-        setDataAdapter(thisYear, listType, door, mEmotionColor);
+        setDataAdapter(watchActivities, listType, door, mEmotionColor);
     }
 
     private class DataAdapter<E> extends BaseAdapter {
