@@ -110,7 +110,7 @@ public class DashboardChartSingleFragment extends DashboardBaseFragment {
 //        view_right_action.setPadding(0, 0, right, 0);
 
         Bundle args = getArguments();
-        int door = args.getInt(DOOR_TYPE, INDOOR);
+        int door = null != args ? args.getInt(DOOR_TYPE, INDOOR) : INDOOR;
         mRadioButtonIndoor.setChecked(INDOOR == door);
         mRadioButtonOutdoor.setChecked(OUTDOOR == door);
         mRadioGroup.setOnCheckedChangeListener(onCheckedChangeListener);
@@ -120,7 +120,7 @@ public class DashboardChartSingleFragment extends DashboardBaseFragment {
     public void onResume() {
         super.onResume();
         Bundle args = getArguments();
-        WatchActivity wa = (WatchActivity) args.getSerializable(WATCH_ACTIVITY);
+        WatchActivity wa = null != args ? (WatchActivity) args.getSerializable(WATCH_ACTIVITY) : null;
         int emotion = getEmotionWithTodayActivity(wa);
 
         mViewSelector.setOnSelectListener(mSelectorListener);
@@ -139,7 +139,7 @@ public class DashboardChartSingleFragment extends DashboardBaseFragment {
 
         setEmotion(emotion);
 
-        int chartType = args.getInt(CHART_TYPE, CHART_TODAY);
+        int chartType = null != args ? args.getInt(CHART_TYPE, CHART_TODAY) : CHART_TODAY;
         showChart(chartType);
         mCurrentChart = chartType;
 
@@ -285,21 +285,21 @@ public class DashboardChartSingleFragment extends DashboardBaseFragment {
     private ViewChartToday.OnAxisRectClickListener onAxisRectClickListener = new ViewChartToday.OnAxisRectClickListener() {
         @Override
         public void onAxisRectClick(float x, float y) {
-            setFragment(DashboardListFragment.newInstance(mCurrentChart, mEmotion), true);
+            setFragment(DashboardListFragment.newInstance(getDoor(), mCurrentChart, mEmotion), true);
         }
     };
 
     private ViewChartBarVertical.onBarClickListener onBarClickListener = new ViewChartBarVertical.onBarClickListener() {
         @Override
         public void onBarClick(int index, float x, float y) {
-            setFragment(DashboardListFragment.newInstance(mCurrentChart, mEmotion), true);
+            setFragment(DashboardListFragment.newInstance(getDoor(), mCurrentChart, mEmotion), true);
         }
     };
 
     private View.OnClickListener onChartClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            setFragment(DashboardListFragment.newInstance(mCurrentChart, mEmotion), true);
+            setFragment(DashboardListFragment.newInstance(getDoor(), mCurrentChart, mEmotion), true);
         }
     };
 
@@ -427,7 +427,7 @@ public class DashboardChartSingleFragment extends DashboardBaseFragment {
         WatchActivity.Act act = null;
         if (isFirstLoad) {
             Bundle args = getArguments();
-            WatchActivity wa = (WatchActivity) args.getSerializable(WATCH_ACTIVITY);
+            WatchActivity wa = null != args ? (WatchActivity) args.getSerializable(WATCH_ACTIVITY) : null;
             if (null != wa) {
                 act = getDoor() == INDOOR ? wa.mIndoor : wa.mOutdoor;
             }
@@ -481,7 +481,7 @@ public class DashboardChartSingleFragment extends DashboardBaseFragment {
 
     private WatchActivity.Act getStepToday(int door) {
         Bundle args = getArguments();
-        WatchActivity wa = (WatchActivity) args.getSerializable(WATCH_ACTIVITY);
+        WatchActivity wa = null != args ? (WatchActivity) args.getSerializable(WATCH_ACTIVITY) : null;
         if (null == wa && null != watchActivities && !watchActivities.isEmpty()) {
             wa = watchActivities.get(0);
         }

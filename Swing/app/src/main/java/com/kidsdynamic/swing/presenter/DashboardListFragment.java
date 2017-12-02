@@ -42,6 +42,7 @@ import butterknife.OnClick;
 
 public class DashboardListFragment extends DashboardBaseFragment {
 
+    public static final String DOOR_TYPE = "door_type";
     private static final String LIST_TYPE = "list_type";
     private static final String EMOTION_INT = "emotion_int";
 
@@ -63,8 +64,9 @@ public class DashboardListFragment extends DashboardBaseFragment {
     private int listType;
     private DataAdapter dataAdapter;
 
-    public static DashboardListFragment newInstance(int listType, int emotion) {
+    public static DashboardListFragment newInstance(int doorType, int listType, int emotion) {
         Bundle args = new Bundle();
+        args.putInt(DOOR_TYPE, doorType);
         args.putInt(LIST_TYPE, listType);
         args.putInt(EMOTION_INT, emotion);
         DashboardListFragment fragment = new DashboardListFragment();
@@ -113,7 +115,7 @@ public class DashboardListFragment extends DashboardBaseFragment {
             cld.add(Calendar.SECOND, 1);
             long start = cld.getTimeInMillis() + timezoneOffset;
 
-            new KidActivityManager().retrieveHourlyDataByTime(getContext(), start, end, kidId,
+            new KidActivityManager().retrieveHourlyDataByTime(getContext(), kidId, start, end,
                     new IRetrieveCompleteListener(start, end, timezoneOffset));
         } else if (LIST_WEEK == listType) {
             tv_title.setText(R.string.dashboard_chart_this_week);
@@ -132,7 +134,7 @@ public class DashboardListFragment extends DashboardBaseFragment {
             cld.set(Calendar.SECOND, 0);
             long start = cld.getTimeInMillis() + timezoneOffset;
 
-            new KidActivityManager().retrieveDataByTime(getContext(), start, end, kidId,
+            new KidActivityManager().retrieveDataByTime(getContext(), kidId, start, end,
                     new IRetrieveCompleteListener(start, end, timezoneOffset));
         } else if (LIST_MONTH == listType) {
             tv_title.setText(R.string.dashboard_chart_this_month);
@@ -151,7 +153,7 @@ public class DashboardListFragment extends DashboardBaseFragment {
             cld.set(Calendar.SECOND, 0);
             long start = cld.getTimeInMillis() + timezoneOffset;
 
-            new KidActivityManager().retrieveDataByTime(getContext(), start, end, kidId,
+            new KidActivityManager().retrieveDataByTime(getContext(), kidId, start, end,
                     new IRetrieveCompleteListener(start, end, timezoneOffset));
         } else {
             tv_title.setText(R.string.dashboard_chart_this_year);
@@ -170,7 +172,7 @@ public class DashboardListFragment extends DashboardBaseFragment {
             cld.set(Calendar.SECOND, 0);
             long start = cld.getTimeInMillis() + timezoneOffset;
 
-            new KidActivityManager().retrieveDataByTime(getContext(), start, end, kidId,
+            new KidActivityManager().retrieveDataByTime(getContext(), kidId, start, end,
                     new IRetrieveCompleteListener(start, end, timezoneOffset));
         }
     }
@@ -315,8 +317,9 @@ public class DashboardListFragment extends DashboardBaseFragment {
             act.mIndoor.mTimestamp -= timezoneOffset;
             act.mOutdoor.mTimestamp -= timezoneOffset;
         }
-
-        setDataAdapter(watchActivities, LIST_TODAY, OUTDOOR, mEmotionColor);
+        Bundle args = getArguments();
+        int door = null != args ? args.getInt(DOOR_TYPE, INDOOR) : INDOOR;
+        setDataAdapter(watchActivities, LIST_TODAY, door, mEmotionColor);
     }
 
     private void handleWeeklyAndMonthlyData(Object arg, long start, long end, long timezoneOffset) {
@@ -360,7 +363,9 @@ public class DashboardListFragment extends DashboardBaseFragment {
             act.mOutdoor.mTimestamp -= timezoneOffset;
         }
 
-        setDataAdapter(watchActivities, listType, OUTDOOR, mEmotionColor);
+        Bundle args = getArguments();
+        int door = null != args ? args.getInt(DOOR_TYPE, INDOOR) : INDOOR;
+        setDataAdapter(watchActivities, listType, door, mEmotionColor);
     }
 
     private void handleYearlyData(Object arg, long start, long end, long timezoneOffset) {
@@ -452,14 +457,16 @@ public class DashboardListFragment extends DashboardBaseFragment {
             endTimestamp = cal.getTimeInMillis();
         }
 
-        Collections.reverse(watchActivities);
+        Collections.reverse(thisYear);
 
-        for (WatchActivity act : watchActivities) {
+        for (WatchActivity act : thisYear) {
             act.mIndoor.mTimestamp -= timezoneOffset;
             act.mOutdoor.mTimestamp -= timezoneOffset;
         }
 
-        setDataAdapter(thisYear, listType, OUTDOOR, mEmotionColor);
+        Bundle args = getArguments();
+        int door = null != args ? args.getInt(DOOR_TYPE, INDOOR) : INDOOR;
+        setDataAdapter(thisYear, listType, door, mEmotionColor);
     }
 
     private class DataAdapter<E> extends BaseAdapter {

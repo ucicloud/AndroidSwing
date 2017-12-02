@@ -169,7 +169,7 @@ public class DashboardChartTripleFragment extends DashboardBaseFragment {
 
         @Override
         public void onBarClick(int index, float x, float y) {
-            setFragment(DashboardListFragment.newInstance(mCurrentChart, mEmotion), true);
+            setFragment(DashboardListFragment.newInstance(getDoor(), mCurrentChart, mEmotion), true);
         }
     }
 
