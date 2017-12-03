@@ -471,7 +471,7 @@
     <string name="title_kids_profile">Kid\'s profile</string>
 
     <string name="profile_kids_switch_tip">Are you sure to switch to this account?</string>
-    <string name="profile_kids_switch_done_tip">It\'s done! \n You are on this account now.</string>
+    <string name="profile_kids_switch_done_tip">It\'s done! \n You are on this \n account now.</string>
     <string name="profile_cancel_request_kids_tip">Are you sure you want to \n cancel this request?</string>
     <string name="profile_title_switch_account">Switch account</string>
     <string name="pending">Pending</string>
@@ -481,8 +481,9 @@
     <string name="profile_title_request_from">Request from</string>
 
     <string name="profile_got_request_tip">You\'ve got an request</string>
-    <string name="profile_got_request_note">You\'ve got an request from %1$s to %2$s\'s watch</string>
+    <string name="profile_got_request_note">You\'ve got an request from %1$s</string>
     <string name="profile_accept_request_from">Accept</string>
+    <string name="profile_confirm">Confirm</string>
     <string name="profile_decline_request_from">Decline</string>
 
     <string name="profile_sharing_now">Sharing now!</string>
@@ -491,5 +492,9 @@
 
     <string name="profile_you_are_on">You are on</string>
     <string name="profile_switch_account_tip">*Tap on profile pictures to switch account</string>
+    <string name="profile_kids_remove_tip">Are you sure to remove this account?</string>
+    <string name="profile_kids_after_remove_tip">This account has \n been removed</string>
+    <string name="profile_kids_select_watch_share">Select watch to share</string>
+    <string name="profile_kids_select_watch_share_tip">Please tap on one or more profile pictures to share with %s</string>
 
 </resources>

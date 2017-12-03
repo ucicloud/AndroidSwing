@@ -2,8 +2,6 @@ package com.kidsdynamic.swing.presenter;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,26 +17,25 @@ import com.kidsdynamic.swing.domain.UserManager;
 import com.kidsdynamic.swing.model.KidsEntityBean;
 import com.kidsdynamic.swing.model.WatchContact;
 import com.kidsdynamic.swing.utils.GlideHelper;
-import com.kidsdynamic.swing.utils.SwingFontsCache;
+import com.kidsdynamic.swing.utils.ViewUtils;
 import com.kidsdynamic.swing.view.ViewCircle;
 import com.yy.base.utils.ToastCommon;
-
-import java.lang.ref.WeakReference;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
- * ProfileSwitchKidsConfirmFragment
+ * 从其他用户分享到kids
+ * ProfileKidsFromSharedInfoFragment <br/><br/>
  * Created by Administrator on 2017/11/29.
  */
 
-public class ProfileSwitchKidsConfirmFragment extends ProfileBaseFragment {
+public class ProfileKidsFromSharedInfoFragment extends ProfileBaseFragment {
     private MainFrameActivity mActivityMain;
     private static final String TAG_KIDS_ID = "kids_id";
 
-    @BindView(R.id.kids_profile_photo)
+    @BindView(R.id.profile_photo)
     protected ViewCircle mViewPhoto;
 
     @BindView(R.id.tv_kids_name)
@@ -47,24 +44,19 @@ public class ProfileSwitchKidsConfirmFragment extends ProfileBaseFragment {
     @BindView(R.id.tv_kids_id)
     protected TextView tv_kids_id;
 
-    @BindView(R.id.switch_confirm_note)
-    protected TextView tv_note;
+    @BindView(R.id.btn_switch_to_account)
+    protected Button btn_switchAccount;
 
-    @BindView(R.id.btn_confirm_switch)
-    protected Button btn_switch_confirm;
-
-    @BindView(R.id.btn_cancel)
-    protected Button btn_cancel;
+    @BindView(R.id.btn_remove)
+    protected Button btn_remove;
 
     private long kidsId;
     private KidsEntityBean kidsInfo;
 
-    private KidsHandler kidsHandler;
-
-    public static ProfileSwitchKidsConfirmFragment newInstance(long kidsId) {
+    public static ProfileKidsFromSharedInfoFragment newInstance(long kidsId) {
         Bundle args = new Bundle();
         args.putLong(TAG_KIDS_ID,kidsId);
-        ProfileSwitchKidsConfirmFragment fragment = new ProfileSwitchKidsConfirmFragment();
+        ProfileKidsFromSharedInfoFragment fragment = new ProfileKidsFromSharedInfoFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -92,7 +84,7 @@ public class ProfileSwitchKidsConfirmFragment extends ProfileBaseFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View mView = inflater.inflate(R.layout.fragment_kids_switch, container, false);
+        View mView = inflater.inflate(R.layout.fragment_kids_from_shared_profile, container, false);
 
         ButterKnife.bind(this,mView);
         initTitleBar();
@@ -103,13 +95,15 @@ public class ProfileSwitchKidsConfirmFragment extends ProfileBaseFragment {
     }
 
     private void initView() {
-        btn_switch_confirm.setTypeface(SwingFontsCache.getBoldType(getContext()));
-        btn_cancel.setTypeface(SwingFontsCache.getBoldType(getContext()));
+
+        ViewUtils.setBtnTypeFace(getContext(),
+                btn_switchAccount,btn_remove);
+
     }
 
     private void initTitleBar() {
         tv_title.setTextColor(getResources().getColor(R.color.colorAccent));
-        tv_title.setText(R.string.profile_title_switch_account);
+        tv_title.setText(R.string.title_kids_profile);
         view_left_action.setImageResource(R.drawable.icon_left);
 
         /*view_right_action.setImageResource(R.drawable.icon_add);
@@ -168,62 +162,16 @@ public class ProfileSwitchKidsConfirmFragment extends ProfileBaseFragment {
         }
     };
 
-    @OnClick(R.id.btn_confirm_switch)
-    protected void onConfirmSwitch(){
-        //confirm to switch account
-        // TODO: 2017/12/1
 
-
-        //切换kids成功后，隐藏btn，更新note
-        btn_switch_confirm.setVisibility(View.INVISIBLE);
-        btn_cancel.setVisibility(View.INVISIBLE);
-        tv_note.setText(R.string.profile_kids_switch_done_tip);
-
-
-        kidsHandler = new KidsHandler(this);
-        Message message = Message.obtain();
-        message.arg1 = 1;
-        //3秒后关闭界面
-        kidsHandler.sendMessageDelayed(message,3000);
+    @OnClick(R.id.btn_switch_to_account)
+    protected void onSwitchAccount(){
+        selectFragment(ProfileSwitchKidsConfirmFragment.newInstance(kidsId),true);
     }
 
-    @OnClick(R.id.btn_cancel)
-    protected void onCancel(){
-        getFragmentManager().popBackStack();
+    @OnClick(R.id.btn_remove)
+    protected void onRemove(){
+        selectFragment(ProfileSwitchKidsConfirmFragment.newInstance(kidsId),true);
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-
-        if(kidsHandler != null){
-            //清除所有在队列中消息
-            kidsHandler.removeCallbacksAndMessages(null);
-        }
-    }
-
-    public void exit(){
-        getFragmentManager().popBackStack();
-    }
-
-    public static class  KidsHandler extends Handler{
-
-        private final WeakReference<ProfileSwitchKidsConfirmFragment> thisFragment;
-
-        public KidsHandler(ProfileSwitchKidsConfirmFragment fragment){
-            thisFragment = new WeakReference<ProfileSwitchKidsConfirmFragment>(fragment);
-        }
-
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-
-            if(thisFragment.get() == null){
-                return;
-            }
-
-            thisFragment.get().exit();
-        }
-    }
 
 }

@@ -74,13 +74,6 @@
             </LinearLayout>
 
             <Button
-                android:id="@+id/btn_edit_kid_profile"
-                style="@style/btn_main_profile"
-                android:layout_width="match_parent"
-                android:layout_marginTop="@dimen/base_30"
-                android:text="@string/profile_edit_kids_profile" />
-
-            <Button
                 android:id="@+id/btn_switch_to_account"
                 style="@style/btn_main_profile"
                 android:layout_width="match_parent"

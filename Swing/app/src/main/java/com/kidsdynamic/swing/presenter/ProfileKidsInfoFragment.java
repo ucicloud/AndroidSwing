@@ -18,7 +18,7 @@ import com.kidsdynamic.swing.domain.UserManager;
 import com.kidsdynamic.swing.model.KidsEntityBean;
 import com.kidsdynamic.swing.model.WatchContact;
 import com.kidsdynamic.swing.utils.GlideHelper;
-import com.kidsdynamic.swing.utils.SwingFontsCache;
+import com.kidsdynamic.swing.utils.ViewUtils;
 import com.kidsdynamic.swing.view.ViewCircle;
 import com.yy.base.utils.ToastCommon;
 
@@ -98,9 +98,13 @@ public class ProfileKidsInfoFragment extends ProfileBaseFragment {
     }
 
     private void initView() {
-        btn_editKidsProfile.setTypeface(SwingFontsCache.getBoldType(getContext()));
+
+        ViewUtils.setBtnTypeFace(getContext(),btn_editKidsProfile,
+                btn_switchAccount,btn_remove);
+
+    /*    btn_editKidsProfile.setTypeface(SwingFontsCache.getBoldType(getContext()));
         btn_switchAccount.setTypeface(SwingFontsCache.getBoldType(getContext()));
-        btn_remove.setTypeface(SwingFontsCache.getBoldType(getContext()));
+        btn_remove.setTypeface(SwingFontsCache.getBoldType(getContext()));*/
     }
 
     private void initTitleBar() {
@@ -182,6 +186,11 @@ public class ProfileKidsInfoFragment extends ProfileBaseFragment {
 
     @OnClick(R.id.btn_switch_to_account)
     protected void onSwitchAccount(){
+        selectFragment(ProfileSwitchKidsConfirmFragment.newInstance(kidsId),true);
+    }
+
+    @OnClick(R.id.btn_remove)
+    protected void onRemove(){
         selectFragment(ProfileSwitchKidsConfirmFragment.newInstance(kidsId),true);
     }
 

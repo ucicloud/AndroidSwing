@@ -64,66 +64,35 @@
 
                 <com.kidsdynamic.swing.view.AvenirTextView
                     android:id="@+id/tv_logout_account_name"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginTop="20dp"
-                    android:textStyle="bold"
-                    android:textSize="@dimen/fontsize52"
-                    android:gravity="center"
                     android:text="Teresa Smith"
-                    android:textColor="@color/profile_logout_confirm_name"
-                    android:imeOptions="actionNext"
-                    android:inputType="text" />
+                    style="@style/profile_name_tv"
+                    android:textStyle="bold"/>
 
                 <com.kidsdynamic.swing.view.AvenirTextView
                     android:id="@+id/tv_account_email"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
-                    android:textSize="@dimen/fontsize42"
-                    android:gravity="center"
-                    android:imeOptions="actionNext"
                     android:text="terase.s@gmail.com"
-                    android:textColor="@color/hex_9c9c9c"
-                    android:inputType="text" />
+                    style="@style/profile_name_2_tv" />
 
                 <com.kidsdynamic.swing.view.AvenirTextView
                     android:id="@+id/logout_confirm_note"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:gravity="center"
                     android:text="@string/profile_logout_confirmation"
-                    android:textColor="@color/color_orange_main"
-                    android:textSize="@dimen/fontsize60"
+                    style="@style/profile_info_tip_tv"
                     android:textStyle="bold"/>
 
             </LinearLayout>
 
-            <com.kidsdynamic.swing.view.AvenirTextView
+            <Button
                 android:id="@+id/btn_confirm_logout"
-                style="@style/button_main"
+                style="@style/btn_main_profile"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/base_40"
                 android:layout_marginTop="@dimen/base_30"
-                android:layout_marginBottom="10dp"
-                android:layout_marginStart="@dimen/base_56"
-                android:layout_marginEnd="@dimen/base_56"
-                android:gravity="center"
-                android:textStyle="bold"
                 android:text="@string/profile_logout_confirm_btn" />
 
-            <com.kidsdynamic.swing.view.AvenirTextView
+            <Button
                 android:id="@+id/btn_cancel"
-                style="@style/button_main"
+                style="@style/btn_main_profile"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:layout_marginStart="@dimen/base_56"
-                android:layout_marginEnd="@dimen/base_56"
-                android:gravity="center"
-                android:textStyle="bold"
                 android:text="@string/profile_logout_cancel_btn" />
 
 

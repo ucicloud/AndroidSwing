@@ -68,6 +68,14 @@
         <item name="android:paddingBottom">10dp</item>
         <item name="android:gravity">center</item>
     </style>
+
+    <style name="btn_main_profile" parent="@style/button_main">
+        <item name="android:layout_marginBottom">10dp</item>
+        <item name="android:layout_marginStart">@dimen/base_56</item>
+        <item name="android:layout_marginEnd">@dimen/base_56</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:gravity">center</item>
+    </style>
     <style name="button_main_no_click">
         <item name="android:layout_height">@dimen/base_40</item>
         <item name="android:textColor">@color/color_white</item>
@@ -274,6 +282,43 @@
         <item name="android:gravity">center_vertical</item>
         <item name="android:layout_marginStart">@dimen/base_5</item>
         <item name="android:layout_marginEnd">@dimen/base_5</item>
+    </style>
+
+    <style name="profile_name_tv">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginBottom">10dp</item>
+        <item name="android:layout_marginTop">20dp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">@dimen/fontsize52</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/profile_logout_confirm_name</item>
+        <item name="android:imeOptions">actionNext</item>
+        <item name="android:inputType">text</item>
+    </style>
+
+
+    <style name="profile_name_2_tv">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginBottom">20dp</item>
+        <item name="android:textSize">@dimen/fontsize42</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/hex_9c9c9c</item>
+        <item name="android:imeOptions">actionNext</item>
+        <item name="android:inputType">text</item>
+    </style>
+
+    <style name="profile_info_tip_tv">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginBottom">10dp</item>
+        <item name="android:paddingStart">@dimen/base_15</item>
+        <item name="android:paddingEnd">@dimen/base_15</item>
+        <item name="android:textSize">@dimen/fontsize60</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/color_orange_main</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
 </resources>

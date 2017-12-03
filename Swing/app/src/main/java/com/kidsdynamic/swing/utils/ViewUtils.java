@@ -1,10 +1,12 @@
 package com.kidsdynamic.swing.utils;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
+import android.widget.Button;
 
 /**
  * ViewUtils
@@ -34,5 +36,14 @@ public class ViewUtils {
 
         return builder;
 
+    }
+
+    public static void setBtnTypeFace(Context context,Button... btns){
+        if(btns == null){
+            return;
+        }
+        for (Button btn : btns) {
+            btn.setTypeface(SwingFontsCache.getBoldType(context));
+        }
     }
 }

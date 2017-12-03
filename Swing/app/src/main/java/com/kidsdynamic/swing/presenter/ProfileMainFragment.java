@@ -250,8 +250,15 @@ public class ProfileMainFragment extends ProfileBaseFragment {
             selectFragment(ProfileKidsInfoFragment.newInstance(watchKidsInfo.mId),true);
         }*/
 
+        //下面的挑战为测试代码
 //        selectFragment(ProfileRequestToKidsInfoFragment.newInstance(1),true);
-        selectFragment(ProfileRequestFromKidsInfoFragment.newInstance(1),true);
+//        selectFragment(ProfileRequestFromKidsInfoFragment.newInstance(1),true);
+
+        if(contact instanceof WatchContact.Kid){
+            WatchContact.Kid watchKidsInfo = (WatchContact.Kid) contact;
+//            selectFragment(ProfileRemoveKidsConfirmFragment.newInstance(watchKidsInfo.mId),true);
+            selectFragment(ProfileKidsFromSharedInfoFragment.newInstance(watchKidsInfo.mId),true);
+        }
 
     }
 

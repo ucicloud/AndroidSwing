@@ -19,7 +19,7 @@ import com.kidsdynamic.swing.domain.UserManager;
 import com.kidsdynamic.swing.model.KidsEntityBean;
 import com.kidsdynamic.swing.model.WatchContact;
 import com.kidsdynamic.swing.utils.GlideHelper;
-import com.kidsdynamic.swing.utils.SwingFontsCache;
+import com.kidsdynamic.swing.utils.ViewUtils;
 import com.kidsdynamic.swing.view.ViewCircle;
 import com.yy.base.utils.ToastCommon;
 
@@ -30,11 +30,11 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
- * ProfileSwitchKidsConfirmFragment
+ * ProfileRemoveKidsConfirmFragment
  * Created by Administrator on 2017/11/29.
  */
 
-public class ProfileSwitchKidsConfirmFragment extends ProfileBaseFragment {
+public class ProfileRemoveKidsConfirmFragment extends ProfileBaseFragment {
     private MainFrameActivity mActivityMain;
     private static final String TAG_KIDS_ID = "kids_id";
 
@@ -50,8 +50,8 @@ public class ProfileSwitchKidsConfirmFragment extends ProfileBaseFragment {
     @BindView(R.id.switch_confirm_note)
     protected TextView tv_note;
 
-    @BindView(R.id.btn_confirm_switch)
-    protected Button btn_switch_confirm;
+    @BindView(R.id.btn_confirm)
+    protected Button btn_confirm;
 
     @BindView(R.id.btn_cancel)
     protected Button btn_cancel;
@@ -61,10 +61,10 @@ public class ProfileSwitchKidsConfirmFragment extends ProfileBaseFragment {
 
     private KidsHandler kidsHandler;
 
-    public static ProfileSwitchKidsConfirmFragment newInstance(long kidsId) {
+    public static ProfileRemoveKidsConfirmFragment newInstance(long kidsId) {
         Bundle args = new Bundle();
         args.putLong(TAG_KIDS_ID,kidsId);
-        ProfileSwitchKidsConfirmFragment fragment = new ProfileSwitchKidsConfirmFragment();
+        ProfileRemoveKidsConfirmFragment fragment = new ProfileRemoveKidsConfirmFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -92,7 +92,7 @@ public class ProfileSwitchKidsConfirmFragment extends ProfileBaseFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View mView = inflater.inflate(R.layout.fragment_kids_switch, container, false);
+        View mView = inflater.inflate(R.layout.fragment_kids_remove_confirm, container, false);
 
         ButterKnife.bind(this,mView);
         initTitleBar();
@@ -103,13 +103,12 @@ public class ProfileSwitchKidsConfirmFragment extends ProfileBaseFragment {
     }
 
     private void initView() {
-        btn_switch_confirm.setTypeface(SwingFontsCache.getBoldType(getContext()));
-        btn_cancel.setTypeface(SwingFontsCache.getBoldType(getContext()));
+        ViewUtils.setBtnTypeFace(getContext(),btn_confirm,btn_cancel);
     }
 
     private void initTitleBar() {
         tv_title.setTextColor(getResources().getColor(R.color.colorAccent));
-        tv_title.setText(R.string.profile_title_switch_account);
+        tv_title.setText(R.string.profile_kid_remove);
         view_left_action.setImageResource(R.drawable.icon_left);
 
         /*view_right_action.setImageResource(R.drawable.icon_add);
@@ -168,16 +167,16 @@ public class ProfileSwitchKidsConfirmFragment extends ProfileBaseFragment {
         }
     };
 
-    @OnClick(R.id.btn_confirm_switch)
+    @OnClick(R.id.btn_confirm)
     protected void onConfirmSwitch(){
         //confirm to switch account
         // TODO: 2017/12/1
 
 
         //切换kids成功后，隐藏btn，更新note
-        btn_switch_confirm.setVisibility(View.INVISIBLE);
+        btn_confirm.setVisibility(View.INVISIBLE);
         btn_cancel.setVisibility(View.INVISIBLE);
-        tv_note.setText(R.string.profile_kids_switch_done_tip);
+        tv_note.setText(R.string.profile_kids_after_remove_tip);
 
 
         kidsHandler = new KidsHandler(this);
@@ -208,10 +207,10 @@ public class ProfileSwitchKidsConfirmFragment extends ProfileBaseFragment {
 
     public static class  KidsHandler extends Handler{
 
-        private final WeakReference<ProfileSwitchKidsConfirmFragment> thisFragment;
+        private final WeakReference<ProfileRemoveKidsConfirmFragment> thisFragment;
 
-        public KidsHandler(ProfileSwitchKidsConfirmFragment fragment){
-            thisFragment = new WeakReference<ProfileSwitchKidsConfirmFragment>(fragment);
+        public KidsHandler(ProfileRemoveKidsConfirmFragment fragment){
+            thisFragment = new WeakReference<ProfileRemoveKidsConfirmFragment>(fragment);
         }
 
         @Override

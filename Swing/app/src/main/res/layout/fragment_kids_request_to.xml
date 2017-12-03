@@ -65,15 +65,8 @@
 
                 <com.kidsdynamic.swing.view.AvenirTextView
                     android:id="@+id/switch_confirm_note"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:paddingStart="@dimen/base_10"
-                    android:paddingEnd="@dimen/base_10"
-                    android:gravity="center"
                     android:text="@string/pending"
-                    android:textColor="@color/color_orange_main"
-                    android:textSize="@dimen/fontsize60"
+                    style="@style/profile_info_tip_tv"
                     android:textStyle="bold"/>
 
                 <com.kidsdynamic.swing.view.AvenirTextView
@@ -92,13 +85,8 @@
 
                 <Button
                     android:id="@+id/btn_cancel_request"
-                    style="@style/button_main"
+                    style="@style/btn_main_profile"
                     android:layout_width="match_parent"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginStart="@dimen/base_56"
-                    android:layout_marginEnd="@dimen/base_56"
-                    android:gravity="center"
-                    android:textStyle="bold"
                     android:text="@string/cancel_kids_request" />
 
             </LinearLayout>
@@ -127,25 +115,15 @@
 
                 <Button
                     android:id="@+id/btn_confirm_cancel"
-                    style="@style/button_main"
+                    style="@style/btn_main_profile"
                     android:layout_width="match_parent"
                     android:layout_marginTop="@dimen/base_30"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginStart="@dimen/base_56"
-                    android:layout_marginEnd="@dimen/base_56"
-                    android:gravity="center"
-                    android:textStyle="bold"
                     android:text="@string/profile_logout_confirm_btn" />
 
                 <Button
                     android:id="@+id/btn_no"
-                    style="@style/button_main"
+                    style="@style/btn_main_profile"
                     android:layout_width="match_parent"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginStart="@dimen/base_56"
-                    android:layout_marginEnd="@dimen/base_56"
-                    android:gravity="center"
-                    android:textStyle="bold"
                     android:text="@string/watch_have_no" />
 
             </LinearLayout>

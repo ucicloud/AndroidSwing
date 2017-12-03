@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.bumptech.glide.request.target.SimpleTarget;
@@ -17,6 +18,7 @@ import com.kidsdynamic.swing.domain.RawActivityManager;
 import com.kidsdynamic.swing.domain.UserManager;
 import com.kidsdynamic.swing.utils.ConfigUtil;
 import com.kidsdynamic.swing.utils.GlideHelper;
+import com.kidsdynamic.swing.utils.ViewUtils;
 import com.kidsdynamic.swing.view.ViewCircle;
 
 import butterknife.BindView;
@@ -39,10 +41,10 @@ public class LogoutConfirmFragment extends ProfileBaseFragment {
     protected TextView tv_accountEmail;
 
     @BindView(R.id.btn_confirm_logout)
-    protected View layout_logout;
+    protected Button layout_logout;
 
     @BindView(R.id.btn_cancel)
-    protected View layout_cancel;
+    protected Button layout_cancel;
 
     @Nullable
     @Override
@@ -51,8 +53,14 @@ public class LogoutConfirmFragment extends ProfileBaseFragment {
 
         ButterKnife.bind(this,mView);
         initTitleBar();
+        initView();
         return mView;
 
+    }
+
+    private void initView() {
+        ViewUtils.setBtnTypeFace(getContext(),layout_cancel,
+                layout_logout);
     }
 
     private void initTitleBar() {

@@ -35,7 +35,8 @@
                 <com.kidsdynamic.swing.view.AvenirTextView
                     android:id="@+id/tv_kids_name"
                     android:text="Teresa Smith"
-                    style="@style/profile_name_tv" />
+                    style="@style/profile_name_tv"
+                    android:textStyle="bold"/>
 
                 <com.kidsdynamic.swing.view.AvenirTextView
                     android:id="@+id/tv_kids_id"
@@ -44,13 +45,14 @@
 
                 <com.kidsdynamic.swing.view.AvenirTextView
                     android:id="@+id/switch_confirm_note"
-                    android:text="@string/profile_kids_switch_tip"
-                    style="@style/profile_info_tip_tv"/>
+                    android:text="@string/profile_kids_remove_tip"
+                    style="@style/profile_info_tip_tv"
+                    android:textStyle="bold"/>
 
             </LinearLayout>
 
             <Button
-                android:id="@+id/btn_confirm_switch"
+                android:id="@+id/btn_confirm"
                 style="@style/btn_main_profile"
                 android:layout_width="match_parent"
                 android:layout_marginTop="@dimen/base_30"
