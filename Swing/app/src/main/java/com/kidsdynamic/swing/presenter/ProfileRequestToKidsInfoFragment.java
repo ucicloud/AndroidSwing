@@ -12,13 +12,10 @@ import android.widget.TextView;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.kidsdynamic.swing.R;
-import com.kidsdynamic.swing.domain.BeanConvertor;
-import com.kidsdynamic.swing.domain.DeviceManager;
-import com.kidsdynamic.swing.domain.UserManager;
 import com.kidsdynamic.swing.model.KidsEntityBean;
 import com.kidsdynamic.swing.model.WatchContact;
-import com.kidsdynamic.swing.utils.GlideHelper;
 import com.kidsdynamic.swing.utils.SwingFontsCache;
+import com.kidsdynamic.swing.utils.ViewUtils;
 import com.kidsdynamic.swing.view.ViewCircle;
 import com.yy.base.utils.ToastCommon;
 
@@ -27,39 +24,45 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
- * ProfileKidsInfoFragment
- * Created by Administrator on 2017/11/29.
+ * ProfileRequestToKidsInfoFragment
+ * Created by Administrator on 2017/12/2.
  */
 
-public class ProfileKidsInfoFragment extends ProfileBaseFragment {
+public class ProfileRequestToKidsInfoFragment extends ProfileBaseFragment {
     private MainFrameActivity mActivityMain;
     private static final String TAG_KIDS_ID = "kids_id";
 
-    @BindView(R.id.profile_photo)
-    protected ViewCircle mViewPhoto;
+    @BindView(R.id.user_profile_photo)
+    protected ViewCircle mViewUserPhoto;
 
-    @BindView(R.id.tv_kids_name)
-    protected TextView tv_kidsName;
+    @BindView(R.id.request_kids_profile_photo)
+    protected ViewCircle mViewRequestKidPhoto;
 
-    @BindView(R.id.tv_kids_id)
-    protected TextView tv_kids_id;
+    @BindView(R.id.layout_request_info)
+    protected View layout_request_info;
 
-    @BindView(R.id.btn_edit_kid_profile)
-    protected Button btn_editKidsProfile;
+    @BindView(R.id.layout_cancel_confirm)
+    protected View layout_cancel_confirm;
 
-    @BindView(R.id.btn_switch_to_account)
-    protected Button btn_switchAccount;
+    @BindView(R.id.tv_request_kids_tip)
+    protected TextView tv_note;
 
-    @BindView(R.id.btn_remove)
-    protected Button btn_remove;
+    @BindView(R.id.btn_cancel_request)
+    protected Button btn_cancel_request;
+
+    @BindView(R.id.btn_confirm_cancel)
+    protected Button btn_confirm_cancel_request;
+
+    @BindView(R.id.btn_no)
+    protected Button btn_no;
 
     private long kidsId;
     private KidsEntityBean kidsInfo;
 
-    public static ProfileKidsInfoFragment newInstance(long kidsId) {
+    public static ProfileRequestToKidsInfoFragment newInstance(long kidsId) {
         Bundle args = new Bundle();
         args.putLong(TAG_KIDS_ID,kidsId);
-        ProfileKidsInfoFragment fragment = new ProfileKidsInfoFragment();
+        ProfileRequestToKidsInfoFragment fragment = new ProfileRequestToKidsInfoFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -87,7 +90,7 @@ public class ProfileKidsInfoFragment extends ProfileBaseFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View mView = inflater.inflate(R.layout.fragment_kids_profile, container, false);
+        View mView = inflater.inflate(R.layout.fragment_kids_request_to, container, false);
 
         ButterKnife.bind(this,mView);
         initTitleBar();
@@ -98,14 +101,31 @@ public class ProfileKidsInfoFragment extends ProfileBaseFragment {
     }
 
     private void initView() {
-        btn_editKidsProfile.setTypeface(SwingFontsCache.getBoldType(getContext()));
-        btn_switchAccount.setTypeface(SwingFontsCache.getBoldType(getContext()));
-        btn_remove.setTypeface(SwingFontsCache.getBoldType(getContext()));
+        btn_cancel_request.setTypeface(SwingFontsCache.getBoldType(getContext()));
+        btn_confirm_cancel_request.setTypeface(SwingFontsCache.getBoldType(getContext()));
+        btn_no.setTypeface(SwingFontsCache.getBoldType(getContext()));
+
+        //todo test ui
+        String requestKidsName = "Ben Smith";
+        String requestKidsName2 = "requested";
+        String note = getString(R.string.request_kids_note, requestKidsName);
+
+        /*SpannableStringBuilder builder = new SpannableStringBuilder(note);
+        ForegroundColorSpan lightBlueSpan = new ForegroundColorSpan(Color.parseColor("#14C0BD"));
+
+        int start = note.indexOf(requestKidsName);
+        int end = start + requestKidsName.length();
+
+        builder.setSpan(lightBlueSpan,start,end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);*/
+
+        tv_note.setText(ViewUtils.setWordColorInStr(note,requestKidsName,requestKidsName2));
+
+//        profile_logout_confirm_name
     }
 
     private void initTitleBar() {
         tv_title.setTextColor(getResources().getColor(R.color.colorAccent));
-        tv_title.setText(R.string.title_kids_profile);
+        tv_title.setText(R.string.profile_title_request_to);
         view_left_action.setImageResource(R.drawable.icon_left);
 
         /*view_right_action.setImageResource(R.drawable.icon_add);
@@ -122,7 +142,7 @@ public class ProfileKidsInfoFragment extends ProfileBaseFragment {
     public void onResume() {
         super.onResume();
 
-        kidsInfo = DeviceManager.getKidsInfo(getContext(), kidsId);
+        /*kidsInfo = DeviceManager.getKidsInfo(getContext(), kidsId);
         if(kidsInfo == null){
             exitByKidsNull();
             return;
@@ -133,12 +153,12 @@ public class ProfileKidsInfoFragment extends ProfileBaseFragment {
             watchContact = mActivityMain.mWatchContactStack.pop();
         }
 
-        loadValue(kidsInfo, watchContact);
+        loadValue(kidsInfo, watchContact);*/
     }
 
     private void loadValue(KidsEntityBean kidsInfo, WatchContact watchContact) {
 
-        tv_kids_id.setText(String.valueOf(kidsInfo.getKidsId()));
+        /*tv_kids_id.setText(String.valueOf(kidsInfo.getKidsId()));
         tv_kidsName.setText(kidsInfo.getName());
 
         if(watchContact != null){
@@ -149,7 +169,7 @@ public class ProfileKidsInfoFragment extends ProfileBaseFragment {
 
         GlideHelper.getBitMap(getContext(),
                 UserManager.getProfileRealUri(kidsInfo.getProfile()),
-                String.valueOf(kidsInfo.getLastUpdate()), userAvatarSimpleTarget);
+                String.valueOf(kidsInfo.getLastUpdate()), userAvatarSimpleTarget);*/
     }
 
 
@@ -159,30 +179,23 @@ public class ProfileKidsInfoFragment extends ProfileBaseFragment {
         public void onResourceReady(Bitmap bitmap, Transition<? super Bitmap> transition) {
 
             if (!getActivity().isDestroyed()) {
-                mViewPhoto.setBitmap(bitmap);
+//                mViewPhoto.setBitmap(bitmap);
             }
         }
     };
 
-    @OnClick(R.id.btn_edit_kid_profile)
-    protected void onEditProfileClick(){
-        //跳转到编辑kids 信息界面
-        WatchContact.Kid watchKidsInfo =
-                BeanConvertor.getKidsForUI(kidsInfo);
-
-        if(mViewPhoto.getBitmap() != null){
-            watchKidsInfo.mPhoto = mViewPhoto.getBitmap();
-        }
-
-        mActivityMain.mWatchContactStack.push(watchKidsInfo);
-
-        selectFragment(ProfileKidsEditorFragment.class.getName(),null,true);
+    @OnClick(R.id.btn_cancel_request)
+    protected void onCancelRequest(){
+        //show cancel confirm UI
+        layout_request_info.setVisibility(View.GONE);
+        layout_cancel_confirm.setVisibility(View.VISIBLE);
 
     }
 
-    @OnClick(R.id.btn_switch_to_account)
-    protected void onSwitchAccount(){
-        selectFragment(ProfileSwitchKidsConfirmFragment.newInstance(kidsId),true);
+    @OnClick(R.id.btn_no)
+    protected void onNoCancel(){
+        layout_request_info.setVisibility(View.VISIBLE);
+        layout_cancel_confirm.setVisibility(View.GONE);
     }
 
 

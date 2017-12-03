@@ -26,11 +26,11 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
- * ProfileSwitchKidsFragment
+ * ProfileSwitchKidsConfirmFragment
  * Created by Administrator on 2017/11/29.
  */
 
-public class ProfileSwitchKidsFragment extends ProfileBaseFragment {
+public class ProfileSwitchKidsConfirmFragment extends ProfileBaseFragment {
     private MainFrameActivity mActivityMain;
     private static final String TAG_KIDS_ID = "kids_id";
 
@@ -55,10 +55,10 @@ public class ProfileSwitchKidsFragment extends ProfileBaseFragment {
     private long kidsId;
     private KidsEntityBean kidsInfo;
 
-    public static ProfileSwitchKidsFragment newInstance(long kidsId) {
+    public static ProfileSwitchKidsConfirmFragment newInstance(long kidsId) {
         Bundle args = new Bundle();
         args.putLong(TAG_KIDS_ID,kidsId);
-        ProfileSwitchKidsFragment fragment = new ProfileSwitchKidsFragment();
+        ProfileSwitchKidsConfirmFragment fragment = new ProfileSwitchKidsConfirmFragment();
         fragment.setArguments(args);
         return fragment;
     }

@@ -19,36 +19,32 @@ import com.kidsdynamic.swing.R;
 import com.kidsdynamic.swing.domain.DeviceManager;
 import com.kidsdynamic.swing.domain.LoginManager;
 import com.kidsdynamic.swing.domain.UserManager;
+import com.kidsdynamic.swing.model.KidsEntityBean;
 import com.kidsdynamic.swing.model.WatchContact;
 import com.kidsdynamic.swing.utils.GlideHelper;
 import com.kidsdynamic.swing.view.ViewCircle;
 
 import java.util.List;
-import java.util.Locale;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
- * ProfileMainFragment <br/><br/>
+ * mActivityMain <br/><br/>
  *
- * 2017年11月20日21:40:52 only_app
+ * 2017年12月3日14:59:25 only_app
  *
  */
 
-public class ProfileMainFragment extends ProfileBaseFragment {
+public class ProfileSwitchAccountFragment extends ProfileBaseFragment {
     private MainFrameActivity mActivityMain;
     private View mViewMain;
     private ViewCircle mViewPhoto;
     private ViewCircle mViewDeviceAdd;
-    private ViewCircle mViewRequestToAdd;
     private TextView mViewName;
-    private TextView mViewMail;
-    private TextView mViewRequestFromTitle;
+    private TextView mViewKidsId;
     private LinearLayout mViewDeviceContainer;
     private LinearLayout mViewSharedContainer;
-    private LinearLayout mViewRequestToContainer;
-    private LinearLayout mViewRequestFromContainer;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -58,11 +54,11 @@ public class ProfileMainFragment extends ProfileBaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mViewMain = inflater.inflate(R.layout.fragment_profile_main, container, false);
+        mViewMain = inflater.inflate(R.layout.fragment_profile_switch_accounts, container, false);
 
-        mViewPhoto =  mViewMain.findViewById(R.id.profile_main_photo);
-        mViewName =  mViewMain.findViewById(R.id.profile_main_name);
-        mViewMail =  mViewMain.findViewById(R.id.profile_main_mail);
+        mViewPhoto =  mViewMain.findViewById(R.id.view_kids_photo);
+        mViewName =  mViewMain.findViewById(R.id.tv_kids_name);
+        mViewKidsId =  mViewMain.findViewById(R.id.tv_kids_id);
 
         mViewDeviceContainer =  mViewMain.findViewById(R.id.profile_main_device_container);
         mViewDeviceAdd =  mViewMain.findViewById(R.id.profile_main_device_add);
@@ -70,12 +66,6 @@ public class ProfileMainFragment extends ProfileBaseFragment {
 
         mViewSharedContainer = mViewMain.findViewById(R.id.profile_main_shared_container);
 
-        mViewRequestToContainer =  mViewMain.findViewById(R.id.profile_main_request_to_container);
-        mViewRequestFromTitle = mViewMain.findViewById(R.id.profile_main_request_from_title);
-        mViewRequestToAdd =  mViewMain.findViewById(R.id.profile_main_request_to_add);
-        mViewRequestToAdd.setOnClickListener(mAddRequestToListener);
-
-        mViewRequestFromContainer = mViewMain.findViewById(R.id.profile_main_request_from_container);
 
         ButterKnife.bind(this,mViewMain);
 
@@ -85,10 +75,9 @@ public class ProfileMainFragment extends ProfileBaseFragment {
 
     private void initTitleBar() {
         tv_title.setTextColor(getResources().getColor(R.color.colorAccent));
-        tv_title.setText(R.string.title_profile);
-        view_left_action.setImageResource(R.drawable.icon_edit);
+        tv_title.setText(R.string.profile_title_switch_account);
+        view_left_action.setImageResource(R.drawable.icon_left);
 
-        view_right_action.setImageResource(R.drawable.icon_settings);
     }
 
     @Override
@@ -97,37 +86,39 @@ public class ProfileMainFragment extends ProfileBaseFragment {
 
         delAllContact(mViewDeviceContainer);
         delAllContact(mViewSharedContainer);
-        delAllContact(mViewRequestToContainer);
-        delAllContact(mViewRequestFromContainer);
 
-        DB_User parent = LoginManager.getCurrentLoginUserInfo();
 
-        if (parent != null) {
-            mViewName.setText(LoginManager.getUserName(parent));
-            mViewMail.setText(parent.getEmail());
+        KidsEntityBean focusKidsInfo = DeviceManager.getFocusKidsInfo(getContext());
+
+        if (focusKidsInfo != null) {
+            mViewName.setText(focusKidsInfo.getName());
+            mViewKidsId.setText(focusKidsInfo.getKidsId()+"");
         }
 
-        WatchContact watchContact = null;
+        if (focusKidsInfo != null && !TextUtils.isEmpty(focusKidsInfo.getProfile())) {
+            GlideHelper.getBitMap(getContext(),
+                    UserManager.getProfileRealUri(focusKidsInfo.getProfile()),
+                    String.valueOf(focusKidsInfo.getLastUpdate()), userAvatarSimpleTarget);
+        }
+
+       /* WatchContact watchContact = null;
         if(!mActivityMain.mWatchContactStack.isEmpty()){
             watchContact = mActivityMain.mWatchContactStack.pop();
         }
 
-
-        if (watchContact == null && parent != null && !TextUtils.isEmpty(parent.getProfile())) {
-            GlideHelper.getBitMap(getContext(), UserManager.getProfileRealUri(parent.getProfile()),
-                    String.valueOf(parent.getLastUpdate()), userAvatarSimpleTarget);
-        }
 
         if(watchContact != null && watchContact.mPhoto != null && parent != null){
             mViewPhoto.setBitmap(watchContact.mPhoto);
             GlideHelper.getBitMap(getContext(), UserManager.getProfileRealUri(parent.getProfile()),
                     String.valueOf(parent.getLastUpdate()),
                     userAvatarSimpleTarget);
-        }
+        }*/
 
-        // 載入用戶的所有手錶
+        DB_User parent = LoginManager.getCurrentLoginUserInfo();
+
         if(parent != null){
-            List<WatchContact.Kid> kidsForUI = DeviceManager.getKidsForUI(getContext(), parent.getUserId());
+            List<WatchContact.Kid> kidsForUI =
+                    DeviceManager.getKidsForUI(getContext(), parent.getUserId());
             for (WatchContact device : kidsForUI)
                 addContact(mViewDeviceContainer, device, mContactListener);
         }
@@ -233,9 +224,7 @@ public class ProfileMainFragment extends ProfileBaseFragment {
             } else if (viewContainer == mViewSharedContainer) {
                 focusContact(contact, false);
 
-            } else if (viewContainer == mViewRequestToContainer) {
-
-            }/* else if (viewContainer == mViewRequestFromContainer) {
+            } /* else if (viewContainer == mViewRequestFromContainer) {
                 mActivityMain.mContactStack.push(contact);
                 mActivityMain.selectFragment(FragmentProfileRequestFrom.class.getName(), null);
             }*/
@@ -298,7 +287,7 @@ public class ProfileMainFragment extends ProfileBaseFragment {
     }
 
     private void delAllContact(LinearLayout layout) {
-        int remain = layout == mViewDeviceContainer || layout == mViewRequestToContainer ? 1 : 0;
+        int remain = layout == mViewDeviceContainer ? 1 : 0;
 
         while (layout.getChildCount() > remain)
             layout.removeViewAt(layout.getChildCount() - 1);
@@ -335,10 +324,10 @@ public class ProfileMainFragment extends ProfileBaseFragment {
     }
 
     private void updateRequestFromTitle() {
-        int count = mViewRequestFromContainer.getChildCount();
+        /*int count = mViewRequestFromContainer.getChildCount();
 
         String string = String.format(Locale.getDefault(),
                 getResources().getString(R.string.profile_main_request_from), count);
-        mViewRequestFromTitle.setText(string);
+        mViewRequestFromTitle.setText(string);*/
     }
 }

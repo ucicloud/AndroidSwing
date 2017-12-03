@@ -457,6 +457,7 @@
 
     <string name="down_arrow">\u2193</string>
     <string name="up_arrow">\u2191</string>
+    <string name="right_arrow">\u2192</string>
 
     <string name="introduction_alarm">Events will have sound alerts on your watch</string>
     <string name="introduction_calendar_month">Please sync with your watch after editing events.</string>
@@ -471,6 +472,24 @@
 
     <string name="profile_kids_switch_tip">Are you sure to switch to this account?</string>
     <string name="profile_kids_switch_done_tip">It\'s done! \n You are on this account now.</string>
+    <string name="profile_cancel_request_kids_tip">Are you sure you want to \n cancel this request?</string>
     <string name="profile_title_switch_account">Switch account</string>
+    <string name="pending">Pending</string>
+    <string name="cancel_kids_request">Cancel request</string>
+    <string name="request_kids_note">You\'ve requested access to %s\'s watch</string>
+    <string name="profile_title_request_to">Request to</string>
+    <string name="profile_title_request_from">Request from</string>
+
+    <string name="profile_got_request_tip">You\'ve got an request</string>
+    <string name="profile_got_request_note">You\'ve got an request from %1$s to %2$s\'s watch</string>
+    <string name="profile_accept_request_from">Accept</string>
+    <string name="profile_decline_request_from">Decline</string>
+
+    <string name="profile_sharing_now">Sharing now!</string>
+    <string name="profile_sharing_now_note">%1$s\'s watch is sharing with %2$s now.</string>
+    <string name="profile_stop_share">Are you sure to stop \n sharing with %s</string>
+
+    <string name="profile_you_are_on">You are on</string>
+    <string name="profile_switch_account_tip">*Tap on profile pictures to switch account</string>
 
 </resources>

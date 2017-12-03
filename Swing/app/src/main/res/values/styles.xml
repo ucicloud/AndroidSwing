@@ -250,4 +250,30 @@
         <item name="android:gravity">center</item>
     </style>
 
+    <style name="kids_share_avatar_view">
+        <item name="android:layout_width">80dp</item>
+        <item name="android:layout_height">80dp</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="strokeColorNormal">@color/hex_1b89cd</item>
+    </style>
+
+
+    <style name="kids_request_arrow">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/request_arrow_color</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:layout_marginStart">@dimen/base_5</item>
+        <item name="android:layout_marginEnd">@dimen/base_5</item>
+        <item name="android:textSize">@dimen/base_48</item>
+    </style>
+
+    <style name="kids_request_img_arrow">
+        <item name="android:layout_width">50dp</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:layout_marginStart">@dimen/base_5</item>
+        <item name="android:layout_marginEnd">@dimen/base_5</item>
+    </style>
+
 </resources>

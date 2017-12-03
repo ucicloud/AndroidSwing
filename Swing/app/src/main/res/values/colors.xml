@@ -56,6 +56,7 @@
 
     <color name="hex_9c9c9c">#FF9C9C9C</color>
     <color name="hex_1b89cd">#FF1B89CD</color>
+    <color name="request_arrow_color">#54C4E0</color>
 
     <color name="pop_window_background">#E0A1A9AB</color>
     <color name="profile_logout_confirm_name">#14C0BD</color>

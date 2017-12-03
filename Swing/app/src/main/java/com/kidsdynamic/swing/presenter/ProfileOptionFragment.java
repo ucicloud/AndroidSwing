@@ -18,7 +18,11 @@ import com.kidsdynamic.data.net.ApiGen;
 import com.kidsdynamic.data.net.user.UserApiNeedToken;
 import com.kidsdynamic.swing.BuildConfig;
 import com.kidsdynamic.swing.R;
+import com.kidsdynamic.swing.domain.BeanConvertor;
+import com.kidsdynamic.swing.domain.DeviceManager;
 import com.kidsdynamic.swing.domain.LoginManager;
+import com.kidsdynamic.swing.model.KidsEntityBean;
+import com.kidsdynamic.swing.model.WatchContact;
 import com.kidsdynamic.swing.net.BaseRetrofitCallback;
 import com.kidsdynamic.swing.view.ViewUtils;
 
@@ -37,11 +41,18 @@ import retrofit2.Response;
 
 public class ProfileOptionFragment extends ProfileBaseFragment {
 
+    private MainFrameActivity mActivityMain;
     @BindView(R.id.profile_option_logout)
     protected View view_logout;
 
     @BindView(R.id.profile_option_version)
     protected TextView tv_version;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mActivityMain = (MainFrameActivity) getActivity();
+    }
 
     @Nullable
     @Override
@@ -73,6 +84,19 @@ public class ProfileOptionFragment extends ProfileBaseFragment {
         getFragmentManager().popBackStack();
     }
 
+
+    @OnClick(R.id.profile_option_watch_share)
+    protected void onYourWatchShareWithOther() {
+
+        long focusKidsId = DeviceManager.getFocusKidsId();
+        selectFragment(ProfileKidsInfoFragment.newInstance(focusKidsId),true);
+    }
+
+    @OnClick(R.id.profile_option_switch_watch_account)
+    protected void onSwitchAccount() {
+
+        selectFragment(ProfileSwitchAccountFragment.class.getName(),null,true);
+    }
 
     @OnClick(R.id.profile_option_logout)
     protected void logout() {
@@ -107,6 +131,24 @@ public class ProfileOptionFragment extends ProfileBaseFragment {
         Intent i = new Intent(Intent.ACTION_VIEW);
         i.setData(Uri.parse(url));
         startActivity(i);
+    }
+
+    @OnClick(R.id.profile_edit)
+    public void editUserProfile(){
+        selectFragment(ProfileEditorFragment.class.getName(), null,true);
+    }
+
+    @OnClick(R.id.profile_option_profile)
+    public void editFocusKidsProfile(){
+        KidsEntityBean focusKidsInfo = DeviceManager.getFocusKidsInfo(getContext());
+
+        //跳转到编辑kids 信息界面
+        WatchContact.Kid watchKidsInfo =
+                BeanConvertor.getKidsForUI(focusKidsInfo);
+
+        mActivityMain.mWatchContactStack.push(watchKidsInfo);
+
+        selectFragment(ProfileKidsEditorFragment.class.getName(),null,true);
     }
 
     //todo 一期先实现成重置口令
