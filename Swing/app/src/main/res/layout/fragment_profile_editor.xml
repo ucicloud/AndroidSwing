@@ -151,7 +151,8 @@
                     android:layout_weight="1"
                     android:paddingLeft="5dp"
                     android:background="@drawable/contact_background"
-                    android:hint="@string/profile_editor_city" />
+                    android:hint="@string/profile_editor_city"
+                    android:visibility="gone"/>
 
                 <EditText
                     android:id="@+id/profile_editor_zip"

@@ -14,6 +14,7 @@ import com.kidsdynamic.data.dao.DB_Kids;
 import com.kidsdynamic.data.dao.DB_CloudActivity;
 import com.kidsdynamic.data.dao.DB_Event;
 import com.kidsdynamic.data.dao.DB_Todo;
+import com.kidsdynamic.data.dao.DB_EventKids;
 import com.kidsdynamic.data.dao.DB_RawActivity;
 import com.kidsdynamic.data.dao.DB_FormatActivity;
 
@@ -22,6 +23,7 @@ import com.kidsdynamic.data.dao.KidsDao;
 import com.kidsdynamic.data.dao.CloudActivityDao;
 import com.kidsdynamic.data.dao.EventDao;
 import com.kidsdynamic.data.dao.TodoDao;
+import com.kidsdynamic.data.dao.EventKidsDao;
 import com.kidsdynamic.data.dao.RawActivityDao;
 import com.kidsdynamic.data.dao.FormatActivityDao;
 
@@ -39,6 +41,7 @@ public class DaoSession extends AbstractDaoSession {
     private final DaoConfig cloudActivityDaoConfig;
     private final DaoConfig eventDaoConfig;
     private final DaoConfig todoDaoConfig;
+    private final DaoConfig eventKidsDaoConfig;
     private final DaoConfig rawActivityDaoConfig;
     private final DaoConfig formatActivityDaoConfig;
 
@@ -47,6 +50,7 @@ public class DaoSession extends AbstractDaoSession {
     private final CloudActivityDao cloudActivityDao;
     private final EventDao eventDao;
     private final TodoDao todoDao;
+    private final EventKidsDao eventKidsDao;
     private final RawActivityDao rawActivityDao;
     private final FormatActivityDao formatActivityDao;
 
@@ -69,6 +73,9 @@ public class DaoSession extends AbstractDaoSession {
         todoDaoConfig = daoConfigMap.get(TodoDao.class).clone();
         todoDaoConfig.initIdentityScope(type);
 
+        eventKidsDaoConfig = daoConfigMap.get(EventKidsDao.class).clone();
+        eventKidsDaoConfig.initIdentityScope(type);
+
         rawActivityDaoConfig = daoConfigMap.get(RawActivityDao.class).clone();
         rawActivityDaoConfig.initIdentityScope(type);
 
@@ -80,6 +87,7 @@ public class DaoSession extends AbstractDaoSession {
         cloudActivityDao = new CloudActivityDao(cloudActivityDaoConfig, this);
         eventDao = new EventDao(eventDaoConfig, this);
         todoDao = new TodoDao(todoDaoConfig, this);
+        eventKidsDao = new EventKidsDao(eventKidsDaoConfig, this);
         rawActivityDao = new RawActivityDao(rawActivityDaoConfig, this);
         formatActivityDao = new FormatActivityDao(formatActivityDaoConfig, this);
 
@@ -88,6 +96,7 @@ public class DaoSession extends AbstractDaoSession {
         registerDao(DB_CloudActivity.class, cloudActivityDao);
         registerDao(DB_Event.class, eventDao);
         registerDao(DB_Todo.class, todoDao);
+        registerDao(DB_EventKids.class, eventKidsDao);
         registerDao(DB_RawActivity.class, rawActivityDao);
         registerDao(DB_FormatActivity.class, formatActivityDao);
     }
@@ -98,6 +107,7 @@ public class DaoSession extends AbstractDaoSession {
         cloudActivityDaoConfig.getIdentityScope().clear();
         eventDaoConfig.getIdentityScope().clear();
         todoDaoConfig.getIdentityScope().clear();
+        eventKidsDaoConfig.getIdentityScope().clear();
         rawActivityDaoConfig.getIdentityScope().clear();
         formatActivityDaoConfig.getIdentityScope().clear();
     }
@@ -120,6 +130,10 @@ public class DaoSession extends AbstractDaoSession {
 
     public TodoDao getTodoDao() {
         return todoDao;
+    }
+
+    public EventKidsDao getEventKidsDao() {
+        return eventKidsDao;
     }
 
     public RawActivityDao getRawActivityDao() {

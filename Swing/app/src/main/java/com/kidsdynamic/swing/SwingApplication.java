@@ -1,11 +1,15 @@
 package com.kidsdynamic.swing;
 
 import android.app.Application;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.support.v4.content.LocalBroadcastManager;
 
 import com.kidsdynamic.data.net.ApiGen;
+import com.kidsdynamic.swing.domain.LoginManager;
 import com.vise.log.ViseLog;
 import com.vise.log.inner.LogcatTree;
 import com.yy.base.ActivityController;
@@ -19,7 +23,10 @@ import com.yy.base.handleException.CrashHandler;
 public class SwingApplication extends Application {
     private static Context applicationContext;
 
+    public static final String Action_Application_showLogin = "show_login";
     public static LocalBroadcastManager localBroadcastManager;
+
+    private ApplicationReceiver applicationReceiver;
     @Override
     public void onCreate() {
         super.onCreate();
@@ -45,6 +52,15 @@ public class SwingApplication extends Application {
             ViseLog.plant(new LogcatTree());//添加Logcat打印信息
         }
 
+
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(Action_Application_showLogin);
+
+        applicationReceiver = new ApplicationReceiver();
+
+        LocalBroadcastManager.getInstance(this).registerReceiver(
+                applicationReceiver,
+                intentFilter);
     }
 
     public static Context getAppContext(){
@@ -57,5 +73,21 @@ public class SwingApplication extends Application {
 
         ActivityController.getInstance().exit();
 
+    }
+
+    public class ApplicationReceiver extends BroadcastReceiver{
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            if(intent == null){
+                return;
+            }
+
+            //如果是显示登录界面的action
+            if (Action_Application_showLogin.equals(intent.getAction())) {
+                LoginManager.clearAcvShowLogin();
+            }
+        }
     }
 }

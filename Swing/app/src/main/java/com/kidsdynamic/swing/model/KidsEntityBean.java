@@ -14,9 +14,9 @@ public class KidsEntityBean {
     private String profile;
     private String state;
     private long parentId;
-    private int battery;
+    private Integer battery;
     private long subHostId;
-    private int shareType;
+    private Integer shareType;
 
     public long getKidsId() {
         return kidsId;
@@ -90,11 +90,11 @@ public class KidsEntityBean {
         this.parentId = parentId;
     }
 
-    public int getBattery() {
+    public Integer getBattery() {
         return battery;
     }
 
-    public void setBattery(int battery) {
+    public void setBattery(Integer battery) {
         this.battery = battery;
     }
 
@@ -106,11 +106,11 @@ public class KidsEntityBean {
         this.subHostId = subHostId;
     }
 
-    public int getShareType() {
+    public Integer getShareType() {
         return shareType;
     }
 
-    public void setShareType(int shareType) {
+    public void setShareType(Integer shareType) {
         this.shareType = shareType;
     }
 }

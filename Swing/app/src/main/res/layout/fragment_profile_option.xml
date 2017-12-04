@@ -103,7 +103,8 @@
         android:layout_height="@dimen/profile_item_height"
         android:background="@drawable/option_background"
         android:paddingEnd="10dp"
-        android:paddingStart="10dp">
+        android:paddingStart="10dp"
+        android:visibility="gone">
 
         <com.kidsdynamic.swing.view.AvenirTextView
             android:layout_width="match_parent"
@@ -117,7 +118,7 @@
 
     <View
         style="@style/option_line"
-        android:visibility="visible" />
+        android:visibility="gone" />
 
     <!--switch watch account-->
     <RelativeLayout
@@ -126,7 +127,8 @@
         android:layout_height="@dimen/profile_item_height"
         android:background="@drawable/option_background"
         android:paddingEnd="10dp"
-        android:paddingStart="10dp">
+        android:paddingStart="10dp"
+        android:visibility="gone">
 
         <com.kidsdynamic.swing.view.AvenirTextView
             android:layout_width="match_parent"
@@ -140,7 +142,7 @@
 
     <View
         style="@style/option_line"
-        android:visibility="visible" />
+        android:visibility="gone" />
 
     <!--reset password-->
     <RelativeLayout

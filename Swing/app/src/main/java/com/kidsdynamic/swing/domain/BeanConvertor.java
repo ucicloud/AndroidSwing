@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import com.kidsdynamic.commonlib.utils.ObjectUtils;
 import com.kidsdynamic.data.dao.DB_CloudActivity;
 import com.kidsdynamic.data.dao.DB_Event;
+import com.kidsdynamic.data.dao.DB_EventKids;
 import com.kidsdynamic.data.dao.DB_FormatActivity;
 import com.kidsdynamic.data.dao.DB_Kids;
 import com.kidsdynamic.data.dao.DB_RawActivity;
@@ -117,11 +118,16 @@ public class BeanConvertor {
             db_kids.setKidsId(kidsEntity.getId());
             db_kids.setName(kidsEntity.getName());
             // TODO: 2017/11/28 数据库修改
+            db_kids.setLastUpdate(System.currentTimeMillis());
             db_kids.setDateCreated(getUTCTimeStamp(kidsEntity.getDateCreated()));
             db_kids.setMacId(kidsEntity.getMacId());
             db_kids.setProfile(kidsEntity.getProfile());
             db_kids.setParentId(userProfileRep.getUser().getId());
             db_kids.setFirmwareVersion("");
+
+            db_kids.setBattery(-1);
+            db_kids.setSubHostId(Long.valueOf(-1));
+            db_kids.setShareType(-1);
 
             db_kidsList.add(db_kids);
         }
@@ -211,11 +217,16 @@ public class BeanConvertor {
 
         db_kids.setKidsId(kidsWithParent.getId());
         db_kids.setName(kidsWithParent.getName());
+        db_kids.setLastUpdate(System.currentTimeMillis());
         db_kids.setDateCreated(getUTCTimeStamp(kidsWithParent.getDateCreated()));
         db_kids.setMacId(kidsWithParent.getMacId());
         db_kids.setProfile(kidsWithParent.getProfile());
         db_kids.setParentId(kidsWithParent.getParent().getId());
         db_kids.setFirmwareVersion(kidsWithParent.getFirmwareVersion());
+
+        db_kids.setBattery(-1);
+        db_kids.setSubHostId(Long.valueOf(-1));
+        db_kids.setShareType(-1);
 
         return db_kids;
     }
@@ -360,12 +371,19 @@ public class BeanConvertor {
         KidsEntityBean kidsEntityBean = new KidsEntityBean();
         kidsEntityBean.setKidsId(db_kids.getKidsId());
         kidsEntityBean.setName(db_kids.getName());
+        kidsEntityBean.setLastUpdate(db_kids.getLastUpdate());
         kidsEntityBean.setDateCreated(db_kids.getDateCreated());
         kidsEntityBean.setMacId(db_kids.getMacId());
         kidsEntityBean.setFirmwareVersion(db_kids.getFirmwareVersion());
         kidsEntityBean.setProfile(db_kids.getProfile());
         kidsEntityBean.setState(db_kids.getState());
         kidsEntityBean.setParentId(db_kids.getParentId());
+
+        kidsEntityBean.setBattery(db_kids.getBattery());
+        if(db_kids.getSubHostId() == null){
+            kidsEntityBean.setSubHostId(-1);
+        }
+        kidsEntityBean.setShareType(db_kids.getShareType());
 
         return kidsEntityBean;
     }
@@ -603,11 +621,23 @@ public class BeanConvertor {
         db_kids.setDateCreated(getUTCTimeStamp(kidsWithParent.getDateCreated()));
         db_kids.setProfile(kidsWithParent.getProfile());
 
-        // TODO: 2017/12/1
         //因为目前服务端不更新lastupdate，客户端本地更新
-//        db_kids.setLastUpdate(System.currentTimeMillis());
+        db_kids.setLastUpdate(System.currentTimeMillis());
 
         return db_kids;
     }
 
+    public static DB_EventKids updateEventKids(DB_EventKids dbEventKids,
+                                               KidsWithParent kidsWithParent) {
+
+        dbEventKids.setKidsId(kidsWithParent.getId());
+        dbEventKids.setName(kidsWithParent.getName());
+        dbEventKids.setMacId(kidsWithParent.getMacId());
+        dbEventKids.setProfile(kidsWithParent.getProfile());
+
+        //因为目前服务端不更新lastupdate，客户端本地更新
+        dbEventKids.setLastUpdate(System.currentTimeMillis());
+
+        return dbEventKids;
+    }
 }

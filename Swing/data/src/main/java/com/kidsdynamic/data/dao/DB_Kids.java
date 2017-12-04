@@ -11,11 +11,16 @@ public class DB_Kids {
 
     private long kidsId;
     private String name;
+    private Long lastUpdate;
     private Long dateCreated;
     private String macId;
+    private String currentVersion;
     private String firmwareVersion;
     private String profile;
     private String state;
+    private Integer battery;
+    private Long subHostId;
+    private Integer shareType;
     private Long parentId;
 
     /** Used to resolve relations */
@@ -35,14 +40,19 @@ public class DB_Kids {
         this.kidsId = kidsId;
     }
 
-    public DB_Kids(long kidsId, String name, Long dateCreated, String macId, String firmwareVersion, String profile, String state, Long parentId) {
+    public DB_Kids(long kidsId, String name, Long lastUpdate, Long dateCreated, String macId, String currentVersion, String firmwareVersion, String profile, String state, Integer battery, Long subHostId, Integer shareType, Long parentId) {
         this.kidsId = kidsId;
         this.name = name;
+        this.lastUpdate = lastUpdate;
         this.dateCreated = dateCreated;
         this.macId = macId;
+        this.currentVersion = currentVersion;
         this.firmwareVersion = firmwareVersion;
         this.profile = profile;
         this.state = state;
+        this.battery = battery;
+        this.subHostId = subHostId;
+        this.shareType = shareType;
         this.parentId = parentId;
     }
 
@@ -68,6 +78,14 @@ public class DB_Kids {
         this.name = name;
     }
 
+    public Long getLastUpdate() {
+        return lastUpdate;
+    }
+
+    public void setLastUpdate(Long lastUpdate) {
+        this.lastUpdate = lastUpdate;
+    }
+
     public Long getDateCreated() {
         return dateCreated;
     }
@@ -82,6 +100,14 @@ public class DB_Kids {
 
     public void setMacId(String macId) {
         this.macId = macId;
+    }
+
+    public String getCurrentVersion() {
+        return currentVersion;
+    }
+
+    public void setCurrentVersion(String currentVersion) {
+        this.currentVersion = currentVersion;
     }
 
     public String getFirmwareVersion() {
@@ -106,6 +132,30 @@ public class DB_Kids {
 
     public void setState(String state) {
         this.state = state;
+    }
+
+    public Integer getBattery() {
+        return battery;
+    }
+
+    public void setBattery(Integer battery) {
+        this.battery = battery;
+    }
+
+    public Long getSubHostId() {
+        return subHostId;
+    }
+
+    public void setSubHostId(Long subHostId) {
+        this.subHostId = subHostId;
+    }
+
+    public Integer getShareType() {
+        return shareType;
+    }
+
+    public void setShareType(Integer shareType) {
+        this.shareType = shareType;
     }
 
     public Long getParentId() {

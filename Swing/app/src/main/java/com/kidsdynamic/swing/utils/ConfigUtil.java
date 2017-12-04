@@ -3,6 +3,7 @@ package com.kidsdynamic.swing.utils;
 import android.content.Context;
 import android.text.TextUtils;
 
+import com.kidsdynamic.data.dao.DB_User;
 import com.kidsdynamic.data.net.Config;
 import com.kidsdynamic.data.persistent.PreferencesUtil;
 import com.kidsdynamic.swing.SwingApplication;
@@ -38,7 +39,11 @@ public class ConfigUtil {
 
 		boolean loginFlag = PreferencesUtil.getInstance(context).gPrefBooleanValue(login_state, false);
 
-		return !TextUtils.isEmpty(token) && loginFlag;
+		//登录状态后，新增查询数据库是否有用户
+		DB_User currentLoginUserInfo = LoginManager.getCurrentLoginUserInfo();
+
+
+		return !TextUtils.isEmpty(token) && loginFlag && currentLoginUserInfo != null;
 	}
 
 	public static void logoutState(){

@@ -1,5 +1,9 @@
 package com.kidsdynamic.swing.presenter;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -13,7 +17,9 @@ import android.widget.RelativeLayout;
 import com.kidsdynamic.data.dao.DB_Kids;
 import com.kidsdynamic.data.persistent.PreferencesUtil;
 import com.kidsdynamic.swing.R;
+import com.kidsdynamic.swing.SwingApplication;
 import com.kidsdynamic.swing.domain.DeviceManager;
+import com.kidsdynamic.swing.domain.LoginManager;
 import com.kidsdynamic.swing.domain.UserManager;
 import com.kidsdynamic.swing.model.WatchContact;
 import com.kidsdynamic.swing.model.WatchEvent;
@@ -61,6 +67,10 @@ public class MainFrameActivity extends BaseFragmentActivity {
     public Stack<WatchEvent> mEventStack;
     public Stack<WatchContact> mWatchContactStack;
 
+    public final static String UI_Update_Action = "MainFrame_UI_action";
+    public final static String Tag_Key = "tag_key";
+    public final static int Tag_Avatar_update = 1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,6 +96,15 @@ public class MainFrameActivity extends BaseFragmentActivity {
         /*addFragment(fragmentHashMap.get(R.id.main_console_device),R.id.main_console_device);
         currentTabKey = R.id.main_console_device;*/
 
+        checkLoginState();
+
+    }
+
+    private void checkLoginState() {
+        //如果登陆状态为false
+        if(!ConfigUtil.isLoginState(getApplicationContext())){
+            LoginManager.clearAcvShowLogin();
+        }
     }
 
     protected void viewInfoClick(){
@@ -96,12 +115,19 @@ public class MainFrameActivity extends BaseFragmentActivity {
     protected void onResume() {
         super.onResume();
 
+        loadFocusKidsAvatar();
+    }
+
+    private void loadFocusKidsAvatar() {
         DB_Kids focusWatchInfo = DeviceManager.getFocusWatchInfo(this.getApplicationContext());
         if(focusWatchInfo != null){
             String profileRealUri = UserManager.getProfileRealUri(focusWatchInfo.getProfile());
-            GlideHelper.showCircleImageView(this,profileRealUri,view_tab_profile);
+            GlideHelper.showCircleImageViewWithSignature(
+                    this,profileRealUri,String.valueOf(focusWatchInfo.getLastUpdate()),
+                    view_tab_profile);
         }
     }
+
 
     private void initValue() {
         mCalendarBundleStack = new Stack<>();
@@ -109,6 +135,50 @@ public class MainFrameActivity extends BaseFragmentActivity {
         mEventStack = new Stack<>();
 
         mWatchContactStack = new Stack<>();
+
+
+        //UI更新广播监听
+        registerUIReceiver();
+    }
+
+    private void registerUIReceiver() {
+        if(SwingApplication.localBroadcastManager != null){
+            IntentFilter intentFilter = new IntentFilter(UI_Update_Action);
+            SwingApplication.localBroadcastManager.registerReceiver(UIChangeReceiver,
+                    intentFilter);
+        }
+    }
+
+    private BroadcastReceiver UIChangeReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            if(intent == null){
+                return;
+            }
+
+            int update_type = intent.getIntExtra(Tag_Key, -1);
+
+            if (update_type == Tag_Avatar_update){
+                if (!mWatchContactStack.isEmpty()) {
+                    //todo 在二期功能前，消费该对象
+                    WatchContact watchContact = mWatchContactStack.pop();
+                    if(watchContact != null && watchContact.mPhoto != null){
+                        view_tab_profile.setBitmap(watchContact.mPhoto);
+                    }
+
+                    loadFocusKidsAvatar();
+                }
+            }
+
+        }
+    };
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        SwingApplication.localBroadcastManager.unregisterReceiver(UIChangeReceiver);
     }
 
     private void initFragments(){

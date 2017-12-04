@@ -73,8 +73,13 @@ public class DashboardMainFragment extends DashboardBaseFragment {
 
             String profileRealUri = UserManager.getProfileRealUri(focusWatchInfo.getProfile());
 //            Log.d("dash_main", "avatar: " + profileRealUri);
-            GlideHelper.showCircleImageView(getContext(), profileRealUri, vc_photo);
+//            GlideHelper.showCircleImageView(getContext(), profileRealUri, vc_photo);
+            GlideHelper.showCircleImageViewWithSignature(
+                    getContext(),
+                    profileRealUri,String.valueOf(focusWatchInfo.getLastUpdate()),
+                    vc_photo);
         }
+
     }
 
     private void initTitleBar() {

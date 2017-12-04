@@ -1,6 +1,7 @@
 package com.kidsdynamic.swing.domain;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
@@ -12,7 +13,9 @@ import com.kidsdynamic.data.persistent.PreferencesUtil;
 import com.kidsdynamic.data.repository.disk.KidsDataStore;
 import com.kidsdynamic.data.repository.disk.UserDataStore;
 import com.kidsdynamic.swing.SwingApplication;
+import com.kidsdynamic.swing.presenter.SignupActivity;
 import com.kidsdynamic.swing.utils.ConfigUtil;
+import com.yy.base.ActivityController;
 
 /**
  * date:   2017/10/17 13:38 <br/>
@@ -106,5 +109,22 @@ public class LoginManager {
         DeviceManager.updateFocusKids(-1);
 
 
+    }
+
+
+    public static void clearAcvShowLogin(){
+        try {
+            ActivityController.getInstance().exit();
+
+            ConfigUtil.logoutState();
+
+            Intent intent = new Intent(SwingApplication.getAppContext(),
+                    SignupActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            SwingApplication.getAppContext().startActivity(
+                    intent);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }

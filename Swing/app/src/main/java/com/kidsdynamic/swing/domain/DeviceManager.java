@@ -5,10 +5,12 @@ import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import com.kidsdynamic.commonlib.utils.ObjectUtils;
+import com.kidsdynamic.data.dao.DB_EventKids;
 import com.kidsdynamic.data.dao.DB_Kids;
 import com.kidsdynamic.data.net.kids.model.KidsWithParent;
 import com.kidsdynamic.data.persistent.DbUtil;
 import com.kidsdynamic.data.persistent.PreferencesUtil;
+import com.kidsdynamic.data.repository.disk.EventKidsStore;
 import com.kidsdynamic.data.repository.disk.KidsDataStore;
 import com.kidsdynamic.swing.SwingApplication;
 import com.kidsdynamic.swing.model.KidsEntityBean;
@@ -196,15 +198,18 @@ public class DeviceManager {
 
         DB_Kids dbKids = kidsDataStore.getKidsInfo(kidsWithParent.getId());
 
-        if(dbKids == null){
-            return;
+        if(dbKids != null){
+            kidsDataStore.update(BeanConvertor.updateDBKids(dbKids, kidsWithParent));
         }
 
 
-        //开始更新
-        kidsDataStore.update(BeanConvertor.updateDBKids(dbKids, kidsWithParent));
-
         //todo db_eventKids表更新
+        EventKidsStore eventKidsStore = new EventKidsStore(dbUtil);
+        DB_EventKids dbEventKids = eventKidsStore.getDBEventKids(kidsWithParent.getId());
+
+        if(dbEventKids != null){
+            eventKidsStore.update(BeanConvertor.updateEventKids(dbEventKids, kidsWithParent));
+        }
 
     }
 

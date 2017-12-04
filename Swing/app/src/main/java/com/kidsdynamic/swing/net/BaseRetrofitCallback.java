@@ -1,13 +1,9 @@
 package com.kidsdynamic.swing.net;
 
-import android.content.Intent;
-
 import com.kidsdynamic.data.utils.LogUtil2;
 import com.kidsdynamic.swing.R;
 import com.kidsdynamic.swing.SwingApplication;
-import com.kidsdynamic.swing.presenter.SignupActivity;
-import com.kidsdynamic.swing.utils.ConfigUtil;
-import com.yy.base.ActivityController;
+import com.kidsdynamic.swing.domain.LoginManager;
 import com.yy.base.utils.ToastCommon;
 
 import retrofit2.Call;
@@ -28,7 +24,9 @@ public abstract class BaseRetrofitCallback<T> implements Callback<T> {
         if(403 == response.code()){//token 无效，提示重新登录
             ToastCommon.makeText(SwingApplication.getAppContext(), R.string.token_invalid);
 
-            try {
+            LoginManager.clearAcvShowLogin();
+
+/*            try {
                 ActivityController.getInstance().exit();
 
                 ConfigUtil.logoutState();
@@ -40,7 +38,7 @@ public abstract class BaseRetrofitCallback<T> implements Callback<T> {
                         intent);
             }catch (Exception e){
                 e.printStackTrace();
-            }
+            }*/
 
         }else if(400 == response.code()){
             ToastCommon.makeText(SwingApplication.getAppContext(),

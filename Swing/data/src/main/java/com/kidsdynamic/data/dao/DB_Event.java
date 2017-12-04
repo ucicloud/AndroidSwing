@@ -32,6 +32,7 @@ public class DB_Event {
     private transient EventDao myDao;
 
     private List<DB_Todo> todoList;
+    private List<DB_EventKids> eventKids;
 
     public DB_Event() {
     }
@@ -195,6 +196,28 @@ public class DB_Event {
     /** Resets a to-many relationship, making the next get call to query for a fresh result. */
     public synchronized void resetTodoList() {
         todoList = null;
+    }
+
+    /** To-many relationship, resolved on first access (and after reset). Changes to to-many relations are not persisted, make changes to the target entity. */
+    public List<DB_EventKids> getEventKids() {
+        if (eventKids == null) {
+            if (daoSession == null) {
+                throw new DaoException("Entity is detached from DAO context");
+            }
+            EventKidsDao targetDao = daoSession.getEventKidsDao();
+            List<DB_EventKids> eventKidsNew = targetDao._queryDB_Event_EventKids(eventId);
+            synchronized (this) {
+                if(eventKids == null) {
+                    eventKids = eventKidsNew;
+                }
+            }
+        }
+        return eventKids;
+    }
+
+    /** Resets a to-many relationship, making the next get call to query for a fresh result. */
+    public synchronized void resetEventKids() {
+        eventKids = null;
     }
 
     /** Convenient call for {@link AbstractDao#delete(Object)}. Entity must attached to an entity context. */

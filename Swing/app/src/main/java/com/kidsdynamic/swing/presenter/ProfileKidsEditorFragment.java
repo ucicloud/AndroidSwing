@@ -32,6 +32,7 @@ import com.kidsdynamic.data.net.kids.model.KidsInfoUpdateEntity;
 import com.kidsdynamic.data.net.user.model.UpdateKidRepEntity;
 import com.kidsdynamic.data.utils.LogUtil2;
 import com.kidsdynamic.swing.R;
+import com.kidsdynamic.swing.SwingApplication;
 import com.kidsdynamic.swing.domain.DeviceManager;
 import com.kidsdynamic.swing.domain.UserManager;
 import com.kidsdynamic.swing.model.WatchContact;
@@ -235,7 +236,6 @@ public class ProfileKidsEditorFragment extends ProfileBaseFragment {
                 !last.equals(watchKidsInfo.mName)) {
             //如果内容有变化
 
-            // TODO: 2017/11/30 kids 
             KidsInfoUpdateEntity kidsInfoUpdateEntity = new KidsInfoUpdateEntity();
             kidsInfoUpdateEntity.setName(first);
             kidsInfoUpdateEntity.setKidId(watchKidsInfo.mId);
@@ -344,6 +344,8 @@ public class ProfileKidsEditorFragment extends ProfileBaseFragment {
             // TODO: 2017/12/1
             mActivityMain.mWatchContactStack.push(watchContact);
 
+            sendBroadcastUpdateAvatar();
+
             ToastCommon.makeText(getContext(), R.string.profile_editor_save_success);
             finishLoadingDialog();
             getFragmentManager().popBackStack();
@@ -351,6 +353,12 @@ public class ProfileKidsEditorFragment extends ProfileBaseFragment {
             finishLoadingDialog();
             ToastCommon.makeText(getContext(),R.string.profile_editor_avatar_failed);
         }
+    }
+
+    private void sendBroadcastUpdateAvatar() {
+        Intent intent = new Intent(MainFrameActivity.UI_Update_Action);
+        intent.putExtra(MainFrameActivity.Tag_Key,MainFrameActivity.Tag_Avatar_update);
+        SwingApplication.localBroadcastManager.sendBroadcast(intent);
     }
 
     @OnClick(R.id.kids_profile_editor_photo)
