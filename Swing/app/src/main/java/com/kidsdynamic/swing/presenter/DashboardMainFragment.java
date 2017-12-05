@@ -25,6 +25,9 @@ import cn.carbs.android.avatarimageview.library.AvatarImageView;
  */
 
 public class DashboardMainFragment extends DashboardBaseFragment {
+    private String type_goto = "-1";
+    public static final String key_goto_type = "key_goto";
+    public static final String type_goto_DashboardEmotion = "2";
 
     @BindView(R.id.watch_sync_photo)
     AvatarImageView vc_photo;
@@ -49,6 +52,12 @@ public class DashboardMainFragment extends DashboardBaseFragment {
         if (arg != null) {
             mAvatarFilename = getArguments().getString(DeviceManager.BUNDLE_KEY_AVATAR, "");
             kidName = getArguments().getString(DeviceManager.BUNDLE_KEY_KID_NAME, "");
+
+            //add 2017年12月5日19:37:01 only 如果是同步成功后，使用最后一次记录
+            type_goto = arg.getString(key_goto_type,"-1");
+            if(type_goto_DashboardEmotion.equals(type_goto)){
+                setFragment(DashboardEmotionFragment.newInstance(), true);
+            }
         }
     }
 

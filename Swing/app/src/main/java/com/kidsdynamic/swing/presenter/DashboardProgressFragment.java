@@ -856,7 +856,7 @@ public class DashboardProgressFragment extends DashboardBaseFragment {
         }
     };
 
-    //从服务端获取activity数据业务结果的listener
+    //向服务端逐条上传数据业务结果的listener
     RawActivityManager.IFinishListener mUpdateRawActivityListener = new RawActivityManager.IFinishListener() {
         @Override
         public void onFinish(Object arg) {
@@ -865,7 +865,9 @@ public class DashboardProgressFragment extends DashboardBaseFragment {
 
         @Override
         public void onFailed(String Command, int statusCode) {
-            mSyncState = SYNC_STATE_FAIL;
+            //2017年12月5日18:47:39 modify 按照mapple要求，如果上传数据失败，也认为是同步完成。
+//            mSyncState = SYNC_STATE_FAIL;
+            mSyncState = SYNC_STATE_SUCCESS;
             Log.d("dashboardProgress", "upload raw activity fail: " + Command);
 //            Toast.makeText(mActivityMain, Command, Toast.LENGTH_SHORT).show();
         }

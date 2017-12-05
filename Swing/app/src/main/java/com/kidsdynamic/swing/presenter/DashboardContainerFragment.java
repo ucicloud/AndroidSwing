@@ -27,6 +27,9 @@ import butterknife.ButterKnife;
 
 public class DashboardContainerFragment extends BaseFragment {
 
+    private String type_goto = "-1";
+    public static final String type_goto_activityFragment = "1";
+
 
     /*@BindView(R.id.main_toolbar_title)
     protected TextView tv_title;
@@ -69,7 +72,19 @@ public class DashboardContainerFragment extends BaseFragment {
         if(ObjectUtils.isListEmpty(allKidsByUserId)){
             selectFragment(DashboardNoDevicesFragment.class.getName(), null, false);
         }else {
-            selectFragment(DashboardMainFragment.class.getName(), null, false);
+
+            //modify 2017年12月5日19:31:19 only
+            //r如果指定跳转到activity界面
+            if(type_goto_activityFragment.equals(type_goto)){
+                Bundle args = new Bundle();
+                args.putString(DashboardMainFragment.key_goto_type,
+                        DashboardMainFragment.type_goto_DashboardEmotion);
+                selectFragment(DashboardMainFragment.class.getName(), args, false);
+
+                type_goto = "-1";
+            }else {
+                selectFragment(DashboardMainFragment.class.getName(), null, false);
+            }
         }
     }
 
