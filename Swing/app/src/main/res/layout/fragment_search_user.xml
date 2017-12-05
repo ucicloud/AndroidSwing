@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/base_title_bar"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/base_56"
+        android:layout_marginRight="@dimen/base_56"
+        android:layout_marginTop="@dimen/base_35"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/et_email"
+            style="@style/edit_text_main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/signup_login_email"
+            android:imeOptions="actionNext"
+            android:inputType="textEmailAddress" />
+
+        <Button
+            android:id="@+id/signup_login_login"
+            style="@style/button_main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/signup_login_enter" />
+    </LinearLayout>
+
+
+    <include layout="@layout/item_search_user_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/base_35"
+        android:layout_marginLeft="@dimen/base_51"
+        android:layout_marginRight="@dimen/base_51" />
+
+</LinearLayout>

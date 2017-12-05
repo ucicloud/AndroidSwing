@@ -505,5 +505,7 @@
     <string name="profile_editor_save_success">save change success</string>
 
     <string name="profile_you_are_on">You are on</string>
+    <string name="profile_request_access">Request access</string>
+    <string name="profile_request_cancel_goto_dashboard">Cancel &#38; go to dashboard</string>
 
 </resources>
