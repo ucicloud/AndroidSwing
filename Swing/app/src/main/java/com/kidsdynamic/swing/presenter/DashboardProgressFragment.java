@@ -24,7 +24,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.kidsdynamic.data.net.ApiGen;
 import com.kidsdynamic.data.net.user.UserApiNeedToken;
@@ -39,7 +38,6 @@ import com.kidsdynamic.swing.ble.SwingBLEService;
 import com.kidsdynamic.swing.domain.DeviceManager;
 import com.kidsdynamic.swing.domain.EventManager;
 import com.kidsdynamic.swing.domain.KidActivityManager;
-import com.kidsdynamic.swing.domain.LoginManager;
 import com.kidsdynamic.swing.domain.RawActivityManager;
 import com.kidsdynamic.swing.model.KidsEntityBean;
 import com.kidsdynamic.swing.model.WatchEvent;
@@ -273,8 +271,9 @@ public class DashboardProgressFragment extends DashboardBaseFragment {
                 LogUtil2.getUtils().d("retrieveUserProfile onResponse");
 
                 if (response.code() == 200) {//获取到用户信息
+                    //del 交互结果暂时不用
                     //先清除本地数据，然后再保存
-                    new LoginManager().saveLoginData(getContext(), response.body());
+//                    new LoginManager().saveLoginData(getContext(), response.body());
                 }
 
                 //设置同步用户数据已经完成
@@ -286,7 +285,8 @@ public class DashboardProgressFragment extends DashboardBaseFragment {
             @Override
             public void onFailure(Call<UserProfileRep> call, Throwable t) {
                 Log.d("syncData", "retrieveUserProfile error, ");
-                super.onFailure(call, t);
+                //因该同步数据，不用让用感知，故出错后，不用提示
+//                super.onFailure(call, t);
 
                 //设置同步用户数据已经完成
                 mServerSyncFinish = true;
@@ -325,9 +325,13 @@ public class DashboardProgressFragment extends DashboardBaseFragment {
                         bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "Server Sync Finished");
                         mActivityMain.FirebaseLog(LogEvent.Event.SYNC_WATCH_DATA, bundle);*/
 
+                        //modify 2017年12月5日21:51:40 only
+                        //不再同步activity数据
                         //开始从服务器获取activity数据
-                        new KidActivityManager().getActivityDataFromCloud
-                                (getContext(), mDevice.getKidsId(), mActivityUpdateListener);
+                        /*new KidActivityManager().getActivityDataFromCloud
+                                (getContext(), mDevice.getKidsId(), mActivityUpdateListener);*/
+
+                        mActivityUpdateFinish = true;
                         mServerSyncState = 1;
                     }
                     break;
@@ -852,7 +856,8 @@ public class DashboardProgressFragment extends DashboardBaseFragment {
         @Override
         public void onFailed(String Command, int statusCode) {
             mActivityUpdateFinish = true;
-            Toast.makeText(mActivityMain, Command, Toast.LENGTH_SHORT).show();
+            //同步失败也不显示错误信息
+//            Toast.makeText(mActivityMain, Command, Toast.LENGTH_SHORT).show();
         }
     };
 

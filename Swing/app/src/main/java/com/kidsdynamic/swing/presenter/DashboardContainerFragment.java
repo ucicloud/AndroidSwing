@@ -88,6 +88,14 @@ public class DashboardContainerFragment extends BaseFragment {
         }
     }
 
+    public String getType_goto() {
+        return type_goto;
+    }
+
+    public void setType_goto(String type_goto) {
+        this.type_goto = type_goto;
+    }
+
     private void registerUIReceiver() {
         /*if(SwingApplication.localBroadcastManager != null){
             IntentFilter intentFilter = new IntentFilter(UI_Update_Action);

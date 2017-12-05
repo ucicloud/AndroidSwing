@@ -486,6 +486,12 @@ public class MainFrameActivity extends BaseFragmentActivity {
 
     public void switchToDashBoardFragment(){
         selectTabItem(R.id.main_console_dashboard);
+
+        Fragment fragment = fragmentHashMap.get(R.id.main_console_dashboard);
+        if(fragment instanceof DashboardContainerFragment){
+            ((DashboardContainerFragment) fragment).setType_goto(DashboardContainerFragment.type_goto_activityFragment);
+        }
+
         switchShowFragment(R.id.main_console_dashboard);
 
         int clickedItemIndex = getTabItemIndexFromResId(R.id.main_console_dashboard);
