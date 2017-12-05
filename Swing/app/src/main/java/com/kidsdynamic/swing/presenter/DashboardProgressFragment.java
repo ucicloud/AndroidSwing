@@ -357,6 +357,7 @@ public class DashboardProgressFragment extends DashboardBaseFragment {
             //watch search result listener
             if (mSearchWatchResult != null) {
                 viewFound();
+                bleSearchCancel();
             } else if (mSearchTimeout == 0) {
                 /*Bundle bundle = new Bundle();
                 bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "Search Swing Watch Timeout");
