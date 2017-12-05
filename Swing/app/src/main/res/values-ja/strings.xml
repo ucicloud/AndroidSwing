@@ -209,8 +209,8 @@
     <string name="signup_login_processing">処理中です</string>
     <string name="signup_login_wait">暫くお待ちください&#8230;</string>
 
-    <string name="signup_login_enter">Enter</string>
-    <string name="signup_login_reset_password">Reset password</string>
+    <string name="signup_login_enter">入る</string>
+    <string name="signup_login_reset_password">パスワードを再設定する</string>
 
     <!-- FragmentSignupLanguage -->
     <string name="signup_language_message">使用する言語を選んでください</string>
@@ -250,7 +250,7 @@
     <string name="watch_have_yes">はい</string>
     <string name="watch_have_no">いいえ</string>
 
-    <string name="watch_have_message">Please have your watch nearby</string>
+    <string name="watch_have_message">スイングウォッチを近づけてください</string>
 
     <!-- FragmentWatchOwner -->
     <string name="watch_owner_message">貴方の時計を登録します</string>
@@ -265,9 +265,9 @@
     <string name="watch_profile_wait">暫くお待ちください&#8230;</string>
     <string name="watch_profile_zip_code">郵便番号</string>
 
-    <string name="watch_profile_first_name">Kid\'s first name</string>
-    <string name="watch_profile_last_name">Kid\'s last name</string>
-    <string name="watch_profile_save">Save</string>
+    <string name="watch_profile_first_name">お子さんの名前</string>
+    <string name="watch_profile_last_name">子どもの名字</string>
+    <string name="watch_profile_save">セーブ（保存）</string>
 
     <!-- FragmentWatchPurchase -->
     <string name="watch_purchase_message">購入しますか?</string>
@@ -288,9 +288,9 @@
     <string name="watch_request_add">追加</string>
     <string name="watch_request_search_again">もう一度検索</string>
 
-    <string name="watch_request_access">Request access</string>
-    <string name="watch_request_access_pending">Request access pending</string>
-    <string name="watch_request_cancel_and_dashboard">Cancel &amp; go to Dashboard</string>
+    <string name="watch_request_access">アクセスをリクエストしますか？</string>
+    <string name="watch_request_access_pending">アクセスリクエスト保留中</string>
+    <string name="watch_request_cancel_and_dashboard">取り消す＆ダッシュボードへ</string>
 
     <!-- FragmentWatchSearch -->
     <string name="watch_search_searching">検索中	</string>
@@ -393,6 +393,71 @@
     <string name="dashboard_progress_enable_gps">あなたのGPSを有効にしてください</string>
 
     <!--new string 20171027-->
+    <string name="profile_option_edit">プロフィール編集</string>
+    <string name="profile_option_change_password">パスワードを変更する</string>
+    <string name="profile_option_watch_share">あなたのスイングウォッチはほかの方と共有されました</string>
+    <string name="profile_option_switch">スイングウォッチを切り替える</string>
+    <string name="profile_option_language">言語</string>
+    <string name="profile_logout_confirmation">ログアウトしてもよろしいですか？</string>
+    <string name="profile_logout_confirm_btn">はい、切り替えます</string>
+    <string name="profile_logout_cancel_btn">キャンセルする</string>
+    <string name="profile_take_photo">新しい写真を撮る</string>
+    <string name="profile_choose_from_library">ライブラリーから選択する</string>
+    <string name="profile_cut_pic_note">指で写真の位置を調整してください</string>
+
+    <string name="dashboard_emotion_today_summary">本日の概要</string>
+    <string name="dashboard_emotion_indoor_steps">屋内ステップ</string>
+    <string name="dashboard_emotion_outdoor_steps">屋外ステップ</string>
+    <string name="dashboard_emotion_uv_exposure">紫外線量</string>
+    <string name="dashboard_emotion_hours">時</string>
+    <string name="dashboard_emotion_mins">分</string>
+    <string name="dashboard_emotion_activity">運動した量</string>
+    <string name="dashboard_emotion_uv_detection">紫外線検出</string>
+    <string name="dashboard_chart_activity">運動した量</string>
+    <string name="dashboard_chart_distance">距離</string>
+    <string name="dashboard_chart_flights">階段</string>
+
+    <string name="calendar_okay">はい</string>
+
+    <string name="introduction_alarm">イベントはスイングウォッチが音声でお知らせします。</string>
+    <string name="introduction_calendar_month">イベントを編集した後はスイングウォッチと同期してください。</string>
+    <string name="introduction_todo_detail">ペンのアイコンをタップし、既存のスケジュールを編集する。</string>
+    <string name="introduction_calendar_today">日付かイベントをタップし、今日のスケジュールを確認する。</string>
+
+    <string name="profile_edit_kids_profile">子どものプロフィールを編集する</string>
+    <string name="profile_switch_to_account">このアカウントに切り替える</string>
+    <string name="title_kids_profile">子どものプロフィール</string>
+
+    <string name="profile_kids_switch_tip">このアカウントに切り替えますか</string>
+    <string name="profile_kids_switch_done_tip">完了　ただいまこのアカウントになっています.</string>
+    <string name="profile_cancel_request_kids_tip">このリクエストを取り消しますか</string>
+    <string name="profile_title_switch_account">アカウントを切り替える</string>
+
+    <string name="pending">保留中</string>
+
+    <string name="cancel_kids_request">リクエストを取り消す</string>
+    <string name="request_kids_note">%sのスイングウォッチへの接続をリクエストしています</string>
+    <string name="profile_title_request_to">へのリクエストをする</string>
+    <string name="profile_title_request_from">からリクエストが来ました</string>
+
+    <string name="profile_got_request_tip">リクエストが届いています</string>
+    <string name="profile_got_request_note">%1$sからリクエストが届いています</string>
+    <string name="profile_accept_request_from">承認</string>
+    <string name="profile_confirm">確定</string>
+    <string name="profile_decline_request_from">拒否</string>
+
+    <string name="profile_sharing_now">さあ共有しましょう！</string>
+    <string name="profile_sharing_now_note">%1$sのスイングウォッチは%2$sと共有しています</string>
+    <string name="profile_stop_share">%sとの共有をやめますか</string>
+
+    <string name="profile_switch_account_tip">*プロフィール写真をタップして、アカウントを切り替える</string>
+
+    <string name="profile_kids_remove_tip">このアカウントを削除しますか</string>
+    <string name="profile_kids_after_remove_tip">このアカウントは削除されました</string>
+    <string name="profile_kids_select_watch_share">Select watch to share</string>
+    <string name="profile_kids_select_watch_share_tip">１枚か複数のプロフィール写真をタップし、%sと共有する</string>
+
+    <!-- Not translated yet -->
     <string name="net_err">Net Error</string>
     <string name="ok_str">OK</string>
     <string name="calendar_day_word">日</string>

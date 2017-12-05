@@ -219,7 +219,7 @@
             </RelativeLayout>
 
             <RelativeLayout
-                android:id="@+id/rl_uv_explosure"
+                android:id="@+id/rl_uv_exposure"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/base_10"
@@ -237,7 +237,7 @@
                     android:layout_marginTop="@dimen/base_12"
                     android:gravity="start"
                     android:includeFontPadding="false"
-                    android:text="@string/dashboard_emotion_uv_explosure"
+                    android:text="@string/dashboard_emotion_uv_exposure"
                     android:textColor="@color/color_blue_main"
                     android:textSize="16sp"
                     android:textStyle="bold" />

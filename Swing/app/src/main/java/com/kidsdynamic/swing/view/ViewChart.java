@@ -31,6 +31,7 @@ public abstract class ViewChart extends View {
     public int mAxisTextSize = 30;
     public int mAxisTextColor = Color.BLACK;
     public int mAxisTextStyle = Typeface.NORMAL;
+    public int mGoalColor = Color.RED;
     public boolean mAxisHEnabled = false;
     public boolean mAxisVEnabled = false;
 
@@ -100,6 +101,8 @@ public abstract class ViewChart extends View {
                     mAxisVMax = typedArray.getFloat(attr, mAxisVMax);
                 } else if (attr == R.styleable.ViewChart_axisVMin) {
                     mAxisVMin = typedArray.getFloat(attr, mAxisVMin);
+                } else if (attr == R.styleable.ViewChart_goalColor) {
+                    mGoalColor = typedArray.getColor(attr, mGoalColor);
                 }
             }
             typedArray.recycle();

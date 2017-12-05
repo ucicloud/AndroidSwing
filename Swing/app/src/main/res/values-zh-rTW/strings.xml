@@ -209,8 +209,8 @@
     <string name="signup_login_processing">"處理中"</string>
     <string name="signup_login_wait">"請稍候&#8230;"</string>
 
-    <string name="signup_login_enter">Enter</string>
-    <string name="signup_login_reset_password">Reset password</string>
+    <string name="signup_login_enter">進入</string>
+    <string name="signup_login_reset_password">重新設置密碼</string>
 
     <!-- FragmentSignupLanguage -->
     <string name="signup_language_message">"請選擇語言"</string>
@@ -250,7 +250,7 @@
     <string name="watch_have_yes">"是"</string>
     <string name="watch_have_no">"否"</string>
 
-    <string name="watch_have_message">Please have your watch nearby</string>
+    <string name="watch_have_message">請把手錶擺置手機旁</string>
 
     <!-- FragmentWatchOwner -->
     <string name="watch_owner_message">"註冊手錶"</string>
@@ -265,9 +265,9 @@
     <string name="watch_profile_wait">"請稍候&#8230;"</string>
     <string name="watch_profile_zip_code">"郵遞區號"</string>
 
-    <string name="watch_profile_first_name">Kid\'s first name</string>
-    <string name="watch_profile_last_name">Kid\'s last name</string>
-    <string name="watch_profile_save">Save</string>
+    <string name="watch_profile_first_name">小孩的名字</string>
+    <string name="watch_profile_last_name">小孩姓氏</string>
+    <string name="watch_profile_save">儲存</string>
 
     <!-- FragmentWatchPurchase -->
     <string name="watch_purchase_message">"你是否\n想要購買Swing Watch?"</string>
@@ -288,9 +288,9 @@
     <string name="watch_request_add">"新增"</string>
     <string name="watch_request_search_again">"再次尋找"</string>
 
-    <string name="watch_request_access">Request access</string>
-    <string name="watch_request_access_pending">Request access pending</string>
-    <string name="watch_request_cancel_and_dashboard">Cancel &amp; go to Dashboard</string>
+    <string name="watch_request_access">啟動需求</string>
+    <string name="watch_request_access_pending">等待通過請求</string>
+    <string name="watch_request_cancel_and_dashboard">取消或進入Dashboard</string>
 
     <!-- FragmentWatchSearch -->
     <string name="watch_search_searching">"尋找中"</string>
@@ -395,6 +395,71 @@
     <string name="dashboard_progress_enable_gps">" 請啟動GPS"</string>
     
     <!--new string 20171027-->
+    <string name="profile_option_edit">修改基本資料</string>
+    <string name="profile_option_change_password">更新密碼</string>
+    <string name="profile_option_watch_share">您的手錶已經與其他人分享</string>
+    <string name="profile_option_switch">轉換手錶帳戶</string>
+    <string name="profile_option_language">語言</string>
+    <string name="profile_logout_confirmation">請問您是否確定登出？</string>
+    <string name="profile_logout_confirm_btn">是的,我確定</string>
+    <string name="profile_logout_cancel_btn">取消</string>
+    <string name="profile_take_photo">新しい写真を撮る</string>
+    <string name="profile_choose_from_library">從手機圖片資料庫中選擇</string>
+    <string name="profile_cut_pic_note">指で写真の位置を調整してください</string>
+
+    <string name="dashboard_emotion_today_summary">本日總結</string>
+    <string name="dashboard_emotion_indoor_steps">室內步數</string>
+    <string name="dashboard_emotion_outdoor_steps">室外步數</string>
+    <string name="dashboard_emotion_uv_exposure">紫外線暴露狀態</string>
+    <string name="dashboard_emotion_hours">時</string>
+    <string name="dashboard_emotion_mins">分</string>
+    <string name="dashboard_emotion_activity">活動量</string>
+    <string name="dashboard_emotion_uv_detection">紫外線檢測</string>
+    <string name="dashboard_chart_activity">活動量</string>
+    <string name="dashboard_chart_distance">距離</string>
+    <string name="dashboard_chart_flights">爬樓</string>
+
+    <string name="calendar_okay">好</string>
+
+    <string name="introduction_alarm">事件將會在手錶上產生有聲提示。</string>
+    <string name="introduction_calendar_month">編輯完成後，請與Swing watch 同步。</string>
+    <string name="introduction_todo_detail">編輯您已存在的時程安排，請按鉛筆圖示。</string>
+    <string name="introduction_calendar_today">點擊時間或是間，查看日程安排。</string>
+
+    <string name="profile_edit_kids_profile">編輯兒童資料</string>
+    <string name="profile_switch_to_account">切換至此帳號</string>
+    <string name="title_kids_profile">兒童基本資料</string>
+
+    <string name="profile_kids_switch_tip">確定要切換至此帳號？</string>
+    <string name="profile_kids_switch_done_tip">完成切換。您已在此帳號.</string>
+    <string name="profile_cancel_request_kids_tip">您確定要刪除這個請求？</string>
+    <string name="profile_title_switch_account">轉換帳號</string>
+
+    <string name="pending">等待請求</string>
+
+    <string name="cancel_kids_request">您確定要取消這個請求？</string>
+    <string name="request_kids_note">你有一個請求至%s的手錶</string>
+    <string name="profile_title_request_to">請求</string>
+    <string name="profile_title_request_from">邀請</string>
+
+    <string name="profile_got_request_tip">您收到一個請求</string>
+    <string name="profile_got_request_note">您收到一個請求來自%1$s</string>
+    <string name="profile_accept_request_from">同意</string>
+    <string name="profile_confirm">確認</string>
+    <string name="profile_decline_request_from">拒絕</string>
+
+    <string name="profile_sharing_now">已經分享</string>
+    <string name="profile_sharing_now_note">%1$s的手錶已經與%2$s分享</string>
+    <string name="profile_stop_share">您確定要停止與%s分享？</string>
+
+    <string name="profile_switch_account_tip">*請點選頭像轉換手錶帳戶</string>
+
+    <string name="profile_kids_remove_tip">您確定要刪除此帳號？</string>
+    <string name="profile_kids_after_remove_tip">此帳號已經被刪除</string>
+    <string name="profile_kids_select_watch_share">選擇手錶分享</string>
+    <string name="profile_kids_select_watch_share_tip">請選擇頭像与%s進行分享</string>
+
+    <!-- Not translated yet -->
     <string name="net_err">Net Error</string>
     <string name="ok_str">OK</string>
     <string name="calendar_day_word">日</string>

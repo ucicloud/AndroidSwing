@@ -277,7 +277,7 @@ public class ViewChartToday extends ViewChart {
 
         mPaint.reset();
         mPaint.setAntiAlias(true);
-        mPaint.setColor(Color.RED);
+        mPaint.setColor(mGoalColor);
         mPaint.setStrokeWidth(4f);
         mPaint.setStyle(Paint.Style.STROKE);
         PathEffect effects = new DashPathEffect(new float[]{8, 8, 8, 8}, 1);
@@ -298,7 +298,7 @@ public class ViewChartToday extends ViewChart {
         mPaint.setTypeface(SwingFontsCache.getBoldType(getContext()));
         mPaint.setTextSize(mChartTextSize - 2);
         mPaint.getTextBounds(text, 0, text.length(), textRect);
-        mPaint.setColor(Color.RED);
+        mPaint.setColor(mGoalColor);
 
         int textPadding = size / 2;
         if ((posX + textRect.width() + textPadding * 2) < getMeasuredWidth()) {

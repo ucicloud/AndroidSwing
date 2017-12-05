@@ -67,4 +67,6 @@
     <color name="ik_common_line_c">#F1F1F2</color>
     <color name="introduction_layout_bg">#df868BCB</color>
     <color name="profile_label_color">#5EC7E2</color>
+
+    <color name="chart_goal">#EE1E23</color>
 </resources>

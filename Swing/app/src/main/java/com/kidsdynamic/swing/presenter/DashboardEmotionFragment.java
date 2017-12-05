@@ -117,7 +117,7 @@ public class DashboardEmotionFragment extends DashboardBaseFragment {
         if (null == kid) {
             return;
         }
-        showLoadingDialog(R.string.signup_login_wait);
+//        showLoadingDialog(R.string.signup_login_wait);
         Calendar cld = Calendar.getInstance();
         int timezoneOffset = cld.getTimeZone().getOffset(cld.getTimeInMillis());
 
@@ -152,8 +152,8 @@ public class DashboardEmotionFragment extends DashboardBaseFragment {
         setFragment(DashboardChartSingleFragment.newInstance(OUTDOOR, CHART_TODAY, watchActivity), true);
     }
 
-    @OnClick(R.id.rl_uv_explosure)
-    public void clickUVExplosure() {
+    @OnClick(R.id.rl_uv_exposure)
+    public void clickUVExposure() {
 
     }
 
@@ -275,15 +275,15 @@ public class DashboardEmotionFragment extends DashboardBaseFragment {
             if (200 == statusCode && null != arg && arg instanceof RetrieveDataRep) {
                 handleRetrieveData(arg, start, end, timezoneOffset, kidId);
             } else {
-                finishLoadingDialog();
+//                finishLoadingDialog();
                 ToastCommon.makeText(getContext(), R.string.dashboard_enqueue_fail_common);
             }
-            finishLoadingDialog();
+//            finishLoadingDialog();
         }
 
         @Override
         public void onFailed(String Command, int statusCode) {
-            finishLoadingDialog();
+//            finishLoadingDialog();
             ToastCommon.showToast(getContext(), Command);
         }
     }

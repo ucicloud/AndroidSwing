@@ -26,6 +26,7 @@
         app:axisColor="@color/color_white"
         app:axisHEnabled="true"
         app:axisHMax="15000"
+        app:chartColor="@color/chart_goal"
         app:chartTextColor="@color/color_white"
         app:chartTextSize="16sp" />
 </LinearLayout>

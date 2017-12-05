@@ -104,7 +104,7 @@ public class DashboardListFragment extends DashboardBaseFragment {
         listType = args.getInt(LIST_TYPE, LIST_TODAY);
         if (LIST_TODAY == listType) {
             tv_title.setText(R.string.dashboard_chart_today);
-            showLoadingDialog(R.string.signup_login_wait);
+//            showLoadingDialog(R.string.signup_login_wait);
             Calendar cld = Calendar.getInstance();
             int timezoneOffset = cld.getTimeZone().getOffset(cld.getTimeInMillis());
 
@@ -121,7 +121,7 @@ public class DashboardListFragment extends DashboardBaseFragment {
                     new IRetrieveCompleteListener(start, end, timezoneOffset));
         } else if (LIST_WEEK == listType) {
             tv_title.setText(R.string.dashboard_chart_this_week);
-            showLoadingDialog(R.string.signup_login_wait);
+//            showLoadingDialog(R.string.signup_login_wait);
             Calendar cld = Calendar.getInstance();
             int timezoneOffset = cld.getTimeZone().getOffset(cld.getTimeInMillis());
 
@@ -140,7 +140,7 @@ public class DashboardListFragment extends DashboardBaseFragment {
                     new IRetrieveCompleteListener(start, end, timezoneOffset));
         } else if (LIST_MONTH == listType) {
             tv_title.setText(R.string.dashboard_chart_this_month);
-            showLoadingDialog(R.string.signup_login_wait);
+//            showLoadingDialog(R.string.signup_login_wait);
             Calendar cld = Calendar.getInstance();
             int timezoneOffset = cld.getTimeZone().getOffset(cld.getTimeInMillis());
 
@@ -159,7 +159,7 @@ public class DashboardListFragment extends DashboardBaseFragment {
                     new IRetrieveCompleteListener(start, end, timezoneOffset));
         } else {
             tv_title.setText(R.string.dashboard_chart_this_year);
-            showLoadingDialog(R.string.signup_login_wait);
+//            showLoadingDialog(R.string.signup_login_wait);
             Calendar cld = Calendar.getInstance();
             int timezoneOffset = cld.getTimeZone().getOffset(cld.getTimeInMillis());
 
@@ -268,14 +268,14 @@ public class DashboardListFragment extends DashboardBaseFragment {
                             .execute(arg, start, end, timezoneOffset, kidId);
                 }
             } else {
-                finishLoadingDialog();
+//                finishLoadingDialog();
                 ToastCommon.makeText(getContext(), R.string.dashboard_enqueue_fail_common);
             }
         }
 
         @Override
         public void onFailed(String Command, int statusCode) {
-            finishLoadingDialog();
+//            finishLoadingDialog();
             ToastCommon.showToast(getContext(), Command);
         }
     }
@@ -341,7 +341,7 @@ public class DashboardListFragment extends DashboardBaseFragment {
         protected void onPostExecute(List<WatchActivity> watchActivities) {
             super.onPostExecute(watchActivities);
             theFragment.handleHourlyData(watchActivities);
-            theFragment.finishLoadingDialog();
+//            theFragment.finishLoadingDialog();
         }
     }
 

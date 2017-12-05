@@ -422,7 +422,7 @@ public class DashboardChartTripleFragment extends DashboardBaseFragment {
 
         String chartTitleSteps = getString(R.string.dashboard_chart_steps);
         String chartTitleDistance = getString(R.string.dashboard_chart_distance);
-        String chartTitleFloors = getString(R.string.dashboard_chart_floors);
+        String chartTitleFloors = getString(R.string.dashboard_chart_flights);
 
         View chartWeek = inflater.inflate(R.layout.layout_chart_vertical_triple, mViewPager, false);
         mViewChartWeekSteps = (ViewChartBarVertical) chartWeek.findViewById(R.id.dashboard_chart_vertical_steps);

@@ -153,7 +153,7 @@ public class DashboardChartSingleFragment extends DashboardBaseFragment {
     }
 
     private void loadData() {
-        showLoadingDialog(R.string.signup_login_wait);
+//        showLoadingDialog(R.string.signup_login_wait);
         Calendar cld = Calendar.getInstance();
         int timezoneOffset = cld.getTimeZone().getOffset(cld.getTimeInMillis());
 
@@ -193,14 +193,14 @@ public class DashboardChartSingleFragment extends DashboardBaseFragment {
                 new DataTask(DashboardChartSingleFragment.this)
                         .execute(arg, start, end, timezoneOffset);
             } else {
-                finishLoadingDialog();
+//                finishLoadingDialog();
                 ToastCommon.makeText(getContext(), R.string.dashboard_enqueue_fail_common);
             }
         }
 
         @Override
         public void onFailed(String Command, int statusCode) {
-            finishLoadingDialog();
+//            finishLoadingDialog();
             ToastCommon.showToast(getContext(), Command);
         }
     }
@@ -265,7 +265,7 @@ public class DashboardChartSingleFragment extends DashboardBaseFragment {
         protected void onPostExecute(List<WatchActivity> watchActivities) {
             super.onPostExecute(watchActivities);
             theFragment.handlePostExecute(watchActivities);
-            theFragment.finishLoadingDialog();
+//            theFragment.finishLoadingDialog();
         }
     }
 

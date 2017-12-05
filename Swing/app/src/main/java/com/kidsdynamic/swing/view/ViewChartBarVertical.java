@@ -361,7 +361,7 @@ public class ViewChartBarVertical extends ViewChart {
 
         mPaint.reset();
         mPaint.setAntiAlias(true);
-        mPaint.setColor(Color.RED);
+        mPaint.setColor(mGoalColor);
         mPaint.setStrokeWidth(4f);
         mPaint.setStyle(Paint.Style.STROKE);
         PathEffect effects = new DashPathEffect(new float[]{8, 8, 8, 8}, 1);
@@ -388,7 +388,7 @@ public class ViewChartBarVertical extends ViewChart {
 
         mPaint.reset();
         mPaint.setAntiAlias(true);
-        mPaint.setColor(Color.RED);
+        mPaint.setColor(mGoalColor);
         mPaint.setStyle(Paint.Style.FILL);
         canvas.drawPath(polygon, mPaint);
 

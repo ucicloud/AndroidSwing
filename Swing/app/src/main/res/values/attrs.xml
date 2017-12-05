@@ -97,6 +97,7 @@
         <attr name="axisVEnabled" format="boolean" />
         <attr name="axisVMax" format="float" />
         <attr name="axisVMin" format="float" />
+        <attr name="goalColor" format="color" />
     </declare-styleable>
 
     <declare-styleable name="ViewDotIndicator">
