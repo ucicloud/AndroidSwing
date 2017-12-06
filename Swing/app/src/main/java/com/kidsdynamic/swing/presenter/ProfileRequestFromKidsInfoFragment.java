@@ -11,9 +11,13 @@ import android.widget.TextView;
 
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.kidsdynamic.data.net.ApiGen;
+import com.kidsdynamic.data.net.host.HostApi;
+import com.kidsdynamic.data.net.host.model.RequestAddSubHostEntity;
 import com.kidsdynamic.swing.R;
 import com.kidsdynamic.swing.model.KidsEntityBean;
 import com.kidsdynamic.swing.model.WatchContact;
+import com.kidsdynamic.swing.net.BaseRetrofitCallback;
 import com.kidsdynamic.swing.utils.ViewUtils;
 import com.kidsdynamic.swing.view.ViewCircle;
 import com.yy.base.utils.ToastCommon;
@@ -24,6 +28,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import retrofit2.Call;
+import retrofit2.Response;
 
 /**
  * ProfileRequestFromKidsInfoFragment
@@ -84,6 +90,8 @@ public class ProfileRequestFromKidsInfoFragment extends ProfileBaseFragment {
 
     private long kidsId;
     private KidsEntityBean kidsInfo;
+
+    private RequestAddSubHostEntity requestFrom;
 
     public static ProfileRequestFromKidsInfoFragment newInstance(long kidsId) {
         Bundle args = new Bundle();
@@ -212,7 +220,7 @@ public class ProfileRequestFromKidsInfoFragment extends ProfileBaseFragment {
         @Override
         public void onResourceReady(Bitmap bitmap, Transition<? super Bitmap> transition) {
 
-            if (!getActivity().isDestroyed()) {
+            if (getActivity() != null && !getActivity().isDestroyed()) {
 //                mViewPhoto.setBitmap(bitmap);
             }
         }
@@ -232,6 +240,38 @@ public class ProfileRequestFromKidsInfoFragment extends ProfileBaseFragment {
 
     @OnClick(R.id.btn_confirm_stop_share)
     protected void onConfirmStopShare(){
+
+        if(requestFrom == null){
+            return;
+        }
+
+        showLoadingDialog(R.string.signup_login_wait);
+        //拒绝 共享请求
+        HostApi hostApi = ApiGen.getInstance(getActivity().getApplicationContext()).
+                generateApi(HostApi.class, true);
+        hostApi.subHostDeny(requestFrom.getId()).enqueue(new BaseRetrofitCallback<Object>() {
+            @Override
+            public void onResponse(Call<Object> call, Response<Object> response) {
+                int code = response.code();
+
+                if(200 == code){
+                    // TODO: 2017/12/6
+                }else {
+                    ToastCommon.makeText(getContext(),R.string.normal_err,code);
+                }
+
+                finishLoadingDialog();
+                super.onResponse(call, response);
+            }
+
+            @Override
+            public void onFailure(Call<Object> call, Throwable t) {
+                finishLoadingDialog();
+
+                super.onFailure(call, t);
+            }
+        });
+
 //        showLayout(R.id.layout_stop_share);
     }
 

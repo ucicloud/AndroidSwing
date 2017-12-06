@@ -24,7 +24,7 @@ public interface HostApi {
 //500	Internal error. Please send me the error. I will fix it
     //Send sub host request to the host account
     @POST("v1/subHost/add")
-    Call<RequestAddSubHostEntity> subHostAdd(@Body int hostId);
+    Call<RequestAddSubHostEntity> subHostAdd(@Body long hostId);
 
 
 //    200	Accept successfully
@@ -39,7 +39,7 @@ public interface HostApi {
 //400	Bad request. Missing some parameters, or the type is wrong
 //500	Internal error. Please send me the error. I will fix it
     @PUT("v1/subHost/deny")
-    Call<Object> subHostDeny(@Body String subHostId);
+    Call<Object> subHostDeny(@Body int subHostId);
 
 //200	Receive list successfully
 //500	Internal error. Please send me the error. I will fix it

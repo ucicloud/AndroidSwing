@@ -104,7 +104,7 @@ public class WatchContact implements Serializable {
     }
 
     public static class User extends WatchContact {
-        public int mId;
+        public long mId;
         public String mEmail;
         public String mFirstName;
         public String mLastName;
@@ -150,7 +150,7 @@ public class WatchContact implements Serializable {
             mRequestKids = new ArrayList<>();
         }
 
-        public User(Bitmap photo, int id, String email, String firstName, String lastName, long lastUpdate, long dateCreated, String zipCode, String phoneNumber, String profile) {
+        public User(Bitmap photo, long id, String email, String firstName, String lastName, long lastUpdate, long dateCreated, String zipCode, String phoneNumber, String profile) {
             super(photo, firstName + " " + lastName);
             mId = id;
             mEmail = email;
@@ -165,7 +165,7 @@ public class WatchContact implements Serializable {
             mRequestKids = new ArrayList<>();
         }
 
-        public User(Bitmap photo, int id, String email, String firstName, String lastName, long lastUpdate, long dateCreated, String zipCode, String phoneNumber) {
+        public User(Bitmap photo, long id, String email, String firstName, String lastName, long lastUpdate, long dateCreated, String zipCode, String phoneNumber) {
             super(photo, firstName + " " + lastName);
             mId = id;
             mEmail = email;

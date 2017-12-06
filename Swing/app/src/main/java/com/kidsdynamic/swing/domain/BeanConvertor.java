@@ -640,4 +640,23 @@ public class BeanConvertor {
 
         return dbEventKids;
     }
+
+
+    public static WatchContact.User getWatchContact(UserInfo userInfo) {
+
+        WatchContact.User user = new WatchContact.User();
+        user.mId = userInfo.getId();
+        user.mEmail = userInfo.getEmail();
+        user.mFirstName = userInfo.getFirstName();
+        user.mLastUpdate = getUTCTimeStamp(userInfo.getLastUpdate());
+        user.mDateCreated = getUTCTimeStamp(userInfo.getDateCreated());
+
+        user.mPhoneNumber = userInfo.getPhoneNumber();
+        user.mProfile = userInfo.getProfile();
+        user.mZipCode = userInfo.getZipCode();
+
+
+        return user;
+
+    }
 }

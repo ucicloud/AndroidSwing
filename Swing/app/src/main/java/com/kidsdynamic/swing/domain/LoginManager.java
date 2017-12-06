@@ -82,6 +82,12 @@ public class LoginManager {
     public static String getUserName(@NonNull DB_User currentLoginUserInfo){
         String firstName = currentLoginUserInfo.getFirstName();
         String lastName = currentLoginUserInfo.getLastName();
+
+        return getUserName(firstName,lastName);
+    }
+
+    public static String getUserName(String firstName, String lastName){
+
         if(!TextUtils.isEmpty(firstName)
                 && !TextUtils.isEmpty(lastName)){
             return firstName + " " + lastName;

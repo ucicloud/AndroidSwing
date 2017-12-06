@@ -387,6 +387,7 @@
     <string name="error_api_event_update_400">Bad Request. Missing some parameters, or the Type is Wrong</string>
     <string name="error_api_event_update_403">Forbidden. The user Doesn\'t Have Permission to Update</string>
     <string name="error_api_event_delete_400">Bad Request. Missing some parameters, or the Type is Wrong</string>
+    <string name="error_api_event_delete_401">Unauthorized. The user doesn\'t have permission</string>
     <string name="error_api_event_delete_403">Forbidden. The User Doesn\'t Have Permission to Delete</string>
     <string name="error_api_event_todo_done_400">Bad Request. Missing some parameters, or the Type is Wrong</string>
     <string name="error_subhost_add_400">Bad Request. Missing some parameters, or the Type is Wrong</string>
@@ -507,5 +508,7 @@
     <string name="profile_you_are_on">You are on</string>
     <string name="profile_request_access">Request access</string>
     <string name="profile_request_cancel_goto_dashboard">Cancel &#38; go to dashboard</string>
+    <string name="error_email_null">Email null</string>
+    <string name="normal_err">fail[%1$d], please try again</string>
 
 </resources>

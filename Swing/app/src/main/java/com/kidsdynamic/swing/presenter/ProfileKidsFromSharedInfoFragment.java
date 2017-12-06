@@ -156,7 +156,7 @@ public class ProfileKidsFromSharedInfoFragment extends ProfileBaseFragment {
         @Override
         public void onResourceReady(Bitmap bitmap, Transition<? super Bitmap> transition) {
 
-            if (!getActivity().isDestroyed()) {
+            if (getActivity() != null && !getActivity().isDestroyed()) {
                 mViewPhoto.setBitmap(bitmap);
             }
         }

@@ -11,9 +11,18 @@ import android.widget.TextView;
 
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.kidsdynamic.data.dao.DB_User;
+import com.kidsdynamic.data.net.ApiGen;
+import com.kidsdynamic.data.net.host.HostApi;
+import com.kidsdynamic.data.net.host.model.RequestAddSubHostEntity;
+import com.kidsdynamic.data.net.user.model.UserInfo;
 import com.kidsdynamic.swing.R;
+import com.kidsdynamic.swing.domain.LoginManager;
+import com.kidsdynamic.swing.domain.UserManager;
 import com.kidsdynamic.swing.model.KidsEntityBean;
 import com.kidsdynamic.swing.model.WatchContact;
+import com.kidsdynamic.swing.net.BaseRetrofitCallback;
+import com.kidsdynamic.swing.utils.GlideHelper;
 import com.kidsdynamic.swing.utils.SwingFontsCache;
 import com.kidsdynamic.swing.utils.ViewUtils;
 import com.kidsdynamic.swing.view.ViewCircle;
@@ -22,6 +31,8 @@ import com.yy.base.utils.ToastCommon;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import retrofit2.Call;
+import retrofit2.Response;
 
 /**
  * ProfileRequestToKidsInfoFragment
@@ -59,6 +70,8 @@ public class ProfileRequestToKidsInfoFragment extends ProfileBaseFragment {
     private long kidsId;
     private KidsEntityBean kidsInfo;
 
+    private RequestAddSubHostEntity requestTo;
+
     public static ProfileRequestToKidsInfoFragment newInstance(long kidsId) {
         Bundle args = new Bundle();
         args.putLong(TAG_KIDS_ID,kidsId);
@@ -73,13 +86,27 @@ public class ProfileRequestToKidsInfoFragment extends ProfileBaseFragment {
 
         mActivityMain = (MainFrameActivity) getActivity();
 
-        Bundle arguments = getArguments();
+        /*Bundle arguments = getArguments();
         if(arguments != null){
             kidsId = arguments.getLong(TAG_KIDS_ID, -1);
             if(kidsId == -1){
                 exitByKidsNull();
             }
+        }*/
+
+        if (mActivityMain.mSubHostInfoEntity.isEmpty()) {
+            exitByKidsNull();
+        }else {
+            requestTo = mActivityMain.mSubHostInfoEntity.pop();
         }
+
+        if(requestTo == null
+                || requestTo.getRequestToUser() == null
+                || requestTo.getRequestFromUser() == null){
+            exitByKidsNull();
+        }
+
+        loadValue();
     }
 
     private void exitByKidsNull() {
@@ -104,21 +131,6 @@ public class ProfileRequestToKidsInfoFragment extends ProfileBaseFragment {
         btn_cancel_request.setTypeface(SwingFontsCache.getBoldType(getContext()));
         btn_confirm_cancel_request.setTypeface(SwingFontsCache.getBoldType(getContext()));
         btn_no.setTypeface(SwingFontsCache.getBoldType(getContext()));
-
-        //todo test ui
-        String requestKidsName = "Ben Smith";
-        String requestKidsName2 = "requested";
-        String note = getString(R.string.request_kids_note, requestKidsName);
-
-        /*SpannableStringBuilder builder = new SpannableStringBuilder(note);
-        ForegroundColorSpan lightBlueSpan = new ForegroundColorSpan(Color.parseColor("#14C0BD"));
-
-        int start = note.indexOf(requestKidsName);
-        int end = start + requestKidsName.length();
-
-        builder.setSpan(lightBlueSpan,start,end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);*/
-
-        tv_note.setText(ViewUtils.setWordColorInStr(note,requestKidsName,requestKidsName2));
 
 //        profile_logout_confirm_name
     }
@@ -156,7 +168,25 @@ public class ProfileRequestToKidsInfoFragment extends ProfileBaseFragment {
         loadValue(kidsInfo, watchContact);*/
     }
 
-    private void loadValue(KidsEntityBean kidsInfo, WatchContact watchContact) {
+    private void loadValue() {
+
+        DB_User currentLoginUserInfo = LoginManager.getCurrentLoginUserInfo();
+        if(currentLoginUserInfo != null){
+            GlideHelper.getBitMap(getContext(),
+                    UserManager.getProfileRealUri(currentLoginUserInfo.getProfile()),
+                    String.valueOf(currentLoginUserInfo.getLastUpdate()),
+                    currentUserAvatarSimpleTarget);
+        }
+
+        UserInfo requestToUser = requestTo.getRequestToUser();
+        String requestToUserName = LoginManager.getUserName(requestToUser.getFirstName(),
+                requestToUser.getLastName());
+
+        String note = getString(R.string.request_kids_note, requestToUserName);
+
+        tv_note.setText(ViewUtils.setWordColorInStr(note,requestToUserName));
+
+
 
         /*tv_kids_id.setText(String.valueOf(kidsInfo.getKidsId()));
         tv_kidsName.setText(kidsInfo.getName());
@@ -173,13 +203,13 @@ public class ProfileRequestToKidsInfoFragment extends ProfileBaseFragment {
     }
 
 
-    private SimpleTarget<Bitmap> userAvatarSimpleTarget = new SimpleTarget<Bitmap>(){
+    private SimpleTarget<Bitmap> currentUserAvatarSimpleTarget = new SimpleTarget<Bitmap>(){
 
         @Override
         public void onResourceReady(Bitmap bitmap, Transition<? super Bitmap> transition) {
 
-            if (!getActivity().isDestroyed()) {
-//                mViewPhoto.setBitmap(bitmap);
+            if (getActivity() != null && !getActivity().isDestroyed()) {
+                mViewUserPhoto.setBitmap(bitmap);
             }
         }
     };
@@ -198,5 +228,41 @@ public class ProfileRequestToKidsInfoFragment extends ProfileBaseFragment {
         layout_cancel_confirm.setVisibility(View.GONE);
     }
 
+    @OnClick(R.id.btn_confirm_cancel)
+    public void onCancelConfirmClick(){
+        if(requestTo == null){
+            return;
+        }
+
+        showLoadingDialog(R.string.signup_login_wait);
+        //拒绝 共享请求
+        HostApi hostApi = ApiGen.getInstance(getActivity().getApplicationContext()).
+                generateApi(HostApi.class, true);
+        hostApi.subHostDelete(requestTo.getId()).
+                enqueue(new BaseRetrofitCallback<RequestAddSubHostEntity>() {
+            @Override
+            public void onResponse(Call<RequestAddSubHostEntity> call,
+                                   Response<RequestAddSubHostEntity> response) {
+                int code = response.code();
+                if(code == 200){
+                    // TODO: 2017/12/6
+                }else if(code == 401){
+                    //unauthorized
+                    ToastCommon.makeText(getContext(),R.string.error_api_event_delete_401);
+                }else {
+                    ToastCommon.makeText(getContext(),R.string.normal_err,code);
+                }
+
+                finishLoadingDialog();
+                super.onResponse(call, response);
+            }
+
+            @Override
+            public void onFailure(Call<RequestAddSubHostEntity> call, Throwable t) {
+                finishLoadingDialog();
+                super.onFailure(call, t);
+            }
+        });
+    }
 
 }

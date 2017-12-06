@@ -39,7 +39,7 @@
                     android:layout_marginBottom="@dimen/base_35"/>
 
                 <Button
-                    android:id="@+id/btn_accept_request"
+                    android:id="@+id/btn_search_again"
                     style="@style/btn_main_profile"
                     android:layout_width="match_parent"
                     android:text="@string/profile_sorry_again" />

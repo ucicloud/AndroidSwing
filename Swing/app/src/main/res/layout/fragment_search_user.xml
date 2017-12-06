@@ -24,11 +24,11 @@
             android:inputType="textEmailAddress" />
 
         <Button
-            android:id="@+id/signup_login_login"
+            android:id="@+id/btn_search"
             style="@style/button_main"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/signup_login_enter" />
+            android:text="@string/watch_owner_search" />
     </LinearLayout>
 
 
