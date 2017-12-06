@@ -1,14 +1,6 @@
 <resources>
     <string name="app_name">Swing</string>
 
-    <!-- Language: Warning DO NOT translate below -->
-    <string name="language_en" translatable="false">"English"</string>
-    <string name="language_zh_tw" translatable="false">"繁體中文"</string>
-    <string name="language_zh_cn" translatable="false">"简体中文"</string>
-    <string name="language_ru" translatable="false">"русский"</string>
-    <string name="language_es" translatable="false">"español"</string>
-    <string name="language_ja" translatable="false">"日本語"</string>
-
     <!-- ActivityMain -->
     <string name="activity_main_synchronize">Sync</string>
     <string name="activity_main_wait">Please Wait&#8230;</string>
@@ -396,23 +388,10 @@
     <string name="error_subhost_remove_kid_400">Bad Request. Missing some parameters, or the Type is Wrong</string>
     <string name="error_subhost_remove_kid_403">Forbidden. The User Doesn\'t Have Permission</string>
 
-    <!-- API Error -->
     <string name="dialog_sync_header">Sync Data</string>
     <string name="dialog_sync_content">Please sync after editing event</string>
     <string name="dialog_sync_sync_button">Sync</string>
     <string name="dialog_sync_skip_button">Skip</string>
-
-    <!-- Sign-in/Singup new words -->
-
-    <!--<string name="signup_login_enter">Enter</string>-->
-    <!--<string name="signup_login_reset_password">Reset password</string>-->
-    <!--<string name="watch_have_message">Please have your watch nearby</string>-->
-    <!--<string name="watch_request_access">Request access</string>-->
-    <!--<string name="watch_request_access_pending">Request access pending</string>-->
-    <!--<string name="watch_request_cancel_and_dashboard">Cancel &amp; go to Dashboard</string>-->
-    <!--<string name="watch_profile_first_name">Kid\'s first name</string>-->
-    <!--<string name="watch_profile_last_name">Kid\'s last name</string>-->
-    <!--<string name="watch_profile_save">Save</string>-->
 
     <!--new string 20171027-->
     <string name="profile_option_edit">Edit profile</string>
@@ -458,7 +437,7 @@
     <string name="pending">Pending</string>
 
     <string name="cancel_kids_request">Cancel request</string>
-    <string name="request_kids_note">You\'ve requested access to %s\'s watch</string>
+    <string name="request_kids_note">You\'ve requested access to %s\'s watch.</string>
     <string name="profile_title_request_to">Request to</string>
     <string name="profile_title_request_from">Request from</string>
 
@@ -470,19 +449,21 @@
 
     <string name="profile_sharing_now">Sharing now!</string>
     <string name="profile_sharing_now_note">%1$s\'s watch is sharing with %2$s now.</string>
-    <string name="profile_stop_share">Are you sure to stop \n sharing with %s</string>
+    <string name="profile_stop_share">Are you sure to stop \n sharing with %s?</string>
 
     <string name="profile_switch_account_tip">*Tap on profile pictures to switch account</string>
 
     <string name="profile_kids_remove_tip">Are you sure to remove this account?</string>
-    <string name="profile_kids_after_remove_tip">This account has \n been removed</string>
+    <string name="profile_kids_after_remove_tip">This account has \n been removed.</string>
     <string name="profile_kids_select_watch_share">Select watch to share</string>
     <string name="profile_kids_select_watch_share_tip">Please tap on one or more profile pictures to share with %s</string>
+
+    <string name="profile_request_cancel_goto_dashboard">Cancel &#38; go to dashboard</string>
 
     <!-- Not translated yet -->
     <string name="net_err">Net Error</string>
     <string name="ok_str">OK</string>
-    <string name="calendar_day_word"></string>
+    <string name="calendar_day_word" />
     <string name="event_del">Delete</string>
     <string name="profile_login_fail">Login fail, please try again</string>
     <string name="token_invalid">Token invalid, please login again</string>
@@ -498,14 +479,23 @@
 
     <string name="event_time_select_error">Event end time invalid</string>
 
-    <string name="down_arrow">\u2193</string>
-    <string name="up_arrow">\u2191</string>
-    <string name="right_arrow">\u2192</string>
-
     <string name="profile_editor_save_success">save change success</string>
 
     <string name="profile_you_are_on">You are on</string>
     <string name="profile_request_access">Request access</string>
-    <string name="profile_request_cancel_goto_dashboard">Cancel &#38; go to dashboard</string>
+
+    <!-- *************************************************************************************** -->
+    <!-- Special character: Warning DO NOT translate below -->
+    <string name="down_arrow" translatable="false">\u2193</string>
+    <string name="up_arrow" translatable="false">\u2191</string>
+    <string name="right_arrow" translatable="false">\u2192</string>
+
+    <!-- Language: Warning DO NOT translate below -->
+    <string name="language_en" translatable="false">"English"</string>
+    <string name="language_zh_tw" translatable="false">"繁體中文"</string>
+    <string name="language_zh_cn" translatable="false">"简体中文"</string>
+    <string name="language_ru" translatable="false">"русский"</string>
+    <string name="language_es" translatable="false">"español"</string>
+    <string name="language_ja" translatable="false">"日本語"</string>
 
 </resources>

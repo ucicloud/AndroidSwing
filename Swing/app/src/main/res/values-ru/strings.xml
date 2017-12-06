@@ -89,6 +89,7 @@
     <string name="dashboard_progress_again">Попытайся еще раз</string>
     <string name="dashboard_progress_last">Вернуться к последней синхронизации</string>
     <string name="dashboard_progress_server_not_reach">Сервер не найден</string>
+    <string name="dashboard_progress_enable_gps">включите GPS</string>
 
     <!-- FragmentDashboardRequest -->
     <string name="dashboard_request_request">Разрешить доступ</string>
@@ -209,8 +210,8 @@
     <string name="signup_login_processing">Идет обработка</string>
     <string name="signup_login_wait">Пожалуйста, подождите&#8230;</string>
 
-    <string name="signup_login_enter">Enter</string>
-    <string name="signup_login_reset_password">Reset password</string>
+    <string name="signup_login_enter">вводить</string>
+    <string name="signup_login_reset_password">Сброс пароля</string>
 
     <!-- FragmentSignupLanguage -->
     <string name="signup_language_message">Пожалуйста,\nвыбери язык</string>
@@ -250,7 +251,7 @@
     <string name="watch_have_yes">Да</string>
     <string name="watch_have_no">Нет</string>
 
-    <string name="watch_have_message">Please have your watch nearby</string>
+    <string name="watch_have_message">Часы должны находиться поблизости</string>
 
     <!-- FragmentWatchOwner -->
     <string name="watch_owner_message">Зарегистрировать часы</string>
@@ -265,9 +266,9 @@
     <string name="watch_profile_wait">Пожалуйста, подождите&#8230;</string>
     <string name="watch_profile_zip_code">Почтовый индекс</string>
 
-    <string name="watch_profile_first_name">Kid\'s first name</string>
-    <string name="watch_profile_last_name">Kid\'s last name</string>
-    <string name="watch_profile_save">Save</string>
+    <string name="watch_profile_first_name">Имя ребенка</string>
+    <string name="watch_profile_last_name">Фамилия ребенка</string>
+    <string name="watch_profile_save">Сохранить</string>
 
     <!-- FragmentWatchPurchase -->
     <string name="watch_purchase_message">Ты хочешь\nкупить их?</string>
@@ -288,9 +289,9 @@
     <string name="watch_request_add">Добавить</string>
     <string name="watch_request_search_again">Повторить поиск</string>
 
-    <string name="watch_request_access">Request access</string>
-    <string name="watch_request_access_pending">Request access pending</string>
-    <string name="watch_request_cancel_and_dashboard">Cancel &amp; go to Dashboard</string>
+    <string name="watch_request_access">Разрешить доступ</string>
+    <string name="watch_request_access_pending">Запрос на доступ в обработке</string>
+    <string name="watch_request_cancel_and_dashboard">Отменить и перейти на панель инструментов</string>
 
     <!-- FragmentWatchSearch -->
     <string name="watch_search_searching">Идет поиск</string>
@@ -339,6 +340,8 @@
     <string name="event_alarm_dinner_time">Время ужинать</string>
     <string name="event_alarm_afternoon_snack_time">Время полдничать</string>
     <string name="event_alarm_review_the_backpack">Подготовить рюкзак</string>
+    <string name="event_alarm_lesson_time">Время урока</string>
+    <string name="event_alarm_time_to_go_home">Пора домой</string>
 
     <!-- Events Repeat -->
     <string name="event_repeat_monthly">Ежемесячно</string>
@@ -389,12 +392,75 @@
     <string name="dialog_sync_header">Sync Data</string>
     <string name="dialog_sync_skip_button">Skip</string>
     <string name="dialog_sync_sync_button">Синхронизация</string>
-    <string name="event_alarm_lesson_time">Tiempo de la lección</string>
-    <string name="event_alarm_time_to_go_home">Tiempo de ir a casa</string>
-    <string name="dashboard_progress_enable_gps">включите GPS</string>
-
 
     <!--new string 20171027-->
+    <string name="profile_option_edit">Редактировать профиль</string>
+    <string name="profile_option_change_password">Изменить пароль</string>
+    <string name="profile_option_watch_share">Ваши часы доступны другим</string>
+    <string name="profile_option_switch">Переключить часы</string>
+    <string name="profile_option_language">Язык</string>
+    <string name="profile_logout_confirmation">Запрос на доступ в обработке</string>
+    <string name="profile_logout_confirm_btn">Да, я уверен</string>
+    <string name="profile_logout_cancel_btn">Отменить</string>
+    <string name="profile_take_photo">Сделайте новый снимок</string>
+    <string name="profile_choose_from_library">Выбрать фотографию</string>
+    <string name="profile_cut_pic_note">Используйте палец, чтобы отрегулировать положение изображения</string>
+
+    <string name="dashboard_emotion_today_summary">Итоги дня</string>
+    <string name="dashboard_emotion_indoor_steps">Внутренние ступени</string>
+    <string name="dashboard_emotion_outdoor_steps">Наружные ступени</string>
+    <string name="dashboard_emotion_uv_exposure">УФ воздействие</string>
+    <string name="dashboard_emotion_hours">часов</string>
+    <string name="dashboard_emotion_mins">минут</string>
+    <string name="dashboard_emotion_activity">Занятие</string>
+    <string name="dashboard_emotion_uv_detection">УФ обнаружение</string>
+    <string name="dashboard_chart_activity">Занятие</string>
+    <string name="dashboard_chart_distance">Расстояние</string>
+    <string name="dashboard_chart_flights">Ступени</string>
+
+    <string name="calendar_okay">Хорошо</string>
+
+    <string name="introduction_alarm">Событиям на часах будут присвоены звуковые сигналы.</string>
+    <string name="introduction_calendar_month">Пожалуйста, проведите синхронизацию с часами после редактирования событий.</string>
+    <string name="introduction_todo_detail">Отредактируйте существующее расписание, нажав на значок пера.</string>
+    <string name="introduction_calendar_today">Нажмите на дату или событие, чтобы увидеть полное расписание.</string>
+
+    <string name="profile_edit_kids_profile">Изменить профиль ребенка</string>
+    <string name="profile_switch_to_account">Перейти к этой учетной записи</string>
+    <string name="title_kids_profile">Профиль ребенка</string>
+
+    <string name="profile_kids_switch_tip">Вы действительно хотите переключиться на эту учетную запись?</string>
+    <string name="profile_kids_switch_done_tip">Готово.Сейчас вы находитесь в этой учетной записи.</string>
+    <string name="profile_cancel_request_kids_tip">Вы действительно хотите отменить этот запрос?</string>
+    <string name="profile_title_switch_account">Переключить учетные записи</string>
+
+    <string name="pending">В ожидании</string>
+
+    <string name="cancel_kids_request">Отменить запрос</string>
+    <string name="request_kids_note">Вы запросили доступ к часам %s.</string>
+    <string name="profile_title_request_to">Запрос на</string>
+    <string name="profile_title_request_from">Запрос от</string>
+
+    <string name="profile_got_request_tip">У вас есть запрос</string>
+    <string name="profile_got_request_note">У вас есть запрос от %1$s</string>
+    <string name="profile_accept_request_from">Принять</string>
+    <string name="profile_confirm">Подтвердить</string>
+    <string name="profile_decline_request_from">Отклонить</string>
+
+    <string name="profile_sharing_now">Дать доступ!</string>
+    <string name="profile_sharing_now_note">Часы %1$s теперь доступны с %2$s.</string>
+    <string name="profile_stop_share">Вы отключили доступ для %s?</string>
+
+    <string name="profile_switch_account_tip">*Нажмите на фотографии профиля, чтобы переключить учетную запись</string>
+
+    <string name="profile_kids_remove_tip">Вы действительно хотите удалить эту учетную запись?</string>
+    <string name="profile_kids_after_remove_tip">Эта учетная запись была удалена.</string>
+    <string name="profile_kids_select_watch_share">Выберите часы для подключения</string>
+    <string name="profile_kids_select_watch_share_tip">Нажмите одну или несколько фотографий профиля, чтобы подключиться к %s</string>
+
+    <string name="profile_request_cancel_goto_dashboard">Отменить и перейти на панель инструментов</string>
+
+    <!-- Not translated yet -->
     <string name="net_err">Net Error</string>
     <string name="ok_str">OK</string>
 </resources>

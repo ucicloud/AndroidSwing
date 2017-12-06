@@ -89,6 +89,7 @@
     <string name="dashboard_progress_again">もう一度試してみてください</string>
     <string name="dashboard_progress_last">前回の接続したデータに移動する</string>
     <string name="dashboard_progress_server_not_reach">サーバーに接続できません</string>
+    <string name="dashboard_progress_enable_gps">あなたのGPSを有効にしてください</string>
 
     <!-- FragmentDashboardRequest -->
     <string name="dashboard_request_request">時計へのアクセスをリクエストします</string>
@@ -339,6 +340,8 @@
     <string name="event_alarm_dinner_time">夕食の時間です</string>
     <string name="event_alarm_afternoon_snack_time">おやつの時間です</string>
     <string name="event_alarm_review_the_backpack">明日の準備をしましょう</string>
+    <string name="event_alarm_lesson_time">習い事の時間です</string>
+    <string name="event_alarm_time_to_go_home">お家に帰る時間です</string>
 
     <!-- Events Repeat -->
     <string name="event_repeat_monthly">毎月</string>
@@ -384,13 +387,11 @@
     <string name="error_subhost_deny_400">パラメータエラーかタイプミスです</string>
     <string name="error_subhost_remove_kid_400">パラメータエラーかタイプミスです</string>
     <string name="error_subhost_remove_kid_403">ユーザーが許可されていません</string>
+
     <string name="dialog_sync_content">イベントを編集すると、時計のシンクロをして下さい。</string>
     <string name="dialog_sync_header">Sync Data</string>
     <string name="dialog_sync_skip_button">Skip</string>
     <string name="dialog_sync_sync_button">接続</string>
-    <string name="event_alarm_lesson_time">習い事の時間です</string>
-    <string name="event_alarm_time_to_go_home">お家に帰る時間です</string>
-    <string name="dashboard_progress_enable_gps">あなたのGPSを有効にしてください</string>
 
     <!--new string 20171027-->
     <string name="profile_option_edit">プロフィール編集</string>
@@ -456,6 +457,8 @@
     <string name="profile_kids_after_remove_tip">このアカウントは削除されました</string>
     <string name="profile_kids_select_watch_share">Select watch to share</string>
     <string name="profile_kids_select_watch_share_tip">１枚か複数のプロフィール写真をタップし、%sと共有する</string>
+
+    <string name="profile_request_cancel_goto_dashboard">取り消す＆ダッシュボードへ</string>
 
     <!-- Not translated yet -->
     <string name="net_err">Net Error</string>
