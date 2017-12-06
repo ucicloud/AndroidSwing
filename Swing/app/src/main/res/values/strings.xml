@@ -499,7 +499,7 @@
     <string name="language_es" translatable="false">"español"</string>
     <string name="language_ja" translatable="false">"日本語"</string>
 
-    <string name="error_email_null">Email null</string>
+    <string name="error_email_null">Email is null</string>
     <string name="normal_err">fail[%1$d], please try again</string>
 
 </resources>
