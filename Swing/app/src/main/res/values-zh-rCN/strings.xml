@@ -89,6 +89,7 @@
     <string name="dashboard_progress_again">"重试"</string>
     <string name="dashboard_progress_last">"使用最后的记录"</string>
     <string name="dashboard_progress_server_not_reach">"Can't Reach Server!"</string>
+    <string name="dashboard_progress_enable_gps">" 请启动GPS"</string>
 
     <!-- FragmentDashboardRequest -->
     <string name="dashboard_request_request">"发出请求"</string>
@@ -339,6 +340,8 @@
     <string name="event_alarm_dinner_time">"晚餐时间"</string>
     <string name="event_alarm_afternoon_snack_time">"下午点心时间"</string>
     <string name="event_alarm_review_the_backpack">"检查书包"</string>
+    <string name="event_alarm_lesson_time">课程时间</string>
+    <string name="event_alarm_time_to_go_home">回家喽</string>
 
     <!-- Events Repeat -->
     <string name="event_repeat_monthly">"每月"</string>
@@ -389,10 +392,6 @@
     <string name="dialog_sync_header">Sync Data</string>
     <string name="dialog_sync_skip_button">Skip</string>
     <string name="dialog_sync_sync_button">同步</string>
-
-    <string name="event_alarm_lesson_time">课程时间</string>
-    <string name="event_alarm_time_to_go_home">回家喽</string>
-    <string name="dashboard_progress_enable_gps">" 请启动GPS"</string>
     
     <!--new string 20171027-->
     <string name="profile_option_edit">修改基本資料</string>
@@ -403,9 +402,9 @@
     <string name="profile_logout_confirmation">請問您是否確定登出？</string>
     <string name="profile_logout_confirm_btn">是的,我確定</string>
     <string name="profile_logout_cancel_btn">取消</string>
-    <string name="profile_take_photo">新しい写真を撮る</string>
+    <string name="profile_take_photo">重新拍照</string>
     <string name="profile_choose_from_library">從手機圖片資料庫中選擇</string>
-    <string name="profile_cut_pic_note">指で写真の位置を調整してください</string>
+    <string name="profile_cut_pic_note">調整您照片位置</string>
 
     <string name="dashboard_emotion_today_summary">本日總結</string>
     <string name="dashboard_emotion_indoor_steps">室內步數</string>
@@ -458,6 +457,8 @@
     <string name="profile_kids_after_remove_tip">此帳號已經被刪除</string>
     <string name="profile_kids_select_watch_share">選擇手錶分享</string>
     <string name="profile_kids_select_watch_share_tip">請選擇頭像与%s進行分享</string>
+
+    <string name="profile_request_cancel_goto_dashboard">取消或進入Dashboard</string>
 
     <!-- Not translated yet -->
     <string name="net_err">Net Error</string>

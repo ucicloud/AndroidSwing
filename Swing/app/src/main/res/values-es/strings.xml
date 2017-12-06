@@ -89,6 +89,7 @@
     <string name="dashboard_progress_again">Inténtalo de nuevo</string>
     <string name="dashboard_progress_last">Volver a la última sincronización</string>
     <string name="dashboard_progress_server_not_reach">Servidor no encontrado</string>
+    <string name="dashboard_progress_enable_gps">por favor active su GPS</string>
 
     <!-- FragmentDashboardRequest -->
     <string name="dashboard_request_request">Permitir acceso</string>
@@ -209,8 +210,8 @@
     <string name="signup_login_processing">Procesando</string>
     <string name="signup_login_wait">Por favor, espera&#8230;</string>
 
-    <string name="signup_login_enter">Enter</string>
-    <string name="signup_login_reset_password">Reset password</string>
+    <string name="signup_login_enter">entrar</string>
+    <string name="signup_login_reset_password">Restablecer contraseña</string>
 
     <!-- FragmentSignupLanguage -->
     <string name="signup_language_message">Por favor, selecciona\ntu idioma</string>
@@ -250,7 +251,7 @@
     <string name="watch_have_yes">Sí</string>
     <string name="watch_have_no">No</string>
 
-    <string name="watch_have_message">Please have your watch nearby</string>
+    <string name="watch_have_message">Por favor, ten tu reloj cerca</string>
 
     <!-- FragmentWatchOwner -->
     <string name="watch_owner_message">Registra tu reloj</string>
@@ -265,9 +266,9 @@
     <string name="watch_profile_wait">Por favor, espera&#8230;</string>
     <string name="watch_profile_zip_code">Código Postal</string>
 
-    <string name="watch_profile_first_name">Kid\'s first name</string>
-    <string name="watch_profile_last_name">Kid\'s last name</string>
-    <string name="watch_profile_save">Save</string>
+    <string name="watch_profile_first_name">Nombre del niño</string>
+    <string name="watch_profile_last_name">Apellido del niño</string>
+    <string name="watch_profile_save">Guardar</string>
 
     <!-- FragmentWatchPurchase -->
     <string name="watch_purchase_message">¿Quieres\ncomprar uno?</string>
@@ -288,9 +289,9 @@
     <string name="watch_request_add">Añadir</string>
     <string name="watch_request_search_again">Buscar de nuevo</string>
 
-    <string name="watch_request_access">Request access</string>
-    <string name="watch_request_access_pending">Request access pending</string>
-    <string name="watch_request_cancel_and_dashboard">Cancel &amp; go to Dashboard</string>
+    <string name="watch_request_access">Permitir acceso</string>
+    <string name="watch_request_access_pending">Solicitud de acceso pendiente</string>
+    <string name="watch_request_cancel_and_dashboard">Cancelar e ir al panel</string>
 
     <!-- FragmentWatchSearch -->
     <string name="watch_search_searching">Buscando</string>
@@ -339,6 +340,8 @@
     <string name="event_alarm_dinner_time">Hora de cenar</string>
     <string name="event_alarm_afternoon_snack_time">Hora de la merienda</string>
     <string name="event_alarm_review_the_backpack">Revisar la mochila</string>
+    <string name="event_alarm_lesson_time">Tiempo de la lección</string>
+    <string name="event_alarm_time_to_go_home">Tiempo de ir a casa</string>
 
     <!-- Events Repeat -->
     <string name="event_repeat_monthly">Mensualmente</string>
@@ -389,7 +392,72 @@
     <string name="dialog_sync_header">Sync Data</string>
     <string name="dialog_sync_skip_button">Skip</string>
     <string name="dialog_sync_sync_button">Sincronizar</string>
-    <string name="event_alarm_lesson_time">Время урока</string>
-    <string name="event_alarm_time_to_go_home">Пора домой</string>
-    <string name="dashboard_progress_enable_gps">por favor active su GPS</string>
+
+    <!--new string 20171027-->
+    <string name="profile_option_edit">Editar perfil</string>
+    <string name="profile_option_change_password">Cambiar contraseña</string>
+    <string name="profile_option_watch_share">Su reloj compartido con otros</string>
+    <string name="profile_option_switch">Cambiar reloj</string>
+    <string name="profile_option_language">Idioma</string>
+    <string name="profile_logout_confirmation">¿Estás seguro de cerrar la sesión?</string>
+    <string name="profile_logout_confirm_btn">Sí, estoy seguro</string>
+    <string name="profile_logout_cancel_btn">Cancelar</string>
+    <string name="profile_take_photo">Tomar una nueva foto</string>
+    <string name="profile_choose_from_library">Seleccionar foto</string>
+    <string name="profile_cut_pic_note">Usar su dedo para ajustar la posición de la foto</string>
+
+    <string name="dashboard_emotion_today_summary">Resumen de hoy</string>
+    <string name="dashboard_emotion_indoor_steps">Pasos interiores</string>
+    <string name="dashboard_emotion_outdoor_steps">Pasos exterior</string>
+    <string name="dashboard_emotion_uv_exposure">Exposición UV</string>
+    <string name="dashboard_emotion_hours">horas</string>
+    <string name="dashboard_emotion_mins">minuto</string>
+    <string name="dashboard_emotion_activity">Actividad</string>
+    <string name="dashboard_emotion_uv_detection">Detección UV</string>
+    <string name="dashboard_chart_activity">Actividad</string>
+    <string name="dashboard_chart_distance">Distancia</string>
+    <string name="dashboard_chart_flights">Escalones</string>
+
+    <string name="calendar_okay">bueno</string>
+
+    <string name="introduction_alarm">Los eventos tendrán alertas de sonido en su reloj.</string>
+    <string name="introduction_calendar_month">Por favor, sincronice con su reloj después de editar eventos.</string>
+    <string name="introduction_todo_detail">Edite su horario existente pulsando en el icono del bolígrafo.</string>
+    <string name="introduction_calendar_today">Pulse en la fecha o evento para ver el horario completo para hoy.</string>
+
+    <string name="profile_edit_kids_profile">Editar el perfil para niños</string>
+    <string name="profile_switch_to_account">Cambiar a esta cuenta</string>
+    <string name="title_kids_profile">Perfil para niños</string>
+
+    <string name="profile_kids_switch_tip">¿Está seguro de cambiar a esta cuenta?</string>
+    <string name="profile_kids_switch_done_tip">Hecho.Está en esta cuenta ahora.</string>
+    <string name="profile_cancel_request_kids_tip">¿Está seguro que desea cancelar esta solicitud?</string>
+    <string name="profile_title_switch_account">Cambiar cuentas</string>
+
+    <string name="pending">Pendiente</string>
+
+    <string name="cancel_kids_request">Cancelar solicitud</string>
+    <string name="request_kids_note">Tiene peticiones de acceso al reloj de %s.</string>
+    <string name="profile_title_request_to">Pedir a</string>
+    <string name="profile_title_request_from">Petición de</string>
+
+    <string name="profile_got_request_tip">Tiene una solicitud.</string>
+    <string name="profile_got_request_note">Tiene una solicitud de %1$s</string>
+    <string name="profile_accept_request_from">Aceptar</string>
+    <string name="profile_confirm">Confirmar</string>
+    <string name="profile_decline_request_from">Rechazar</string>
+
+    <string name="profile_sharing_now">¡Compartiendo ahora!</string>
+    <string name="profile_sharing_now_note">El reloj de %1$s está compartiendo con %2$s ahora.</string>
+    <string name="profile_stop_share">¿Está seguro de no compartir con %s?</string>
+
+    <string name="profile_switch_account_tip">*Pulse en las fotos de perfil para cambiar cuentas</string>
+
+    <string name="profile_kids_remove_tip">¿Está seguro de eliminar esta cuenta?</string>
+    <string name="profile_kids_after_remove_tip">Esta cuenta ha sido eliminada.</string>
+    <string name="profile_kids_select_watch_share">Seleccione el reloj para compartir</string>
+    <string name="profile_kids_select_watch_share_tip">Por favor, pulse en una o más fotos de perfil para compartir con %s</string>
+
+    <string name="profile_request_cancel_goto_dashboard">Cancelar e ir al panel</string>
+
 </resources>
