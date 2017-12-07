@@ -76,7 +76,7 @@
     <string name="dashboard_emotion_excellent">Excellent!</string>
     <string name="dashboard_emotion_almost">Almost There!</string>
     <string name="dashboard_emotion_below">Below Average!</string>
-    <string name="dashboard_emotion_steps">steps</string>
+    <string name="dashboard_emotion_steps">Steps</string>
 
     <!-- FragmentDashboardProgress -->
     <string name="dashboard_progress_searching">Searching\nfor your\nWatch</string>
@@ -141,10 +141,10 @@
     <string name="profile_kid_name_not_blank">Kid Name is Blank</string>
 
     <!-- FragmentProfileMain -->
-    <string name="profile_main_hosting">My Hosting Watch</string>
-    <string name="profile_main_shared">Watch shared with Me</string>
-    <string name="profile_main_request_to">You\'ve Sent Request to</string>
-    <string name="profile_main_request_from">You\'ve Received %d Request From</string>
+    <string name="profile_main_hosting">My devices</string>
+    <string name="profile_main_shared">Devices shared with Me</string>
+    <string name="profile_main_request_to">Your pending request to</string>
+    <string name="profile_main_request_from">You have %d requests from</string>
 
     <!-- FragmentProfileOption -->
     <string name="profile_option_account">Account</string>
@@ -418,6 +418,9 @@
     <string name="dashboard_chart_activity">Activity</string>
     <string name="dashboard_chart_distance">Distance</string>
     <string name="dashboard_chart_flights">Flights</string>
+    <string name="dashboard_chart_goal">Goal</string>
+    <string name="dashboard_chart_start">Start</string>
+    <string name="dashboard_chart_end">End</string>
 
     <string name="calendar_okay">Okay</string>
 
@@ -460,12 +463,17 @@
     <string name="profile_kids_select_watch_share_tip">Please tap on one or more profile pictures to share with %s</string>
 
     <string name="profile_request_cancel_goto_dashboard">Cancel &#38; go to dashboard</string>
+    <string name="profile_request_access">Request access</string>
+
+    <string name="profile_you_are_on">You are on</string>
+
+    <string name="ok_str">OK</string>
+    <string name="event_del">Delete</string>
+    <string name="calendar_day_word" />
+    <string name="calendar_todo_del">Delete</string>
 
     <!-- Not translated yet -->
     <string name="net_err">Net Error</string>
-    <string name="ok_str">OK</string>
-    <string name="calendar_day_word"></string>
-    <string name="event_del">Delete</string>
     <string name="profile_login_fail">Login fail, please try again</string>
     <string name="token_invalid">Token invalid, please login again</string>
     <string name="login_data_invalid">Login state invalid, please login again</string>
@@ -474,16 +482,15 @@
     <string name="dashboard_enqueue_fail_common">Response fail, please try again</string>
     <string name="save_todo_done_statue_err">Save fail, try again[%1$d]</string>
 
-    <string name="calendar_todo_del">Delete</string>
     <string name="dashboard_progress_sync_fail">Sync Fail</string>
     <string name="calendar_hide_this_reminder">Hide this reminder</string>
 
     <string name="event_time_select_error">Event end time invalid</string>
 
-    <string name="profile_editor_save_success">save change success</string>
+    <string name="profile_editor_save_success">Save change success</string>
 
-    <string name="profile_you_are_on">You are on</string>
-    <string name="profile_request_access">Request access</string>
+    <string name="error_email_null">Email is null</string>
+    <string name="normal_err">fail[%1$d], please try again</string>
 
     <!-- *************************************************************************************** -->
     <!-- Special character: Warning DO NOT translate below -->
@@ -492,14 +499,15 @@
     <string name="right_arrow" translatable="false">\u2192</string>
 
     <!-- Language: Warning DO NOT translate below -->
-    <string name="language_en" translatable="false">"English"</string>
     <string name="language_zh_tw" translatable="false">"繁體中文"</string>
-    <string name="language_zh_cn" translatable="false">"简体中文"</string>
-    <string name="language_ru" translatable="false">"русский"</string>
-    <string name="language_es" translatable="false">"español"</string>
+    <!--<string name="language_zh_tw" translatable="false">"Chinese traditional"</string>-->
+    <string name="language_en" translatable="false">"English"</string>
     <string name="language_ja" translatable="false">"日本語"</string>
-
-    <string name="error_email_null">Email is null</string>
-    <string name="normal_err">fail[%1$d], please try again</string>
+    <!--<string name="language_ja" translatable="false">"Japanese"</string>-->
+    <string name="language_ru" translatable="false">"русский"</string>
+    <!--<string name="language_ru" translatable="false">"Russian"</string>-->
+    <string name="language_es" translatable="false">"español"</string>
+    <!--<string name="language_es" translatable="false">"Spanish"</string>-->
+    <!--<string name="language_zh_cn" translatable="false">"简体中文"</string>-->
 
 </resources>

@@ -8,6 +8,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.BetterViewPager;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,7 @@ import com.kidsdynamic.swing.domain.DeviceManager;
 import com.kidsdynamic.swing.domain.KidActivityManager;
 import com.kidsdynamic.swing.model.KidsEntityBean;
 import com.kidsdynamic.swing.model.WatchActivity;
+import com.kidsdynamic.swing.utils.DataUtil;
 import com.kidsdynamic.swing.utils.SwingFontsCache;
 import com.kidsdynamic.swing.view.ViewChartBarVertical;
 import com.kidsdynamic.swing.view.ViewChartToday;
@@ -110,18 +112,24 @@ public class DashboardChartSingleFragment extends DashboardBaseFragment {
 //        view_right_action.setPadding(0, 0, right, 0);
 
         Bundle args = getArguments();
-        int door = null != args ? args.getInt(DOOR_TYPE, INDOOR) : INDOOR;
+        Integer door = DataUtil.getInstance().getDoorTypeInSingleChart();
+        if (null == door) {
+            door = null != args ? args.getInt(DOOR_TYPE, INDOOR) : INDOOR;
+        }
         mRadioButtonIndoor.setChecked(INDOOR == door);
         mRadioButtonOutdoor.setChecked(OUTDOOR == door);
         mRadioGroup.setOnCheckedChangeListener(onCheckedChangeListener);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Bundle args = getArguments();
-        WatchActivity wa = null != args ? (WatchActivity) args.getSerializable(WATCH_ACTIVITY) : null;
-        int emotion = getEmotionWithTodayActivity(wa);
+//    }
+//
+//    @Override
+//    public void onResume() {
+//        super.onResume();
+//        Bundle args = getArguments();
+        Integer emotion = DataUtil.getInstance().getEmotionInSingleChart();
+        if (null == emotion) {
+            WatchActivity wa = null != args ? (WatchActivity) args.getSerializable(WATCH_ACTIVITY) : null;
+            emotion = getEmotionWithTodayActivity(wa);
+        }
 
         mViewSelector.setOnSelectListener(mSelectorListener);
 
@@ -139,16 +147,44 @@ public class DashboardChartSingleFragment extends DashboardBaseFragment {
 
         setEmotion(emotion);
 
-        int chartType = null != args ? args.getInt(CHART_TYPE, CHART_TODAY) : CHART_TODAY;
-        showChart(chartType);
-        mCurrentChart = chartType;
+        Integer chartType = DataUtil.getInstance().getChartTypeInSingleChart();
+        if (null == chartType) {
+            chartType = null != args ? args.getInt(CHART_TYPE, CHART_TODAY) : CHART_TODAY;
+            showChart(chartType);
+            mCurrentChart = chartType;
+        } else {
+            showChart(chartType);
+            mCurrentChart = chartType;
+            loadData();
+        }
+    }
 
-        loadData();
+    @Override
+    public void onResume() {
+        super.onResume();
+        View root = getView();
+        if (null == root) {
+            return;
+        }
+        root.setFocusableInTouchMode(true);
+        root.requestFocus();
+        root.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP) {
+                    clearSavedData();
+                    getFragmentManager().popBackStack();
+                    return true;
+                }
+                return false;
+            }
+        });
     }
 
     @OnClick(R.id.main_toolbar_action1)
     public void onToolbarAction1() {
 //        mActivityMain.popFragment();
+        clearSavedData();
         getFragmentManager().popBackStack();
     }
 
@@ -264,8 +300,12 @@ public class DashboardChartSingleFragment extends DashboardBaseFragment {
         @Override
         protected void onPostExecute(List<WatchActivity> watchActivities) {
             super.onPostExecute(watchActivities);
-            theFragment.handlePostExecute(watchActivities);
+            try {
+                theFragment.handlePostExecute(watchActivities);
 //            theFragment.finishLoadingDialog();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -287,6 +327,7 @@ public class DashboardChartSingleFragment extends DashboardBaseFragment {
     private ViewChartToday.OnAxisRectClickListener onAxisRectClickListener = new ViewChartToday.OnAxisRectClickListener() {
         @Override
         public void onAxisRectClick(float x, float y) {
+            setSavedData();
             setFragment(DashboardListFragment.newInstance(getDoor(), mCurrentChart, mEmotion), true);
         }
     };
@@ -294,6 +335,7 @@ public class DashboardChartSingleFragment extends DashboardBaseFragment {
     private ViewChartBarVertical.onBarClickListener onBarClickListener = new ViewChartBarVertical.onBarClickListener() {
         @Override
         public void onBarClick(int index, float x, float y) {
+            setSavedData();
             setFragment(DashboardListFragment.newInstance(getDoor(), mCurrentChart, mEmotion), true);
         }
     };
@@ -304,6 +346,20 @@ public class DashboardChartSingleFragment extends DashboardBaseFragment {
             setFragment(DashboardListFragment.newInstance(getDoor(), mCurrentChart, mEmotion), true);
         }
     };
+
+    private void setSavedData() {
+        DataUtil.getInstance().setChartTypeInSingleChart(mCurrentChart);
+        DataUtil.getInstance().setDoorTypeInSingleChart(getDoor());
+        DataUtil.getInstance().setEmotionInSingleChart(mEmotion);
+        DataUtil.getInstance().setWatchActivitiesInSingleChart(watchActivities);
+    }
+
+    private void clearSavedData() {
+        DataUtil.getInstance().setChartTypeInSingleChart(null);
+        DataUtil.getInstance().setDoorTypeInSingleChart(null);
+        DataUtil.getInstance().setEmotionInSingleChart(null);
+        DataUtil.getInstance().setWatchActivitiesInSingleChart(null);
+    }
 
     private BetterViewPager.OnPageChangeListener onPageChangeListener = new ViewPager.OnPageChangeListener() {
         @Override
@@ -599,25 +655,20 @@ public class DashboardChartSingleFragment extends DashboardBaseFragment {
         mViewChartToday.setOnAxisRectClickListener(onAxisRectClickListener);
         list.add(chartToday);
 
-        String chartTitle = getString(R.string.dashboard_chart_steps);
-
         View chartWeek = inflater.inflate(R.layout.layout_chart_vertical_single, mViewPager, false);
         mViewChartWeek = (ViewChartBarVertical) chartWeek.findViewById(R.id.dashboard_chart_vertical);
-        mViewChartWeek.setTitle(chartTitle);
 //        mViewChartWeek.setOnBarClickListener(onBarClickListener);
         mViewChartWeek.setOnClickListener(onChartClickListener);
         list.add(chartWeek);
 
         View chartMonth = inflater.inflate(R.layout.layout_chart_vertical_single, mViewPager, false);
         mViewChartMonth = (ViewChartBarVertical) chartMonth.findViewById(R.id.dashboard_chart_vertical);
-        mViewChartMonth.setTitle(chartTitle);
 //        mViewChartMonth.setOnBarClickListener(onBarClickListener);
         mViewChartMonth.setOnClickListener(onChartClickListener);
         list.add(chartMonth);
 
         View chartYear = inflater.inflate(R.layout.layout_chart_vertical_single, mViewPager, false);
         mViewChartYear = (ViewChartBarVertical) chartYear.findViewById(R.id.dashboard_chart_vertical);
-        mViewChartYear.setTitle(chartTitle);
 //        mViewChartYear.setOnBarClickListener(onBarClickListener);
         mViewChartYear.setOnClickListener(onChartClickListener);
         list.add(chartYear);

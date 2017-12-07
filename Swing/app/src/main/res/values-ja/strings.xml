@@ -142,9 +142,9 @@
 
     <!-- FragmentProfileMain -->
     <string name="profile_main_hosting">私の時計</string>
-    <string name="profile_main_shared">わたしと共有する時計	</string>
-    <string name="profile_main_request_to">リクエストを送りました</string>
-    <string name="profile_main_request_from">You\'ve Received %d Request From</string>
+    <string name="profile_main_shared">わたしと共有する時計</string>
+    <string name="profile_main_request_to">への保留中のリクエスト</string>
+    <string name="profile_main_request_from">から %d のリクエストがあります</string>
 
     <!-- FragmentProfileOption -->
     <string name="profile_option_account">アカウント</string>
@@ -407,8 +407,8 @@
     <string name="profile_cut_pic_note">指で写真の位置を調整してください</string>
 
     <string name="dashboard_emotion_today_summary">本日の概要</string>
-    <string name="dashboard_emotion_indoor_steps">屋内ステップ</string>
-    <string name="dashboard_emotion_outdoor_steps">屋外ステップ</string>
+    <string name="dashboard_emotion_indoor_steps">屋内\nステップ</string>
+    <string name="dashboard_emotion_outdoor_steps">屋外\nステップ</string>
     <string name="dashboard_emotion_uv_exposure">紫外線量</string>
     <string name="dashboard_emotion_hours">時</string>
     <string name="dashboard_emotion_mins">分</string>
@@ -417,6 +417,9 @@
     <string name="dashboard_chart_activity">運動した量</string>
     <string name="dashboard_chart_distance">距離</string>
     <string name="dashboard_chart_flights">階段</string>
+    <string name="dashboard_chart_goal">目標</string>
+    <string name="dashboard_chart_start">開始時間</string>
+    <string name="dashboard_chart_end">終了時間</string>
 
     <string name="calendar_okay">はい</string>
 
@@ -459,9 +462,15 @@
     <string name="profile_kids_select_watch_share_tip">１枚か複数のプロフィール写真をタップし、%sと共有する</string>
 
     <string name="profile_request_cancel_goto_dashboard">取り消す＆ダッシュボードへ</string>
+    <string name="profile_request_access">アクセスをリクエストしますか？</string>
+
+    <string name="profile_you_are_on">あなたはこのアカウントでログインしています</string>
+
+    <string name="ok_str">はい</string>
+    <string name="event_del">削除</string>
+    <string name="calendar_day_word">日</string>
+    <string name="calendar_todo_del">削除</string>
 
     <!-- Not translated yet -->
     <string name="net_err">Net Error</string>
-    <string name="ok_str">OK</string>
-    <string name="calendar_day_word">日</string>
 </resources>

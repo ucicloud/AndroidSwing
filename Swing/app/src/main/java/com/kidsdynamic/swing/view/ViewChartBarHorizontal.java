@@ -268,12 +268,11 @@ public class ViewChartBarHorizontal extends ViewChart {
 
         float textX, textY;
         Rect textRect = new Rect();
-        String text = "Goal";
 
         mPaint.reset();
         mPaint.setTypeface(SwingFontsCache.getBoldType(getContext()));
         mPaint.setTextSize(mChartTextSize + 1);
-        mPaint.getTextBounds(text, 0, text.length(), textRect);
+        mPaint.getTextBounds(mGoalText, 0, mGoalText.length(), textRect);
         mPaint.setColor(mGoalColor);
 
         if (posX + textRect.width() + textPadding * 2 < getMeasuredWidth()) {
@@ -283,7 +282,7 @@ public class ViewChartBarHorizontal extends ViewChart {
         }
         textY = lineEndY + textPadding * 2;
 
-        canvas.drawText(text, textX, textY, mPaint);
+        canvas.drawText(mGoalText, textX, textY, mPaint);
     }
 
     private Rect makeChartRect() {

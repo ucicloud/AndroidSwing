@@ -86,9 +86,9 @@ public class ProfileLanguageFragment extends ProfileBaseFragment {
     private void initData() {
         Resources res = getResources();
         List<Where> whereList = new ArrayList<>();
-        whereList.add(new Where(res.getString(R.string.language_en), LanguageSpUtils.EN));
         whereList.add(new Where(res.getString(R.string.language_zh_tw), LanguageSpUtils.ZH_TW));
-        whereList.add(new Where(res.getString(R.string.language_zh_cn), LanguageSpUtils.ZH_CN));
+        whereList.add(new Where(res.getString(R.string.language_en), LanguageSpUtils.EN));
+//        whereList.add(new Where(res.getString(R.string.language_zh_cn), LanguageSpUtils.ZH_CN));
         whereList.add(new Where(res.getString(R.string.language_ja), LanguageSpUtils.JA));
         whereList.add(new Where(res.getString(R.string.language_ru), LanguageSpUtils.RU));
         whereList.add(new Where(res.getString(R.string.language_es), LanguageSpUtils.ES));

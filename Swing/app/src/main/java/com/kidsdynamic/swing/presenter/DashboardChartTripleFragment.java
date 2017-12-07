@@ -420,48 +420,35 @@ public class DashboardChartTripleFragment extends DashboardBaseFragment {
         mViewChartToday.setOnBarClickListener(onChartBarHorizontalClickListener);
         list.add(chartToday);
 
-        String chartTitleSteps = getString(R.string.dashboard_chart_steps);
-        String chartTitleDistance = getString(R.string.dashboard_chart_distance);
-        String chartTitleFloors = getString(R.string.dashboard_chart_flights);
-
         View chartWeek = inflater.inflate(R.layout.layout_chart_vertical_triple, mViewPager, false);
         mViewChartWeekSteps = (ViewChartBarVertical) chartWeek.findViewById(R.id.dashboard_chart_vertical_steps);
-        mViewChartWeekSteps.setTitle(chartTitleSteps);
         mViewChartWeekSteps.setOnBarClickListener(new OnChartBarVerticalListener(CHART_STEPS));
         mViewChartWeekDistance = (ViewChartBarVertical) chartWeek.findViewById(R.id.dashboard_chart_vertical_distance);
-        mViewChartWeekDistance.setTitle(chartTitleDistance);
         mViewChartWeekDistance.setOnBarClickListener(new OnChartBarVerticalListener(CHART_DISTANCE));
         mViewChartWeekDistance.setVisibility(isOnlyShowSteps ? View.GONE : View.VISIBLE);
         mViewChartWeekFloors = (ViewChartBarVertical) chartWeek.findViewById(R.id.dashboard_chart_vertical_floors);
-        mViewChartWeekFloors.setTitle(chartTitleFloors);
         mViewChartWeekFloors.setOnBarClickListener(new OnChartBarVerticalListener(CHART_FLOORS));
         mViewChartWeekFloors.setVisibility(isOnlyShowSteps ? View.GONE : View.VISIBLE);
         list.add(chartWeek);
 
         View chartMonth = inflater.inflate(R.layout.layout_chart_vertical_triple, mViewPager, false);
         mViewChartMonthSteps = (ViewChartBarVertical) chartMonth.findViewById(R.id.dashboard_chart_vertical_steps);
-        mViewChartMonthSteps.setTitle(chartTitleSteps);
         mViewChartMonthSteps.setOnBarClickListener(new OnChartBarVerticalListener(CHART_STEPS));
         mViewChartMonthDistance = (ViewChartBarVertical) chartMonth.findViewById(R.id.dashboard_chart_vertical_distance);
-        mViewChartMonthDistance.setTitle(chartTitleDistance);
         mViewChartMonthDistance.setOnBarClickListener(new OnChartBarVerticalListener(CHART_DISTANCE));
         mViewChartMonthDistance.setVisibility(isOnlyShowSteps ? View.GONE : View.VISIBLE);
         mViewChartMonthFloors = (ViewChartBarVertical) chartMonth.findViewById(R.id.dashboard_chart_vertical_floors);
-        mViewChartMonthFloors.setTitle(chartTitleFloors);
         mViewChartMonthFloors.setOnBarClickListener(new OnChartBarVerticalListener(CHART_FLOORS));
         mViewChartMonthFloors.setVisibility(isOnlyShowSteps ? View.GONE : View.VISIBLE);
         list.add(chartMonth);
 
         View chartYear = inflater.inflate(R.layout.layout_chart_vertical_triple, mViewPager, false);
         mViewChartYearSteps = (ViewChartBarVertical) chartYear.findViewById(R.id.dashboard_chart_vertical_steps);
-        mViewChartYearSteps.setTitle(chartTitleSteps);
         mViewChartYearSteps.setOnBarClickListener(new OnChartBarVerticalListener(CHART_STEPS));
         mViewChartYearDistance = (ViewChartBarVertical) chartYear.findViewById(R.id.dashboard_chart_vertical_distance);
-        mViewChartYearDistance.setTitle(chartTitleDistance);
         mViewChartYearDistance.setOnBarClickListener(new OnChartBarVerticalListener(CHART_DISTANCE));
         mViewChartYearDistance.setVisibility(isOnlyShowSteps ? View.GONE : View.VISIBLE);
         mViewChartYearFloors = (ViewChartBarVertical) chartYear.findViewById(R.id.dashboard_chart_vertical_floors);
-        mViewChartYearFloors.setTitle(chartTitleFloors);
         mViewChartYearFloors.setOnBarClickListener(new OnChartBarVerticalListener(CHART_FLOORS));
         mViewChartYearFloors.setVisibility(isOnlyShowSteps ? View.GONE : View.VISIBLE);
         list.add(chartYear);

@@ -141,10 +141,10 @@
     <string name="profile_kid_name_not_blank">姓名栏不可为空白</string>
 
     <!-- FragmentProfileMain -->
-    <string name="profile_main_hosting">"我的装置"</string>
-    <string name="profile_main_shared">"与我分享的装置"</string>
-    <string name="profile_main_request_to">"我所请求的装置"</string>
-    <string name="profile_main_request_from">"你有%d个请求"</string>
+    <string name="profile_main_hosting">"我的手表"</string>
+    <string name="profile_main_shared">"已分享对象"</string>
+    <string name="profile_main_request_to">"等待邀請請求"</string>
+    <string name="profile_main_request_from">"你有%d个请求来自"</string>
 
     <!-- FragmentProfileOption -->
     <string name="profile_option_account">"账号"</string>
@@ -407,8 +407,8 @@
     <string name="profile_cut_pic_note">調整您照片位置</string>
 
     <string name="dashboard_emotion_today_summary">本日總結</string>
-    <string name="dashboard_emotion_indoor_steps">室內步數</string>
-    <string name="dashboard_emotion_outdoor_steps">室外步數</string>
+    <string name="dashboard_emotion_indoor_steps">室內\n步數</string>
+    <string name="dashboard_emotion_outdoor_steps">室外\n步數</string>
     <string name="dashboard_emotion_uv_exposure">紫外線暴露狀態</string>
     <string name="dashboard_emotion_hours">時</string>
     <string name="dashboard_emotion_mins">分</string>
@@ -417,6 +417,9 @@
     <string name="dashboard_chart_activity">活動量</string>
     <string name="dashboard_chart_distance">距離</string>
     <string name="dashboard_chart_flights">爬樓</string>
+    <string name="dashboard_chart_goal">目標</string>
+    <string name="dashboard_chart_start">"开始时间"</string>
+    <string name="dashboard_chart_end">"结束时间"</string>
 
     <string name="calendar_okay">好</string>
 
@@ -459,9 +462,15 @@
     <string name="profile_kids_select_watch_share_tip">請選擇頭像与%s進行分享</string>
 
     <string name="profile_request_cancel_goto_dashboard">取消或進入Dashboard</string>
+    <string name="profile_request_access">啟動需求</string>
+
+    <string name="profile_you_are_on">您已在此帳號</string>
+
+    <string name="ok_str">确定</string>
+    <string name="event_del">删除</string>
+    <string name="calendar_day_word">日</string>
+    <string name="calendar_todo_del">删除</string>
 
     <!-- Not translated yet -->
     <string name="net_err">Net Error</string>
-    <string name="ok_str">OK</string>
-    <string name="calendar_day_word">日</string>
 </resources>

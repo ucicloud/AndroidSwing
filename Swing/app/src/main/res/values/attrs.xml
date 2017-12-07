@@ -98,6 +98,8 @@
         <attr name="axisVMax" format="float" />
         <attr name="axisVMin" format="float" />
         <attr name="goalColor" format="color" />
+        <attr name="goalText" format="reference|string" />
+        <attr name="titleText" format="reference|string" />
     </declare-styleable>
 
     <declare-styleable name="ViewDotIndicator">

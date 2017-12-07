@@ -14,7 +14,7 @@ public class WatchActivity implements Serializable {
     public Act mIndoor = new Act();
     public Act mOutdoor = new Act();
 
-    public static class Act {
+    public static class Act implements Serializable {
         public long mId;
         public String mMacId;
         public String mKidId;

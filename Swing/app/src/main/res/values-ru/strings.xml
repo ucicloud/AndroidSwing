@@ -143,8 +143,8 @@
     <!-- FragmentProfileMain -->
     <string name="profile_main_hosting">Мои часы</string>
     <string name="profile_main_shared">Часы предоставлены мне</string>
-    <string name="profile_main_request_to">Ты отправил запрос</string>
-    <string name="profile_main_request_from">Получен %d запрос от</string>
+    <string name="profile_main_request_to">Ваш запрос к в ожидании</string>
+    <string name="profile_main_request_from">У вас есть %d запросов от</string>
 
     <!-- FragmentProfileOption -->
     <string name="profile_option_account">Аккаунт</string>
@@ -407,8 +407,8 @@
     <string name="profile_cut_pic_note">Используйте палец, чтобы отрегулировать положение изображения</string>
 
     <string name="dashboard_emotion_today_summary">Итоги дня</string>
-    <string name="dashboard_emotion_indoor_steps">Внутренние ступени</string>
-    <string name="dashboard_emotion_outdoor_steps">Наружные ступени</string>
+    <string name="dashboard_emotion_indoor_steps">Внутренние\nступени</string>
+    <string name="dashboard_emotion_outdoor_steps">Наружные\nступени</string>
     <string name="dashboard_emotion_uv_exposure">УФ воздействие</string>
     <string name="dashboard_emotion_hours">часов</string>
     <string name="dashboard_emotion_mins">минут</string>
@@ -417,6 +417,9 @@
     <string name="dashboard_chart_activity">Занятие</string>
     <string name="dashboard_chart_distance">Расстояние</string>
     <string name="dashboard_chart_flights">Ступени</string>
+    <string name="dashboard_chart_goal">Цель</string>
+    <string name="dashboard_chart_start">Начинается</string>
+    <string name="dashboard_chart_end">Заканчивается</string>
 
     <string name="calendar_okay">Хорошо</string>
 
@@ -459,8 +462,15 @@
     <string name="profile_kids_select_watch_share_tip">Нажмите одну или несколько фотографий профиля, чтобы подключиться к %s</string>
 
     <string name="profile_request_cancel_goto_dashboard">Отменить и перейти на панель инструментов</string>
+    <string name="profile_request_access">Разрешить доступ</string>
+
+    <string name="profile_you_are_on">Вы находитесь на этом счету сейчас</string>
+
+    <string name="ok_str">Хорошо</string>
+    <string name="event_del">Удалить</string>
+    <string name="calendar_day_word" />
+    <string name="calendar_todo_del">Удалить</string>
 
     <!-- Not translated yet -->
     <string name="net_err">Net Error</string>
-    <string name="ok_str">OK</string>
 </resources>

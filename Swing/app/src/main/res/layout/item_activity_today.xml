@@ -25,7 +25,7 @@
                 android:gravity="start"
                 android:includeFontPadding="false"
                 android:minEms="3"
-                android:text="@string/calendar_event_start"
+                android:text="@string/dashboard_chart_start"
                 android:textColor="@color/color_gray_main"
                 android:textSize="12sp"
                 android:textStyle="bold" />
@@ -57,7 +57,7 @@
                 android:gravity="start"
                 android:includeFontPadding="false"
                 android:minEms="3"
-                android:text="@string/calendar_event_end"
+                android:text="@string/dashboard_chart_end"
                 android:textColor="@color/color_gray_main"
                 android:textSize="12sp"
                 android:textStyle="bold" />

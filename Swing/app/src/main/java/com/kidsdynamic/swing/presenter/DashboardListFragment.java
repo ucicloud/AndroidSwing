@@ -89,13 +89,19 @@ public class DashboardListFragment extends DashboardBaseFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         view_left_action.setImageResource(R.drawable.icon_left);
-        mRadioButtonIndoor.setChecked(true);
-        mRadioGroup.setOnCheckedChangeListener(onCheckedChangeListener);
 
         Bundle args = getArguments();
 
         mEmotion = args.getInt(EMOTION_INT, EMOTION_LOW);
         setEmotion(mEmotion);
+
+        int door = args.getInt(DOOR_TYPE, INDOOR);
+        if (INDOOR == door) {
+            mRadioButtonIndoor.setChecked(true);
+        } else {
+            mRadioButtonOutdoor.setChecked(true);
+        }
+        mRadioGroup.setOnCheckedChangeListener(onCheckedChangeListener);
 
         KidsEntityBean kid = DeviceManager.getFocusKidsInfo(getContext());
         if (null != kid) {
@@ -340,8 +346,12 @@ public class DashboardListFragment extends DashboardBaseFragment {
         @Override
         protected void onPostExecute(List<WatchActivity> watchActivities) {
             super.onPostExecute(watchActivities);
-            theFragment.handleHourlyData(watchActivities);
+            try {
+                theFragment.handleHourlyData(watchActivities);
 //            theFragment.finishLoadingDialog();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 

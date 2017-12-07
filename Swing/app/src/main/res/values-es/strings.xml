@@ -76,7 +76,7 @@
     <string name="dashboard_emotion_excellent">¡Excelente!</string>
     <string name="dashboard_emotion_almost">Casi en la media</string>
     <string name="dashboard_emotion_below">Por debajo de la media</string>
-    <string name="dashboard_emotion_steps">pasos</string>
+    <string name="dashboard_emotion_steps">Pasos</string>
 
     <!-- FragmentDashboardProgress -->
     <string name="dashboard_progress_searching">Buscando\ntu\nreloj</string>
@@ -143,8 +143,8 @@
     <!-- FragmentProfileMain -->
     <string name="profile_main_hosting">Mis relojes</string>
     <string name="profile_main_shared">Reloj compartido conmigo</string>
-    <string name="profile_main_request_to">Has enviado petición a</string>
-    <string name="profile_main_request_from">Has recibido %d petición de</string>
+    <string name="profile_main_request_to">Su solicitud pendiente a</string>
+    <string name="profile_main_request_from">Tiene %d peticiones de</string>
 
     <!-- FragmentProfileOption -->
     <string name="profile_option_account">Cuenta</string>
@@ -407,8 +407,8 @@
     <string name="profile_cut_pic_note">Usar su dedo para ajustar la posición de la foto</string>
 
     <string name="dashboard_emotion_today_summary">Resumen de hoy</string>
-    <string name="dashboard_emotion_indoor_steps">Pasos interiores</string>
-    <string name="dashboard_emotion_outdoor_steps">Pasos exterior</string>
+    <string name="dashboard_emotion_indoor_steps">Pasos\ninteriores</string>
+    <string name="dashboard_emotion_outdoor_steps">Pasos\nexterior</string>
     <string name="dashboard_emotion_uv_exposure">Exposición UV</string>
     <string name="dashboard_emotion_hours">horas</string>
     <string name="dashboard_emotion_mins">minuto</string>
@@ -417,6 +417,9 @@
     <string name="dashboard_chart_activity">Actividad</string>
     <string name="dashboard_chart_distance">Distancia</string>
     <string name="dashboard_chart_flights">Escalones</string>
+    <string name="dashboard_chart_goal">Gol</string>
+    <string name="dashboard_chart_start">Empieza</string>
+    <string name="dashboard_chart_end">Termina</string>
 
     <string name="calendar_okay">bueno</string>
 
@@ -459,5 +462,15 @@
     <string name="profile_kids_select_watch_share_tip">Por favor, pulse en una o más fotos de perfil para compartir con %s</string>
 
     <string name="profile_request_cancel_goto_dashboard">Cancelar e ir al panel</string>
+    <string name="profile_request_access">Permitir acceso</string>
 
+    <string name="profile_you_are_on">Estás en esta cuenta ahora</string>
+
+    <string name="ok_str">bueno</string>
+    <string name="event_del">Borrar</string>
+    <string name="calendar_day_word" />
+    <string name="calendar_todo_del">Borrar</string>
+
+    <!-- Not translated yet -->
+    <string name="net_err">Net Error</string>
 </resources>

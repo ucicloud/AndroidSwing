@@ -4,6 +4,7 @@ import android.content.res.Resources;
 import android.graphics.drawable.Animatable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,7 @@ import com.kidsdynamic.swing.domain.DeviceManager;
 import com.kidsdynamic.swing.domain.KidActivityManager;
 import com.kidsdynamic.swing.model.KidsEntityBean;
 import com.kidsdynamic.swing.model.WatchActivity;
+import com.kidsdynamic.swing.utils.DataUtil;
 import com.yy.base.utils.ToastCommon;
 
 import java.util.ArrayList;
@@ -113,6 +115,12 @@ public class DashboardEmotionFragment extends DashboardBaseFragment {
 //        animLoading = (Animatable) view_left_action.getDrawable();
 //        animLoading.start();
 
+        WatchActivity wa = DataUtil.getInstance().getWatchActivityInEmotionFragment();
+        if (null != wa) {
+            setWatchActivity(wa);
+            return;
+        }
+
         KidsEntityBean kid = DeviceManager.getFocusKidsInfo(getContext());
         if (null == kid) {
             return;
@@ -135,6 +143,28 @@ public class DashboardEmotionFragment extends DashboardBaseFragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        View root = getView();
+        if (null == root) {
+            return;
+        }
+        root.setFocusableInTouchMode(true);
+        root.requestFocus();
+        root.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP) {
+                    DataUtil.getInstance().setWatchActivityInEmotionFragment(null);
+                    getFragmentManager().popBackStack();
+                    return true;
+                }
+                return false;
+            }
+        });
+    }
+
+    @Override
     public void onStop() {
         super.onStop();
 //        if (null != animLoading && animLoading.isRunning()) {
@@ -144,11 +174,13 @@ public class DashboardEmotionFragment extends DashboardBaseFragment {
 
     @OnClick(R.id.rl_indoor_steps)
     public void clickIndoorSteps() {
+        DataUtil.getInstance().setWatchActivityInEmotionFragment(watchActivity);
         setFragment(DashboardChartSingleFragment.newInstance(INDOOR, CHART_TODAY, watchActivity), true);
     }
 
     @OnClick(R.id.rl_outdoor_steps)
     public void clickOutdoorSteps() {
+        DataUtil.getInstance().setWatchActivityInEmotionFragment(watchActivity);
         setFragment(DashboardChartSingleFragment.newInstance(OUTDOOR, CHART_TODAY, watchActivity), true);
     }
 
@@ -160,6 +192,7 @@ public class DashboardEmotionFragment extends DashboardBaseFragment {
     @OnClick({R.id.ib_activity, R.id.tv_activity})
     public void clickActivity() {
 //        setFragment(DashboardChartTripleFragment.newInstance(OUTDOOR), true);
+        DataUtil.getInstance().setWatchActivityInEmotionFragment(watchActivity);
         setFragment(DashboardChartSingleFragment.newInstance(OUTDOOR, CHART_TODAY, watchActivity), true);
     }
 
@@ -273,7 +306,11 @@ public class DashboardEmotionFragment extends DashboardBaseFragment {
         @Override
         public void onComplete(Object arg, int statusCode) {
             if (200 == statusCode && null != arg && arg instanceof RetrieveDataRep) {
-                handleRetrieveData(arg, start, end, timezoneOffset, kidId);
+                try {
+                    handleRetrieveData(arg, start, end, timezoneOffset, kidId);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             } else {
 //                finishLoadingDialog();
                 ToastCommon.makeText(getContext(), R.string.dashboard_enqueue_fail_common);

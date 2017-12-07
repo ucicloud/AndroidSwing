@@ -40,6 +40,9 @@ public abstract class ViewChart extends View {
     public float mAxisVMax = 100.f;
     public float mAxisVMin = 0.f;
 
+    public String mGoalText = "Goal";
+    public String mTitleText = "Steps";
+
     public ViewChart(Context context) {
         super(context);
         init(context, null);
@@ -103,6 +106,10 @@ public abstract class ViewChart extends View {
                     mAxisVMin = typedArray.getFloat(attr, mAxisVMin);
                 } else if (attr == R.styleable.ViewChart_goalColor) {
                     mGoalColor = typedArray.getColor(attr, mGoalColor);
+                } else if (attr == R.styleable.ViewChart_goalText) {
+                    mGoalText = typedArray.getString(attr);
+                } else if (attr == R.styleable.ViewChart_titleText) {
+                    mTitleText = typedArray.getString(attr);
                 }
             }
             typedArray.recycle();

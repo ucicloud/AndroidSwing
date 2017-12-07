@@ -197,7 +197,7 @@ public class ViewChartToday extends ViewChart {
 
         int textX, textY;
         Rect textRect = new Rect();
-        String text = String.format(Locale.getDefault(), "Step %,d", (int) value);
+        String text = String.format(Locale.getDefault(), "%s %,d", mTitleText, (int) value);
 
         mPaint.setTypeface(SwingFontsCache.getBoldType(getContext()));
         mPaint.setTextSize(mChartTextSize + 1);
@@ -292,12 +292,11 @@ public class ViewChartToday extends ViewChart {
 
         float textX, textY;
         Rect textRect = new Rect();
-        String text = "Goal";
 
         mPaint.reset();
         mPaint.setTypeface(SwingFontsCache.getBoldType(getContext()));
         mPaint.setTextSize(mChartTextSize - 2);
-        mPaint.getTextBounds(text, 0, text.length(), textRect);
+        mPaint.getTextBounds(mGoalText, 0, mGoalText.length(), textRect);
         mPaint.setColor(mGoalColor);
 
         int textPadding = size / 2;
@@ -308,7 +307,7 @@ public class ViewChartToday extends ViewChart {
         }
         textY = lineEndY + textPadding * 2;
 
-        canvas.drawText(text, textX, textY, mPaint);
+        canvas.drawText(mGoalText, textX, textY, mPaint);
 
     }
 

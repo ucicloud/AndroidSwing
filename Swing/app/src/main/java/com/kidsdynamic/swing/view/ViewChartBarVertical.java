@@ -41,7 +41,6 @@ public class ViewChartBarVertical extends ViewChart {
 
     private float mGoal;
     private List<WatchActivity.Act> mValue;
-    private String mTitle = "Steps";
 
     private List<Rect> barRectList;
     private MotionEvent mCurrentEvent;
@@ -80,14 +79,6 @@ public class ViewChartBarVertical extends ViewChart {
         if (null != list) {
             mValue.addAll(list);
         }
-    }
-
-    public void setTitle(String title) {
-        mTitle = title;
-    }
-
-    public float getGoal() {
-        return mGoal;
     }
 
     public void setGoal(float goal) {
@@ -149,7 +140,7 @@ public class ViewChartBarVertical extends ViewChart {
         mRectV.set(mRect.left, mRect.top, mRect.right, mRect.top + mRect.height() * 7 / 8);
         mRectH.set(mRectV.left, mRectV.top, mRectV.left + colWidth, mRectV.bottom);
 
-        drawTitle(canvas, mRectV, mTitle);
+        drawTitle(canvas, mRectV, mTitleText);
         drawGoal(canvas, mRectH, mRectV);
 
         for (int idx = 0; idx < mValue.size(); idx++) {
@@ -316,7 +307,8 @@ public class ViewChartBarVertical extends ViewChart {
 
         cale.setTimeInMillis(date);
 
-        String text = String.format(Locale.getDefault(), "%d/%d", cale.get(Calendar.MONTH) + 1, cale.get(Calendar.DAY_OF_MONTH));
+        String text = String.format(Locale.getDefault(), "%d/%d",
+                cale.get(Calendar.MONTH) + 1, cale.get(Calendar.DAY_OF_MONTH));
 
         mPaint.reset();
         mPaint.setAntiAlias(true);

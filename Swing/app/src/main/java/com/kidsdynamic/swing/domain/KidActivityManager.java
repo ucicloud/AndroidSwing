@@ -164,8 +164,8 @@ public class KidActivityManager {
         void onFailed(String Command, int statusCode);
     }
 
-    public void retrieveHourlyDataByTime(final Context context, final long start, final long end,
-                                         final long kidId, final ICompleteListener completeListener) {
+    public void retrieveHourlyDataByTime(final Context context, final long kidId, final long start, final long end,
+                                         final ICompleteListener completeListener) {
         ActivityApi activityApi = ApiGen
                 .getInstance(context.getApplicationContext())
                 .generateApi(ActivityApi.class, true);

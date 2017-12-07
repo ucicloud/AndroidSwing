@@ -32,6 +32,7 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:text="@string/dashboard_progress_searching"
+            android:textStyle="bold"
             android:visibility="visible" />
 
         <com.kidsdynamic.swing.view.ViewCircle
