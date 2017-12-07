@@ -31,12 +31,14 @@
                     android:textStyle="bold"/>
 
                 <include layout="@layout/item_search_user_info"
+                    android:id="@+id/layout_user_info"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/base_35"
                     android:layout_marginLeft="@dimen/base_51"
                     android:layout_marginRight="@dimen/base_51"
-                    android:layout_marginBottom="@dimen/base_35"/>
+                    android:layout_marginBottom="@dimen/base_35"
+                    android:visibility="invisible"/>
 
                 <Button
                     android:id="@+id/btn_search_again"
@@ -48,7 +50,7 @@
                     android:id="@+id/btn_decline"
                     style="@style/btn_main_profile"
                     android:layout_width="match_parent"
-                    android:text="@string/profile_decline_request_from" />
+                    android:text="@string/profile_request_cancel_goto_dashboard" />
 
             </LinearLayout>
 

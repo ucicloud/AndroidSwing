@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -57,6 +56,9 @@ public class ProfileKidsRequestAccessFragment extends ProfileBaseFragment {
     @BindView(R.id.iv_action)
     protected ImageView img_add;
 
+    @BindView(R.id.layout_user_info)
+    protected View layout_user_info;
+
 
     private Bitmap mUserAvatar = null;
     private String mUserAvatarFileName = null;
@@ -83,7 +85,7 @@ public class ProfileKidsRequestAccessFragment extends ProfileBaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mViewMain = inflater.inflate(R.layout.fragment_search_user, container, false);
+        mViewMain = inflater.inflate(R.layout.fragment_kids_request_access, container, false);
 
         ButterKnife.bind(this,mViewMain);
 
@@ -115,7 +117,7 @@ public class ProfileKidsRequestAccessFragment extends ProfileBaseFragment {
 
     @OnClick(R.id.main_toolbar_action1)
     public void onTopLeftBtnClick() {
-        getActivity().getSupportFragmentManager().popBackStack();
+        getFragmentManager().popBackStack();
     }
 
     public void onToolbarAction2() {
@@ -161,6 +163,8 @@ public class ProfileKidsRequestAccessFragment extends ProfileBaseFragment {
                     user_avatar);
         }
 
+        layout_user_info.setVisibility(View.VISIBLE);
+
 //        img_add.setImageResource(R.drawable.ic_icon_add_orange);
     }
 
@@ -190,7 +194,7 @@ public class ProfileKidsRequestAccessFragment extends ProfileBaseFragment {
     public void onSearchAgain(){
         SoftKeyBoardUtil.hideSoftKeyboard(getActivity());
 
-//        getFragmentManager().popBackStack();
+        getFragmentManager().popBackStack();
         selectFragment(ProfileSearchUserFragment.class.getName(),null,true);
     }
 

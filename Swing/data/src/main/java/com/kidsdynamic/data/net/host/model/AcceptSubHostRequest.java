@@ -14,7 +14,7 @@ public class AcceptSubHostRequest {
      */
 
     private int subHostId;
-    private List<Integer> kidId;
+    private List<Long> kidId;
 
     public int getSubHostId() {
         return subHostId;
@@ -24,11 +24,11 @@ public class AcceptSubHostRequest {
         this.subHostId = subHostId;
     }
 
-    public List<Integer> getKidId() {
+    public List<Long> getKidId() {
         return kidId;
     }
 
-    public void setKidId(List<Integer> kidId) {
+    public void setKidId(List<Long> kidId) {
         this.kidId = kidId;
     }
 }

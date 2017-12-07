@@ -14,6 +14,7 @@ import com.bumptech.glide.request.transition.Transition;
 import com.kidsdynamic.data.net.ApiGen;
 import com.kidsdynamic.data.net.host.HostApi;
 import com.kidsdynamic.data.net.host.model.RequestAddSubHostEntity;
+import com.kidsdynamic.data.net.host.model.DenySubHost;
 import com.kidsdynamic.swing.R;
 import com.kidsdynamic.swing.model.KidsEntityBean;
 import com.kidsdynamic.swing.model.WatchContact;
@@ -249,7 +250,10 @@ public class ProfileRequestFromKidsInfoFragment extends ProfileBaseFragment {
         //拒绝 共享请求
         HostApi hostApi = ApiGen.getInstance(getActivity().getApplicationContext()).
                 generateApi(HostApi.class, true);
-        hostApi.subHostDeny(requestFrom.getId()).enqueue(new BaseRetrofitCallback<Object>() {
+
+        DenySubHost subHostId = new DenySubHost();
+        subHostId.setSubHostId(requestFrom.getId());
+        hostApi.subHostDeny(subHostId).enqueue(new BaseRetrofitCallback<Object>() {
             @Override
             public void onResponse(Call<Object> call, Response<Object> response) {
                 int code = response.code();

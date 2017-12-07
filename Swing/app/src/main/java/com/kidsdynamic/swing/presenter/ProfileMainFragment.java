@@ -229,7 +229,6 @@ public class ProfileMainFragment extends ProfileBaseFragment {
             if (viewContainer == mViewDeviceContainer) {
 
                 //一期暂时没跳转
-//                focusContact(contact, false);
 //                showKidsProfile(contact);
 
             } else if (viewContainer == mViewSharedContainer) {
@@ -259,7 +258,8 @@ public class ProfileMainFragment extends ProfileBaseFragment {
         if(contact instanceof WatchContact.Kid){
             WatchContact.Kid watchKidsInfo = (WatchContact.Kid) contact;
 //            selectFragment(ProfileRemoveKidsConfirmFragment.newInstance(watchKidsInfo.mId),true);
-            selectFragment(ProfileKidsFromSharedInfoFragment.newInstance(watchKidsInfo.mId),true);
+//            selectFragment(ProfileKidsFromSharedInfoFragment.newInstance(watchKidsInfo.mId),true);
+            selectFragment(ProfileSearchUserFragment.class.getName(),null,true);
         }
 
     }

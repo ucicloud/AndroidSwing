@@ -27,16 +27,18 @@
             android:id="@+id/btn_search"
             style="@style/button_main"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/base_35"
             android:text="@string/watch_owner_search" />
     </LinearLayout>
 
 
     <include layout="@layout/item_search_user_info"
+        android:id="@+id/layout_user_info"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/base_35"
         android:layout_marginLeft="@dimen/base_51"
-        android:layout_marginRight="@dimen/base_51" />
+        android:layout_marginRight="@dimen/base_51"
+        android:visibility="gone"/>
 
 </LinearLayout>

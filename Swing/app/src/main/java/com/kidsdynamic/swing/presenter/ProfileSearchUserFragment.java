@@ -4,66 +4,43 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Point;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.request.target.SimpleTarget;
-import com.bumptech.glide.request.transition.Transition;
 import com.kidsdynamic.commonlib.utils.SoftKeyBoardUtil;
 import com.kidsdynamic.data.net.ApiGen;
-import com.kidsdynamic.data.net.avatar.AvatarApi;
-import com.kidsdynamic.data.net.avatar.PartUtils;
 import com.kidsdynamic.data.net.host.HostApi;
+import com.kidsdynamic.data.net.host.model.AddSubHost;
 import com.kidsdynamic.data.net.host.model.RequestAddSubHostEntity;
-import com.kidsdynamic.data.net.kids.KidsApi;
-import com.kidsdynamic.data.net.kids.model.KidsInfoUpdateEntity;
 import com.kidsdynamic.data.net.user.UserApiNeedToken;
-import com.kidsdynamic.data.net.user.model.UpdateKidRepEntity;
 import com.kidsdynamic.data.net.user.model.UserInfo;
-import com.kidsdynamic.data.utils.LogUtil2;
 import com.kidsdynamic.swing.R;
-import com.kidsdynamic.swing.SwingApplication;
 import com.kidsdynamic.swing.domain.BeanConvertor;
-import com.kidsdynamic.swing.domain.DeviceManager;
 import com.kidsdynamic.swing.domain.LoginManager;
 import com.kidsdynamic.swing.domain.UserManager;
 import com.kidsdynamic.swing.model.WatchContact;
 import com.kidsdynamic.swing.net.BaseRetrofitCallback;
 import com.kidsdynamic.swing.utils.GlideHelper;
 import com.kidsdynamic.swing.utils.SwingFontsCache;
-import com.kidsdynamic.swing.view.BottomPopWindow;
-import com.kidsdynamic.swing.view.CropImageView;
-import com.kidsdynamic.swing.view.CropPopWindow;
-import com.kidsdynamic.swing.view.ViewCircle;
 import com.yy.base.utils.Functions;
 import com.yy.base.utils.ToastCommon;
-import com.yy.base.utils.ViewUtils;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Response;
 
@@ -91,6 +68,8 @@ public class ProfileSearchUserFragment extends ProfileBaseFragment {
     @BindView(R.id.iv_action)
     protected ImageView img_add;
 
+    @BindView(R.id.layout_user_info)
+    protected View layout_user_info;
 
     private Bitmap mUserAvatar = null;
     private String mUserAvatarFileName = null;
@@ -281,6 +260,8 @@ public class ProfileSearchUserFragment extends ProfileBaseFragment {
 
         watchUserInfo = BeanConvertor.getWatchContact(userInfo);
 
+        layout_user_info.setVisibility(View.VISIBLE);
+
     }
 
     @OnClick(R.id.iv_action)
@@ -296,7 +277,9 @@ public class ProfileSearchUserFragment extends ProfileBaseFragment {
         HostApi hostApi = ApiGen.getInstance(getActivity().getApplicationContext()).
                 generateApi(HostApi.class, true);
 
-        hostApi.subHostAdd(watchUserInfo.mId).enqueue(new BaseRetrofitCallback<RequestAddSubHostEntity>() {
+        AddSubHost subHostId = new AddSubHost();
+        subHostId.setHostId(watchUserInfo.mId);
+        hostApi.subHostAdd(subHostId).enqueue(new BaseRetrofitCallback<RequestAddSubHostEntity>() {
             @Override
             public void onResponse(Call<RequestAddSubHostEntity> call,
                                    Response<RequestAddSubHostEntity> response) {
@@ -305,8 +288,15 @@ public class ProfileSearchUserFragment extends ProfileBaseFragment {
                     mActivityMain.mWatchContactStack.push(watchUserInfo);
 
                     selectFragment(ProfileKidsRequestAccessFragment.class.getName(),null,
-                            false);
+                            true);
                 }else if(code == 409){
+
+                    //todo test
+                    mActivityMain.mWatchContactStack.push(watchUserInfo);
+
+                    selectFragment(ProfileKidsRequestAccessFragment.class.getName(),null,
+                            false);
+
                     //请求已经存在
                     ToastCommon.makeText(getContext(),R.string.error_subhost_add_409);
                 }else {
