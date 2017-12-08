@@ -9,6 +9,7 @@ import com.kidsdynamic.swing.SwingApplication;
 import com.kidsdynamic.swing.ble.ActivityModel;
 import com.yy.base.utils.NetUtils;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -21,9 +22,10 @@ import retrofit2.Response;
  */
 
 public class RawActivityManager {
-
+    private static boolean isBackUploadRunning = false;
 
     private static ExecutorService executorService = Executors.newSingleThreadExecutor();
+    private static ExecutorService executorServiceInBack = Executors.newSingleThreadExecutor();
 
     public static void saveRawActivity(ActivityModel activityModel){
         if(activityModel == null){
@@ -51,6 +53,40 @@ public class RawActivityManager {
                         iFinishListener));
 
     }
+
+    public void uploadRawActivityInBack(){
+
+        if(isBackUploadRunning){
+           return;
+        }
+
+        isBackUploadRunning = true;
+
+        //首先获取全部rawActivity
+        DbUtil dbUtil = DbUtil.getInstance(SwingApplication.getAppContext());
+        RawActivityDataStore rawActivityDataStore = new RawActivityDataStore(dbUtil);
+
+        List<DB_RawActivity> rawActivities = rawActivityDataStore.getAllData();
+
+        //然后启动线程逐条上传，上传完成后，回调界面
+        executorServiceInBack.execute(
+                new UpdateActivityRunnable(rawActivities,
+                        rawActivityDataStore,
+                        backUploadFinishListener));
+
+    }
+
+    private  IFinishListener backUploadFinishListener = new IFinishListener() {
+        @Override
+        public void onFinish(Object arg) {
+            isBackUploadRunning = false;
+        }
+
+        @Override
+        public void onFailed(String Command, int statusCode) {
+            isBackUploadRunning = false;
+        }
+    };
 
     private class UpdateActivityRunnable implements Runnable{
         List<DB_RawActivity> rawActivities;
@@ -96,7 +132,12 @@ public class RawActivityManager {
                         rawActivityDataStore.deleteById(dbRawActivity.getId());
                         successNum ++;
                     }
-                } catch (Exception e) {
+                }catch (IOException ioe){
+                    //add 2017年12月8日14:42:14 only
+                    //如果发生io异常，则停止本次数据上传
+                    ioe.printStackTrace();
+                    break;
+                }catch (Exception e) {
                     e.printStackTrace();
                 }
             }

@@ -9,11 +9,13 @@ import de.greenrobot.dao.DaoException;
  */
 public class DB_EventKids {
 
+    private Long id;
     private long kidsId;
     private String name;
     private String macId;
     private String firmwareVersion;
     private String profile;
+    private Long dateCreated;
     private Long lastUpdate;
     private Long eventId;
 
@@ -30,16 +32,18 @@ public class DB_EventKids {
     public DB_EventKids() {
     }
 
-    public DB_EventKids(long kidsId) {
-        this.kidsId = kidsId;
+    public DB_EventKids(Long id) {
+        this.id = id;
     }
 
-    public DB_EventKids(long kidsId, String name, String macId, String firmwareVersion, String profile, Long lastUpdate, Long eventId) {
+    public DB_EventKids(Long id, Long kidsId, String name, String macId, String firmwareVersion, String profile, Long dateCreated, Long lastUpdate, Long eventId) {
+        this.id = id;
         this.kidsId = kidsId;
         this.name = name;
         this.macId = macId;
         this.firmwareVersion = firmwareVersion;
         this.profile = profile;
+        this.dateCreated = dateCreated;
         this.lastUpdate = lastUpdate;
         this.eventId = eventId;
     }
@@ -48,6 +52,14 @@ public class DB_EventKids {
     public void __setDaoSession(DaoSession daoSession) {
         this.daoSession = daoSession;
         myDao = daoSession != null ? daoSession.getEventKidsDao() : null;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public long getKidsId() {
@@ -88,6 +100,14 @@ public class DB_EventKids {
 
     public void setProfile(String profile) {
         this.profile = profile;
+    }
+
+    public Long getDateCreated() {
+        return dateCreated;
+    }
+
+    public void setDateCreated(Long dateCreated) {
+        this.dateCreated = dateCreated;
     }
 
     public Long getLastUpdate() {

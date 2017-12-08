@@ -14,7 +14,7 @@ import de.greenrobot.dao.identityscope.IdentityScopeType;
  * Master of DAO (schema version 1): knows all DAOs.
 */
 public class DaoMaster extends AbstractDaoMaster {
-    public static final int SCHEMA_VERSION = 2;
+    public static final int SCHEMA_VERSION = 3;
 
     /** Creates underlying database table using DAOs. */
     public static void createAllTables(SQLiteDatabase db, boolean ifNotExists) {
@@ -64,7 +64,7 @@ public class DaoMaster extends AbstractDaoMaster {
             Log.i("greenDAO", "Upgrading schema from version " + oldVersion + " to " + newVersion + " by dropping all tables");
 
             //modify 2017年12月4日20:35:08 only
-            if(oldVersion == 1){
+            if(oldVersion == 1 || oldVersion == 2){
                 //如果老数据库为1，因开发阶段，故采用drop表的方式升级，
                 //同时为了和缓存数据的一致性，升级后需要重新登陆
                 dropAllTables(db, true);

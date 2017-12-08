@@ -30,14 +30,14 @@ public class EventKidsStore {
         eventKidsDao.insertInTx(eventKidsList);
     }
 
-    public DB_EventKids getDBEventKids(long kidsId){
+    public List<DB_EventKids> getDBEventKids(long kidsId){
         EventKidsDao eventKidsDao = dbUtil.getDaoSession().getEventKidsDao();
 
         List<DB_EventKids> dbEventKids = eventKidsDao.queryBuilder().
                 where(EventKidsDao.Properties.KidsId.eq(kidsId)).list();
 
         if(!ObjectUtils.isListEmpty(dbEventKids)){
-            return dbEventKids.get(0);
+            return dbEventKids;
         }
 
         return null;
@@ -48,5 +48,15 @@ public class EventKidsStore {
         EventKidsDao eventKidsDao = dbUtil.getDaoSession().getEventKidsDao();
 
         eventKidsDao.update(eventKids);
+    }
+
+    public void updateList(@NonNull List<DB_EventKids> eventKids){
+        if(ObjectUtils.isListEmpty(eventKids)){
+            return;
+        }
+
+        EventKidsDao eventKidsDao = dbUtil.getDaoSession().getEventKidsDao();
+
+        eventKidsDao.updateInTx(eventKids);
     }
 }

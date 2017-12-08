@@ -54,11 +54,14 @@ public class EventMaker implements Maker {
         Entity eventKid = schema.addEntity("DB_EventKids");
         eventKid.setTableName("t_event_kids");
         eventKid.setClassNameDao("EventKidsDao");
-        eventKid.addLongProperty("kidsId").columnName("kids_id").notNull().primaryKey();
+
+        eventKid.addIdProperty().primaryKey().autoincrement().unique();
+        eventKid.addLongProperty("kidsId").columnName("kids_id");
         eventKid.addStringProperty("name").columnName("name");
         eventKid.addStringProperty("macId").columnName("macId");
         eventKid.addStringProperty("firmwareVersion").columnName("firmwareVersion");
         eventKid.addStringProperty("profile").columnName("profile");
+        eventKid.addLongProperty("dateCreated").columnName("date_created");
         eventKid.addLongProperty("lastUpdate").columnName("last_update");
 
         //建立event表与eventKids表间的一对多关系

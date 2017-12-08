@@ -21,6 +21,7 @@ import com.kidsdynamic.swing.R;
 import com.kidsdynamic.swing.SwingApplication;
 import com.kidsdynamic.swing.domain.DeviceManager;
 import com.kidsdynamic.swing.domain.LoginManager;
+import com.kidsdynamic.swing.domain.RawActivityManager;
 import com.kidsdynamic.swing.domain.UserManager;
 import com.kidsdynamic.swing.model.WatchContact;
 import com.kidsdynamic.swing.model.WatchEvent;
@@ -249,6 +250,7 @@ public class MainFrameActivity extends BaseFragmentActivity {
 //                    showIntroductionUI();
                     break;
                 case R.id.main_console_dashboard:
+                    uploadRawActivityInBack();
                     switchShowFragment(R.id.main_console_dashboard);
                     break;
                 case R.id.main_control_profile:
@@ -256,6 +258,11 @@ public class MainFrameActivity extends BaseFragmentActivity {
                     break;
             }
         }
+    }
+
+    //根据需求，切换到dashboard界面时，后台上次一次activity数据
+    private void uploadRawActivityInBack() {
+        new RawActivityManager().uploadRawActivityInBack();
     }
 
     private void showIntroductionUI() {

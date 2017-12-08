@@ -28,13 +28,15 @@ public class EventKidsDao extends AbstractDao<DB_EventKids, Long> {
      * Can be used for QueryBuilder and for referencing column names.
     */
     public static class Properties {
-        public final static Property KidsId = new Property(0, long.class, "kidsId", true, "kids_id");
-        public final static Property Name = new Property(1, String.class, "name", false, "name");
-        public final static Property MacId = new Property(2, String.class, "macId", false, "macId");
-        public final static Property FirmwareVersion = new Property(3, String.class, "firmwareVersion", false, "firmwareVersion");
-        public final static Property Profile = new Property(4, String.class, "profile", false, "profile");
-        public final static Property LastUpdate = new Property(5, Long.class, "lastUpdate", false, "last_update");
-        public final static Property EventId = new Property(6, Long.class, "eventId", false, "event_id");
+        public final static Property Id = new Property(0, Long.class, "id", true, "_id");
+        public final static Property KidsId = new Property(1, Long.class, "kidsId", false, "kids_id");
+        public final static Property Name = new Property(2, String.class, "name", false, "name");
+        public final static Property MacId = new Property(3, String.class, "macId", false, "macId");
+        public final static Property FirmwareVersion = new Property(4, String.class, "firmwareVersion", false, "firmwareVersion");
+        public final static Property Profile = new Property(5, String.class, "profile", false, "profile");
+        public final static Property DateCreated = new Property(6, Long.class, "dateCreated", false, "date_created");
+        public final static Property LastUpdate = new Property(7, Long.class, "lastUpdate", false, "last_update");
+        public final static Property EventId = new Property(8, Long.class, "eventId", false, "event_id");
     };
 
     private DaoSession daoSession;
@@ -54,13 +56,15 @@ public class EventKidsDao extends AbstractDao<DB_EventKids, Long> {
     public static void createTable(SQLiteDatabase db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"t_event_kids\" (" + //
-                "\"kids_id\" INTEGER PRIMARY KEY NOT NULL ," + // 0: kidsId
-                "\"name\" TEXT," + // 1: name
-                "\"macId\" TEXT," + // 2: macId
-                "\"firmwareVersion\" TEXT," + // 3: firmwareVersion
-                "\"profile\" TEXT," + // 4: profile
-                "\"last_update\" INTEGER," + // 5: lastUpdate
-                "\"event_id\" INTEGER);"); // 6: eventId
+                "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE ," + // 0: id
+                "\"kids_id\" INTEGER," + // 1: kidsId
+                "\"name\" TEXT," + // 2: name
+                "\"macId\" TEXT," + // 3: macId
+                "\"firmwareVersion\" TEXT," + // 4: firmwareVersion
+                "\"profile\" TEXT," + // 5: profile
+                "\"date_created\" INTEGER," + // 6: dateCreated
+                "\"last_update\" INTEGER," + // 7: lastUpdate
+                "\"event_id\" INTEGER);"); // 8: eventId
     }
 
     /** Drops the underlying database table. */
@@ -73,36 +77,50 @@ public class EventKidsDao extends AbstractDao<DB_EventKids, Long> {
     @Override
     protected void bindValues(SQLiteStatement stmt, DB_EventKids entity) {
         stmt.clearBindings();
-        stmt.bindLong(1, entity.getKidsId());
+ 
+        Long id = entity.getId();
+        if (id != null) {
+            stmt.bindLong(1, id);
+        }
+ 
+        Long kidsId = entity.getKidsId();
+        if (kidsId != null) {
+            stmt.bindLong(2, kidsId);
+        }
  
         String name = entity.getName();
         if (name != null) {
-            stmt.bindString(2, name);
+            stmt.bindString(3, name);
         }
  
         String macId = entity.getMacId();
         if (macId != null) {
-            stmt.bindString(3, macId);
+            stmt.bindString(4, macId);
         }
  
         String firmwareVersion = entity.getFirmwareVersion();
         if (firmwareVersion != null) {
-            stmt.bindString(4, firmwareVersion);
+            stmt.bindString(5, firmwareVersion);
         }
  
         String profile = entity.getProfile();
         if (profile != null) {
-            stmt.bindString(5, profile);
+            stmt.bindString(6, profile);
+        }
+ 
+        Long dateCreated = entity.getDateCreated();
+        if (dateCreated != null) {
+            stmt.bindLong(7, dateCreated);
         }
  
         Long lastUpdate = entity.getLastUpdate();
         if (lastUpdate != null) {
-            stmt.bindLong(6, lastUpdate);
+            stmt.bindLong(8, lastUpdate);
         }
  
         Long eventId = entity.getEventId();
         if (eventId != null) {
-            stmt.bindLong(7, eventId);
+            stmt.bindLong(9, eventId);
         }
     }
 
@@ -115,20 +133,22 @@ public class EventKidsDao extends AbstractDao<DB_EventKids, Long> {
     /** @inheritdoc */
     @Override
     public Long readKey(Cursor cursor, int offset) {
-        return cursor.getLong(offset + 0);
+        return cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0);
     }    
 
     /** @inheritdoc */
     @Override
     public DB_EventKids readEntity(Cursor cursor, int offset) {
         DB_EventKids entity = new DB_EventKids( //
-            cursor.getLong(offset + 0), // kidsId
-            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // name
-            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // macId
-            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // firmwareVersion
-            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // profile
-            cursor.isNull(offset + 5) ? null : cursor.getLong(offset + 5), // lastUpdate
-            cursor.isNull(offset + 6) ? null : cursor.getLong(offset + 6) // eventId
+            cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
+            cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1), // kidsId
+            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // name
+            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // macId
+            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // firmwareVersion
+            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // profile
+            cursor.isNull(offset + 6) ? null : cursor.getLong(offset + 6), // dateCreated
+            cursor.isNull(offset + 7) ? null : cursor.getLong(offset + 7), // lastUpdate
+            cursor.isNull(offset + 8) ? null : cursor.getLong(offset + 8) // eventId
         );
         return entity;
     }
@@ -136,19 +156,21 @@ public class EventKidsDao extends AbstractDao<DB_EventKids, Long> {
     /** @inheritdoc */
     @Override
     public void readEntity(Cursor cursor, DB_EventKids entity, int offset) {
-        entity.setKidsId(cursor.getLong(offset + 0));
-        entity.setName(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
-        entity.setMacId(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
-        entity.setFirmwareVersion(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
-        entity.setProfile(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
-        entity.setLastUpdate(cursor.isNull(offset + 5) ? null : cursor.getLong(offset + 5));
-        entity.setEventId(cursor.isNull(offset + 6) ? null : cursor.getLong(offset + 6));
+        entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
+        entity.setKidsId(cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1));
+        entity.setName(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
+        entity.setMacId(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
+        entity.setFirmwareVersion(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
+        entity.setProfile(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
+        entity.setDateCreated(cursor.isNull(offset + 6) ? null : cursor.getLong(offset + 6));
+        entity.setLastUpdate(cursor.isNull(offset + 7) ? null : cursor.getLong(offset + 7));
+        entity.setEventId(cursor.isNull(offset + 8) ? null : cursor.getLong(offset + 8));
      }
     
     /** @inheritdoc */
     @Override
     protected Long updateKeyAfterInsert(DB_EventKids entity, long rowId) {
-        entity.setKidsId(rowId);
+        entity.setId(rowId);
         return rowId;
     }
     
@@ -156,7 +178,7 @@ public class EventKidsDao extends AbstractDao<DB_EventKids, Long> {
     @Override
     public Long getKey(DB_EventKids entity) {
         if(entity != null) {
-            return entity.getKidsId();
+            return entity.getId();
         } else {
             return null;
         }

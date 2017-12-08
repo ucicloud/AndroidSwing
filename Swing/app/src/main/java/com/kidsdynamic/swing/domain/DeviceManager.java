@@ -198,17 +198,21 @@ public class DeviceManager {
 
         DB_Kids dbKids = kidsDataStore.getKidsInfo(kidsWithParent.getId());
 
+        long updateTime = System.currentTimeMillis();
+
         if(dbKids != null){
-            kidsDataStore.update(BeanConvertor.updateDBKids(dbKids, kidsWithParent));
+            kidsDataStore.update(
+                    BeanConvertor.updateDBKids(dbKids, kidsWithParent,updateTime));
         }
 
 
         //todo db_eventKids表更新
         EventKidsStore eventKidsStore = new EventKidsStore(dbUtil);
-        DB_EventKids dbEventKids = eventKidsStore.getDBEventKids(kidsWithParent.getId());
+        List<DB_EventKids> dbEventKids = eventKidsStore.getDBEventKids(kidsWithParent.getId());
 
-        if(dbEventKids != null){
-            eventKidsStore.update(BeanConvertor.updateEventKids(dbEventKids, kidsWithParent));
+        if(!ObjectUtils.isListEmpty(dbEventKids)){
+            eventKidsStore.updateList(
+                    BeanConvertor.updateEventKidsList(dbEventKids, kidsWithParent,updateTime));
         }
 
     }

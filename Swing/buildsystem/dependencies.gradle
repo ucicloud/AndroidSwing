@@ -36,4 +36,6 @@ ext {
     espressoVersion = '2.2'
     testingSupportLibVersion = '0.4'
 
+    arch_components_version = '1.0.0-rc1'
+
 }

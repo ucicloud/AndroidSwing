@@ -12,6 +12,7 @@ import com.kidsdynamic.data.net.event.model.EventEditRep;
 import com.kidsdynamic.data.net.event.model.EventWithTodo;
 import com.kidsdynamic.data.persistent.DbUtil;
 import com.kidsdynamic.data.repository.disk.EventDataStore;
+import com.kidsdynamic.data.repository.disk.EventKidsStore;
 import com.kidsdynamic.data.repository.disk.TodoItemDataStore;
 import com.kidsdynamic.swing.R;
 import com.kidsdynamic.swing.SwingApplication;
@@ -52,9 +53,16 @@ public class EventManager {
         TodoItemDataStore todoItemDataStore = new TodoItemDataStore(dbUtil);
         todoItemDataStore.dealAll();
 
+        //event 对应的kidslist
+        EventKidsStore eventKidsStore = new EventKidsStore(dbUtil);
+        eventKidsStore.clearAllData();
+
         //save
         eventDataStore.saveAll(BeanConvertor.getDBEventList(eventWithTodoList));
         todoItemDataStore.saveAll(BeanConvertor.getDBTodo(eventWithTodoList));
+
+        // TODO: 2017/12/8  二期功能
+//        eventKidsStore.save(BeanConvertor.getDBEventKids(eventWithTodoList));
 
     }
 

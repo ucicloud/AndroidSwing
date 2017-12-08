@@ -185,7 +185,7 @@ public class BeanConvertor {
     }
 
 
-    public static List<DB_Todo> getDBTodo(@NonNull List<EventWithTodo> eventWithTodoList) {
+    static List<DB_Todo> getDBTodo(@NonNull List<EventWithTodo> eventWithTodoList) {
         List<DB_Todo> db_todoList = new ArrayList<>();
 
         for (EventWithTodo eventWithTodo : eventWithTodoList) {
@@ -211,7 +211,35 @@ public class BeanConvertor {
         return db_todoList;
     }
 
-    public static DB_Kids getDBKidsInfo(@NonNull KidsWithParent kidsWithParent) {
+    static List<DB_EventKids> getDBEventKids(@NonNull List<EventWithTodo> eventWithTodoList){
+        List<DB_EventKids> db_eventKidsList = new ArrayList<>(5);
+
+        for (EventWithTodo eventWithTodo : eventWithTodoList) {
+            List<KidInfo> kidInfos = eventWithTodo.getKid();
+            if(!ObjectUtils.isListEmpty(kidInfos)){
+
+                for (KidInfo kidInfo : kidInfos) {
+                    DB_EventKids db_eventKids = new DB_EventKids();
+
+                    db_eventKids.setKidsId(kidInfo.getId());
+                    db_eventKids.setName(kidInfo.getName());
+                    db_eventKids.setMacId(kidInfo.getMacId());
+
+                    db_eventKids.setProfile(kidInfo.getProfile());
+
+                    db_eventKids.setDateCreated(getUTCTimeStamp(kidInfo.getDateCreated()));
+                    db_eventKids.setLastUpdate(System.currentTimeMillis());
+                    db_eventKids.setEventId((long)eventWithTodo.getId());
+
+                    db_eventKidsList.add(db_eventKids);
+                }
+            }
+        }
+
+        return db_eventKidsList;
+    }
+
+    static DB_Kids getDBKidsInfo(@NonNull KidsWithParent kidsWithParent) {
 
         DB_Kids db_kids = new DB_Kids();
 
@@ -276,7 +304,7 @@ public class BeanConvertor {
         return format.format(date);
     }
 
-    public static String getLocalTimeString(long timeStamp) {
+    private static String getLocalTimeString(long timeStamp) {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault());
         Date date = new Date();
         date.setTime(timeStamp);
@@ -340,7 +368,7 @@ public class BeanConvertor {
         return kidsList;
     }
 
-    public static List<WatchTodo> getWatchTodos(long userId, List<DB_Todo> dbTodos) {
+    private static List<WatchTodo> getWatchTodos(long userId, List<DB_Todo> dbTodos) {
         List<WatchTodo> watchTodos = new ArrayList<>(dbTodos.size());
         for (DB_Todo db_todo : dbTodos) {
             watchTodos.add(getWatchTodo(userId, db_todo));
@@ -349,7 +377,7 @@ public class BeanConvertor {
         return watchTodos;
     }
 
-    public static WatchTodo getWatchTodo(long userId, DB_Todo db_todo) {
+    private static WatchTodo getWatchTodo(long userId, DB_Todo db_todo) {
 //        new WatchTodo(1, 452, 0, "1 ", WatchTodo.STATUS_DONE);
         WatchTodo watchTodo = new WatchTodo();
         watchTodo.mId = db_todo.getTodoId();
@@ -546,7 +574,7 @@ public class BeanConvertor {
         db_cloudActivity.setReceivedDate(activitiesEntity.getReceivedDate());
     }*/
 
-    public static DB_RawActivity getDBRawActivity(ActivityModel activityModel) {
+    static DB_RawActivity getDBRawActivity(ActivityModel activityModel) {
         DB_RawActivity db_rawActivity = new DB_RawActivity();
 
         db_rawActivity.setMacId(activityModel.getMacId());
@@ -559,7 +587,7 @@ public class BeanConvertor {
         return db_rawActivity;
     }
 
-    public static RawActivityDataEntity getRawActivityDataEntity(DB_RawActivity dbRawActivity) {
+    static RawActivityDataEntity getRawActivityDataEntity(DB_RawActivity dbRawActivity) {
         RawActivityDataEntity rawActivityDataEntity = new RawActivityDataEntity();
 
         rawActivityDataEntity.setMacId(dbRawActivity.getMacId());
@@ -614,7 +642,9 @@ public class BeanConvertor {
         return String.format(Locale.getDefault(), "%,d", steps);
     }
 
-    public static DB_Kids updateDBKids(@NonNull DB_Kids db_kids, @NonNull KidsWithParent kidsWithParent) {
+    public static DB_Kids updateDBKids(@NonNull DB_Kids db_kids,
+                                       @NonNull KidsWithParent kidsWithParent,
+                                       long updateTime) {
         db_kids.setKidsId(kidsWithParent.getId());
         db_kids.setName(kidsWithParent.getName());
         db_kids.setMacId(kidsWithParent.getMacId());
@@ -622,13 +652,14 @@ public class BeanConvertor {
         db_kids.setProfile(kidsWithParent.getProfile());
 
         //因为目前服务端不更新lastupdate，客户端本地更新
-        db_kids.setLastUpdate(System.currentTimeMillis());
+        db_kids.setLastUpdate(updateTime);
 
         return db_kids;
     }
 
-    public static DB_EventKids updateEventKids(DB_EventKids dbEventKids,
-                                               KidsWithParent kidsWithParent) {
+    static DB_EventKids updateEventKids(DB_EventKids dbEventKids,
+                                               KidsWithParent kidsWithParent,
+                                        long updateTime) {
 
         dbEventKids.setKidsId(kidsWithParent.getId());
         dbEventKids.setName(kidsWithParent.getName());
@@ -636,9 +667,28 @@ public class BeanConvertor {
         dbEventKids.setProfile(kidsWithParent.getProfile());
 
         //因为目前服务端不更新lastupdate，客户端本地更新
-        dbEventKids.setLastUpdate(System.currentTimeMillis());
+        dbEventKids.setLastUpdate(updateTime);
 
         return dbEventKids;
+    }
+
+    static List<DB_EventKids> updateEventKidsList(List<DB_EventKids> db_eventKidsList,
+                                                  KidsWithParent kidsWithParent,
+                                                  long updateTime){
+
+        for (DB_EventKids dbEventKids :
+                db_eventKidsList) {
+
+            dbEventKids.setKidsId(kidsWithParent.getId());
+            dbEventKids.setName(kidsWithParent.getName());
+            dbEventKids.setMacId(kidsWithParent.getMacId());
+            dbEventKids.setProfile(kidsWithParent.getProfile());
+
+            //因为目前服务端不更新lastupdate，客户端本地更新
+            dbEventKids.setLastUpdate(updateTime);
+        }
+
+        return db_eventKidsList;
     }
 
 
