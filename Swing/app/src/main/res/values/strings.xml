@@ -210,7 +210,7 @@
     <string name="signup_login_processing">Processing</string>
     <string name="signup_login_wait">Please Wait&#8230;</string>
 
-    <string name="signup_login_enter">Enter</string>
+    <string name="signup_login_enter">Login</string>
     <string name="signup_login_reset_password">Reset password</string>
 
     <!-- FragmentSignupLanguage -->

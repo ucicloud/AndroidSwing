@@ -210,7 +210,7 @@
     <string name="signup_login_processing">処理中です</string>
     <string name="signup_login_wait">暫くお待ちください&#8230;</string>
 
-    <string name="signup_login_enter">入る</string>
+    <string name="signup_login_enter">ログイン</string>
     <string name="signup_login_reset_password">パスワードを再設定する</string>
 
     <!-- FragmentSignupLanguage -->

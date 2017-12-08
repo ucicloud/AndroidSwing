@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:drawable="@drawable/background_dashboard_uv02"
+        android:drawable="@drawable/background_dashboard_monster01"
         android:gravity="center" />
     <item android:drawable="@color/emotion_mask_color" />
 </layer-list>

@@ -55,8 +55,8 @@ public class DashboardMainFragment extends DashboardBaseFragment {
             kidName = getArguments().getString(DeviceManager.BUNDLE_KEY_KID_NAME, "");
 
             //add 2017年12月5日19:37:01 only 如果是同步成功后，使用最后一次记录
-            type_goto = arg.getString(key_goto_type,"-1");
-            if(type_goto_DashboardEmotion.equals(type_goto)){
+            type_goto = arg.getString(key_goto_type, "-1");
+            if (type_goto_DashboardEmotion.equals(type_goto)) {
                 setFragment(DashboardEmotionFragment.newInstance(), true);
             }
         }
@@ -81,14 +81,14 @@ public class DashboardMainFragment extends DashboardBaseFragment {
             kidName = focusWatchInfo.getName();
             tv_kids_name.setText(kidName);
 
-            Log.w("avatar","kids lastUpdate :" + focusWatchInfo.getLastUpdate());
+            Log.w("avatar", "kids lastUpdate :" + focusWatchInfo.getLastUpdate());
 
             String profileRealUri = UserManager.getProfileRealUri(focusWatchInfo.getProfile());
 //            Log.d("dash_main", "avatar: " + profileRealUri);
 //            GlideHelper.showCircleImageView(getContext(), profileRealUri, vc_photo);
             GlideHelper.showCircleImageViewWithSignature(
                     getContext(),
-                    profileRealUri,String.valueOf(focusWatchInfo.getLastUpdate()),
+                    profileRealUri, String.valueOf(focusWatchInfo.getLastUpdate()),
                     vc_photo);
         }
 
@@ -101,6 +101,19 @@ public class DashboardMainFragment extends DashboardBaseFragment {
 
         /*view_right_action.setImageResource(R.drawable.icon_add);
         view_right_action.setTag(R.drawable.icon_add);*/
+    }
+
+    @OnClick(R.id.main_toolbar_action1)
+    public void onToolbarAction1() {
+        Bundle arg = getArguments();
+        if (arg != null) {
+            type_goto = arg.getString(key_goto_type, "-1");
+            if (type_goto_DashboardEmotion.equals(type_goto)) {
+                setFragment(DashboardEmotionFragment.newInstance(), true);
+            }
+        } else {
+            setFragment(DashboardEmotionFragment.newInstance(), true);
+        }
     }
 
     @OnClick(R.id.watch_sync_yes)

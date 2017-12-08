@@ -1,7 +1,6 @@
 package com.kidsdynamic.swing.presenter;
 
 import android.content.res.Resources;
-import android.graphics.drawable.Animatable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.KeyEvent;
@@ -78,12 +77,8 @@ public class DashboardEmotionFragment extends DashboardBaseFragment {
     TextView tv_uv_minutes;
     @BindView(R.id.tv_uv_time)
     TextView tv_uv_time;
-    @BindView(R.id.ib_activity)
-    ImageButton ib_activity;
     @BindView(R.id.tv_activity)
     TextView tv_activity;
-    @BindView(R.id.ib_uv_detection)
-    ImageButton ib_uv_detection;
     @BindView(R.id.tv_uv_detection)
     TextView tv_uv_detection;
 
@@ -189,14 +184,14 @@ public class DashboardEmotionFragment extends DashboardBaseFragment {
 
     }
 
-    @OnClick({R.id.ib_activity, R.id.tv_activity})
+    @OnClick(R.id.tv_activity)
     public void clickActivity() {
 //        setFragment(DashboardChartTripleFragment.newInstance(OUTDOOR), true);
         DataUtil.getInstance().setWatchActivityInEmotionFragment(watchActivity);
         setFragment(DashboardChartSingleFragment.newInstance(OUTDOOR, CHART_TODAY, watchActivity), true);
     }
 
-    @OnClick({R.id.ib_uv_detection, R.id.tv_uv_detection})
+    @OnClick(R.id.tv_uv_detection)
     public void clickUVDetection() {
 
     }
@@ -241,33 +236,33 @@ public class DashboardEmotionFragment extends DashboardBaseFragment {
 
     private void setViews(int emotion) {
         Resources res = getResources();
-        int rootId = R.drawable.emotion_fragment_bg_blue;
+        int rootId = R.drawable.emotion_bg_purple;
         int color = res.getColor(R.color.color_blue_main);
         int messageId = R.string.dashboard_emotion_below;
         int monsterId = R.drawable.monster_purple;
-        int activityBgId = R.drawable.circle_bg_blue;
-        int uvDetectionBgId = R.drawable.circle_bg_blue;
+        int iconActivityId = R.drawable.icon_activity_purp;
+        int iconUVId = R.drawable.icon_uv_purp;
         if (EMOTION_LOW == emotion) {
-            rootId = R.drawable.emotion_fragment_bg_blue;
+            rootId = R.drawable.emotion_bg_purple;
             color = res.getColor(R.color.color_blue_main);
             messageId = R.string.dashboard_emotion_below;
             monsterId = R.drawable.monster_purple;
-            activityBgId = R.drawable.circle_bg_blue;
-            uvDetectionBgId = R.drawable.circle_bg_blue;
+            iconActivityId = R.drawable.icon_activity_purp;
+            iconUVId = R.drawable.icon_uv_purp;
         } else if (EMOTION_ALMOST == emotion) {
-            rootId = R.drawable.emotion_fragment_bg_green;
+            rootId = R.drawable.emotion_bg_green;
             color = res.getColor(R.color.color_green_main);
             messageId = R.string.dashboard_emotion_almost;
             monsterId = R.drawable.monster_green;
-            activityBgId = R.drawable.circle_bg_green;
-            uvDetectionBgId = R.drawable.circle_bg_green;
+            iconActivityId = R.drawable.icon_activity_grn;
+            iconUVId = R.drawable.icon_uv_grn;
         } else if (EMOTION_EXCELLENT == emotion) {
-            rootId = R.drawable.emotion_fragment_bg_orange;
+            rootId = R.drawable.emotion_bg_orange;
             color = res.getColor(R.color.color_orange_main);
             messageId = R.string.dashboard_emotion_excellent;
             monsterId = R.drawable.monster_yellow;
-            activityBgId = R.drawable.circle_bg_orange;
-            uvDetectionBgId = R.drawable.circle_bg_orange;
+            iconActivityId = R.drawable.icon_activity_purp;
+            iconUVId = R.drawable.icon_uv_purp;
         }
         root.setBackgroundResource(rootId);
         tv_top_banner.setTextColor(color);
@@ -287,9 +282,9 @@ public class DashboardEmotionFragment extends DashboardBaseFragment {
         tv_uv_minute.setTextColor(color);
         tv_uv_minutes.setTextColor(color);
         tv_activity.setTextColor(color);
+        tv_activity.setCompoundDrawablesWithIntrinsicBounds(0, iconActivityId, 0, 0);
         tv_uv_detection.setTextColor(color);
-        ib_activity.setBackgroundResource(activityBgId);
-        ib_uv_detection.setBackgroundResource(uvDetectionBgId);
+        tv_uv_detection.setCompoundDrawablesWithIntrinsicBounds(0, iconUVId, 0, 0);
     }
 
     private class IRetrieveCompleteListener implements KidActivityManager.ICompleteListener {

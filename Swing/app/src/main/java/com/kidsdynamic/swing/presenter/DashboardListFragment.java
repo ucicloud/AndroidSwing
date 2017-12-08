@@ -213,7 +213,7 @@ public class DashboardListFragment extends DashboardBaseFragment {
                 mBorderButtonTextColorStateList = ContextCompat.getColorStateList(getContext(),
                         R.color.text_blue_white_change_selector);
 
-                mViewRoot.setBackgroundResource(R.drawable.background_dashboard_monster01);
+                mViewRoot.setBackgroundResource(R.drawable.emotion_bg_purple);
                 break;
 
             case EMOTION_ALMOST:
@@ -222,7 +222,7 @@ public class DashboardListFragment extends DashboardBaseFragment {
                 mBorderButtonTextColorStateList = ContextCompat.getColorStateList(getContext(),
                         R.color.text_green_white_change_selector);
 
-                mViewRoot.setBackgroundResource(R.drawable.background_dashboard_monster02);
+                mViewRoot.setBackgroundResource(R.drawable.emotion_bg_green);
                 break;
 
             default:
@@ -231,7 +231,7 @@ public class DashboardListFragment extends DashboardBaseFragment {
                 mBorderButtonTextColorStateList = ContextCompat.getColorStateList(getContext(),
                         R.color.text_orange_white_change_selector);
 
-                mViewRoot.setBackgroundResource(R.drawable.background_dashboard_monster03);
+                mViewRoot.setBackgroundResource(R.drawable.emotion_bg_orange);
                 break;
         }
 

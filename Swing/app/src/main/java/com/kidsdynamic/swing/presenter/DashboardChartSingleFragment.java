@@ -152,10 +152,14 @@ public class DashboardChartSingleFragment extends DashboardBaseFragment {
             chartType = null != args ? args.getInt(CHART_TYPE, CHART_TODAY) : CHART_TODAY;
             showChart(chartType);
             mCurrentChart = chartType;
+            loadData();
         } else {
             showChart(chartType);
             mCurrentChart = chartType;
-            loadData();
+            watchActivities = DataUtil.getInstance().getWatchActivitiesInSingleChart();
+            if (null == watchActivities) {
+                loadData();
+            }
         }
     }
 
@@ -414,7 +418,7 @@ public class DashboardChartSingleFragment extends DashboardBaseFragment {
                 mBorderButtonTextColorStateList = ContextCompat.getColorStateList(getContext(),
                         R.color.text_blue_white_change_selector);
 
-                mViewRoot.setBackgroundResource(R.drawable.background_dashboard_monster01);
+                mViewRoot.setBackgroundResource(R.drawable.emotion_bg_purple);
                 mViewMessage.setText(getResources().getString(R.string.dashboard_chart_message_below));
                 break;
 
@@ -424,7 +428,7 @@ public class DashboardChartSingleFragment extends DashboardBaseFragment {
                 mBorderButtonTextColorStateList = ContextCompat.getColorStateList(getContext(),
                         R.color.text_green_white_change_selector);
 
-                mViewRoot.setBackgroundResource(R.drawable.background_dashboard_monster02);
+                mViewRoot.setBackgroundResource(R.drawable.emotion_bg_green);
                 mViewMessage.setText(getResources().getString(R.string.dashboard_chart_message_almost));
                 break;
 
@@ -434,7 +438,7 @@ public class DashboardChartSingleFragment extends DashboardBaseFragment {
                 mBorderButtonTextColorStateList = ContextCompat.getColorStateList(getContext(),
                         R.color.text_orange_white_change_selector);
 
-                mViewRoot.setBackgroundResource(R.drawable.background_dashboard_monster03);
+                mViewRoot.setBackgroundResource(R.drawable.emotion_bg_orange);
                 mViewMessage.setText(getResources().getString(R.string.dashboard_chart_message_excellent));
                 break;
         }

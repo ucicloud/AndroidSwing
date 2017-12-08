@@ -210,7 +210,7 @@
     <string name="signup_login_processing">"處理中"</string>
     <string name="signup_login_wait">"請稍候&#8230;"</string>
 
-    <string name="signup_login_enter">進入</string>
+    <string name="signup_login_enter">登入</string>
     <string name="signup_login_reset_password">重新設置密碼</string>
 
     <!-- FragmentSignupLanguage -->

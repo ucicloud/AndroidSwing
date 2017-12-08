@@ -210,7 +210,7 @@
     <string name="signup_login_processing">Идет обработка</string>
     <string name="signup_login_wait">Пожалуйста, подождите&#8230;</string>
 
-    <string name="signup_login_enter">вводить</string>
+    <string name="signup_login_enter">Доступ</string>
     <string name="signup_login_reset_password">Сброс пароля</string>
 
     <!-- FragmentSignupLanguage -->
