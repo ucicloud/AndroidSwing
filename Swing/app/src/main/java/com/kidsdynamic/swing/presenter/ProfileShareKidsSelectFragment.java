@@ -174,6 +174,9 @@ public class ProfileShareKidsSelectFragment extends ProfileBaseFragment {
 
     @OnClick(R.id.btn_confirm_select)
     protected void onAcceptRequest(){
+
+        // TODO: 2017/12/8 调用 “/v1/subHost/accept” 同意分享请求
+
         //accept request
         showLayout(R.id.layout_sharing_now);
 

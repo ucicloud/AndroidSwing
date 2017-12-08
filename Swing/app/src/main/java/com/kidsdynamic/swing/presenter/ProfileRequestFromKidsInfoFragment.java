@@ -230,7 +230,11 @@ public class ProfileRequestFromKidsInfoFragment extends ProfileBaseFragment {
     @OnClick(R.id.btn_accept_request)
     protected void onAcceptRequest(){
         //accept request
-        showLayout(R.id.layout_sharing_now);
+//        showLayout(R.id.layout_sharing_now);
+
+        //新的流程为，调用accept后，跳转到select watch to share 界面
+        selectFragment(ProfileShareKidsSelectFragment.class.getName(),null,
+                true);
 
     }
 

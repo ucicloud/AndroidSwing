@@ -54,7 +54,7 @@ public class DB_EventKids {
         myDao = daoSession != null ? daoSession.getEventKidsDao() : null;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 

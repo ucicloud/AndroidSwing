@@ -20,7 +20,6 @@ import com.kidsdynamic.swing.R;
 import com.kidsdynamic.swing.domain.LoginManager;
 import com.kidsdynamic.swing.domain.UserManager;
 import com.kidsdynamic.swing.model.KidsEntityBean;
-import com.kidsdynamic.swing.model.WatchContact;
 import com.kidsdynamic.swing.net.BaseRetrofitCallback;
 import com.kidsdynamic.swing.utils.GlideHelper;
 import com.kidsdynamic.swing.utils.SwingFontsCache;
@@ -235,7 +234,7 @@ public class ProfileRequestToKidsInfoFragment extends ProfileBaseFragment {
         }
 
         showLoadingDialog(R.string.signup_login_wait);
-        //拒绝 共享请求
+        //取消 共享申请
         HostApi hostApi = ApiGen.getInstance(getActivity().getApplicationContext()).
                 generateApi(HostApi.class, true);
         hostApi.subHostDelete(requestTo.getId()).
@@ -246,6 +245,7 @@ public class ProfileRequestToKidsInfoFragment extends ProfileBaseFragment {
                 int code = response.code();
                 if(code == 200){
                     // TODO: 2017/12/6
+                    getFragmentManager().popBackStack();
                 }else if(code == 401){
                     //unauthorized
                     ToastCommon.makeText(getContext(),R.string.error_api_event_delete_401);
