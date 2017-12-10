@@ -47,7 +47,7 @@
                     android:text="@string/profile_sorry_again" />
 
                 <Button
-                    android:id="@+id/btn_decline"
+                    android:id="@+id/btn_cancel"
                     style="@style/btn_main_profile"
                     android:layout_width="match_parent"
                     android:text="@string/profile_request_cancel_goto_dashboard" />

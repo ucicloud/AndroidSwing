@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,12 +15,18 @@ import android.widget.TextView;
 
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.kidsdynamic.commonlib.utils.ObjectUtils;
 import com.kidsdynamic.data.dao.DB_User;
+import com.kidsdynamic.data.net.ApiGen;
+import com.kidsdynamic.data.net.host.HostApi;
+import com.kidsdynamic.data.net.host.model.RequestAddSubHostEntity;
+import com.kidsdynamic.data.net.host.model.SubHostRequests;
 import com.kidsdynamic.swing.R;
 import com.kidsdynamic.swing.domain.DeviceManager;
 import com.kidsdynamic.swing.domain.LoginManager;
 import com.kidsdynamic.swing.domain.UserManager;
 import com.kidsdynamic.swing.model.WatchContact;
+import com.kidsdynamic.swing.net.BaseRetrofitCallback;
 import com.kidsdynamic.swing.utils.GlideHelper;
 import com.kidsdynamic.swing.view.ViewCircle;
 
@@ -28,6 +35,8 @@ import java.util.Locale;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import retrofit2.Call;
+import retrofit2.Response;
 
 /**
  * ProfileMainFragment <br/><br/>
@@ -183,12 +192,6 @@ public class ProfileMainFragment extends ProfileBaseFragment {
         }
     }
 
-   /* @Override
-    public ViewFragmentConfig getConfig() {
-        return new ViewFragmentConfig(
-                getResources().getString(R.string.title_profile), true, true, false,
-                ActivityMain.RESOURCE_IGNORE, R.mipmap.icon_edit, R.mipmap.icon_settings);
-    }*/
 
    @OnClick(R.id.main_toolbar_action1)
     public void onToolbarAction1() {
@@ -231,6 +234,9 @@ public class ProfileMainFragment extends ProfileBaseFragment {
                 //一期暂时没跳转
 //                showKidsProfile(contact);
 
+                //just test
+//                showRequestToFragment(null);
+
             } else if (viewContainer == mViewSharedContainer) {
                 focusContact(contact, false);
 
@@ -253,7 +259,7 @@ public class ProfileMainFragment extends ProfileBaseFragment {
 
         //下面的挑战为测试代码
 //        selectFragment(ProfileRequestToKidsInfoFragment.newInstance(1),true);
-//        selectFragment(ProfileRequestFromKidsInfoFragment.newInstance(1),true);
+//        selectFragment(ProfileRequestFromFragment.newInstance(1),true);
 
         if(contact instanceof WatchContact.Kid){
             WatchContact.Kid watchKidsInfo = (WatchContact.Kid) contact;
@@ -261,6 +267,40 @@ public class ProfileMainFragment extends ProfileBaseFragment {
 //            selectFragment(ProfileKidsFromSharedInfoFragment.newInstance(watchKidsInfo.mId),true);
             selectFragment(ProfileSearchUserFragment.class.getName(),null,true);
         }
+
+    }
+
+    private void showRequestToFragment(RequestAddSubHostEntity requestAddSubHostEntity){
+
+        HostApi hostApi = ApiGen.getInstance(getActivity().getApplicationContext()).
+                generateApi(HostApi.class, true);
+
+        hostApi.subHostList("").enqueue(new BaseRetrofitCallback<SubHostRequests>() {
+            @Override
+            public void onResponse(Call<SubHostRequests> call, Response<SubHostRequests> response) {
+
+                if(response.code() == 200){
+
+                    List<RequestAddSubHostEntity> requestFrom = response.body().getRequestFrom();
+                    if(!ObjectUtils.isListEmpty(requestFrom)){
+                        mActivityMain.mSubHostInfoEntity.push(requestFrom.get(0));
+                        selectFragment(ProfileRequestFromFragment.class.getName(),null,true);
+                    }else {
+                        Log.w("profile", "requestFrom list 0");
+                    }
+                }
+
+                super.onResponse(call, response);
+            }
+
+            @Override
+            public void onFailure(Call<SubHostRequests> call, Throwable t) {
+                super.onFailure(call, t);
+            }
+        });
+
+       /* mActivityMain.mSubHostInfoEntity.push(requestAddSubHostEntity);
+        selectFragment(ProfileRequestFromFragment.class.getName(),null,true);*/
 
     }
 

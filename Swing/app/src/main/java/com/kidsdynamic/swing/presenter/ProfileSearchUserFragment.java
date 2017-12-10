@@ -288,14 +288,14 @@ public class ProfileSearchUserFragment extends ProfileBaseFragment {
                     mActivityMain.mWatchContactStack.push(watchUserInfo);
 
                     selectFragment(ProfileKidsRequestAccessFragment.class.getName(),null,
-                            true);
+                            false);
                 }else if(code == 409){
 
                     //todo test
-                    mActivityMain.mWatchContactStack.push(watchUserInfo);
+                    /*mActivityMain.mWatchContactStack.push(watchUserInfo);
 
                     selectFragment(ProfileKidsRequestAccessFragment.class.getName(),null,
-                            false);
+                            false);*/
 
                     //请求已经存在
                     ToastCommon.makeText(getContext(),R.string.error_subhost_add_409);

@@ -93,11 +93,10 @@ public class ProfileRequestToKidsInfoFragment extends ProfileBaseFragment {
             }
         }*/
 
-        if (mActivityMain.mSubHostInfoEntity.isEmpty()) {
-            exitByKidsNull();
-        }else {
+        if (!mActivityMain.mSubHostInfoEntity.isEmpty()) {
             requestTo = mActivityMain.mSubHostInfoEntity.pop();
         }
+
 
         if(requestTo == null
                 || requestTo.getRequestToUser() == null

@@ -11,8 +11,10 @@ import android.widget.TextView;
 
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.kidsdynamic.data.net.host.model.RequestAddSubHostEntity;
 import com.kidsdynamic.swing.R;
 import com.kidsdynamic.swing.domain.DeviceManager;
+import com.kidsdynamic.swing.domain.ProfileManager;
 import com.kidsdynamic.swing.domain.UserManager;
 import com.kidsdynamic.swing.model.KidsEntityBean;
 import com.kidsdynamic.swing.model.WatchContact;
@@ -52,6 +54,7 @@ public class ProfileKidsFromSharedInfoFragment extends ProfileBaseFragment {
 
     private long kidsId;
     private KidsEntityBean kidsInfo;
+    private RequestAddSubHostEntity requestInfo;
 
     public static ProfileKidsFromSharedInfoFragment newInstance(long kidsId) {
         Bundle args = new Bundle();
@@ -67,12 +70,18 @@ public class ProfileKidsFromSharedInfoFragment extends ProfileBaseFragment {
 
         mActivityMain = (MainFrameActivity) getActivity();
 
+        if(!mActivityMain.mSubHostInfoEntity.isEmpty()){
+            requestInfo = mActivityMain.mSubHostInfoEntity.pop();
+            return;
+        }
+
         Bundle arguments = getArguments();
         if(arguments != null){
             kidsId = arguments.getLong(TAG_KIDS_ID, -1);
-            if(kidsId == -1){
-                exitByKidsNull();
-            }
+        }
+
+        if(kidsId == -1 || requestInfo == null){
+            exitByKidsNull();
         }
     }
 
@@ -120,6 +129,14 @@ public class ProfileKidsFromSharedInfoFragment extends ProfileBaseFragment {
     public void onResume() {
         super.onResume();
 
+        if (!mActivityMain.mSignStack.isEmpty()) {
+            String signStr = mActivityMain.mSignStack.pop();
+            if(ProfileManager.sign_deny_ok.equals(signStr)){
+                getFragmentManager().popBackStack();
+                return;
+            }
+        }
+
         kidsInfo = DeviceManager.getKidsInfo(getContext(), kidsId);
         if(kidsInfo == null){
             exitByKidsNull();
@@ -145,9 +162,9 @@ public class ProfileKidsFromSharedInfoFragment extends ProfileBaseFragment {
 
         }
 
-        GlideHelper.getBitMap(getContext(),
+        GlideHelper.getBitMapOnlyCacheInMemory(getContext(),
                 UserManager.getProfileRealUri(kidsInfo.getProfile()),
-                String.valueOf(kidsInfo.getLastUpdate()), userAvatarSimpleTarget);
+                userAvatarSimpleTarget);
     }
 
 
@@ -170,6 +187,7 @@ public class ProfileKidsFromSharedInfoFragment extends ProfileBaseFragment {
 
     @OnClick(R.id.btn_remove)
     protected void onRemove(){
+        mActivityMain.mSubHostInfoEntity.push(requestInfo);
         selectFragment(ProfileSwitchKidsConfirmFragment.newInstance(kidsId),true);
     }
 

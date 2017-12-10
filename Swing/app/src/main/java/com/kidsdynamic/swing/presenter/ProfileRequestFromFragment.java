@@ -3,6 +3,7 @@ package com.kidsdynamic.swing.presenter;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,14 +12,18 @@ import android.widget.TextView;
 
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.kidsdynamic.data.dao.DB_User;
 import com.kidsdynamic.data.net.ApiGen;
 import com.kidsdynamic.data.net.host.HostApi;
-import com.kidsdynamic.data.net.host.model.RequestAddSubHostEntity;
 import com.kidsdynamic.data.net.host.model.DenySubHost;
+import com.kidsdynamic.data.net.host.model.RequestAddSubHostEntity;
 import com.kidsdynamic.swing.R;
+import com.kidsdynamic.swing.domain.LoginManager;
+import com.kidsdynamic.swing.domain.ProfileManager;
+import com.kidsdynamic.swing.domain.UserManager;
 import com.kidsdynamic.swing.model.KidsEntityBean;
-import com.kidsdynamic.swing.model.WatchContact;
 import com.kidsdynamic.swing.net.BaseRetrofitCallback;
+import com.kidsdynamic.swing.utils.GlideHelper;
 import com.kidsdynamic.swing.utils.ViewUtils;
 import com.kidsdynamic.swing.view.ViewCircle;
 import com.yy.base.utils.ToastCommon;
@@ -33,19 +38,19 @@ import retrofit2.Call;
 import retrofit2.Response;
 
 /**
- * ProfileRequestFromKidsInfoFragment
+ * ProfileRequestFromFragment
  * Created by Administrator on 2017/12/2.
  */
 
-public class ProfileRequestFromKidsInfoFragment extends ProfileBaseFragment {
+public class ProfileRequestFromFragment extends ProfileBaseFragment {
     private MainFrameActivity mActivityMain;
     private static final String TAG_KIDS_ID = "kids_id";
 
     @BindView(R.id.user_profile_photo)
-    protected ViewCircle mViewUserPhoto;
+    protected ViewCircle mViewRequestFromUserPhoto;
 
     @BindView(R.id.request_kids_profile_photo)
-    protected ViewCircle mViewRequestKidPhoto;
+    protected ViewCircle mViewRequestToUserPhoto;
 
 //    request from layout start
     @BindView(R.id.layout_request_from_info)
@@ -92,38 +97,56 @@ public class ProfileRequestFromKidsInfoFragment extends ProfileBaseFragment {
     private long kidsId;
     private KidsEntityBean kidsInfo;
 
-    private RequestAddSubHostEntity requestFrom;
+    private RequestAddSubHostEntity requestInfo;
+    private DB_User loginUserInfo;
 
-    public static ProfileRequestFromKidsInfoFragment newInstance(long kidsId) {
+    public static ProfileRequestFromFragment newInstance(long kidsId) {
         Bundle args = new Bundle();
         args.putLong(TAG_KIDS_ID,kidsId);
-        ProfileRequestFromKidsInfoFragment fragment = new ProfileRequestFromKidsInfoFragment();
+        ProfileRequestFromFragment fragment = new ProfileRequestFromFragment();
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        initValue();
+    }
+
+    private void initValue() {
         mActivityMain = (MainFrameActivity) getActivity();
 
-        Bundle arguments = getArguments();
-        if(arguments != null){
-            kidsId = arguments.getLong(TAG_KIDS_ID, -1);
-            if(kidsId == -1){
-                exitByKidsNull();
-            }
+        if(!mActivityMain.mSubHostInfoEntity.isEmpty()){
+            requestInfo = mActivityMain.mSubHostInfoEntity.pop();
         }
+
+        loginUserInfo = LoginManager.getCurrentLoginUserInfo();
+
+        if(requestInfo == null || requestInfo.getRequestFromUser() == null
+                || loginUserInfo == null){
+            exitByKidsNull();
+            return;
+        }
+
 
         layouts.add(layout_request_info);
         layouts.add(layout_sharing_now);
         layouts.add(layout_stop_share);
+
+        loadInfo();
     }
 
     private void exitByKidsNull() {
         getFragmentManager().popBackStack();
-        ToastCommon.showToast(getContext(),"kids null");
+        ToastCommon.showToast(getContext(),"info request null");
     }
 
     @Nullable
@@ -134,24 +157,27 @@ public class ProfileRequestFromKidsInfoFragment extends ProfileBaseFragment {
         ButterKnife.bind(this,mView);
         initTitleBar();
 
-        initView();
         return mView;
 
     }
 
-    private void initView() {
+    private void loadInfo() {
         ViewUtils.setBtnTypeFace(getContext(),btn_accept_request,btn_decline,
                 btn_remove_sharing,btn_confirm_stop_share,
                 btn_no_stop);
 
-        //todo test ui
-        String requestUserName = "Dan Smith";
-        String requestKidsName = "Alex Smith";
+
+
+        String requestUserName = LoginManager.getUserName(
+                requestInfo.getRequestFromUser().getFirstName(),
+                requestInfo.getRequestFromUser().getLastName());
+
+//        String requestKidsName = "Alex Smith";
         String request_from_note = getString(R.string.profile_got_request_note,
                 requestUserName);
 
-        String sharing_note = getString(R.string.profile_sharing_now_note,
-                requestKidsName,requestUserName);
+        /*String sharing_note = getString(R.string.profile_sharing_now_note,
+                requestKidsName,requestUserName);*/
 
         String share_stop_note = getString(R.string.profile_stop_share,requestUserName);
 
@@ -159,10 +185,14 @@ public class ProfileRequestFromKidsInfoFragment extends ProfileBaseFragment {
         tv_request_from_note.setText(ViewUtils.setWordColorInStr(request_from_note,
                 requestUserName));
 
-        tv_sharing_info_tip.setText(ViewUtils.setWordColorInStr(sharing_note,
-                requestKidsName,requestUserName));
+        /*tv_sharing_info_tip.setText(ViewUtils.setWordColorInStr(sharing_note,
+                requestKidsName,requestUserName));*/
 
         tv_stop_share_tip.setText(share_stop_note);
+
+
+        //load avatar
+        loadAvatar();
 
     }
 
@@ -178,7 +208,7 @@ public class ProfileRequestFromKidsInfoFragment extends ProfileBaseFragment {
 
     @OnClick(R.id.main_toolbar_action1)
     public void onTopLeftBtnClick() {
-        getActivity().getSupportFragmentManager().popBackStack();
+        getFragmentManager().popBackStack();
     }
 
     @Override
@@ -197,32 +227,52 @@ public class ProfileRequestFromKidsInfoFragment extends ProfileBaseFragment {
         }
 
         loadValue(kidsInfo, watchContact);*/
+
+        if (!mActivityMain.mSignStack.isEmpty()) {
+            String signStr = mActivityMain.mSignStack.pop();
+            if(ProfileManager.sign_deny_ok.equals(signStr)){
+                getFragmentManager().popBackStack();
+                return;
+            }
+        }
     }
 
-    private void loadValue(KidsEntityBean kidsInfo, WatchContact watchContact) {
+    private void loadAvatar() {
 
-        /*tv_kids_id.setText(String.valueOf(kidsInfo.getKidsId()));
-        tv_kidsName.setText(kidsInfo.getName());
-
-        if(watchContact != null){
-            //如果不为null，则为edit界面返回数据
-            mViewPhoto.setBitmap(watchContact.mPhoto);
-
+        //request from user
+        String requestFromUerProfile = requestInfo.getRequestFromUser().getProfile();
+        if(!TextUtils.isEmpty(requestFromUerProfile)){
+            GlideHelper.getBitMapOnlyCacheInMemory(getContext(),
+                    UserManager.getProfileRealUri(requestFromUerProfile),
+                    requestFromUserAvatarSimpleTarget);
         }
 
+        //current user
         GlideHelper.getBitMap(getContext(),
-                UserManager.getProfileRealUri(kidsInfo.getProfile()),
-                String.valueOf(kidsInfo.getLastUpdate()), userAvatarSimpleTarget);*/
+                UserManager.getProfileRealUri(loginUserInfo.getProfile()),
+                loginUserInfo.getLastUpdate()+"",
+                currentUserAvatarSimpleTarget);
     }
 
 
-    private SimpleTarget<Bitmap> userAvatarSimpleTarget = new SimpleTarget<Bitmap>(){
+    private SimpleTarget<Bitmap> requestFromUserAvatarSimpleTarget = new SimpleTarget<Bitmap>(){
 
         @Override
         public void onResourceReady(Bitmap bitmap, Transition<? super Bitmap> transition) {
 
             if (getActivity() != null && !getActivity().isDestroyed()) {
-//                mViewPhoto.setBitmap(bitmap);
+                mViewRequestFromUserPhoto.setBitmap(bitmap);
+            }
+        }
+    };
+
+    private SimpleTarget<Bitmap> currentUserAvatarSimpleTarget = new SimpleTarget<Bitmap>(){
+
+        @Override
+        public void onResourceReady(Bitmap bitmap, Transition<? super Bitmap> transition) {
+
+            if (getActivity() != null && !getActivity().isDestroyed()) {
+                mViewRequestToUserPhoto.setBitmap(bitmap);
             }
         }
     };
@@ -232,6 +282,7 @@ public class ProfileRequestFromKidsInfoFragment extends ProfileBaseFragment {
         //accept request
 //        showLayout(R.id.layout_sharing_now);
 
+        mActivityMain.mSubHostInfoEntity.push(requestInfo);
         //新的流程为，调用accept后，跳转到select watch to share 界面
         selectFragment(ProfileShareKidsSelectFragment.class.getName(),null,
                 true);
@@ -240,13 +291,17 @@ public class ProfileRequestFromKidsInfoFragment extends ProfileBaseFragment {
 
     @OnClick(R.id.btn_decline)
     protected void onDeclineRequestFrom(){
-        showLayout(R.id.layout_stop_share);
+        mActivityMain.mSubHostInfoEntity.push(requestInfo);
+        selectFragment(ProfileRequestFromDenyConfirmFragment.class.getName(),null,
+                true);
+
+//        showLayout(R.id.layout_stop_share);
     }
 
     @OnClick(R.id.btn_confirm_stop_share)
     protected void onConfirmStopShare(){
 
-        if(requestFrom == null){
+        if(requestInfo == null){
             return;
         }
 
@@ -256,14 +311,14 @@ public class ProfileRequestFromKidsInfoFragment extends ProfileBaseFragment {
                 generateApi(HostApi.class, true);
 
         DenySubHost subHostId = new DenySubHost();
-        subHostId.setSubHostId(requestFrom.getId());
+        subHostId.setSubHostId(requestInfo.getId());
         hostApi.subHostDeny(subHostId).enqueue(new BaseRetrofitCallback<Object>() {
             @Override
             public void onResponse(Call<Object> call, Response<Object> response) {
                 int code = response.code();
 
                 if(200 == code){
-                    // TODO: 2017/12/6
+                    getFragmentManager().popBackStack();
                 }else {
                     ToastCommon.makeText(getContext(),R.string.normal_err,code);
                 }

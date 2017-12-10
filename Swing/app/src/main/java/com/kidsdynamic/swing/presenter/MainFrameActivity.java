@@ -65,6 +65,7 @@ public class MainFrameActivity extends BaseFragmentActivity {
     //用于CalendarFragment间的数据交换
 //    public Stack<WatchContact> mContactStack;
     public Stack<Bundle> mCalendarBundleStack;
+    public Stack<String> mSignStack;
 
     public Stack<WatchEvent> mEventStack;
     public Stack<WatchContact> mWatchContactStack;
@@ -140,6 +141,7 @@ public class MainFrameActivity extends BaseFragmentActivity {
         mWatchContactStack = new Stack<>();
 
         mSubHostInfoEntity = new Stack<>();
+        mSignStack = new Stack<>();
 
 
         //UI更新广播监听

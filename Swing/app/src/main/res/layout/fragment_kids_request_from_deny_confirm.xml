@@ -20,57 +20,50 @@
             android:orientation="vertical"
             android:layout_gravity="center_vertical">
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="85dp"
-                android:layout_weight="2.5"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:paddingBottom="6dp">
+                android:layout_height="wrap_content">
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    style="@style/profile_label_layout">
-
-                    <com.kidsdynamic.swing.view.AvenirTextView
-                        android:id="@+id/tv_my_devices"
-                        style="@style/textview_profile_group"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:gravity="center"
-                        android:text="@string/profile_main_hosting" />
-
-                    <View
-                        style="@style/line_profile_label"
-                        android:layout_toStartOf="@id/tv_my_devices" />
-
-                    <View
-                        style="@style/line_profile_label"
-                        android:layout_toEndOf="@id/tv_my_devices" />
-
-                </RelativeLayout>
-
-                <HorizontalScrollView
+                <LinearLayout
+                    android:id="@+id/layout_arrow"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center_horizontal">
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:orientation="vertical">
 
-                    <LinearLayout
-                        android:id="@+id/profile_share_device_container"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center_vertical"
-                        android:orientation="horizontal">
+                    <ImageView
+                        android:id="@+id/view_right_arrow"
+                        android:background="@drawable/right_arrow"
+                        style="@style/kids_request_img_arrow"
+                        android:layout_weight="1"/>
 
-                    </LinearLayout>
-                </HorizontalScrollView>
-            </LinearLayout>
+                    <ImageView
+                        android:id="@+id/view_left_arrow"
+                        android:background="@drawable/left_arrow"
+                        style="@style/kids_request_img_arrow"
+                        android:layout_weight="1"
+                        android:visibility="visible"/>
 
-            <!--select kids to share confirm-->
+                </LinearLayout>
+
+
+
+                <com.kidsdynamic.swing.view.ViewCircle
+                    android:id="@+id/user_profile_photo"
+                    style="@style/kids_share_avatar_view"
+                    android:layout_toStartOf="@id/layout_arrow"/>
+
+                <com.kidsdynamic.swing.view.ViewCircle
+                    android:id="@+id/request_kids_profile_photo"
+                    style="@style/kids_share_avatar_view"
+                    android:layout_toEndOf="@id/layout_arrow"/>
+
+            </RelativeLayout>
+
+
+            <!--decline confirm layout确认界面-->
             <LinearLayout
-                android:id="@+id/layout_request_from_info"
+                android:id="@+id/layout_stop_share"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
@@ -78,36 +71,23 @@
                 android:visibility="visible">
 
                 <com.kidsdynamic.swing.view.AvenirTextView
-                    android:id="@+id/state_note"
-                    android:text="@string/profile_kids_select_watch_share"
+                    android:id="@+id/tv_stop_share_tip"
+                    android:text="@string/profile_stop_share"
                     style="@style/profile_info_tip_tv"
                     android:textStyle="bold"/>
 
-                <com.kidsdynamic.swing.view.AvenirTextView
-                    android:id="@+id/tv_request_kids_tip"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
-                    android:layout_marginStart="@dimen/base_56"
-                    android:layout_marginEnd="@dimen/base_56"
-                    android:textSize="@dimen/fontsize42"
-                    android:gravity="center"
-                    android:imeOptions="actionNext"
-                    android:text="terase."
-                    android:textColor="@color/hex_9c9c9c"
-                    />
-
                 <Button
-                    android:id="@+id/btn_confirm_select"
+                    android:id="@+id/btn_confirm_stop_share"
                     style="@style/btn_main_profile"
                     android:layout_width="match_parent"
-                    android:text="@string/profile_confirm" />
+                    android:layout_marginTop="@dimen/base_30"
+                    android:text="@string/profile_logout_confirm_btn" />
 
                 <Button
-                    android:id="@+id/btn_decline"
+                    android:id="@+id/btn_no"
                     style="@style/btn_main_profile"
                     android:layout_width="match_parent"
-                    android:text="@string/profile_decline_request_from" />
+                    android:text="@string/watch_have_no" />
 
             </LinearLayout>
 
@@ -147,6 +127,7 @@
                     android:text="@string/profile_kid_remove" />
 
             </LinearLayout>
+
 
 
         </LinearLayout>

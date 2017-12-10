@@ -20,6 +20,11 @@ import retrofit2.http.Query;
  */
 
 public interface HostApi {
+
+    public final String subHost_status_pending = "PENDING";
+    public final String subHost_status_accepted = "ACCEPTED";
+    public final String subHost_status_denied = "DENIED";
+
 //200	Added successfully
 //400	Bad request. Missing some parameters, or the type is wrong
 //409	Conflict. The request is already exists
@@ -49,7 +54,7 @@ public interface HostApi {
 //    It returns request from and request to Subhost list
 //    status: PENDING, ACCEPTED, DENIED
     @GET("v1/subHost/list")
-    Call<SubHostRequests> subHostList(@Body String status);
+    Call<SubHostRequests> subHostList(@Query("status") String status);
 
 //200	Accept successfully
 //400	Bad request. Missing some parameters, or the type is wrong

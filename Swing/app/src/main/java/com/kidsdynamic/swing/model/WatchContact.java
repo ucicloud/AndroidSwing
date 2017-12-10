@@ -15,6 +15,7 @@ import java.util.Locale;
 public class WatchContact implements Serializable {
     public Bitmap mPhoto;
     public String mLabel;
+    public boolean isSelect = false;
 
     public WatchContact() {
         mPhoto = null;

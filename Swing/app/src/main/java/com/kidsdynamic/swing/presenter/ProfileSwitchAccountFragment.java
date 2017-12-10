@@ -240,7 +240,7 @@ public class ProfileSwitchAccountFragment extends ProfileBaseFragment {
         }*/
 
 //        selectFragment(ProfileRequestToKidsInfoFragment.newInstance(1),true);
-        selectFragment(ProfileRequestFromKidsInfoFragment.newInstance(1),true);
+        selectFragment(ProfileRequestFromFragment.newInstance(1),true);
 
     }
 

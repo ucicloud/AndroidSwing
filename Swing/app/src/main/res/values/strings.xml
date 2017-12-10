@@ -491,6 +491,7 @@
 
     <string name="error_email_null">Email is null</string>
     <string name="normal_err">fail[%1$d], please try again</string>
+    <string name="share_no_select_kids">Please select one watch</string>
 
     <!-- *************************************************************************************** -->
     <!-- Special character: Warning DO NOT translate below -->

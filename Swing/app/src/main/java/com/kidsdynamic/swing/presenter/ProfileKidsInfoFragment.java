@@ -73,9 +73,10 @@ public class ProfileKidsInfoFragment extends ProfileBaseFragment {
         Bundle arguments = getArguments();
         if(arguments != null){
             kidsId = arguments.getLong(TAG_KIDS_ID, -1);
-            if(kidsId == -1){
-                exitByKidsNull();
-            }
+        }
+
+        if(kidsId == -1){
+            exitByKidsNull();
         }
     }
 

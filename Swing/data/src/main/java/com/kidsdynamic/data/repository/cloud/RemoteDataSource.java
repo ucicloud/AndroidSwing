@@ -1,29 +1,12 @@
 package com.kidsdynamic.data.repository.cloud;
 
-import android.app.Application;
-import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MutableLiveData;
-import android.content.Context;
-import android.util.Log;
-
-import com.kidsdynamic.data.net.ApiGen;
-import com.kidsdynamic.data.net.event.EventApi;
-import com.kidsdynamic.data.net.event.model.EventWithTodo;
-import com.kidsdynamic.data.utils.LogUtil2;
-
-import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
 /**
  * RemoteDataSource 服务的event数据 <br/>
  * date:   2017/12/8 11:58 <br/>
  */
 
 public class RemoteDataSource {
-    private Context applicationContext;
+    /*private Context applicationContext;
 
     private static RemoteDataSource INSTANCE = null;
 
@@ -75,6 +58,6 @@ public class RemoteDataSource {
 
         return mEventList;
     }
-
+*/
 
 }

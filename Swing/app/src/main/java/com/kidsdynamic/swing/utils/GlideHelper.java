@@ -75,11 +75,12 @@ public class GlideHelper {
             e.printStackTrace();
         }
     }
-    public static void getBitMapFromCloud(Context context, String uri, SimpleTarget<Bitmap> SimpleTarget) {
+    public static void getBitMapOnlyCacheInMemory(Context context, String uri,
+                                                  SimpleTarget<Bitmap> SimpleTarget) {
         try {
             RequestOptions requestOptions = RequestOptions.circleCropTransform()
                     .placeholder(R.drawable.default_avatar)
-                    .skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.NONE);
+                    .skipMemoryCache(false).diskCacheStrategy(DiskCacheStrategy.NONE);
             Glide.with(context.getApplicationContext()).asBitmap()
                     .load(uri)
                     .apply(requestOptions)

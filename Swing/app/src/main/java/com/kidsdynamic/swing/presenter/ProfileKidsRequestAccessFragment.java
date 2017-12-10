@@ -46,8 +46,8 @@ public class ProfileKidsRequestAccessFragment extends ProfileBaseFragment {
     @BindView(R.id.btn_search_again)
     protected Button btn_search_again;
 
-    @BindView(R.id.btn_decline)
-    protected Button btn_decline;
+    @BindView(R.id.btn_cancel)
+    protected Button btn_cancel;
 
     @BindView(R.id.iv_head)
     protected ImageView user_avatar;
@@ -92,7 +92,7 @@ public class ProfileKidsRequestAccessFragment extends ProfileBaseFragment {
 //        mViewPhoto.setOnClickListener(mPhotoListener);
 
         btn_search_again.setTypeface(SwingFontsCache.getBoldType(getContext()));
-        btn_decline.setTypeface(SwingFontsCache.getBoldType(getContext()));
+        btn_cancel.setTypeface(SwingFontsCache.getBoldType(getContext()));
 
         initTitleBar();
 
@@ -198,8 +198,8 @@ public class ProfileKidsRequestAccessFragment extends ProfileBaseFragment {
         selectFragment(ProfileSearchUserFragment.class.getName(),null,true);
     }
 
-    @OnClick(R.id.btn_decline)
-    public void onDecline(){
+    @OnClick(R.id.btn_cancel)
+    public void onCancel(){
        getFragmentManager().popBackStack();
     }
 

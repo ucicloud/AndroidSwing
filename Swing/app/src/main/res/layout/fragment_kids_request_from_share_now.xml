@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_blue_sky"
+    android:orientation="vertical">
+
+    <include layout="@layout/base_title_bar"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="7"
+        android:layout_marginTop="@dimen/base_10">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="center_vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:id="@+id/layout_arrow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/view_right_arrow"
+                        android:background="@drawable/right_arrow"
+                        style="@style/kids_request_img_arrow"
+                        android:layout_weight="1"/>
+
+                    <ImageView
+                        android:id="@+id/view_left_arrow"
+                        android:background="@drawable/left_arrow"
+                        style="@style/kids_request_img_arrow"
+                        android:layout_weight="1"
+                        android:visibility="visible"/>
+
+                </LinearLayout>
+
+
+
+                <com.kidsdynamic.swing.view.ViewCircle
+                    android:id="@+id/user_profile_photo"
+                    style="@style/kids_share_avatar_view"
+                    android:layout_toStartOf="@id/layout_arrow"/>
+
+                <com.kidsdynamic.swing.view.ViewCircle
+                    android:id="@+id/request_kids_profile_photo"
+                    style="@style/kids_share_avatar_view"
+                    android:layout_toEndOf="@id/layout_arrow"/>
+
+            </RelativeLayout>
+
+            <!--sharing now layout确认界面-->
+            <LinearLayout
+                android:id="@+id/layout_sharing_now"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_marginTop="@dimen/base_35"
+                android:visibility="visible">
+
+                <com.kidsdynamic.swing.view.AvenirTextView
+                    android:text="@string/profile_sharing_now"
+                    style="@style/profile_info_tip_tv"
+                    android:textStyle="bold"/>
+
+                <com.kidsdynamic.swing.view.AvenirTextView
+                    android:id="@+id/tv_sharing_info_tip"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                    android:layout_marginStart="@dimen/base_56"
+                    android:layout_marginEnd="@dimen/base_56"
+                    android:textSize="@dimen/fontsize42"
+                    android:gravity="center"
+                    android:imeOptions="actionNext"
+                    android:text="terase."
+                    android:textColor="@color/hex_9c9c9c"
+                    />
+
+                <Button
+                    android:id="@+id/btn_remove_sharing"
+                    style="@style/btn_main_profile"
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="@dimen/base_30"
+                    android:text="@string/profile_kid_remove" />
+
+            </LinearLayout>
+
+
+
+
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>
