@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,11 +14,17 @@ import android.widget.TextView;
 
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.kidsdynamic.data.net.ApiGen;
+import com.kidsdynamic.data.net.host.HostApi;
+import com.kidsdynamic.data.net.host.model.RequestAddSubHostEntity;
+import com.kidsdynamic.data.net.host.model.SubHostRemovedKidRequest;
 import com.kidsdynamic.swing.R;
 import com.kidsdynamic.swing.domain.DeviceManager;
+import com.kidsdynamic.swing.domain.ProfileManager;
 import com.kidsdynamic.swing.domain.UserManager;
 import com.kidsdynamic.swing.model.KidsEntityBean;
 import com.kidsdynamic.swing.model.WatchContact;
+import com.kidsdynamic.swing.net.BaseRetrofitCallback;
 import com.kidsdynamic.swing.utils.GlideHelper;
 import com.kidsdynamic.swing.utils.ViewUtils;
 import com.kidsdynamic.swing.view.ViewCircle;
@@ -28,6 +35,8 @@ import java.lang.ref.WeakReference;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import retrofit2.Call;
+import retrofit2.Response;
 
 /**
  * ProfileRemoveKidsConfirmFragment
@@ -58,6 +67,7 @@ public class ProfileRemoveKidsConfirmFragment extends ProfileBaseFragment {
 
     private long kidsId;
     private KidsEntityBean kidsInfo;
+    private RequestAddSubHostEntity requestInfo;
 
     private KidsHandler kidsHandler;
 
@@ -75,13 +85,41 @@ public class ProfileRemoveKidsConfirmFragment extends ProfileBaseFragment {
 
         mActivityMain = (MainFrameActivity) getActivity();
 
+        handleBackKey();
+
+        if(!mActivityMain.mSubHostInfoEntity.isEmpty()){
+            requestInfo = mActivityMain.mSubHostInfoEntity.pop();
+        }
+
         Bundle arguments = getArguments();
         if(arguments != null){
             kidsId = arguments.getLong(TAG_KIDS_ID, -1);
-            if(kidsId == -1){
-                exitByKidsNull();
-            }
         }
+
+        if(kidsId == -1 || requestInfo == null){
+            exitByKidsNull();
+        }
+    }
+
+    private void handleBackKey() {
+
+        if (getView() == null) {
+            return;
+        }
+
+        getView().setFocusableInTouchMode(true);
+        getView().requestFocus();
+        getView().setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View view, int keycode, KeyEvent keyEvent) {
+                if(keycode == KeyEvent.KEYCODE_BACK
+                        && isRemoveOKStatus()){
+                    onTopLeftBtnClick();
+                    return true;
+                }
+                return false;
+            }
+        });
     }
 
     private void exitByKidsNull() {
@@ -118,7 +156,14 @@ public class ProfileRemoveKidsConfirmFragment extends ProfileBaseFragment {
 
     @OnClick(R.id.main_toolbar_action1)
     public void onTopLeftBtnClick() {
+        if(isRemoveOKStatus()){
+            mActivityMain.mSignStack.push(ProfileManager.sign_remove_ok);
+        }
         getActivity().getSupportFragmentManager().popBackStack();
+    }
+
+    public boolean isRemoveOKStatus(){
+        return btn_confirm.getVisibility() == View.INVISIBLE;
     }
 
     @Override
@@ -168,12 +213,45 @@ public class ProfileRemoveKidsConfirmFragment extends ProfileBaseFragment {
     };
 
     @OnClick(R.id.btn_confirm)
-    protected void onConfirmSwitch(){
-        //confirm to switch account
-        // TODO: 2017/12/1
+    protected void onConfirmRemove(){
+        //confirm to remove account
+        showLoadingDialog(R.string.signup_login_wait);
+        //拒绝 共享请求
+        HostApi hostApi = ApiGen.getInstance(getActivity().getApplicationContext()).
+                generateApi(HostApi.class, true);
+
+        SubHostRemovedKidRequest subHostRemovedKidRequest = new SubHostRemovedKidRequest();
+        subHostRemovedKidRequest.setKidId(kidsId);
+        subHostRemovedKidRequest.setSubHostId(requestInfo.getId());
 
 
-        //切换kids成功后，隐藏btn，更新note
+        hostApi.subHostRemoveKid(subHostRemovedKidRequest).enqueue(new BaseRetrofitCallback<RequestAddSubHostEntity>() {
+            @Override
+            public void onResponse(Call<RequestAddSubHostEntity> call, Response<RequestAddSubHostEntity> response) {
+                int code = response.code();
+                if(code == 200){
+                    //切换kids成功后，隐藏btn，更新note
+                    afterRemoveKids();
+                }else if(code == 401){
+                    ToastCommon.makeText(getContext(),R.string.error_subhost_remove_kid_403);
+                }else {
+                    ToastCommon.makeText(getContext(),R.string.normal_err,code);
+                }
+
+                finishLoadingDialog();
+                super.onResponse(call, response);
+            }
+
+            @Override
+            public void onFailure(Call<RequestAddSubHostEntity> call, Throwable t) {
+                finishLoadingDialog();
+                super.onFailure(call, t);
+            }
+        });
+
+    }
+
+    private void afterRemoveKids() {
         btn_confirm.setVisibility(View.INVISIBLE);
         btn_cancel.setVisibility(View.INVISIBLE);
         tv_note.setText(R.string.profile_kids_after_remove_tip);
@@ -202,6 +280,8 @@ public class ProfileRemoveKidsConfirmFragment extends ProfileBaseFragment {
     }
 
     public void exit(){
+        //remove 成功后，需要通知上个界面关闭
+        mActivityMain.mSignStack.push(ProfileManager.sign_remove_ok);
         getFragmentManager().popBackStack();
     }
 

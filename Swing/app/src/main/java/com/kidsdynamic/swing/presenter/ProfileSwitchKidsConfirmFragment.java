@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.kidsdynamic.swing.R;
 import com.kidsdynamic.swing.domain.DeviceManager;
+import com.kidsdynamic.swing.domain.ProfileManager;
 import com.kidsdynamic.swing.domain.UserManager;
 import com.kidsdynamic.swing.model.KidsEntityBean;
 import com.kidsdynamic.swing.model.WatchContact;
@@ -75,13 +77,41 @@ public class ProfileSwitchKidsConfirmFragment extends ProfileBaseFragment {
 
         mActivityMain = (MainFrameActivity) getActivity();
 
+        handleBackKey();
+
         Bundle arguments = getArguments();
         if(arguments != null){
             kidsId = arguments.getLong(TAG_KIDS_ID, -1);
-            if(kidsId == -1){
-                exitByKidsNull();
-            }
         }
+
+        if(kidsId == -1){
+            exitByKidsNull();
+        }
+    }
+
+    private void handleBackKey() {
+
+        if (getView() == null) {
+            return;
+        }
+
+        getView().setFocusableInTouchMode(true);
+        getView().requestFocus();
+        getView().setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View view, int keycode, KeyEvent keyEvent) {
+                if(keycode == KeyEvent.KEYCODE_BACK
+                        && isConfirmOKStatus()){
+                    onTopLeftBtnClick();
+                    return true;
+                }
+                return false;
+            }
+        });
+    }
+
+    public boolean isConfirmOKStatus(){
+        return btn_switch_confirm.getVisibility() == View.INVISIBLE;
     }
 
     private void exitByKidsNull() {
@@ -119,6 +149,10 @@ public class ProfileSwitchKidsConfirmFragment extends ProfileBaseFragment {
 
     @OnClick(R.id.main_toolbar_action1)
     public void onTopLeftBtnClick() {
+
+        if(isConfirmOKStatus()){
+            mActivityMain.mSignStack.push(ProfileManager.sign_remove_ok);
+        }
         getActivity().getSupportFragmentManager().popBackStack();
     }
 
@@ -171,8 +205,12 @@ public class ProfileSwitchKidsConfirmFragment extends ProfileBaseFragment {
     @OnClick(R.id.btn_confirm_switch)
     protected void onConfirmSwitch(){
         //confirm to switch account
-        // TODO: 2017/12/1
 
+        //更新本地缓存
+        if(!DeviceManager.updateFocusKids(kidsId)){
+            ToastCommon.makeText(getContext(),R.string.normal_err,-1);
+            return;
+        }
 
         //切换kids成功后，隐藏btn，更新note
         btn_switch_confirm.setVisibility(View.INVISIBLE);
@@ -203,6 +241,8 @@ public class ProfileSwitchKidsConfirmFragment extends ProfileBaseFragment {
     }
 
     public void exit(){
+        //switch 成功后，需要通知上个界面关闭
+        mActivityMain.mSignStack.push(ProfileManager.sign_remove_ok);
         getFragmentManager().popBackStack();
     }
 

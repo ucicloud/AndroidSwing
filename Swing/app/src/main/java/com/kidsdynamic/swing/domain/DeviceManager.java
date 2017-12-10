@@ -4,9 +4,11 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
+import com.google.gson.Gson;
 import com.kidsdynamic.commonlib.utils.ObjectUtils;
 import com.kidsdynamic.data.dao.DB_EventKids;
 import com.kidsdynamic.data.dao.DB_Kids;
+import com.kidsdynamic.data.net.host.model.SubHostRequests;
 import com.kidsdynamic.data.net.kids.model.KidsWithParent;
 import com.kidsdynamic.data.persistent.DbUtil;
 import com.kidsdynamic.data.persistent.PreferencesUtil;
@@ -30,6 +32,8 @@ public class DeviceManager {
     public final static String BUNDLE_KEY_USER_ID = "USER_ID";
 
     private final static String key_focus_kids = "focus_kids";
+    private final static String key_SubHostRequests = "SubHostRequests";
+
     public static DB_Kids getFocusWatchInfo(Context context){
 
         long focusKidsId = getFocusKidsId();
@@ -215,6 +219,29 @@ public class DeviceManager {
                     BeanConvertor.updateEventKidsList(dbEventKids, kidsWithParent,updateTime));
         }
 
+    }
+
+    public static void updateSubHostRequestsInCache(SubHostRequests subHostRequests){
+        if(subHostRequests != null){
+            Gson gson = new Gson();
+            String jsonStr = gson.toJson(subHostRequests);
+
+            PreferencesUtil preferencesUtil = PreferencesUtil.getInstance(SwingApplication.getAppContext());
+            preferencesUtil.setPreferenceStringValue(key_SubHostRequests,jsonStr);
+        }
+
+    }
+
+    public SubHostRequests getSubHostRequestsInCache(){
+        PreferencesUtil preferencesUtil = PreferencesUtil.getInstance(SwingApplication.getAppContext());
+
+        String subHostListStr = preferencesUtil.gPrefStringValue(key_SubHostRequests);
+        if(TextUtils.isEmpty(subHostListStr)){
+            return null;
+        }
+
+        Gson gson = new Gson();
+        return gson.fromJson(subHostListStr, SubHostRequests.class);
     }
 
 

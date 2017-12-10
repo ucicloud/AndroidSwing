@@ -7,4 +7,5 @@ package com.kidsdynamic.swing.domain;
 
 public class ProfileManager {
     public static String sign_deny_ok = "deny_ok";
+    public static String sign_remove_ok = "remove_ok";
 }

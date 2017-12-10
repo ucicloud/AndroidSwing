@@ -1,7 +1,10 @@
 package com.kidsdynamic.swing.presenter;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Log;
@@ -22,9 +25,12 @@ import com.kidsdynamic.data.net.host.HostApi;
 import com.kidsdynamic.data.net.host.model.RequestAddSubHostEntity;
 import com.kidsdynamic.data.net.host.model.SubHostRequests;
 import com.kidsdynamic.swing.R;
+import com.kidsdynamic.swing.SwingApplication;
 import com.kidsdynamic.swing.domain.DeviceManager;
 import com.kidsdynamic.swing.domain.LoginManager;
 import com.kidsdynamic.swing.domain.UserManager;
+import com.kidsdynamic.swing.domain.datasource.RemoteDataSource;
+import com.kidsdynamic.swing.domain.viewmodel.SubHostListModel;
 import com.kidsdynamic.swing.model.WatchContact;
 import com.kidsdynamic.swing.net.BaseRetrofitCallback;
 import com.kidsdynamic.swing.utils.GlideHelper;
@@ -58,6 +64,9 @@ public class ProfileMainFragment extends ProfileBaseFragment {
     private LinearLayout mViewSharedContainer;
     private LinearLayout mViewRequestToContainer;
     private LinearLayout mViewRequestFromContainer;
+
+    private SubHostListModel subHostListModel = null;
+    private boolean isLoadSubHost = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -98,6 +107,47 @@ public class ProfileMainFragment extends ProfileBaseFragment {
         view_left_action.setImageResource(R.drawable.icon_edit);
 
         view_right_action.setImageResource(R.drawable.icon_settings);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        subscribeUI();
+    }
+
+    private void subscribeUI() {
+        if (!isAdded()) {
+            return;
+        }
+
+
+        SwingApplication appInstance = (SwingApplication) SwingApplication.getAppContext();
+
+        SubHostListModel.Factory factory = new SubHostListModel.Factory(
+                appInstance,
+                RemoteDataSource.getInstance(appInstance));
+        subHostListModel = ViewModelProviders.of(this,factory).get(SubHostListModel.class);
+        subHostListModel.getSubHostRequestsLiveData().observe(this, new Observer<SubHostRequests>() {
+            @Override
+            public void onChanged(@Nullable SubHostRequests subHostRequests) {
+                //update UI
+
+            }
+        });
+
+        subHostListModel.getLoadState().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(@Nullable Boolean aBoolean) {
+                if(aBoolean == null){
+                    return;
+                }
+
+                isLoadSubHost = aBoolean;
+            }
+        });
+
+        subHostListModel.refreshSubHostData("");
     }
 
     @Override
@@ -231,11 +281,11 @@ public class ProfileMainFragment extends ProfileBaseFragment {
 
             if (viewContainer == mViewDeviceContainer) {
 
-                //一期暂时没跳转
+                //一期暂时没跳转,
 //                showKidsProfile(contact);
 
                 //just test
-//                showRequestToFragment(null);
+                showRequestToFragment(null,contact);
 
             } else if (viewContainer == mViewSharedContainer) {
                 focusContact(contact, false);
@@ -264,13 +314,13 @@ public class ProfileMainFragment extends ProfileBaseFragment {
         if(contact instanceof WatchContact.Kid){
             WatchContact.Kid watchKidsInfo = (WatchContact.Kid) contact;
 //            selectFragment(ProfileRemoveKidsConfirmFragment.newInstance(watchKidsInfo.mId),true);
-//            selectFragment(ProfileKidsFromSharedInfoFragment.newInstance(watchKidsInfo.mId),true);
-            selectFragment(ProfileSearchUserFragment.class.getName(),null,true);
+            selectFragment(ProfileKidsFromSharedInfoFragment.newInstance(watchKidsInfo.mId),true);
+//            selectFragment(ProfileSearchUserFragment.class.getName(),null,true);
         }
 
     }
 
-    private void showRequestToFragment(RequestAddSubHostEntity requestAddSubHostEntity){
+    private void showRequestToFragment(RequestAddSubHostEntity requestAddSubHostEntity, final WatchContact... contacts){
 
         HostApi hostApi = ApiGen.getInstance(getActivity().getApplicationContext()).
                 generateApi(HostApi.class, true);
@@ -284,7 +334,9 @@ public class ProfileMainFragment extends ProfileBaseFragment {
                     List<RequestAddSubHostEntity> requestFrom = response.body().getRequestFrom();
                     if(!ObjectUtils.isListEmpty(requestFrom)){
                         mActivityMain.mSubHostInfoEntity.push(requestFrom.get(0));
-                        selectFragment(ProfileRequestFromFragment.class.getName(),null,true);
+//                        selectFragment(ProfileRequestFromFragment.class.getName(),null,true);
+
+                        testGotoKidsInfoShare(requestFrom.get(0),contacts);
                     }else {
                         Log.w("profile", "requestFrom list 0");
                     }
@@ -302,6 +354,16 @@ public class ProfileMainFragment extends ProfileBaseFragment {
        /* mActivityMain.mSubHostInfoEntity.push(requestAddSubHostEntity);
         selectFragment(ProfileRequestFromFragment.class.getName(),null,true);*/
 
+    }
+
+    private void testGotoKidsInfoShare(RequestAddSubHostEntity requestAddSubHostEntity, WatchContact... contacts){
+
+        if(contacts != null && contacts.length >0 &&
+                contacts[0] instanceof WatchContact.Kid){
+
+            WatchContact.Kid kid = (WatchContact.Kid) contacts[0];
+            selectFragment(ProfileKidsFromSharedInfoFragment.newInstance(kid.mId),true);
+        }
     }
 
     private void addContact(LinearLayout layout, WatchContact contact, View.OnClickListener listener) {

@@ -72,7 +72,6 @@ public class ProfileKidsFromSharedInfoFragment extends ProfileBaseFragment {
 
         if(!mActivityMain.mSubHostInfoEntity.isEmpty()){
             requestInfo = mActivityMain.mSubHostInfoEntity.pop();
-            return;
         }
 
         Bundle arguments = getArguments();
@@ -131,7 +130,7 @@ public class ProfileKidsFromSharedInfoFragment extends ProfileBaseFragment {
 
         if (!mActivityMain.mSignStack.isEmpty()) {
             String signStr = mActivityMain.mSignStack.pop();
-            if(ProfileManager.sign_deny_ok.equals(signStr)){
+            if(ProfileManager.sign_remove_ok.equals(signStr)){
                 getFragmentManager().popBackStack();
                 return;
             }
@@ -188,7 +187,7 @@ public class ProfileKidsFromSharedInfoFragment extends ProfileBaseFragment {
     @OnClick(R.id.btn_remove)
     protected void onRemove(){
         mActivityMain.mSubHostInfoEntity.push(requestInfo);
-        selectFragment(ProfileSwitchKidsConfirmFragment.newInstance(kidsId),true);
+        selectFragment(ProfileRemoveKidsConfirmFragment.newInstance(kidsId),true);
     }
 
 

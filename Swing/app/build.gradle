@@ -2,7 +2,8 @@ apply plugin: 'com.android.application'
 //apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'com.jakewharton.butterknife'
 
-def supportVersion = "25.3.0"
+//def supportVersion = "25.3.0"
+def supportVersion = "26.1.0"
 
 android {
     compileSdkVersion 26
