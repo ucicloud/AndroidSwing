@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,13 +45,23 @@ public class ProfileContainerFragment extends BaseFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        Log.w("profile","container onActivityCreated");
+
         initTitleBar();
 
         registerUIReceiver();
 
         // TODO: 2017/12/4 一期项目直接显示option界面
-        selectFragment(ProfileMainFragment.class.getName(),null,false);
+//        selectFragment(ProfileMainFragment.class.getName(),null,false);
 //        selectFragment(ProfileOptionFragment.class.getName(),null,false);
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        selectFragment(ProfileMainFragment.class.getName(),null,false);
 
     }
 

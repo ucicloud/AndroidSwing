@@ -50,6 +50,27 @@ public class KidsDataStore {
         return null;
     }
 
+    public List<DB_Kids> getKidsInfoByShared(int shareType){
+        KidsDao kidsDao = dbUtil.getDaoSession().getKidsDao();
+        List<DB_Kids> kidsList = kidsDao.queryBuilder().
+                where(KidsDao.Properties.ShareType.eq(shareType)).list();
+        if(!ObjectUtils.isListEmpty(kidsList)){
+            return kidsList;
+        }
+
+        return null;
+    }
+
+    public void clearKidsInfoForShareType(int ShareType){
+        KidsDao kidsDao = dbUtil.getDaoSession().getKidsDao();
+        List<DB_Kids> db_kids = kidsDao.queryBuilder().
+                where(KidsDao.Properties.ShareType.eq(ShareType)).list();
+
+        if(!ObjectUtils.isListEmpty(db_kids)){
+            kidsDao.deleteInTx(db_kids);
+        }
+    }
+
 
     public void update(@NonNull DB_Kids db_kids){
         KidsDao kidsDao = dbUtil.getDaoSession().getKidsDao();

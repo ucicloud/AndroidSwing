@@ -26,6 +26,7 @@ import com.kidsdynamic.data.net.host.model.RequestAddSubHostEntity;
 import com.kidsdynamic.data.net.host.model.SubHostRequests;
 import com.kidsdynamic.swing.R;
 import com.kidsdynamic.swing.SwingApplication;
+import com.kidsdynamic.swing.domain.BeanConvertor;
 import com.kidsdynamic.swing.domain.DeviceManager;
 import com.kidsdynamic.swing.domain.LoginManager;
 import com.kidsdynamic.swing.domain.UserManager;
@@ -67,6 +68,7 @@ public class ProfileMainFragment extends ProfileBaseFragment {
 
     private SubHostListModel subHostListModel = null;
     private boolean isLoadSubHost = false;
+    private SubHostRequests mSubHostRequests;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -113,10 +115,14 @@ public class ProfileMainFragment extends ProfileBaseFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        mSubHostRequests = DeviceManager.getSubHostRequestsInCache();
+
         subscribeUI();
     }
 
     private void subscribeUI() {
+        Log.w("profile","subscribeUI");
+
         if (!isAdded()) {
             return;
         }
@@ -132,7 +138,12 @@ public class ProfileMainFragment extends ProfileBaseFragment {
             @Override
             public void onChanged(@Nullable SubHostRequests subHostRequests) {
                 //update UI
+                mSubHostRequests = subHostRequests;
 
+                //更新数据库
+                DeviceManager.saveKidsData4Shared(mSubHostRequests.getRequestTo());
+
+                loadSubHostData();
             }
         });
 
@@ -153,6 +164,8 @@ public class ProfileMainFragment extends ProfileBaseFragment {
     @Override
     public void onResume() {
         super.onResume();
+
+        Log.w("profile","onResume");
 
         delAllContact(mViewDeviceContainer);
         delAllContact(mViewSharedContainer);
@@ -194,11 +207,12 @@ public class ProfileMainFragment extends ProfileBaseFragment {
 
         // TODO: 2017/11/20 二期
         // 載入所有其它用戶與當前用戶分享的手錶
-        /*for (WatchContact device : mActivityMain.mOperator.getSharedList())
+        List<WatchContact.Kid> kidsForUI = DeviceManager.getKidsForUI_sharedKids(getContext());
+        for (WatchContact device : kidsForUI)
             addContact(mViewSharedContainer, device, mContactListener);
 
         // 載入用戶發出需求的用戶
-        for (WatchContact user : mActivityMain.mOperator.getRequestToList()) {
+        /* for (WatchContact user : mActivityMain.mOperator.getRequestToList()) {
             if (((WatchContact.User) user).mRequestStatus.equals(WatchContact.User.STATUS_PENDING))
                 addContact(mViewRequestToContainer, user, null);
         }
@@ -209,10 +223,42 @@ public class ProfileMainFragment extends ProfileBaseFragment {
             addContact(mViewRequestFromContainer, user, mContactListener);
         }*/
 
+        loadSubHostData();
+
         updateRequestFromTitle();
 
         //当前focus的kids
 //        focusContact(mActivityMain.mOperator.getFocusKid(), true);
+    }
+
+    private void loadSubHostData(){
+        if(mSubHostRequests == null){
+            return;
+        }
+
+        List<RequestAddSubHostEntity> requestTo = mSubHostRequests.getRequestTo();
+        if(!ObjectUtils.isListEmpty(requestTo)){
+            for (RequestAddSubHostEntity requestToEntity : requestTo) {
+                if (requestToEntity.getStatus().equals(WatchContact.User.STATUS_PENDING)) {
+                    addContact(mViewRequestToContainer,
+                            BeanConvertor.getWatchContact(requestToEntity.getRequestToUser()),
+                            null);
+                }
+            }
+        }
+
+        List<RequestAddSubHostEntity> requestFrom = mSubHostRequests.getRequestFrom();
+        if(!ObjectUtils.isListEmpty(requestFrom)){
+            for (RequestAddSubHostEntity requestFromEntity : requestFrom) {
+                if (requestFromEntity.getStatus().equals(WatchContact.User.STATUS_PENDING)){
+                    addContact(mViewRequestFromContainer,
+                            BeanConvertor.getWatchContact(requestFromEntity.getRequestFromUser()),
+                                    mContactListener);
+                }
+            }
+
+        }
+
     }
 
     private SimpleTarget<Bitmap> userAvatarSimpleTarget = new SimpleTarget<Bitmap>(){
