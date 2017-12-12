@@ -27,6 +27,7 @@ import com.kidsdynamic.swing.net.BaseRetrofitCallback;
 import com.kidsdynamic.swing.view.ViewUtils;
 
 import java.util.HashMap;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -107,17 +108,17 @@ public class ProfileOptionFragment extends ProfileBaseFragment {
     @OnClick(R.id.profile_option_contact)
     protected void contactUs() {
 
-        /*String url = "http://www.kidsdynamic.com";
-        String language = mActivityMain.mConfig.getString(ActivityConfig.KEY_LANGUAGE);
-        switch (language) {
-            case "ru":
-            case "es":
-                url = "http://www.imaginarium.info/";
-                break;
-        }*/
-
         // force to KD's customer webpage
         String url = "http://www.imaginarium.info/";
+
+        String language =  Locale.getDefault().getLanguage();
+        switch (language) {
+            case "zh":
+            case "es":
+            case "ja":
+                url = "https://www.kidsdynamic.com";
+                break;
+        }
 
         Intent i = new Intent(Intent.ACTION_VIEW);
         i.setData(Uri.parse(url));
@@ -127,6 +128,20 @@ public class ProfileOptionFragment extends ProfileBaseFragment {
     @OnClick(R.id.profile_option_manual)
     protected void UserManual() {
         String url = "https://childrenlab.s3.amazonaws.com/pdf/Swing_User_Guide.pdf";
+
+        String lang = Locale.getDefault().getLanguage();
+
+        switch (lang) {
+            case "zh":
+                url = "https://childrenlab.s3.amazonaws.com/pdf/Swing_UserGuide_CN_KD_v1.0.pdf";
+                break;
+            case "es":
+                url = "https://childrenlab.s3.amazonaws.com/pdf/Swing_UserGuide_ENG_KD_v1.0.pdf";
+                break;
+            case "ja":
+                url = "https://childrenlab.s3.amazonaws.com/pdf/Swing_UserGuide_JP_KD_v1.0.pdf";
+                break;
+        }
 
         Intent i = new Intent(Intent.ACTION_VIEW);
         i.setData(Uri.parse(url));

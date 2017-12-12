@@ -57,8 +57,6 @@ public class CalendarContainerFragment extends BaseFragment {
 
         registerUIReceiver();
 
-        selectFragment(CalendarMainFragment.class.getName(),null,false);
-
         /*getView().setFocusableInTouchMode(true);
         getView().requestFocus();
         getView().setOnKeyListener(new View.OnKeyListener() {
@@ -75,6 +73,13 @@ public class CalendarContainerFragment extends BaseFragment {
                 return false;
             }
         });*/
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        selectFragment(CalendarMainFragment.class.getName(),null,false);
     }
 
     private void registerUIReceiver() {

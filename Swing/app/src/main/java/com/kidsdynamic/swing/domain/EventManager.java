@@ -144,6 +144,20 @@ public class EventManager {
             }
         });
 
+        //按照自然序排，由小到大
+        /*Collections.sort(result, new Comparator<WatchEvent>() {
+            @Override
+            public int compare(WatchEvent t1, WatchEvent t2) {
+                if (t2.mAlertTimeStamp > t1.mAlertTimeStamp) {
+                    return 1;
+                } else if (t2.mAlertTimeStamp < t1.mAlertTimeStamp) {
+                    return -1;
+                } else {
+                    return 0;
+                }
+            }
+        });*/
+
 
         return result;
 
@@ -360,12 +374,24 @@ public class EventManager {
         List<WatchEvent> list = getEventList(kid.getParentId(),startTimeStamp, endTimeStamp);
         List<WatchEvent> rtn = new ArrayList<>();
         Log.d("Sync", "!!!!!!!!! ignore kid !!!!!!!! " + startTimeStamp);
+
+        //add 2017年12月13日00:00:37 only
+       //手表一次最多同步100条
+       int maxNum = 100;
+       int nowNum = 0;
         for (WatchEvent watchEvent : list) {
             //if (watchEvent.containsKid(kid.mId))
             //    rtn.add(watchEvent);
 
-            if (watchEvent.mAlertTimeStamp > startTimeStamp)//watchEvent.containsKid(kid.mId)
-                rtn.add(watchEvent);
+            if (watchEvent.mAlertTimeStamp > startTimeStamp){
+                //watchEvent.containsKid(kid.mId)
+                if(nowNum >= maxNum){
+                    break;
+                }else {
+                    rtn.add(watchEvent);
+                    nowNum++;
+                }
+            }
         }
 
         return rtn;
