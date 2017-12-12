@@ -11,7 +11,7 @@
     <string name="title_dashboard">Начало</string>
     <string name="title_photo">фотографию</string>
     <string name="title_profile">профиль</string>
-    <string name="title_option">Опции</string>
+    <string name="title_option">Настройки</string>
     <string name="title_password">Пароль</string>
     <string name="title_request_from">Запрос от</string>
     <string name="title_request_to">Отправить запрос</string>

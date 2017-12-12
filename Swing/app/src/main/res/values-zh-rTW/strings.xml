@@ -154,7 +154,7 @@
     <string name="profile_option_about">"關於"</string>
     <string name="profile_option_contact_us">"與我們連絡"</string>
     <string name="profile_option_privacy_policy">"隱私政策"</string>
-    <string name="profile_option_manual">用戶手冊</string>
+    <string name="profile_option_manual">"使用手冊"</string>
     <string name="profile_option_version">"版本資訊"</string>
 
     <!-- FragmentProfilePassword -->

@@ -11,7 +11,7 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_photo">Photo</string>
     <string name="title_profile">Profile</string>
-    <string name="title_option">Option</string>
+    <string name="title_option">Options</string>
     <string name="title_password">Password</string>
     <string name="title_request_from">Request From</string>
     <string name="title_request_to">Send Requests To</string>
@@ -154,7 +154,7 @@
     <string name="profile_option_about">About</string>
     <string name="profile_option_contact_us">Contact Us</string>
     <string name="profile_option_privacy_policy">Privacy Policy</string>
-    <string name="profile_option_manual">User Manual</string>
+    <string name="profile_option_manual">User guide</string>
     <string name="profile_option_version">Version</string>
 
     <!-- FragmentProfilePassword -->

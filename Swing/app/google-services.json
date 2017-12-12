@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "1087866096212",
+    "firebase_url": "https://swing-2a798.firebaseio.com",
+    "project_id": "swing-2a798",
+    "storage_bucket": "swing-2a798.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1087866096212:android:84c2cfcf0df50782",
+        "android_client_info": {
+          "package_name": "com.kidsdynamic.swing"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1087866096212-uocu3kgvdmsafmmqp7v9k763aitn3ikc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kidsdynamic.swing",
+            "certificate_hash": "5d0d5505050192a15963f63a851108eeab40776d"
+          }
+        },
+        {
+          "client_id": "1087866096212-ftcnlv7dsl1griugt38ds0v1gli1obv9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCpjXgQwO9c_SkNuEG4UsmYe_T1onrKi9c"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1087866096212-ftcnlv7dsl1griugt38ds0v1gli1obv9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
