@@ -35,7 +35,7 @@ android {
             signingConfig signingConfigs.release
         }
 
-        debug{
+        debug {
             buildConfigField "String", "API_BASE_URL", devApiBaseUrl
             buildConfigField "String", "PHOTO_BASE_URL", devPhotoBaseUrl
 
@@ -43,7 +43,7 @@ android {
         }
     }
 
-    lintOptions{
+    lintOptions {
         abortOnError false
     }
 
@@ -87,10 +87,12 @@ dependencies {
     compile 'com.github.bumptech.glide:glide:4.3.1'
     compile 'cn.carbs.android:AvatarImageView:1.0.4'
     compile 'com.wdullaer:materialdatetimepicker:3.2.2'
+    compile 'com.google.firebase:firebase-core:11.6.2'
+    compile 'com.google.firebase:firebase-messaging:11.6.2'
 
     compile project(':data')
     compile project(':htttp')
-    compile project(path: ':base')
+    compile project(':base')
     compile project(':baseble')
 }
 
@@ -120,11 +122,9 @@ configurations.all {
         }
     }
 }
-
 task onDebugTypeTriggered << {
     rootProject.ext.variantRelease = false
 }
-
 task onReleaseTypeTriggered << {
     rootProject.ext.variantRelease = true
 }*/
@@ -154,3 +154,5 @@ if (proFile.exists()) {
     android.buildTypes.debug.signingConfig = null
     android.buildTypes.release.signingConfig = null
 }
+
+apply plugin: 'com.google.gms.google-services'
