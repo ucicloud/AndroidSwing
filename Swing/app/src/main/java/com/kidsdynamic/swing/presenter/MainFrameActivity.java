@@ -8,15 +8,20 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.kidsdynamic.data.dao.DB_Kids;
+import com.kidsdynamic.data.net.ApiGen;
 import com.kidsdynamic.data.net.host.model.RequestAddSubHostEntity;
+import com.kidsdynamic.data.net.user.UserApiNeedToken;
 import com.kidsdynamic.data.persistent.PreferencesUtil;
+import com.kidsdynamic.data.utils.LogUtil2;
 import com.kidsdynamic.swing.R;
 import com.kidsdynamic.swing.SwingApplication;
 import com.kidsdynamic.swing.domain.DeviceManager;
@@ -25,6 +30,7 @@ import com.kidsdynamic.swing.domain.RawActivityManager;
 import com.kidsdynamic.swing.domain.UserManager;
 import com.kidsdynamic.swing.model.WatchContact;
 import com.kidsdynamic.swing.model.WatchEvent;
+import com.kidsdynamic.swing.net.BaseRetrofitCallback;
 import com.kidsdynamic.swing.utils.ConfigUtil;
 import com.kidsdynamic.swing.utils.GlideHelper;
 import com.kidsdynamic.swing.view.ViewIntroductionAlarmList;
@@ -37,9 +43,12 @@ import java.util.HashMap;
 import java.util.Stack;
 
 import cn.carbs.android.avatarimageview.library.AvatarImageView;
+import retrofit2.Call;
+import retrofit2.Response;
 
 /**
  * 主界面
+ *
  * @data 2017年4月15日19:33:10
  */
 public class MainFrameActivity extends BaseFragmentActivity {
@@ -51,13 +60,13 @@ public class MainFrameActivity extends BaseFragmentActivity {
     protected View view_info;
     protected FrameLayout view_container;
 
-    private View [] tabViews = {view_tab_device,view_tab_calendar, view_tab_dashboard, view_tab_profile};
-    private int [] tabViews_res_id = {R.id.main_console_device,  R.id.main_console_calendar,
+    private View[] tabViews = {view_tab_device, view_tab_calendar, view_tab_dashboard, view_tab_profile};
+    private int[] tabViews_res_id = {R.id.main_console_device, R.id.main_console_calendar,
             R.id.main_console_dashboard, R.id.main_control_profile};
 
 //    private Fragment [] fragments = new Fragment[tabViews.length];
 
-    private HashMap<Integer,Fragment> fragmentHashMap = new HashMap<>(tabViews.length);
+    private HashMap<Integer, Fragment> fragmentHashMap = new HashMap<>(tabViews.length);
 
     private int currentTabKey; // 当前Tab页面索引
 
@@ -95,23 +104,46 @@ public class MainFrameActivity extends BaseFragmentActivity {
 
         //默认显示第三项
         tabViews[2].setSelected(true);
-        addFragment(fragmentHashMap.get(R.id.main_console_dashboard),R.id.main_console_dashboard);
+        addFragment(fragmentHashMap.get(R.id.main_console_dashboard), R.id.main_console_dashboard);
         currentTabKey = R.id.main_console_dashboard;
         /*addFragment(fragmentHashMap.get(R.id.main_console_device),R.id.main_console_device);
         currentTabKey = R.id.main_console_device;*/
 
         checkLoginState();
 
+        String refreshedToken = FirebaseInstanceId.getInstance().getToken();
+        sendRegistrationToServer(refreshedToken);
+        LogUtil2.getUtils().d("FireBase InstanceId->" + refreshedToken);
+    }
+
+    private void sendRegistrationToServer(String token) {
+        // TODO: Implement this method to send token to your app server.
+        if (TextUtils.isEmpty(token)) {
+            return;
+        }
+        final UserApiNeedToken userApiNeedToken = ApiGen.getInstance(getApplicationContext()).
+                generateApi(UserApiNeedToken.class, true);
+        userApiNeedToken.updateAndroidRegistrationId(token).enqueue(new BaseRetrofitCallback<Object>() {
+            @Override
+            public void onResponse(Call<Object> call, Response<Object> response) {
+                super.onResponse(call, response);
+            }
+
+            @Override
+            public void onFailure(Call<Object> call, Throwable t) {
+                super.onFailure(call, t);
+            }
+        });
     }
 
     private void checkLoginState() {
         //如果登陆状态为false
-        if(!ConfigUtil.isLoginState(getApplicationContext())){
+        if (!ConfigUtil.isLoginState(getApplicationContext())) {
             LoginManager.clearAcvShowLogin();
         }
     }
 
-    protected void viewInfoClick(){
+    protected void viewInfoClick() {
         view_info.setVisibility(View.GONE);
     }
 
@@ -124,10 +156,10 @@ public class MainFrameActivity extends BaseFragmentActivity {
 
     private void loadFocusKidsAvatar() {
         DB_Kids focusWatchInfo = DeviceManager.getFocusWatchInfo(this.getApplicationContext());
-        if(focusWatchInfo != null){
+        if (focusWatchInfo != null) {
             String profileRealUri = UserManager.getProfileRealUri(focusWatchInfo.getProfile());
             GlideHelper.showCircleImageViewWithSignature(
-                    this,profileRealUri,String.valueOf(focusWatchInfo.getLastUpdate()),
+                    this, profileRealUri, String.valueOf(focusWatchInfo.getLastUpdate()),
                     view_tab_profile);
         }
     }
@@ -149,7 +181,7 @@ public class MainFrameActivity extends BaseFragmentActivity {
     }
 
     private void registerUIReceiver() {
-        if(SwingApplication.localBroadcastManager != null){
+        if (SwingApplication.localBroadcastManager != null) {
             IntentFilter intentFilter = new IntentFilter(UI_Update_Action);
             SwingApplication.localBroadcastManager.registerReceiver(UIChangeReceiver,
                     intentFilter);
@@ -160,17 +192,17 @@ public class MainFrameActivity extends BaseFragmentActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
 
-            if(intent == null){
+            if (intent == null) {
                 return;
             }
 
             int update_type = intent.getIntExtra(Tag_Key, -1);
 
-            if (update_type == Tag_Avatar_update){
+            if (update_type == Tag_Avatar_update) {
                 if (!mWatchContactStack.isEmpty()) {
                     //todo 在二期功能前，消费该对象
                     WatchContact watchContact = mWatchContactStack.pop();
-                    if(watchContact != null && watchContact.mPhoto != null){
+                    if (watchContact != null && watchContact.mPhoto != null) {
                         view_tab_profile.setBitmap(watchContact.mPhoto);
                     }
 
@@ -188,12 +220,12 @@ public class MainFrameActivity extends BaseFragmentActivity {
         SwingApplication.localBroadcastManager.unregisterReceiver(UIChangeReceiver);
     }
 
-    private void initFragments(){
+    private void initFragments() {
 
         fragmentHashMap.put(R.id.main_console_device, new FragmentDevice());
-        fragmentHashMap.put(R.id.main_console_calendar,new CalendarContainerFragment());
-        fragmentHashMap.put(R.id.main_console_dashboard,new DashboardContainerFragment());
-        fragmentHashMap.put(R.id.main_control_profile,new ProfileContainerFragment());
+        fragmentHashMap.put(R.id.main_console_calendar, new CalendarContainerFragment());
+        fragmentHashMap.put(R.id.main_console_dashboard, new DashboardContainerFragment());
+        fragmentHashMap.put(R.id.main_control_profile, new ProfileContainerFragment());
     }
 
     private void initView() {
@@ -208,8 +240,8 @@ public class MainFrameActivity extends BaseFragmentActivity {
             }
         });*/
 
-       //功能引导UI显示
-       view_container = findViewById(R.id.view_bg);
+        //功能引导UI显示
+        view_container = findViewById(R.id.view_bg);
          /*ViewIntroductionSync viewIntroductionSync = new ViewIntroductionSync(this.getApplication());
         RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.MATCH_PARENT);
 
@@ -225,7 +257,7 @@ public class MainFrameActivity extends BaseFragmentActivity {
         });*/
     }
 
-    private void initTabView(){
+    private void initTabView() {
         int tabSize = tabViews.length;
         OnTabItemClickListener onTabItemClickListener = new OnTabItemClickListener();
         for (int i = 0; i < tabSize; i++) {
@@ -235,20 +267,20 @@ public class MainFrameActivity extends BaseFragmentActivity {
 
     }
 
-    private class OnTabItemClickListener implements View.OnClickListener{
+    private class OnTabItemClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
             //首先设置点击item为选中状态，其他的为非选择状态
             int clickedItemIndex = getTabItemIndexFromResId(v.getId());
             selectTabItem(clickedItemIndex);
 
-            switch (v.getId()){
+            switch (v.getId()) {
                 case R.id.main_console_device://watch
                     switchShowFragment(R.id.main_console_device);
                     break;
                 case R.id.main_console_calendar://calendar
                     switchShowFragment(R.id.main_console_calendar);
-                //因介绍界面效果不好，暂时不显示
+                    //因介绍界面效果不好，暂时不显示
 //                    showIntroductionUI();
                     break;
                 case R.id.main_console_dashboard:
@@ -281,7 +313,7 @@ public class MainFrameActivity extends BaseFragmentActivity {
     }
 
     //eventlist 界面的介绍页
-    public void showAlarmIntroductionUI(){
+    public void showAlarmIntroductionUI() {
         ViewIntroductionAlarmList viewIntroductionAlarmList = new ViewIntroductionAlarmList(this.getApplication());
         RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.MATCH_PARENT);
 
@@ -302,11 +334,11 @@ public class MainFrameActivity extends BaseFragmentActivity {
         });
 
         PreferencesUtil.getInstance(getApplicationContext()).
-                setPreferenceBooleanValue(ConfigUtil.event_list_first_time,false);
+                setPreferenceBooleanValue(ConfigUtil.event_list_first_time, false);
     }
 
     //eventlist 界面的介绍页
-    public void showCalendarMonthIntroductionUI(){
+    public void showCalendarMonthIntroductionUI() {
         ViewIntroductionSync viewIntroductionSync = new ViewIntroductionSync(this.getApplication());
         RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,
                 RelativeLayout.LayoutParams.MATCH_PARENT);
@@ -328,10 +360,11 @@ public class MainFrameActivity extends BaseFragmentActivity {
         });
 
         PreferencesUtil.getInstance(getApplicationContext()).
-                setPreferenceBooleanValue(ConfigUtil.calendar_month_first_time,false);
+                setPreferenceBooleanValue(ConfigUtil.calendar_month_first_time, false);
     }
+
     //todoDetail 界面的介绍页
-    public void showTodoDetailIntroductionUI(){
+    public void showTodoDetailIntroductionUI() {
         ViewIntroductionTodoDetail viewIntroductionTodoDetail = new ViewIntroductionTodoDetail(this.getApplication());
         RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,
                 RelativeLayout.LayoutParams.MATCH_PARENT);
@@ -353,10 +386,11 @@ public class MainFrameActivity extends BaseFragmentActivity {
         });
 
         PreferencesUtil.getInstance(getApplicationContext()).
-                setPreferenceBooleanValue(ConfigUtil.todo_detail_first_time,false);
+                setPreferenceBooleanValue(ConfigUtil.todo_detail_first_time, false);
     }
+
     //calendar 首界面的介绍页
-    public void showCalendarMainIntroductionUI(){
+    public void showCalendarMainIntroductionUI() {
         ViewIntroductionCalendarToday viewIntroductionCalendar = new ViewIntroductionCalendarToday(this.getApplication());
         RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,
                 RelativeLayout.LayoutParams.MATCH_PARENT);
@@ -378,7 +412,7 @@ public class MainFrameActivity extends BaseFragmentActivity {
         });
 
         PreferencesUtil.getInstance(getApplicationContext()).
-                setPreferenceBooleanValue(ConfigUtil.calendar_main_first_time,false);
+                setPreferenceBooleanValue(ConfigUtil.calendar_main_first_time, false);
     }
 
     private void addIntroductionView(ViewGroup viewIntroductionAlarmList,
@@ -392,8 +426,8 @@ public class MainFrameActivity extends BaseFragmentActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
 
-        if(keyCode == KeyEvent.KEYCODE_BACK){
-            if(view_container.getVisibility() == View.VISIBLE){
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (view_container.getVisibility() == View.VISIBLE) {
                 hideIntroView();
 
                 return true;
@@ -409,11 +443,11 @@ public class MainFrameActivity extends BaseFragmentActivity {
         view_container.setOnClickListener(null);
     }
 
-    private int getTabItemIndexFromResId(int resId){
+    private int getTabItemIndexFromResId(int resId) {
         int itemIndex = -1;
 
         for (int index = 0; index < tabViews.length; index++) {
-            if(tabViews_res_id[index] == resId){
+            if (tabViews_res_id[index] == resId) {
                 itemIndex = index;
                 break;
             }
@@ -422,16 +456,16 @@ public class MainFrameActivity extends BaseFragmentActivity {
         return itemIndex;
     }
 
-    private void selectTabItem(int selectItemIndex){
-        if(selectItemIndex < 0 || selectItemIndex >= tabViews.length){
+    private void selectTabItem(int selectItemIndex) {
+        if (selectItemIndex < 0 || selectItemIndex >= tabViews.length) {
             return;
         }
 
         tabViews[selectItemIndex].setSelected(true);
         for (int i = 0; i < tabViews.length; i++) {
-            if(i == selectItemIndex){
+            if (i == selectItemIndex) {
                 tabViews[i].setSelected(true);
-            }else {
+            } else {
                 tabViews[i].setSelected(false);
             }
         }
@@ -439,16 +473,16 @@ public class MainFrameActivity extends BaseFragmentActivity {
     }
 
 
-    private void addFragment(Fragment fragment, int fragmentKey){
+    private void addFragment(Fragment fragment, int fragmentKey) {
 
         if (!fragment.isAdded()) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.fragment_container,fragment,String.valueOf(fragmentKey))
+                    .add(R.id.fragment_container, fragment, String.valueOf(fragmentKey))
                     .commit();
         }
     }
 
-    private void switchShowFragment(int fragmentKey){
+    private void switchShowFragment(int fragmentKey) {
         Fragment fragment = fragmentHashMap.get(fragmentKey);
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
 
@@ -457,13 +491,13 @@ public class MainFrameActivity extends BaseFragmentActivity {
         fragmentTransaction.hide(getCurrentFragment());
 
         //如果将要显示的fragment已经add，则resume，show
-        if(fragment.isAdded()){
+        if (fragment.isAdded()) {
             fragment.onResume();
             fragmentTransaction.show(fragment);
-        }else {
+        } else {
             //否则，add
             fragmentTransaction
-                    .add(R.id.fragment_container,fragment,String.valueOf(fragmentKey));
+                    .add(R.id.fragment_container, fragment, String.valueOf(fragmentKey));
         }
 
         //add 2017年10月29日16:35:44 weizg
@@ -472,18 +506,18 @@ public class MainFrameActivity extends BaseFragmentActivity {
 
         fragmentTransaction.commit();
 
-       currentTabKey = fragmentKey;
+        currentTabKey = fragmentKey;
     }
 
-    private void clearFragmentStack(){
-        try{
-            if(getSupportFragmentManager().getBackStackEntryCount() > 0){
+    private void clearFragmentStack() {
+        try {
+            if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
                 getSupportFragmentManager().popBackStack(null,
                         FragmentManager.POP_BACK_STACK_INCLUSIVE);
             }
 
 
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -492,16 +526,16 @@ public class MainFrameActivity extends BaseFragmentActivity {
 
     }*/
 
-    private Fragment getCurrentFragment(){
+    private Fragment getCurrentFragment() {
         return fragmentHashMap.get(currentTabKey);
     }
 
 
-    public void switchToDashBoardFragment(){
+    public void switchToDashBoardFragment() {
         selectTabItem(R.id.main_console_dashboard);
 
         Fragment fragment = fragmentHashMap.get(R.id.main_console_dashboard);
-        if(fragment instanceof DashboardContainerFragment){
+        if (fragment instanceof DashboardContainerFragment) {
             ((DashboardContainerFragment) fragment).setType_goto(DashboardContainerFragment.type_goto_activityFragment);
         }
 
@@ -513,19 +547,19 @@ public class MainFrameActivity extends BaseFragmentActivity {
 
     public void setFragment(Fragment fragment, boolean isAddBackStack) {
         Fragment currentFragment = getCurrentFragment();
-        if(currentFragment instanceof DashboardContainerFragment){
-            ((DashboardContainerFragment) currentFragment).setFragment(fragment,isAddBackStack);
-        }else if(currentFragment instanceof CalendarContainerFragment){
+        if (currentFragment instanceof DashboardContainerFragment) {
+            ((DashboardContainerFragment) currentFragment).setFragment(fragment, isAddBackStack);
+        } else if (currentFragment instanceof CalendarContainerFragment) {
             ((CalendarContainerFragment) currentFragment).setFragment(fragment, isAddBackStack);
         }
     }
 
     public void selectFragment(String className, Bundle args, boolean isAddToBackStack) {
         Fragment currentFragment = getCurrentFragment();
-        if(currentFragment instanceof DashboardContainerFragment){
-            ((DashboardContainerFragment) currentFragment).selectFragment(className,args,isAddToBackStack);
-        }else if(currentFragment instanceof CalendarContainerFragment){
-            ((CalendarContainerFragment) currentFragment).selectFragment(className,args,isAddToBackStack);
+        if (currentFragment instanceof DashboardContainerFragment) {
+            ((DashboardContainerFragment) currentFragment).selectFragment(className, args, isAddToBackStack);
+        } else if (currentFragment instanceof CalendarContainerFragment) {
+            ((CalendarContainerFragment) currentFragment).selectFragment(className, args, isAddToBackStack);
         }
     }
 

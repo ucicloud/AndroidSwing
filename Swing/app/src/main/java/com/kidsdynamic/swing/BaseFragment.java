@@ -1,8 +1,10 @@
 package com.kidsdynamic.swing;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.view.inputmethod.InputMethodManager;
 
 /**
  * fragment 基类
@@ -46,6 +48,16 @@ public class BaseFragment extends Fragment {
     public void finishLoadingDialog(){
         if(progressDialog != null && progressDialog.isShowing()){
             progressDialog.dismiss();
+        }
+    }
+
+    public void hideInput(){
+        if(getActivity() != null && getActivity().getCurrentFocus() != null &&
+                getActivity().getCurrentFocus().getWindowToken() != null){
+            InputMethodManager inputMethodManager =
+                    (InputMethodManager) getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
+
+            inputMethodManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
         }
     }
 }
