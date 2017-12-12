@@ -20,7 +20,6 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
@@ -116,6 +115,14 @@ public class ProfileEditorFragment extends ProfileBaseFragment {
 
         btn_save.setTypeface(SwingFontsCache.getBoldType(getContext()));
         initTitleBar();
+
+        mViewMain.findViewById(R.id.layout_all).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.w("profile","onclick layout");
+                hideInput();
+            }
+        });
 
         return mViewMain;
     }

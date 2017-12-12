@@ -380,6 +380,7 @@ public class DashboardProgressFragment extends DashboardBaseFragment {
 
             if (mSyncState == SYNC_STATE_SUCCESS) {
                 viewCompleted();
+                bleDisconnect();
             } else if (mSyncTimeout == 0 || mSyncState == SYNC_STATE_FAIL) {
                 viewNotFound(R.string.dashboard_progress_sync_fail);
                 bleSyncCancel();
@@ -612,6 +613,12 @@ public class DashboardProgressFragment extends DashboardBaseFragment {
 
     private void bleSyncCancel() {
 //        mActivityMain.mBLEMachine.Disconnect();
+    }
+
+    private void bleDisconnect(){
+        if(mBluetoothService != null){
+            mBluetoothService.closeConnect();
+        }
     }
 
     private void viewSync() {
