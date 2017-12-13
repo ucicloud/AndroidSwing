@@ -208,7 +208,7 @@ public class WatchSelectFragment extends BaseFragment {
 
             @Override
             public void onScanning(BluetoothLeDevice scanResult) {
-                Log.w("watchSelect","scanResult: " + scanResult);
+                Log.w("watchSelect", "scanResult: " + scanResult);
                 checkWatchBindStatus(scanResult);
             }
         });
@@ -312,7 +312,6 @@ public class WatchSelectFragment extends BaseFragment {
                 long id = kidsWithParent.getId();
                 if (-1 == id) {
                     holder.iv_head.setImageResource(R.drawable.ic_icon_profile_);
-                    holder.iv_head.setBackgroundResource(R.color.color_white);
                     holder.tv_content.setText(String.format("%1$s %2$s", kidsWithParent.getName(),
                             DeviceManager.getMacAddress(kidsWithParent.getMacId())));
                     holder.iv_action.setImageResource(R.drawable.ic_icon_add_orange);
@@ -329,7 +328,6 @@ public class WatchSelectFragment extends BaseFragment {
                         holder.iv_head.setBackgroundResource(R.color.transparent);
                     } else {
                         holder.iv_head.setImageResource(R.drawable.ic_icon_profile_);
-                        holder.iv_head.setBackgroundResource(R.color.color_white);
                     }
                     holder.tv_content.setText(kidsWithParent.getName());
                     holder.iv_action.setImageResource(R.drawable.icon_arrow_up_orange);
@@ -360,10 +358,10 @@ public class WatchSelectFragment extends BaseFragment {
                 finishLoadingDialog();
 
                 FragmentActivity activity = getActivity();
-                if(activity instanceof MainFrameActivity){
+                if (activity instanceof MainFrameActivity) {
                     ((MainFrameActivity) activity).
                             setFragment(WatchProfileFragment.newInstance(macId), true);
-                }else {
+                } else {
                     SignupActivity signupActivity = (SignupActivity) getActivity();
                     signupActivity.setFragment(WatchProfileFragment.newInstance(macId), true);
                 }
