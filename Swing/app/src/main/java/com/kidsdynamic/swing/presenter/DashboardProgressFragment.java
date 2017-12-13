@@ -608,6 +608,11 @@ public class DashboardProgressFragment extends DashboardBaseFragment {
                 DeviceManager.saveBindWatchBattery(mDevice.getMacId(), battery);
 
             }
+
+            @Override
+            public void onDeviceVersion(String version) {
+                Log.d("dashProgress", "onDeviceVersion version " + version);
+            }
         });
     }
 

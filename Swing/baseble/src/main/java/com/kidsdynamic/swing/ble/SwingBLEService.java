@@ -77,6 +77,38 @@ public class SwingBLEService extends Service {
             }
 
             switch (msg.what) {
+                case SwingBLEAttributes.MSG_SYNC_READ_VERSION:
+                {
+                    read(SwingBLEAttributes.DEVICE_SERVICE, SwingBLEAttributes.FIRMWARE_VERSION, new ICharacteristicCallback(){
+                        @Override
+                        public void onFailure(BleException exception) {
+                            ViseLog.i("VERSION onFailure:" + exception);
+                            onBleFailure("VERSION Read Error");
+                        }
+
+                        @Override
+                        public void onSuccess(BluetoothGattCharacteristic characteristic) {
+                            ViseLog.i(characteristic.getUuid() + " characteristic onSuccess");
+                            //读设备版本号
+                            byte[] data = characteristic.getValue();
+                            String version = null;
+                            if (data != null && data.length > 0) {
+                                try{
+                                    version = new String(data);
+                                }
+                                catch (Exception e){}
+                            }
+                            if (syncCallback != null && version != null) {
+                                syncCallback.onDeviceVersion(version);
+                                ViseLog.i("VERSION value: " + version);
+                            }
+                            if (threadHandler != null) {
+                                threadHandler.sendEmptyMessage(SwingBLEAttributes.MSG_INIT_WRITE_ACCEL);
+                            }
+                        }
+                    });
+                }
+                break;
                 case SwingBLEAttributes.MSG_INIT_WRITE_ACCEL:
                 {
                     write(SwingBLEAttributes.WATCH_SERVICE, SwingBLEAttributes.ACCEL_ENABLE, "01", new ICharacteristicCallback(){
@@ -725,7 +757,7 @@ public class SwingBLEService extends Service {
                                                             }
                                                         }
                                                         if (threadHandler != null) {
-                                                            threadHandler.sendEmptyMessage(SwingBLEAttributes.MSG_INIT_WRITE_ACCEL);
+                                                            threadHandler.sendEmptyMessage(SwingBLEAttributes.MSG_SYNC_READ_VERSION);
                                                         }
                                                     }
 

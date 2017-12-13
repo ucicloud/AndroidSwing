@@ -405,6 +405,11 @@ public class SwingScanActivity extends AppCompatActivity implements View.OnClick
                     public void onDeviceBattery(int battery) {
                         Log.d(TAG, "onDeviceBattery battery " + battery);
                     }
+
+                    @Override
+                    public void onDeviceVersion(String version) {
+                        Log.d(TAG, "onDeviceVersion version " + version);
+                    }
                 });
 
 //                mBluetoothService.scanAndSync2("7F:9F:57:8D:3F:6A", list);
@@ -423,7 +428,7 @@ public class SwingScanActivity extends AppCompatActivity implements View.OnClick
         {
             for (int i = 37; i <= 64; i++, j++)//64
             {
-                if (list.size() >= 100) {
+                if (list.size() >= 5) {
                     return list;
                 }
 
