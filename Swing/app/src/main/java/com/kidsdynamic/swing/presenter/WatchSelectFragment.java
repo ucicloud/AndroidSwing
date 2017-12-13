@@ -379,6 +379,11 @@ public class WatchSelectFragment extends BaseFragment {
             public void onDeviceBattery(int battery) {
                 DeviceManager.saveBindWatchBattery(macId, battery);
             }
+
+            @Override
+            public void onDeviceVersion(String version) {
+                LogUtil2.getUtils().d("onDeviceVersion version " + version);
+            }
         });
 
     }
@@ -410,6 +415,11 @@ public class WatchSelectFragment extends BaseFragment {
                 DeviceManager.saveBindWatchBattery(macId, battery);
                 SignupActivity signupActivity = (SignupActivity) getActivity();
                 signupActivity.setFragment(WatchRegisteredFragment.newInstance(), true);
+            }
+
+            @Override
+            public void onDeviceVersion(String version) {
+                LogUtil2.getUtils().d("onDeviceVersion version " + version);
             }
         });
     }

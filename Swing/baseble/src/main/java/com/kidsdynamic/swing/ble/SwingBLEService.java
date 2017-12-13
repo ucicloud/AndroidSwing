@@ -98,9 +98,19 @@ public class SwingBLEService extends Service {
                                 }
                                 catch (Exception e){}
                             }
-                            if (syncCallback != null && version != null) {
-                                syncCallback.onDeviceVersion(version);
-                                ViseLog.i("VERSION value: " + version);
+                            if (isSync)
+                            {
+                                if (syncCallback != null && version != null) {
+                                    syncCallback.onDeviceVersion(version);
+                                    ViseLog.i("VERSION value: " + version);
+                                }
+                            }
+                            else
+                            {
+                                if (initCallback != null && version != null) {
+                                    initCallback.onDeviceVersion(version);
+                                    ViseLog.i("VERSION value: " + version);
+                                }
                             }
                             if (threadHandler != null) {
                                 threadHandler.sendEmptyMessage(SwingBLEAttributes.MSG_INIT_WRITE_ACCEL);
@@ -560,7 +570,7 @@ public class SwingBLEService extends Service {
                                     }
                                 }
                                 if (threadHandler != null) {
-                                    threadHandler.sendEmptyMessage(SwingBLEAttributes.MSG_INIT_WRITE_ACCEL);
+                                    threadHandler.sendEmptyMessage(SwingBLEAttributes.MSG_SYNC_READ_VERSION);
                                 }
                             }
 
@@ -646,7 +656,7 @@ public class SwingBLEService extends Service {
                                     }
                                 }
                                 if (threadHandler != null) {
-                                    threadHandler.sendEmptyMessage(SwingBLEAttributes.MSG_INIT_WRITE_ACCEL);
+                                    threadHandler.sendEmptyMessage(SwingBLEAttributes.MSG_SYNC_READ_VERSION);
                                 }
                             }
 

@@ -10,4 +10,6 @@ public interface IDeviceInitCallback {
     void onInitFail(int reason);
 
     void onDeviceBattery(int battery);
+
+    void onDeviceVersion(String version);
 }
