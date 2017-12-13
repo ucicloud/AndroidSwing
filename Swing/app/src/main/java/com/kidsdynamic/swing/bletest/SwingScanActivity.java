@@ -162,6 +162,11 @@ public class SwingScanActivity extends AppCompatActivity implements View.OnClick
                         public void onDeviceBattery(int battery) {
                             Log.d(TAG, "onDeviceBattery battery " + battery);
                         }
+
+                        @Override
+                        public void onDeviceVersion(String version) {
+                            Log.d(TAG, "onDeviceVersion version " + version);
+                        }
                     });
                     mResultAdapter.clear();
                     mResultAdapter.notifyDataSetChanged();

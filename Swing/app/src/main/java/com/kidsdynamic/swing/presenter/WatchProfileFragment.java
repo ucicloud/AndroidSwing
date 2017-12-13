@@ -60,6 +60,7 @@ public class WatchProfileFragment extends BaseFragment {
     private static final int REQUEST_CODE_ALBUM = 2;
 
     private static final String MAC_ID = "mac_id";
+    private static final String FIRMWARE_VERSION = "firmware_Version";
 
     @BindView(R.id.watch_profile_photo)
     ViewCircle vc_photo;
@@ -72,9 +73,10 @@ public class WatchProfileFragment extends BaseFragment {
 
     private File profile;
 
-    public static WatchProfileFragment newInstance(String macId) {
+    public static WatchProfileFragment newInstance(String macId, String firmwareVersion) {
         Bundle args = new Bundle();
         args.putString(MAC_ID, macId);
+        args.putString(FIRMWARE_VERSION, firmwareVersion);
         WatchProfileFragment fragment = new WatchProfileFragment();
         fragment.setArguments(args);
         return fragment;
@@ -164,7 +166,8 @@ public class WatchProfileFragment extends BaseFragment {
         }
         Bundle args = getArguments();
         String macId = args.getString(MAC_ID);
-        addKids(macId, profile, String.format("%1$s %2$s", firstName, lastName));
+        String firmwareVersion = args.getString(FIRMWARE_VERSION);
+        addKids(macId, firmwareVersion, profile, String.format("%1$s %2$s", firstName, lastName));
     }
 
     /**
@@ -173,7 +176,7 @@ public class WatchProfileFragment extends BaseFragment {
      * @param watchMacId String
      * @param kidsName   String
      */
-    public void addKids(String watchMacId, final File profile, final String kidsName) {
+    public void addKids(String watchMacId, final String firmwareVersion, final File profile, final String kidsName) {
         showLoadingDialog(R.string.watch_profile_wait);
         KidsApi kidsApi = ApiGen
                 .getInstance(getContext().getApplicationContext())
@@ -195,8 +198,15 @@ public class WatchProfileFragment extends BaseFragment {
                     LogUtil2.getUtils().d("addKid rep kid ID: " + kidId);
 
                     DeviceManager.updateFocusKids(kidId);
+
+                    kidsWithParent.setFirmwareVersion(firmwareVersion);
                     //add 2017年11月7日13:45:21 only_app save kids info to db
                     new DeviceManager().saveKidsData(getContext(), kidsWithParent);
+
+                    //更新firmwareVersion
+                    DeviceManager.updateEventKidsFirmwareVersion(kidsWithParent.getMacId(),firmwareVersion);
+                    //上报服务器
+                    new DeviceManager().uploadFirmwareVersion(kidsWithParent.getMacId(),firmwareVersion);
 
                     if (profile != null) {
                         uploadAvatar(profile, String.valueOf(kidId));

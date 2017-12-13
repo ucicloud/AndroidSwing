@@ -344,6 +344,8 @@ public class WatchSelectFragment extends BaseFragment {
         }
     }
 
+    private String nowFirmwareVersion = "";
+
     private void doPlusClick(final String macId) {
         BluetoothLeDevice device = mDeviceMap.get(macId);
 
@@ -357,13 +359,20 @@ public class WatchSelectFragment extends BaseFragment {
             public void onInitComplete(String mac) {
                 finishLoadingDialog();
 
+                //add 2017年12月13日15:44:38 only
+                if (TextUtils.isEmpty(mac)
+                        || TextUtils.isEmpty(nowFirmwareVersion)) {
+                    ToastCommon.makeText(getActivity(), R.string.error_api_unknown);
+                    return;
+                }
+
                 FragmentActivity activity = getActivity();
                 if (activity instanceof MainFrameActivity) {
                     ((MainFrameActivity) activity).
-                            setFragment(WatchProfileFragment.newInstance(macId), true);
+                            setFragment(WatchProfileFragment.newInstance(macId, nowFirmwareVersion), true);
                 } else {
                     SignupActivity signupActivity = (SignupActivity) getActivity();
-                    signupActivity.setFragment(WatchProfileFragment.newInstance(macId), true);
+                    signupActivity.setFragment(WatchProfileFragment.newInstance(macId, nowFirmwareVersion), true);
                 }
             }
 
@@ -376,6 +385,12 @@ public class WatchSelectFragment extends BaseFragment {
             @Override
             public void onDeviceBattery(int battery) {
                 DeviceManager.saveBindWatchBattery(macId, battery);
+            }
+
+            @Override
+            public void onDeviceVersion(String version) {
+                LogUtil2.getUtils().d("onDeviceVersion version " + version);
+                nowFirmwareVersion = version;
             }
         });
 
@@ -408,6 +423,11 @@ public class WatchSelectFragment extends BaseFragment {
                 DeviceManager.saveBindWatchBattery(macId, battery);
                 SignupActivity signupActivity = (SignupActivity) getActivity();
                 signupActivity.setFragment(WatchRegisteredFragment.newInstance(), true);
+            }
+
+            @Override
+            public void onDeviceVersion(String version) {
+                LogUtil2.getUtils().d("onDeviceVersion version " + version);
             }
         });
     }
