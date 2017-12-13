@@ -260,6 +260,10 @@ public class BeanConvertor {
     }
 
     public static long getUTCTimeStamp(String dateString) {
+        if(TextUtils.isEmpty(dateString)){
+            return 0;
+        }
+
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault());
         format.setTimeZone(TimeZone.getTimeZone("UTC"));
         Date date;

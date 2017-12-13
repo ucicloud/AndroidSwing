@@ -1,6 +1,7 @@
 package com.kidsdynamic.data.repository.disk;
 
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 
 import com.kidsdynamic.commonlib.utils.ObjectUtils;
 import com.kidsdynamic.data.dao.DB_EventKids;
@@ -58,5 +59,24 @@ public class EventKidsStore {
         EventKidsDao eventKidsDao = dbUtil.getDaoSession().getEventKidsDao();
 
         eventKidsDao.updateInTx(eventKids);
+    }
+
+    public void updateFirmwareVersion(String macId, String fireWareVersion){
+        if(TextUtils.isEmpty(macId)
+                || TextUtils.isEmpty(fireWareVersion)){
+            return;
+        }
+
+        EventKidsDao eventKidsDao = dbUtil.getDaoSession().getEventKidsDao();
+        List<DB_EventKids> list = eventKidsDao.queryBuilder().
+                where(EventKidsDao.Properties.MacId.eq(macId)).list();
+
+        if(!ObjectUtils.isListEmpty(list)){
+            for (DB_EventKids dbKids : list) {
+                dbKids.setFirmwareVersion(fireWareVersion);
+            }
+
+            eventKidsDao.updateInTx(list);
+        }
     }
 }
