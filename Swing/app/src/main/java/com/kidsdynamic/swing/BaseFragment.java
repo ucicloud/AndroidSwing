@@ -56,7 +56,7 @@ public class BaseFragment extends Fragment {
                 getActivity().getCurrentFocus().getWindowToken() != null){
             InputMethodManager inputMethodManager =
                     (InputMethodManager) getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
-
+            if(null==inputMethodManager) return;
             inputMethodManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
         }
     }

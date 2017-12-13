@@ -3,6 +3,7 @@ package com.kidsdynamic.swing.presenter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,6 +29,7 @@ import butterknife.ButterKnife;
 public class DashboardContainerFragment extends BaseFragment {
 
     private String type_goto = "-1";
+    private Fragment currentFragment;
     public static final String type_goto_activityFragment = "1";
 
 
@@ -69,20 +71,25 @@ public class DashboardContainerFragment extends BaseFragment {
         List<KidsEntityBean> allKidsByUserId =
                 DeviceManager.getAllKidsByUserId(getContext(), currentLoginUserId);
 
-        if(ObjectUtils.isListEmpty(allKidsByUserId)){
+        if (ObjectUtils.isListEmpty(allKidsByUserId)) {
+            // modify 2017年12月13日 Stefan
+            // 进入到无设备界面后，会执行到WatchProfileFragment界面，需要return
+            if (null != currentFragment && currentFragment instanceof WatchProfileFragment) {
+                return;
+            }
             selectFragment(DashboardNoDevicesFragment.class.getName(), null, false);
-        }else {
+        } else {
 
             //modify 2017年12月5日19:31:19 only
             //r如果指定跳转到activity界面
-            if(type_goto_activityFragment.equals(type_goto)){
+            if (type_goto_activityFragment.equals(type_goto)) {
                 Bundle args = new Bundle();
                 args.putString(DashboardMainFragment.key_goto_type,
                         DashboardMainFragment.type_goto_DashboardEmotion);
                 selectFragment(DashboardMainFragment.class.getName(), args, false);
 
                 type_goto = "-1";
-            }else {
+            } else {
                 selectFragment(DashboardMainFragment.class.getName(), null, false);
             }
         }
@@ -166,7 +173,7 @@ public class DashboardContainerFragment extends BaseFragment {
         }
 
         fragmentTransaction.commit();
-
+        currentFragment = fragment;
     }
 
     public void setFragment(Fragment fragment, boolean isAddBackStack) {
@@ -177,6 +184,7 @@ public class DashboardContainerFragment extends BaseFragment {
             fragmentTransaction.addToBackStack(null);
         }
         fragmentTransaction.commit();
+        currentFragment = fragment;
     }
 
     @Override
