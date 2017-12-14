@@ -34,11 +34,11 @@ import retrofit2.Call;
 import retrofit2.Response;
 
 /**
- * ProfileRequestToKidsInfoFragment
+ * ProfileRequestToFragment
  * Created by Administrator on 2017/12/2.
  */
 
-public class ProfileRequestToKidsInfoFragment extends ProfileBaseFragment {
+public class ProfileRequestToFragment extends ProfileBaseFragment {
     private MainFrameActivity mActivityMain;
     private static final String TAG_KIDS_ID = "kids_id";
 
@@ -71,10 +71,10 @@ public class ProfileRequestToKidsInfoFragment extends ProfileBaseFragment {
 
     private RequestAddSubHostEntity requestTo;
 
-    public static ProfileRequestToKidsInfoFragment newInstance(long kidsId) {
+    public static ProfileRequestToFragment newInstance(long kidsId) {
         Bundle args = new Bundle();
         args.putLong(TAG_KIDS_ID,kidsId);
-        ProfileRequestToKidsInfoFragment fragment = new ProfileRequestToKidsInfoFragment();
+        ProfileRequestToFragment fragment = new ProfileRequestToFragment();
         fragment.setArguments(args);
         return fragment;
     }

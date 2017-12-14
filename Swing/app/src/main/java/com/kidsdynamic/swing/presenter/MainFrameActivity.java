@@ -19,6 +19,7 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.kidsdynamic.data.dao.DB_Kids;
 import com.kidsdynamic.data.net.ApiGen;
 import com.kidsdynamic.data.net.host.model.RequestAddSubHostEntity;
+import com.kidsdynamic.data.net.host.model.SubHostRequests;
 import com.kidsdynamic.data.net.user.UserApiNeedToken;
 import com.kidsdynamic.data.persistent.PreferencesUtil;
 import com.kidsdynamic.data.utils.LogUtil2;
@@ -79,6 +80,7 @@ public class MainFrameActivity extends BaseFragmentActivity {
     public Stack<WatchEvent> mEventStack;
     public Stack<WatchContact> mWatchContactStack;
     public Stack<RequestAddSubHostEntity> mSubHostInfoEntity;
+    public Stack<SubHostRequests> mSubHostList;
 
     public final static String UI_Update_Action = "MainFrame_UI_action";
     public final static String Tag_Key = "tag_key";
@@ -174,6 +176,7 @@ public class MainFrameActivity extends BaseFragmentActivity {
 
         mSubHostInfoEntity = new Stack<>();
         mSignStack = new Stack<>();
+        mSubHostList = new Stack<>();
 
 
         //UI更新广播监听

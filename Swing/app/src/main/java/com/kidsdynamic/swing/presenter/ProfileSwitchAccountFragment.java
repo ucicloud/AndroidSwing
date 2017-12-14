@@ -239,7 +239,7 @@ public class ProfileSwitchAccountFragment extends ProfileBaseFragment {
             selectFragment(ProfileKidsInfoFragment.newInstance(watchKidsInfo.mId),true);
         }*/
 
-//        selectFragment(ProfileRequestToKidsInfoFragment.newInstance(1),true);
+//        selectFragment(ProfileRequestToFragment.newInstance(1),true);
         selectFragment(ProfileRequestFromFragment.newInstance(1),true);
 
     }

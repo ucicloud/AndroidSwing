@@ -3,11 +3,19 @@ package com.kidsdynamic.swing.domain;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
+import android.util.Log;
 
+import com.google.gson.Gson;
 import com.kidsdynamic.commonlib.utils.ObjectUtils;
 import com.kidsdynamic.data.dao.DB_EventKids;
 import com.kidsdynamic.data.dao.DB_Kids;
+import com.kidsdynamic.data.net.ApiGen;
+import com.kidsdynamic.data.net.firmware.FirmwareApi;
+import com.kidsdynamic.data.net.firmware.model.CurrentFirmwareVersion;
+import com.kidsdynamic.data.net.host.model.RequestAddSubHostEntity;
+import com.kidsdynamic.data.net.host.model.SubHostRequests;
 import com.kidsdynamic.data.net.kids.model.KidsWithParent;
+import com.kidsdynamic.data.net.user.model.KidInfo;
 import com.kidsdynamic.data.persistent.DbUtil;
 import com.kidsdynamic.data.persistent.PreferencesUtil;
 import com.kidsdynamic.data.repository.disk.EventKidsStore;
@@ -18,6 +26,12 @@ import com.kidsdynamic.swing.model.WatchContact;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import static com.kidsdynamic.swing.domain.BeanConvertor.getUTCTimeStamp;
 
 /**
  * Created by Administrator on 2017/10/27.

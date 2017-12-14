@@ -445,8 +445,8 @@
     <string name="profile_title_request_to">Request to</string>
     <string name="profile_title_request_from">Request from</string>
 
-    <string name="profile_got_request_tip">You\'ve got an request</string>
-    <string name="profile_got_request_note">You\'ve got an request from %1$s</string>
+    <string name="profile_got_request_tip">You\'ve got a request</string>
+    <string name="profile_got_request_note">You\'ve got a request from %1$s</string>
     <string name="profile_accept_request_from">Accept</string>
     <string name="profile_confirm">Confirm</string>
     <string name="profile_decline_request_from">Decline</string>
