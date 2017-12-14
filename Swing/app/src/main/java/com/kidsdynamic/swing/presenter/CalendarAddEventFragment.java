@@ -34,10 +34,12 @@ import com.kidsdynamic.swing.domain.DeviceManager;
 import com.kidsdynamic.swing.domain.EventManager;
 import com.kidsdynamic.swing.domain.LoginManager;
 import com.kidsdynamic.swing.model.KidsEntityBean;
+import com.kidsdynamic.swing.model.WatchContact;
 import com.kidsdynamic.swing.model.WatchEvent;
 import com.kidsdynamic.swing.model.WatchTodo;
 import com.kidsdynamic.swing.net.BaseRetrofitCallback;
 import com.kidsdynamic.swing.utils.SwingFontsCache;
+import com.kidsdynamic.swing.view.ViewCircle;
 import com.kidsdynamic.swing.view.ViewShape;
 import com.kidsdynamic.swing.view.ViewTodo;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
@@ -86,6 +88,8 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
 
     @BindView(R.id.calendar_event_assign_name)
     protected TextView mViewAssignName;
+    @BindView(R.id.calendar_event_assign_container)
+    protected LinearLayout mViewAssignContainer;
 
     //to-do
     @BindView(R.id.calendar_event_todo_line)
@@ -606,6 +610,32 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
         selectFragment(EventAssignToFragment.class.getName(),null,true);
     }
 
+
+    private View addKid(WatchContact.Kid kid) {
+
+        int size = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 32, getResources().getDisplayMetrics()));
+        int margin = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, getResources().getDisplayMetrics()));
+
+        ViewCircle viewCircle = new ViewCircle(mainFrameActivity);
+
+        viewCircle.setTag(kid);
+        viewCircle.setBitmap(kid.mPhoto);
+        viewCircle.setStrokeWidth(4.0f);
+        viewCircle.setStrokeColorActive(ContextCompat.getColor(mainFrameActivity, R.color.color_orange_main));
+        viewCircle.setStrokeColorNormal(ContextCompat.getColor(mainFrameActivity, R.color.color_white));
+        viewCircle.setActive(mEvent.containsKid(kid.mId));
+        viewCircle.setOnClickListener(mAssignOptionListener);
+
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(size, size);
+        layoutParams.setMarginStart(margin);
+        layoutParams.setMarginEnd(margin);
+        viewCircle.setLayoutParams(layoutParams);
+
+        mViewAssignContainer.addView(viewCircle);
+
+        return viewCircle;
+    }
+
     //event color layout
     private View addColor(int color) {
         ViewShape view = new ViewShape(getContext());
@@ -657,6 +687,27 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
         mEvent.mTodoList.add(todo);
         addTodoView(todo);
     }
+
+    private View.OnClickListener mAssignOptionListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            ViewCircle viewCircle = (ViewCircle) view;
+            WatchContact.Kid kid = (WatchContact.Kid) view.getTag();
+
+            if (viewCircle.getActive()) {
+                if (mEvent.mKids.size() <= 1)    // least one.
+                    return;
+
+                mEvent.removeKid(kid.mId);
+                viewCircle.setActive(false);
+            } else {
+                mEvent.insertKid(kid.mId, 0);
+                viewCircle.setActive(true);
+            }
+
+            setAssign(mEvent.mKids.get(0));
+        }
+    };
 
     // Advance模式.
     @OnClick(R.id.calendar_event_advance)

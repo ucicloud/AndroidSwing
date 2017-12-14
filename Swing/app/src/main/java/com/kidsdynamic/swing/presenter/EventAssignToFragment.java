@@ -39,6 +39,7 @@ public class EventAssignToFragment extends CalendarBaseFragment {
     private EventAssignToListAdapter eventAssignToListAdapter;
 
     private long assignToKidsId = -1;
+    private List<Long> assignToKidsIdList = null;
     private long userId = -1;
     List<KidsEntityBean> allKidsByUserId = new ArrayList<>();
 
@@ -48,6 +49,7 @@ public class EventAssignToFragment extends CalendarBaseFragment {
         Bundle arg = getArguments();
         if (arg != null) {
             assignToKidsId = getArguments().getLong(DeviceManager.BUNDLE_KEY_KID_ID, -1);
+//            assignToKidsIdList = getArguments().getLongArray(DeviceManager.BUNDLE_KEY_ASSIGN_KID_ID);
             userId = getArguments().getLong(DeviceManager.BUNDLE_KEY_USER_ID, -1);
         }
     }
@@ -89,12 +91,28 @@ public class EventAssignToFragment extends CalendarBaseFragment {
     public void onResume() {
         super.onResume();
 
-        if (mainFrameActivity.mEventStack.isEmpty()) {
-            ToastCommon.showToast(getContext(),"event null");
-            getFragmentManager().popBackStack();
-        }else {
+        if (!mainFrameActivity.mEventStack.isEmpty()) {
             mEvent = mainFrameActivity.mEventStack.pop();
         }
+
+        if(mEvent == null){
+            ToastCommon.showToast(getContext(),"event null");
+            getFragmentManager().popBackStack();
+        }
+
+        assignToKidsIdList = mEvent.mKids;
+        initSelectStatus();
+    }
+
+    private void initSelectStatus() {
+        for (KidsEntityBean kidsEntityBean: allKidsByUserId) {
+            if(isAssignKids(kidsEntityBean.getKidsId())){
+                kidsEntityBean.setSelected(true);
+            }
+        }
+
+        eventAssignToListAdapter.notifyDataSetChanged();
+
     }
 
     @OnClick(R.id.main_toolbar_title)
@@ -127,8 +145,26 @@ public class EventAssignToFragment extends CalendarBaseFragment {
 
         mainFrameActivity.mCalendarBundleStack.push(bundle);*/
 
+        boolean selected = allKidsByUserId.get(i).isSelected();
+        allKidsByUserId.get(i).setSelected(!selected);
+
+
         mainFrameActivity.mEventStack.push(mEvent);
         getActivity().getSupportFragmentManager().popBackStack();
+    }
+
+    private void confirmSelect(){
+        List<Long> newSelectedKidsList = new ArrayList<>();
+
+        for (KidsEntityBean kidsEntityBean: allKidsByUserId) {
+            if(kidsEntityBean.isSelected()){
+                newSelectedKidsList.add(kidsEntityBean.getKidsId());
+            }
+        }
+
+        mEvent.mKids.clear();
+        mEvent.mKids.addAll(newSelectedKidsList);
+
     }
 
 
@@ -174,12 +210,25 @@ public class EventAssignToFragment extends CalendarBaseFragment {
 
             //获取真实的头像地址，并显示
             String profileRealUri = UserManager.getProfileRealUri(dbKids.getProfile());
+            if(dbKids.getShareType() == KidsEntityBean.shareType_from_other){
+                //如果是别人共享的设备，则头像仅仅内存cache
+                GlideHelper.getCircleImageViewOnlyCacheInMemory(
+                        getContext().getApplicationContext(),
+                        profileRealUri,
+                        viewHolder.kidsAvatarView);
+            }else {
+                GlideHelper.showCircleImageViewWithSignature(
+                        getContext().getApplicationContext(),
+                        profileRealUri,dbKids.getLastUpdate()+"",
+                        viewHolder.kidsAvatarView);
+            }
             GlideHelper.showCircleImageView(getContext().getApplicationContext(),profileRealUri,
                     viewHolder.kidsAvatarView);
 
             viewHolder.tv_kids_name.setText(dbKids.getName());
 
-            if(assignToKidsId == dbKids.getKidsId()){
+//            if(isAssignKids(dbKids.getKidsId())){
+            if(dbKids.isSelected()){
                 viewHolder.view_selected.setVisibility(View.VISIBLE);
             }else {
                 viewHolder.view_selected.setVisibility(View.INVISIBLE);
@@ -187,6 +236,17 @@ public class EventAssignToFragment extends CalendarBaseFragment {
 
             return convertView;
         }
+    }
+
+    private boolean isAssignKids(long kidsId){
+        for (long assignKidsId :
+                assignToKidsIdList) {
+            if (assignKidsId == kidsId){
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private static class ViewHolder{

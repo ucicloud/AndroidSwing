@@ -213,7 +213,7 @@ public class WatchEvent implements Serializable {
         return false;
     }
 
-    public void removeKid(int id) {
+    public void removeKid(long id) {
         int count = mKids.size();
         for (int idx = 0; idx < count; idx++) {
             if (mKids.get(idx) != id)

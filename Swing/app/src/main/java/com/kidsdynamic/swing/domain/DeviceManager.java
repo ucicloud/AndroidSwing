@@ -36,6 +36,7 @@ public class DeviceManager {
     public final static String BUNDLE_KEY_KID_NAME = "KID_NAME";
     public final static String BUNDLE_KEY_KID_ID = "KID_ID";
     public final static String BUNDLE_KEY_USER_ID = "USER_ID";
+    public final static String BUNDLE_KEY_ASSIGN_KID_ID = "ASSIGN_KID_ID";
 
     private final static String key_focus_kids = "focus_kids";
     public static DB_Kids getFocusWatchInfo(Context context){

@@ -5,6 +5,11 @@ package com.kidsdynamic.swing.model;
  */
 
 public class KidsEntityBean {
+    //分享类型：0 无；1 自己分享给别人；2 别人分享给自己
+    public static final int shareType_none = 0;
+    public static final int shareType_mine = 1;
+    public static final int shareType_from_other = 2;
+
     private long kidsId;
     private String name;
     private long lastUpdate;
@@ -16,7 +21,10 @@ public class KidsEntityBean {
     private long parentId;
     private Integer battery;
     private long subHostId;
-    private Integer shareType;
+    private int shareType;
+
+    //是否选中
+    private boolean isSelected = false;
 
     public long getKidsId() {
         return kidsId;
@@ -34,11 +42,11 @@ public class KidsEntityBean {
         this.name = name;
     }
 
-    public Long getLastUpdate() {
+    public long getLastUpdate() {
         return lastUpdate;
     }
 
-    public void setLastUpdate(Long lastUpdate) {
+    public void setLastUpdate(long lastUpdate) {
         this.lastUpdate = lastUpdate;
     }
 
@@ -106,11 +114,23 @@ public class KidsEntityBean {
         this.subHostId = subHostId;
     }
 
-    public Integer getShareType() {
+    public int getShareType() {
         return shareType;
     }
 
-    public void setShareType(Integer shareType) {
+    public void setShareType(int shareType) {
         this.shareType = shareType;
+    }
+
+    public void setDateCreated(long dateCreated) {
+        this.dateCreated = dateCreated;
+    }
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
     }
 }
