@@ -44,7 +44,7 @@ public class WatchHaveFragment extends BaseFragment {
                 signupActivity.setFragment(WatchSearchFragment.newInstance(), true);
                 break;
             case R.id.watch_have_no:
-                signupActivity.setFragment(WatchPurchaseFragment.newInstance());
+                signupActivity.setFragment(WatchPurchaseFragment.newInstance(), false);
                 break;
         }
     }

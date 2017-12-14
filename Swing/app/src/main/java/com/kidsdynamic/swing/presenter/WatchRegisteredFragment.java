@@ -1,11 +1,13 @@
 package com.kidsdynamic.swing.presenter;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.kidsdynamic.data.net.kids.model.KidsWithParent;
 import com.kidsdynamic.swing.BaseFragment;
 import com.kidsdynamic.swing.R;
 
@@ -20,9 +22,12 @@ import butterknife.OnClick;
 
 public class WatchRegisteredFragment extends BaseFragment {
 
-    public static WatchRegisteredFragment newInstance() {
+    private static final String DATA = "data";
+
+    public static WatchRegisteredFragment newInstance(KidsWithParent kidsWithParent) {
         Bundle args = new Bundle();
         WatchRegisteredFragment fragment = new WatchRegisteredFragment();
+        args.putSerializable(DATA, kidsWithParent);
         fragment.setArguments(args);
         return fragment;
     }
@@ -38,8 +43,16 @@ public class WatchRegisteredFragment extends BaseFragment {
 
     @OnClick(R.id.watch_registered_request)
     public void requestAccess() {
-        SignupActivity signupActivity = (SignupActivity) getActivity();
-        signupActivity.setFragment(WatchRequestFragment.newInstance());
+        Bundle args = getArguments();
+        KidsWithParent kidsWithParent = null != args ? (KidsWithParent) args.getSerializable(DATA) : null;
+        Activity activity = getActivity();
+        if (activity instanceof SignupActivity) {
+            SignupActivity signupActivity = (SignupActivity) activity;
+            signupActivity.setFragment(WatchRequestFragment.newInstance(kidsWithParent), true);
+        } else if (activity instanceof MainFrameActivity) {
+            MainFrameActivity mainFrameActivity = (MainFrameActivity) activity;
+            mainFrameActivity.setFragment(WatchRequestFragment.newInstance(kidsWithParent), true);
+        }
     }
 
     @OnClick(R.id.watch_registered_contact)

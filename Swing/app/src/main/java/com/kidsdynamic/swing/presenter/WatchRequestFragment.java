@@ -1,8 +1,11 @@
 package com.kidsdynamic.swing.presenter;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,10 +13,18 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.kidsdynamic.data.net.user.model.KidInfo;
+import com.kidsdynamic.data.net.ApiGen;
+import com.kidsdynamic.data.net.host.HostApi;
+import com.kidsdynamic.data.net.host.model.AddSubHost;
+import com.kidsdynamic.data.net.host.model.RequestAddSubHostEntity;
+import com.kidsdynamic.data.net.kids.model.KidsWithParent;
 import com.kidsdynamic.swing.BaseFragment;
 import com.kidsdynamic.swing.R;
+import com.kidsdynamic.swing.domain.UserManager;
+import com.kidsdynamic.swing.net.BaseRetrofitCallback;
+import com.kidsdynamic.swing.utils.GlideHelper;
 import com.kidsdynamic.swing.view.ListLinearLayout;
+import com.yy.base.utils.ToastCommon;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +32,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import retrofit2.Call;
+import retrofit2.Response;
 
 /**
  * WatchRequestFragment
@@ -29,6 +42,8 @@ import butterknife.OnClick;
  */
 
 public class WatchRequestFragment extends BaseFragment {
+
+    private static final String DATA = "data";
 
     @BindView(R.id.watch_request_title)
     TextView tv_title;
@@ -39,9 +54,10 @@ public class WatchRequestFragment extends BaseFragment {
 
     private DataAdapter dataAdapter;
 
-    public static WatchRequestFragment newInstance() {
+    public static WatchRequestFragment newInstance(KidsWithParent kidsWithParent) {
         Bundle args = new Bundle();
         WatchRequestFragment fragment = new WatchRequestFragment();
+        args.putSerializable(DATA, kidsWithParent);
         fragment.setArguments(args);
         return fragment;
     }
@@ -58,25 +74,40 @@ public class WatchRequestFragment extends BaseFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-//        List<KidInfo> list = new ArrayList<>();
-//        for (int i = 0; i < 1; i++) {
-//            list.add(new KidInfo());
-//        }
-//        setDataAdapter(list);
+        List<KidsWithParent> list = new ArrayList<>();
+        Bundle args = getArguments();
+        KidsWithParent kidsWithParent = null != args ? (KidsWithParent) args.getSerializable(DATA) : null;
+        if (null != kidsWithParent) {
+            list.add(kidsWithParent);
+        }
+        setDataAdapter(list);
     }
 
     @OnClick(R.id.watch_request_search)
     public void searchAgain() {
-        SignupActivity signupActivity = (SignupActivity) getActivity();
-        signupActivity.setFragment(WatchSearchFragment.newInstance());
+        Activity activity = getActivity();
+        if (activity instanceof SignupActivity) {
+            SignupActivity signupActivity = (SignupActivity) activity;
+            signupActivity.setFragment(WatchSearchFragment.newInstance(), true);
+        } else if (activity instanceof MainFrameActivity) {
+            MainFrameActivity mainFrameActivity = (MainFrameActivity) activity;
+            mainFrameActivity.setFragment(WatchSearchFragment.newInstance(), true);
+        }
     }
 
     @OnClick(R.id.watch_request_dashboard)
     public void goDashBoard() {
-
+        Activity activity = getActivity();
+        if (activity instanceof SignupActivity) {
+            activity.finish();
+            startActivity(new Intent(activity, MainFrameActivity.class));
+        } else if (activity instanceof MainFrameActivity) {
+            MainFrameActivity mainFrameActivity = (MainFrameActivity) activity;
+            mainFrameActivity.setFragment(DashboardEmotionFragment.newInstance(), true);
+        }
     }
 
-    public void setDataAdapter(List<KidInfo> list) {
+    public void setDataAdapter(List<KidsWithParent> list) {
         if (null == dataAdapter) {
             dataAdapter = new DataAdapter(getContext(), list);
         } else {
@@ -88,14 +119,14 @@ public class WatchRequestFragment extends BaseFragment {
     private class DataAdapter extends BaseAdapter {
 
         private Context mContext;
-        private List<KidInfo> mItems = new ArrayList<>();
+        private List<KidsWithParent> mItems = new ArrayList<>();
 
-        private DataAdapter(Context context, List<KidInfo> items) {
+        private DataAdapter(Context context, List<KidsWithParent> items) {
             mContext = context;
             mItems = items;
         }
 
-        public void setData(List<KidInfo> items) {
+        public void setData(List<KidsWithParent> items) {
             mItems.clear();
             mItems.addAll(items);
         }
@@ -106,7 +137,7 @@ public class WatchRequestFragment extends BaseFragment {
         }
 
         @Override
-        public KidInfo getItem(int position) {
+        public KidsWithParent getItem(int position) {
             return mItems.get(position);
         }
 
@@ -127,15 +158,28 @@ public class WatchRequestFragment extends BaseFragment {
                 holder = (WatchSelectFragment.ViewHolder) convertView.getTag();
             }
 
-            KidInfo kidInfo = getItem(position);
-            if (null != kidInfo) {
-                holder.iv_head.setImageResource(R.drawable.ic_icon_profile_);
-                holder.tv_content.setText(String.valueOf(position));
-                holder.iv_action.setImageResource(R.drawable.ic_icon_add_orange);
+            KidsWithParent kidsWithParent = getItem(position);
+            if (null != kidsWithParent) {
+                String url;
+                final long id = kidsWithParent.getId();
+                String profile = kidsWithParent.getProfile();
+                if (!TextUtils.isEmpty(profile)) {
+                    url = UserManager.getProfileRealUri(profile);
+                } else {
+                    url = UserManager.getProfileRealUri(id);
+                }
+                if (TextUtils.isEmpty(url)) {
+                    holder.iv_head.setImageResource(R.drawable.ic_icon_profile_);
+                } else {
+                    GlideHelper.showCircleImageView(mContext, url, holder.iv_head);
+                }
+                holder.iv_head.setBackgroundResource(R.color.transparent);
+                holder.tv_content.setText(kidsWithParent.getName());
+                holder.iv_action.setImageResource(R.drawable.icon_arrow_up_orange);
                 holder.iv_action.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        doPlusClick(holder.iv_action);
+                        doRequestClick(id, tv_title, tv_dashboard, holder.iv_action);
                     }
                 });
             }
@@ -144,16 +188,39 @@ public class WatchRequestFragment extends BaseFragment {
         }
     }
 
-    private void doPlusClick(ImageView iv_action) {
-//        tv_title.setText("Request access pending");
-//        tv_dashboard.setText("Go to Dashboard");
-//        iv_action.setImageResource(android.R.drawable.ic_media_next);
-    }
+    private void doRequestClick(long hostId, final TextView tvTitle, final TextView tvDashboard,
+                                final ImageView iv_action) {
+        showLoadingDialog(R.string.signup_login_wait);
+        HostApi hostApi = ApiGen.getInstance(getActivity().getApplicationContext()).
+                generateApi(HostApi.class, true);
+        AddSubHost subHostId = new AddSubHost();
+        subHostId.setHostId(hostId);
+        hostApi.subHostAdd(subHostId)
+                .enqueue(new BaseRetrofitCallback<RequestAddSubHostEntity>() {
+                    @Override
+                    public void onResponse(Call<RequestAddSubHostEntity> call,
+                                           Response<RequestAddSubHostEntity> response) {
+                        super.onResponse(call, response);
+                        finishLoadingDialog();
+                        int code = response.code();
+                        if (code == 200) {
+                            tvTitle.setText(R.string.watch_request_access_pending);
+                            tvDashboard.setText(R.string.watch_select_dashboard);
+                            iv_action.setImageResource(R.drawable.icon_done);
+                        } else if (code == 409) {
+                            ToastCommon.makeText(getContext(), R.string.error_subhost_add_409);
+                        } else {
+                            ToastCommon.makeText(getContext(), R.string.normal_err, code);
+                        }
+                    }
 
-//    private void doRequestClick() {
-//        SignupActivity signupActivity = (SignupActivity) getActivity();
-//        signupActivity.setFragment(WatchRegisteredFragment.newInstance());
-//    }
+                    @Override
+                    public void onFailure(Call<RequestAddSubHostEntity> call, Throwable t) {
+                        super.onFailure(call, t);
+                        finishLoadingDialog();
+                    }
+                });
+    }
 
     static class ViewHolder {
 

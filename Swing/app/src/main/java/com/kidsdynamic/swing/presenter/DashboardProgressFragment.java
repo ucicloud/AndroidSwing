@@ -26,6 +26,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.kidsdynamic.data.net.ApiGen;
+import com.kidsdynamic.data.net.firmware.FirmwareApi;
+import com.kidsdynamic.data.net.firmware.model.CurrentFirmwareVersion;
 import com.kidsdynamic.data.net.user.UserApiNeedToken;
 import com.kidsdynamic.data.net.user.model.UserProfileRep;
 import com.kidsdynamic.data.utils.LogUtil2;
@@ -54,6 +56,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import retrofit2.Call;
+import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
@@ -80,8 +83,6 @@ public class DashboardProgressFragment extends DashboardBaseFragment {
     private MainFrameActivity mActivityMain;
     private View mViewMain;
 
-    //    @BindView(R.id.view_sync_complete)
-//    protected View view_sync_complete;
     @BindView(R.id.tv_message)
     protected TextView mViewLabel;
     @BindView(R.id.dashboard_progress_button_first)
@@ -608,8 +609,19 @@ public class DashboardProgressFragment extends DashboardBaseFragment {
                 DeviceManager.saveBindWatchBattery(mDevice.getMacId(), battery);
 
             }
+
+            @Override
+            public void onDeviceVersion(String version) {
+                Log.d("dashProgress", "onDeviceVersion version " + version);
+                //首先更新本地存储
+                DeviceManager.updateKidsFirmwareVersion(
+                        DeviceManager.getMacID(mMacAddress),version);
+                //上传服务器
+                new DeviceManager().uploadFirmwareVersion(DeviceManager.getMacID(mMacAddress), version);
+            }
         });
     }
+
 
     private void bleSyncCancel() {
 //        mActivityMain.mBLEMachine.Disconnect();
@@ -749,7 +761,6 @@ public class DashboardProgressFragment extends DashboardBaseFragment {
         //显示同步成功通过另外一种方式实现
         /*mViewLabel.setVisibility(View.INVISIBLE);
         mViewProgress.setVisibility(View.INVISIBLE);*/
-//        view_sync_complete.setVisibility(View.VISIBLE);
     }
 
     private void viewNotFound(int errMsgStrId) {

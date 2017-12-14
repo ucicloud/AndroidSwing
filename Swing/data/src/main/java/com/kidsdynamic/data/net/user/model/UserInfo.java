@@ -1,10 +1,12 @@
 package com.kidsdynamic.data.net.user.model;
 
+import java.io.Serializable;
+
 /**
  * Created by Administrator on 2017/10/16.
  */
 
-public class UserInfo {
+public class UserInfo implements Serializable {
 
     /**
      * id : 29
@@ -17,9 +19,9 @@ public class UserInfo {
      * phoneNumber : 3444943214
      * profile ://头像信息
      * language" "en",
-     "ios_registration_id": "D975DE6114780B4396AB5D1A8D8DA1826035A7AD3C48BA420683E85072ED62FB",
-     "android_registration_id": "",
-     "country": "CN"
+     * "ios_registration_id": "D975DE6114780B4396AB5D1A8D8DA1826035A7AD3C48BA420683E85072ED62FB",
+     * "android_registration_id": "",
+     * "country": "CN"
      */
 
     private long id;

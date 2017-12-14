@@ -89,7 +89,7 @@ public class SignupLoginFragment extends BaseFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        if(BuildConfig.DEBUG){
+        if (BuildConfig.DEBUG) {
             et_email.setText("123@qq.com");
             et_password.setText("123456");
         }
@@ -102,7 +102,7 @@ public class SignupLoginFragment extends BaseFragment {
     @OnClick(R.id.ib_back)
     public void back() {
         SignupActivity signupActivity = (SignupActivity) getActivity();
-        signupActivity.setFragment(SignupStartFragment.newInstance());
+        signupActivity.setFragment(SignupStartFragment.newInstance(), false);
     }
 
     @OnClick(R.id.signup_login_login)
@@ -185,7 +185,7 @@ public class SignupLoginFragment extends BaseFragment {
 
     private void showRegisterUI(String email, String pwd) {
         SignupActivity signupActivity = (SignupActivity) getActivity();
-        signupActivity.setFragment(SignupProfileFragment.newInstance(email, pwd));
+        signupActivity.setFragment(SignupProfileFragment.newInstance(email, pwd), false);
     }
 
     //开始执行登录接口，如果登录成功，则同步数据
@@ -314,7 +314,7 @@ public class SignupLoginFragment extends BaseFragment {
         startActivity(new Intent(getActivity(), MainFrameActivity.class));
 
         //记录状态
-        new LoginManager().cacheLoginOK(getContext(),userEntity);
+        new LoginManager().cacheLoginOK(getContext(), userEntity);
     }
 
     @OnClick(R.id.signup_login_reset_pwd)

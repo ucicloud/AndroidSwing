@@ -1,6 +1,7 @@
 package com.kidsdynamic.data.repository.disk;
 
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 
 import com.kidsdynamic.commonlib.utils.ObjectUtils;
 import com.kidsdynamic.data.dao.DB_Kids;
@@ -76,5 +77,23 @@ public class KidsDataStore {
         KidsDao kidsDao = dbUtil.getDaoSession().getKidsDao();
 
         kidsDao.update(db_kids);
+    }
+
+    public void updateFirmwareVersion(String macId, String fireWareVersion){
+        if(TextUtils.isEmpty(macId)
+                || TextUtils.isEmpty(fireWareVersion)){
+            return;
+        }
+
+        KidsDao kidsDao = dbUtil.getDaoSession().getKidsDao();
+        List<DB_Kids> list = kidsDao.queryBuilder().where(KidsDao.Properties.MacId.eq(macId)).list();
+
+        if(!ObjectUtils.isListEmpty(list)){
+            for (DB_Kids dbKids : list) {
+                dbKids.setFirmwareVersion(fireWareVersion);
+            }
+
+            kidsDao.updateInTx(list);
+        }
     }
 }

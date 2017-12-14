@@ -102,7 +102,7 @@ public class SignupActivity extends BaseFragmentActivity {
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
 
-        setFragment(SignupStartFragment.newInstance());
+        setFragment(SignupStartFragment.newInstance(), false);
 
         //below test fragment
 //        setFragment(WatchSelectFragment.newInstance());
@@ -125,10 +125,6 @@ public class SignupActivity extends BaseFragmentActivity {
                 .replace(R.id.signup_activity_container, fragment, className)
                 .addToBackStack(null)
                 .commit();
-    }
-
-    public void setFragment(Fragment fragment) {
-        setFragment(fragment, false);
     }
 
     public void setFragment(Fragment fragment, boolean isAddBackStack) {

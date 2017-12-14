@@ -14,4 +14,6 @@ public interface IDeviceSyncCallback {
     void onSyncActivity(ActivityModel activity);
 
     void onDeviceBattery(int battery);
+
+    void onDeviceVersion(String version);
 }

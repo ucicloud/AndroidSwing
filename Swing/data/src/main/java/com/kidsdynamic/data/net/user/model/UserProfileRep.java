@@ -187,6 +187,7 @@ public class UserProfileRep {
          * dateCreated : 2016-12-11T22:37:15Z
          * macId : 13031FCFE5E02
          * profile :
+         * firmwareVersion: ""
          */
 
         private int id;
@@ -194,6 +195,7 @@ public class UserProfileRep {
         private String dateCreated;
         private String macId;
         private String profile;
+        private String firmwareVersion;
 
         public int getId() {
             return id;
@@ -233,6 +235,14 @@ public class UserProfileRep {
 
         public void setProfile(String profile) {
             this.profile = profile;
+        }
+
+        public String getFirmwareVersion() {
+            return firmwareVersion;
+        }
+
+        public void setFirmwareVersion(String firmwareVersion) {
+            this.firmwareVersion = firmwareVersion;
         }
     }
 }

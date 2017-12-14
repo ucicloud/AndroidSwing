@@ -39,7 +39,7 @@ public class WatchSorryFragment extends BaseFragment {
     @OnClick(R.id.watch_sorry_search)
     public void searchAgain() {
         SignupActivity signupActivity = (SignupActivity) getActivity();
-        signupActivity.setFragment(WatchSearchFragment.newInstance());
+        signupActivity.setFragment(WatchSearchFragment.newInstance(), false);
     }
 
     @OnClick(R.id.watch_sorry_request)

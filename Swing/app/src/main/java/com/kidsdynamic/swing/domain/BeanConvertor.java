@@ -123,7 +123,7 @@ public class BeanConvertor {
             db_kids.setMacId(kidsEntity.getMacId());
             db_kids.setProfile(kidsEntity.getProfile());
             db_kids.setParentId(userProfileRep.getUser().getId());
-            db_kids.setFirmwareVersion("");
+            db_kids.setFirmwareVersion(kidsEntity.getFirmwareVersion());
 
             db_kids.setBattery(-1);
             db_kids.setSubHostId(Long.valueOf(-1));

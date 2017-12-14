@@ -4,14 +4,10 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
-import com.google.gson.Gson;
 import com.kidsdynamic.commonlib.utils.ObjectUtils;
 import com.kidsdynamic.data.dao.DB_EventKids;
 import com.kidsdynamic.data.dao.DB_Kids;
-import com.kidsdynamic.data.net.host.model.RequestAddSubHostEntity;
-import com.kidsdynamic.data.net.host.model.SubHostRequests;
 import com.kidsdynamic.data.net.kids.model.KidsWithParent;
-import com.kidsdynamic.data.net.user.model.KidInfo;
 import com.kidsdynamic.data.persistent.DbUtil;
 import com.kidsdynamic.data.persistent.PreferencesUtil;
 import com.kidsdynamic.data.repository.disk.EventKidsStore;
@@ -23,8 +19,6 @@ import com.kidsdynamic.swing.model.WatchContact;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.kidsdynamic.swing.domain.BeanConvertor.getUTCTimeStamp;
-
 /**
  * Created by Administrator on 2017/10/27.
  */
@@ -34,6 +28,7 @@ public class DeviceManager {
     public final static String BUNDLE_KEY_KID_NAME = "KID_NAME";
     public final static String BUNDLE_KEY_KID_ID = "KID_ID";
     public final static String BUNDLE_KEY_USER_ID = "USER_ID";
+    public final static String BUNDLE_KEY_ASSIGN_KID_ID = "ASSIGN_KID_ID";
 
     private final static String key_focus_kids = "focus_kids";
     private final static String key_SubHostRequests = "SubHostRequests";
@@ -324,7 +319,7 @@ public class DeviceManager {
         }
 
 
-        //todo db_eventKids表更新
+        //db_eventKids表更新
         EventKidsStore eventKidsStore = new EventKidsStore(dbUtil);
         List<DB_EventKids> dbEventKids = eventKidsStore.getDBEventKids(kidsWithParent.getId());
 
@@ -333,6 +328,50 @@ public class DeviceManager {
                     BeanConvertor.updateEventKidsList(dbEventKids, kidsWithParent,updateTime));
         }
 
+    }
+
+    public static void updateKidsFirmwareVersion(String macId, String fireWareVersion){
+
+        if(TextUtils.isEmpty(macId)
+                || TextUtils.isEmpty(fireWareVersion)){
+            return;
+        }
+
+        DbUtil dbUtil = DbUtil.getInstance(SwingApplication.getAppContext());
+        KidsDataStore kidsDataStore = new KidsDataStore(dbUtil);
+        kidsDataStore.updateFirmwareVersion(macId,fireWareVersion);
+
+        //更新eventKids表
+        EventKidsStore eventKidsStore = new EventKidsStore(dbUtil);
+        eventKidsStore.updateFirmwareVersion(macId,fireWareVersion);
+    }
+
+    public static void updateEventKidsFirmwareVersion(String macId, String fireWareVersion){
+        DbUtil dbUtil = DbUtil.getInstance(SwingApplication.getAppContext());
+
+        EventKidsStore eventKidsStore = new EventKidsStore(dbUtil);
+        eventKidsStore.updateFirmwareVersion(macId,fireWareVersion);
+    }
+
+    public void uploadFirmwareVersion(final String macId, final String version) {
+        FirmwareApi firmwareApi = ApiGen.getInstance(SwingApplication.getAppContext()).
+                generateApi(FirmwareApi.class, true);
+
+        CurrentFirmwareVersion currentFirmwareVersion = new CurrentFirmwareVersion();
+        currentFirmwareVersion.setFirmwareVersion(version);
+        currentFirmwareVersion.setMacId(macId);
+
+        firmwareApi.sendFirmwareVersion(currentFirmwareVersion).enqueue(new Callback<Object>() {
+            @Override
+            public void onResponse(Call<Object> call, Response<Object> response) {
+                Log.w("uploadFirmwareVersion","sendFirmwareVersion ok");
+            }
+
+            @Override
+            public void onFailure(Call<Object> call, Throwable t) {
+                Log.w("uploadFirmwareVersion","sendFirmwareVersion fail");
+            }
+        });
     }
 
     public static void updateSubHostRequestsInCache(SubHostRequests subHostRequests){
@@ -357,6 +396,5 @@ public class DeviceManager {
         Gson gson = new Gson();
         return gson.fromJson(subHostListStr, SubHostRequests.class);
     }
-
 
 }

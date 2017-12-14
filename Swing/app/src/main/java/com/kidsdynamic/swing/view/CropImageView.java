@@ -40,7 +40,7 @@ public class CropImageView extends AppCompatImageView implements ViewTreeObserve
 
     private static final float SCALE_MAX = 3.0f;
 
-    private static int mRadius = 360;
+    private static int mRadius = 240;
     private Bitmap.CompressFormat mCompressFormat;
     private int mCompressQuality;
     private boolean isCropCircle;
@@ -473,7 +473,7 @@ public class CropImageView extends AppCompatImageView implements ViewTreeObserve
             return null;
         }
         bitmap = zoomBitmap(bitmap, sx, sy);
-        Bitmap target = Bitmap.createBitmap(mRadius * 2, mRadius * 2, Bitmap.Config.ARGB_8888);
+        Bitmap target = Bitmap.createBitmap(mRadius * 2, mRadius * 2, Bitmap.Config.ARGB_4444);
         Canvas canvas = new Canvas(target);
         canvas.drawCircle(mRadius, mRadius, mRadius, paint);
         if (isCropCircle) {
@@ -525,12 +525,13 @@ public class CropImageView extends AppCompatImageView implements ViewTreeObserve
                 return null;
             }
             if (imgFile.createNewFile()) {
+                bitmap.setConfig(Bitmap.Config.ARGB_4444);
                 baos = new ByteArrayOutputStream();
                 if (null == compressFormat) {
                     compressFormat = Bitmap.CompressFormat.JPEG;
                 }
                 if (0 == quality) {
-                    quality = 80;
+                    quality = 30;
                 }
                 bitmap.compress(compressFormat, quality, baos);
                 fos = new FileOutputStream(imgFile);

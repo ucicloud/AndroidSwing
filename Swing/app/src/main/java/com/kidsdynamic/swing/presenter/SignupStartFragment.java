@@ -39,7 +39,7 @@ public class SignupStartFragment extends BaseFragment {
     @OnClick(R.id.signup_start_login)
     public void login(View v) {
         SignupActivity signupActivity = (SignupActivity) getActivity();
-        signupActivity.setFragment(SignupLoginFragment.newInstance());
+        signupActivity.setFragment(SignupLoginFragment.newInstance(), false);
     }
 
 }

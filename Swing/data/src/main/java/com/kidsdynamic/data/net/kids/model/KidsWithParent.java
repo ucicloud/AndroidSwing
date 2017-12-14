@@ -2,11 +2,13 @@ package com.kidsdynamic.data.net.kids.model;
 
 import com.kidsdynamic.data.net.user.model.UserInfo;
 
+import java.io.Serializable;
+
 /**
  * date:   2017/10/21 15:33 <br/>
  */
 
-public class KidsWithParent {
+public class KidsWithParent implements Serializable {
 
     /**
      * id : 2
