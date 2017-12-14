@@ -126,7 +126,7 @@ public class SignupProfileFragment extends BaseFragment {
     @OnClick(R.id.ib_back)
     public void back() {
         SignupActivity signupActivity = (SignupActivity) getActivity();
-        signupActivity.setFragment(SignupLoginFragment.newInstance());
+        signupActivity.setFragment(SignupLoginFragment.newInstance(),false);
     }
 
     @OnClick(R.id.signup_profile_photo)
@@ -316,7 +316,7 @@ public class SignupProfileFragment extends BaseFragment {
                     finishLoadingDialog();
 
                     SignupActivity signupActivity = (SignupActivity) getActivity();
-                    signupActivity.setFragment(WatchHaveFragment.newInstance());
+                    signupActivity.setFragment(WatchHaveFragment.newInstance(),false);
 
                 } else {
                     finishLoadingDialog();
@@ -343,7 +343,7 @@ public class SignupProfileFragment extends BaseFragment {
     //如果注册成功，但是登录失败，则跳转到login
     private void gotoLoginFragment(){
         SignupActivity signupActivity = (SignupActivity) getActivity();
-        signupActivity.setFragment(SignupLoginFragment.newInstance());
+        signupActivity.setFragment(SignupLoginFragment.newInstance(),false);
     }
 
     private void doWhichClick(int position) {

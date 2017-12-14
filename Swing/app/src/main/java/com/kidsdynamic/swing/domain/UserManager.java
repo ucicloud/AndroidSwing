@@ -21,6 +21,10 @@ public class UserManager {
         return ApiGen.BASE_PHOTO_URL + userProfile;
     }
 
+    public static String getProfileRealUri(long id){
+        return ApiGen.BASE_PHOTO_URL + "avatar_" + id + ".jpg";
+    }
+
     public static void updateProfile2DB(@NonNull UpdateProfileSuccess updateProfileSuccess){
         DbUtil dbUtil = DbUtil.getInstance(SwingApplication.getAppContext());
         UserDataStore userDataStore = new UserDataStore(dbUtil);

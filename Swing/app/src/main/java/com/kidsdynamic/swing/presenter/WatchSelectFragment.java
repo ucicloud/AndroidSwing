@@ -1,6 +1,7 @@
 package com.kidsdynamic.swing.presenter;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -33,6 +34,7 @@ import com.kidsdynamic.swing.ble.IDeviceInitCallback;
 import com.kidsdynamic.swing.ble.IDeviceScanCallback;
 import com.kidsdynamic.swing.ble.SwingBLEService;
 import com.kidsdynamic.swing.domain.DeviceManager;
+import com.kidsdynamic.swing.domain.UserManager;
 import com.kidsdynamic.swing.net.BaseRetrofitCallback;
 import com.kidsdynamic.swing.utils.GlideHelper;
 import com.kidsdynamic.swing.view.ListLinearLayout;
@@ -243,7 +245,8 @@ public class WatchSelectFragment extends BaseFragment {
                     kidsWithParent.setName(scanResult.getName());
                     kidsWithParent.setMacId(watchMacId);
                     LogUtil2.getUtils().d("watch not bind");
-
+                }
+                if (null != kidsWithParent) {
                     //业务上用的macId需要吧address中的":"删除
                     mDeviceMap.put(watchMacId, scanResult);
                     dataAdapter.addItem(kidsWithParent);
@@ -318,23 +321,29 @@ public class WatchSelectFragment extends BaseFragment {
                     holder.iv_action.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            doPlusClick(kidsWithParent.getMacId());
+                            doPlusClick(kidsWithParent);
                         }
                     });
                 } else {
+                    String url;
                     String profile = kidsWithParent.getProfile();
                     if (!TextUtils.isEmpty(profile)) {
-                        GlideHelper.showCircleImageView(mContext, profile, holder.iv_head);
-                        holder.iv_head.setBackgroundResource(R.color.transparent);
+                        url = UserManager.getProfileRealUri(profile);
                     } else {
-                        holder.iv_head.setImageResource(R.drawable.ic_icon_profile_);
+                        url = UserManager.getProfileRealUri(id);
                     }
+                    if (TextUtils.isEmpty(url)) {
+                        holder.iv_head.setImageResource(R.drawable.ic_icon_profile_);
+                    } else {
+                        GlideHelper.showCircleImageView(mContext, url, holder.iv_head);
+                    }
+                    holder.iv_head.setBackgroundResource(R.color.transparent);
                     holder.tv_content.setText(kidsWithParent.getName());
                     holder.iv_action.setImageResource(R.drawable.icon_arrow_up_orange);
                     holder.iv_action.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            doRequestClick(kidsWithParent.getMacId());
+                            doRequestClick(kidsWithParent);
                         }
                     });
                 }
@@ -346,9 +355,9 @@ public class WatchSelectFragment extends BaseFragment {
 
     private String nowFirmwareVersion = "";
 
-    private void doPlusClick(final String macId) {
+    private void doPlusClick(KidsWithParent kidsWithParent) {
+        final String macId = kidsWithParent.getMacId();
         BluetoothLeDevice device = mDeviceMap.get(macId);
-
         if (device == null) {
             ToastCommon.makeText(getActivity(), R.string.error_api_unknown);
             return;
@@ -396,14 +405,13 @@ public class WatchSelectFragment extends BaseFragment {
 
     }
 
-    private void doRequestClick(final String macId) {
+    private void doRequestClick(final KidsWithParent kidsWithParent) {
+        final String macId = kidsWithParent.getMacId();
         BluetoothLeDevice device = mDeviceMap.get(macId);
-
         if (device == null) {
             ToastCommon.makeText(getActivity(), R.string.error_api_unknown);
             return;
         }
-
         showLoadingDialog(R.string.signup_login_wait);
         mBluetoothService.connectAndInitDevice(device, new IDeviceInitCallback() {
             @Override
@@ -421,8 +429,14 @@ public class WatchSelectFragment extends BaseFragment {
             public void onDeviceBattery(int battery) {
                 finishLoadingDialog();
                 DeviceManager.saveBindWatchBattery(macId, battery);
-                SignupActivity signupActivity = (SignupActivity) getActivity();
-                signupActivity.setFragment(WatchRegisteredFragment.newInstance(), true);
+                Activity activity = getActivity();
+                if (activity instanceof SignupActivity) {
+                    SignupActivity signupActivity = (SignupActivity) activity;
+                    signupActivity.setFragment(WatchRegisteredFragment.newInstance(kidsWithParent), true);
+                } else if (activity instanceof MainFrameActivity) {
+                    MainFrameActivity mainFrameActivity = (MainFrameActivity) activity;
+                    mainFrameActivity.setFragment(WatchRegisteredFragment.newInstance(kidsWithParent), true);
+                }
             }
 
             @Override
