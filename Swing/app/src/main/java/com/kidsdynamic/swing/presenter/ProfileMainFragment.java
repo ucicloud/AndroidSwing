@@ -351,6 +351,8 @@ public class ProfileMainFragment extends ProfileBaseFragment {
     private void showKidsProfile(WatchContact contact){
 
         if(contact instanceof WatchContact.Kid){
+            mActivityMain.mSubHostList.push(mSubHostRequests);
+
             WatchContact.Kid watchKidsInfo = (WatchContact.Kid) contact;
             selectFragment(ProfileKidsInfoFragment.newInstance(watchKidsInfo.mId),true);
         }
@@ -386,7 +388,6 @@ public class ProfileMainFragment extends ProfileBaseFragment {
         selectFragment(ProfileRequestFromFragment.class.getName(),null,true);
 
     }
-
 
 
     private void testGotoKidsInfoShare(RequestAddSubHostEntity requestAddSubHostEntity, WatchContact... contacts){
@@ -427,6 +428,7 @@ public class ProfileMainFragment extends ProfileBaseFragment {
         photo.setStrokeType(ViewCircle.STROKE_TYPE_ARC);
         photo.setStrokeColorActive(ContextCompat.getColor(mActivityMain, R.color.color_orange_main));
         photo.setStrokeColorNormal(ContextCompat.getColor(mActivityMain, R.color.color_white));
+
         photo.setTag(R.id.profile_main_photo,contact);
         photo.setTag(R.id.profile_main_request_to_container,requestAddSubHostEntity);
 

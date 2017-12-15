@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.kidsdynamic.data.dao.DB_User;
 import com.kidsdynamic.data.net.ApiGen;
+import com.kidsdynamic.data.net.host.model.SubHostRequests;
 import com.kidsdynamic.data.net.user.UserApiNeedToken;
 import com.kidsdynamic.swing.BuildConfig;
 import com.kidsdynamic.swing.R;
@@ -49,6 +50,8 @@ public class ProfileOptionFragment extends ProfileBaseFragment {
     @BindView(R.id.profile_option_version)
     protected TextView tv_version;
 
+    private SubHostRequests requestInfo;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,6 +83,15 @@ public class ProfileOptionFragment extends ProfileBaseFragment {
 
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (!mActivityMain.mSubHostList.isEmpty()) {
+            requestInfo = mActivityMain.mSubHostList.pop();
+        }
+    }
+
     @OnClick(R.id.main_toolbar_action1)
     public void onToolbarAction1() {
         getFragmentManager().popBackStack();
@@ -95,7 +107,7 @@ public class ProfileOptionFragment extends ProfileBaseFragment {
 
     @OnClick(R.id.profile_option_switch_watch_account)
     protected void onSwitchAccount() {
-
+        mActivityMain.mSubHostList.push(requestInfo);
         selectFragment(ProfileSwitchAccountFragment.class.getName(),null,true);
     }
 

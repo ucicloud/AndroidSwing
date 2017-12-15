@@ -80,6 +80,7 @@ public class MainFrameActivity extends BaseFragmentActivity {
     public Stack<WatchEvent> mEventStack;
     public Stack<WatchContact> mWatchContactStack;
     public Stack<RequestAddSubHostEntity> mSubHostInfoEntity;
+    public Stack<RequestAddSubHostEntity> mRemovedSubHostInfoEntity;
     public Stack<SubHostRequests> mSubHostList;
 
     public final static String UI_Update_Action = "MainFrame_UI_action";
@@ -175,6 +176,7 @@ public class MainFrameActivity extends BaseFragmentActivity {
         mWatchContactStack = new Stack<>();
 
         mSubHostInfoEntity = new Stack<>();
+        mRemovedSubHostInfoEntity = new Stack<>();
         mSignStack = new Stack<>();
         mSubHostList = new Stack<>();
 

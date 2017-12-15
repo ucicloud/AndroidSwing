@@ -511,4 +511,7 @@
     <!--<string name="language_es" translatable="false">"Spanish"</string>-->
     <!--<string name="language_zh_cn" translatable="false">"简体中文"</string>-->
 
+    <!--new string 20171215 2rd-->
+    <string name="is_sharing_with">is sharing with</string>
+    <string name="has_requests_from">has requests from</string>
 </resources>

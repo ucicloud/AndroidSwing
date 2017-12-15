@@ -79,7 +79,7 @@
                 android:layout_weight="2.5"
                 android:orientation="vertical"
                 android:paddingBottom="6dp"
-                android:visibility="gone">
+                android:visibility="visible">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -93,7 +93,7 @@
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
                         android:gravity="center"
-                        android:text="@string/profile_main_shared" />
+                        android:text="@string/is_sharing_with" />
 
                     <View
                         style="@style/line_profile_label"
@@ -128,7 +128,7 @@
                 android:layout_weight="2.5"
                 android:orientation="vertical"
                 android:paddingBottom="6dp"
-                android:visibility="gone">
+                android:visibility="visible">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -142,7 +142,7 @@
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
                         android:gravity="center"
-                        android:text="@string/profile_main_request_to" />
+                        android:text="@string/has_requests_from" />
 
                     <View
                         style="@style/line_profile_label"
@@ -186,7 +186,8 @@
                 android:id="@+id/btn_remove"
                 style="@style/btn_main_profile"
                 android:layout_width="match_parent"
-                android:text="@string/profile_kid_remove" />
+                android:text="@string/profile_kid_remove"
+                android:visibility="gone"/>
 
 
         </LinearLayout>

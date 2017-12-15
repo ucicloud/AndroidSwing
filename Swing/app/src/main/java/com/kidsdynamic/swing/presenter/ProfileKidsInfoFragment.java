@@ -8,6 +8,7 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -18,7 +19,6 @@ import com.kidsdynamic.commonlib.utils.ObjectUtils;
 import com.kidsdynamic.data.net.host.model.RequestAddSubHostEntity;
 import com.kidsdynamic.data.net.host.model.SubHostRequests;
 import com.kidsdynamic.data.net.user.model.KidInfo;
-import com.kidsdynamic.data.net.user.model.UserInfo;
 import com.kidsdynamic.swing.R;
 import com.kidsdynamic.swing.domain.BeanConvertor;
 import com.kidsdynamic.swing.domain.DeviceManager;
@@ -57,8 +57,13 @@ public class ProfileKidsInfoFragment extends ProfileBaseFragment {
 
     @BindView(R.id.layout_kids_sharing_with)
     protected LinearLayout layout_kids_sharing_with;
+    @BindView(R.id.profile_main_shared_container)
+    protected LinearLayout mViewSharedContainer;
+
     @BindView(R.id.layout_kids_request_from)
     protected LinearLayout layout_kids_request_from;
+    @BindView(R.id.profile_main_request_from_container)
+    protected LinearLayout mViewRequestFromContainer;
 
     @BindView(R.id.btn_edit_kid_profile)
     protected Button btn_editKidsProfile;
@@ -155,12 +160,31 @@ public class ProfileKidsInfoFragment extends ProfileBaseFragment {
             requestInfo = mActivityMain.mSubHostList.pop();
         }
 
+        //如果有界面返回，其他用户的request from被删除
+        if(!mActivityMain.mRemovedSubHostInfoEntity.isEmpty()){
+            RequestAddSubHostEntity removedRequestInfo = mActivityMain.mRemovedSubHostInfoEntity.pop();
+            removeRequestFromCache(removedRequestInfo);
+        }
+
         WatchContact watchContact = null;
         if(!mActivityMain.mWatchContactStack.isEmpty()){
             watchContact = mActivityMain.mWatchContactStack.pop();
         }
 
         loadValue(kidsInfo, watchContact);
+    }
+
+    private void removeRequestFromCache(RequestAddSubHostEntity removedRequestInfo){
+        if(requestInfo != null && removedRequestInfo != null){
+            List<RequestAddSubHostEntity> requestFrom = requestInfo.getRequestFrom();
+
+            for (int i = 0; i < requestFrom.size(); i++) {
+                if (requestFrom.get(i).getId() == removedRequestInfo.getId()) {
+                    requestFrom.remove(i);
+                    break;
+                }
+            }
+        }
     }
 
     private void loadValue(KidsEntityBean kidsInfo, WatchContact watchContact) {
@@ -180,7 +204,7 @@ public class ProfileKidsInfoFragment extends ProfileBaseFragment {
 
         //当前kids的shared信息
         //获取当前kids已经被分享的user list
-        //请求
+        loadSharingWith();
 
     }
 
@@ -194,20 +218,51 @@ public class ProfileKidsInfoFragment extends ProfileBaseFragment {
             return;
         }
 
-        List<UserInfo> sharingUserList = new ArrayList<>(5);
+//        List<UserInfo> sharingUserList = new ArrayList<>(5);
+        List<RequestAddSubHostEntity> sharingUserList = new ArrayList<>(5);
 
         for (RequestAddSubHostEntity requestAddSubHostEntity: requestFrom) {
             if (requestAddSubHostEntity.getStatus().equals(WatchContact.User.STATUS_ACCEPTED)
                     && isContainKids(requestAddSubHostEntity.getKids(),kidsId)) {
-                sharingUserList.add(requestAddSubHostEntity.getRequestFromUser());
+                sharingUserList.add(requestAddSubHostEntity);
             }
+
+           /* if (requestAddSubHostEntity.getStatus().equals(WatchContact.User.STATUS_PENDING)
+                    *//*&& isContainKids(requestAddSubHostEntity.getKids(),kidsId)*//*) {
+                sharingUserList.add(requestAddSubHostEntity);
+            }*/
         }
 
         if(!ObjectUtils.isListEmpty(sharingUserList)){
+            //如果当前kids已经分享给其他人
             layout_kids_sharing_with.setVisibility(View.VISIBLE);
+
+            mViewSharedContainer.removeAllViews();
+            for (RequestAddSubHostEntity requestEntitySharing : sharingUserList) {
+                addContact(mViewSharedContainer,requestEntitySharing,
+                        BeanConvertor.getWatchContact(requestEntitySharing.getRequestFromUser()),
+                        mContactListener);
+            }
         }
 
-        //todo
+        //其他用户向自己发出的请求
+        mViewRequestFromContainer.removeAllViews();
+        if(!ObjectUtils.isListEmpty(requestFrom)){
+            for (RequestAddSubHostEntity requestFromEntity : requestFrom) {
+                if (requestFromEntity.getStatus().equals(WatchContact.User.STATUS_PENDING)){
+                    addContact(mViewRequestFromContainer,requestFromEntity,
+                            BeanConvertor.getWatchContact(requestFromEntity.getRequestFromUser()),
+                            mContactListener);
+                }
+            }
+
+            if(mViewRequestFromContainer.getChildCount() > 0){
+                layout_kids_request_from.setVisibility(View.VISIBLE);
+            }else {
+                layout_kids_request_from.setVisibility(View.GONE);
+            }
+
+        }
 
     }
 
@@ -250,11 +305,48 @@ public class ProfileKidsInfoFragment extends ProfileBaseFragment {
 
         int margin = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, getResources().getDisplayMetrics()));
 
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT);
+        LinearLayout.LayoutParams layoutParams =
+                new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.WRAP_CONTENT,
+                        LinearLayout.LayoutParams.MATCH_PARENT);
         layoutParams.setMargins(margin, 0, margin, 0);
 
         layout.addView(photo, 0, layoutParams);
         photo.setOnClickListener(listener);
+    }
+
+    //联系人点击事件
+    private View.OnClickListener mContactListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            ViewCircle viewCircle = (ViewCircle) view;
+            ViewParent viewContainer = view.getParent();
+            WatchContact contact = (WatchContact) viewCircle.getTag(R.id.profile_main_photo);
+            RequestAddSubHostEntity requestAddSubHostEntity =
+                    (RequestAddSubHostEntity) viewCircle.getTag(R.id.profile_main_request_to_container);
+
+           if (viewContainer == mViewSharedContainer) {
+                showSharedKidsProfile(requestAddSubHostEntity);
+
+            } else if (viewContainer == mViewRequestFromContainer) {
+                showRequestFromFragment(requestAddSubHostEntity,contact);
+            }
+        }
+    };
+
+    private void showSharedKidsProfile(RequestAddSubHostEntity requestAddSubHostEntity){
+
+        mActivityMain.mSubHostInfoEntity.push(requestAddSubHostEntity);
+        selectFragment(ProfileRequestFromShareNowFragment.class.getName(),null,
+                true);
+
+    }
+
+    private void showRequestFromFragment(RequestAddSubHostEntity requestAddSubHostEntity, final WatchContact... contacts){
+
+        mActivityMain.mSubHostInfoEntity.push(requestAddSubHostEntity);
+        selectFragment(ProfileRequestFromFragment.class.getName(),null,true);
+
     }
 
 
@@ -292,7 +384,8 @@ public class ProfileKidsInfoFragment extends ProfileBaseFragment {
 
     @OnClick(R.id.btn_remove)
     protected void onRemove(){
-        selectFragment(ProfileSwitchKidsConfirmFragment.newInstance(kidsId),true);
+//        mActivityMain.mSubHostInfoEntity.push(requestInfo);
+        selectFragment(ProfileRemoveKidsConfirmFragment.newInstance(kidsId),true);
     }
 
     private class AvatarSimpleTarget extends SimpleTarget<Bitmap>{

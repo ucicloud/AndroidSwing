@@ -187,9 +187,6 @@ public class ProfileRequestFromShareNowFragment extends ProfileBaseFragment {
         tv_title.setText(R.string.profile_title_request_from);
         view_left_action.setImageResource(R.drawable.icon_left);
 
-        /*view_right_action.setImageResource(R.drawable.icon_add);
-        view_right_action.setTag(R.drawable.icon_add);*/
-
     }
 
     @OnClick(R.id.main_toolbar_action1)
@@ -274,6 +271,8 @@ public class ProfileRequestFromShareNowFragment extends ProfileBaseFragment {
                     getFragmentManager().popBackStack();
                     //deny 成功后，需要通知上个界面关闭
                     mActivityMain.mSignStack.push(ProfileManager.sign_deny_ok);
+                    //通知上个界面是那个请求被删除
+                    mActivityMain.mRemovedSubHostInfoEntity.push(requestInfo);
                 }else {
                     ToastCommon.makeText(getContext(),R.string.normal_err,code);
                 }
