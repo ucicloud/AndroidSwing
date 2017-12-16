@@ -19,6 +19,9 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.kidsdynamic.commonlib.utils.ObjectUtils;
 import com.kidsdynamic.data.dao.DB_User;
+import com.kidsdynamic.data.net.ApiGen;
+import com.kidsdynamic.data.net.host.HostApi;
+import com.kidsdynamic.data.net.host.model.AcceptSubHostRequest;
 import com.kidsdynamic.data.net.host.model.RequestAddSubHostEntity;
 import com.kidsdynamic.swing.R;
 import com.kidsdynamic.swing.domain.DeviceManager;
@@ -27,6 +30,7 @@ import com.kidsdynamic.swing.domain.ProfileManager;
 import com.kidsdynamic.swing.domain.UserManager;
 import com.kidsdynamic.swing.model.KidsEntityBean;
 import com.kidsdynamic.swing.model.WatchContact;
+import com.kidsdynamic.swing.net.BaseRetrofitCallback;
 import com.kidsdynamic.swing.utils.GlideHelper;
 import com.kidsdynamic.swing.utils.ViewUtils;
 import com.kidsdynamic.swing.view.ViewCircle;
@@ -39,6 +43,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import retrofit2.Call;
+import retrofit2.Response;
 
 /**
  * 选择要分享的kids watch
@@ -242,13 +248,8 @@ public class ProfileShareKidsSelectFragment extends ProfileBaseFragment {
             return;
         }
 
-
-        mActivityMain.mSubHostInfoEntity.push(requestInfo);
-        selectFragment(ProfileRequestFromShareNowFragment.class.getName(),null,
-                true);
-
-        /*showLoadingDialog(R.string.signup_login_wait);
-        //拒绝 共享请求
+        showLoadingDialog(R.string.signup_login_wait);
+        //接受 共享请求
         HostApi hostApi = ApiGen.getInstance(getActivity().getApplicationContext()).
                 generateApi(HostApi.class, true);
 
@@ -263,7 +264,10 @@ public class ProfileShareKidsSelectFragment extends ProfileBaseFragment {
                 int code = response.code();
                 if(code == 200){
                     //accept success
-                    getFragmentManager().popBackStack();
+
+                    mActivityMain.mSubHostInfoEntity.push(requestInfo);
+                    selectFragment(ProfileRequestFromShareNowFragment.class.getName(),null,
+                            true);
                 }else {
                     ToastCommon.makeText(getContext(),R.string.normal_err,code);
                 }
@@ -277,7 +281,7 @@ public class ProfileShareKidsSelectFragment extends ProfileBaseFragment {
                 finishLoadingDialog();
                 super.onFailure(call, t);
             }
-        });*/
+        });
 
 
     }

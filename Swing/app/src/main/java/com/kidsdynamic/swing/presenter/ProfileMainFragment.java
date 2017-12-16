@@ -30,6 +30,7 @@ import com.kidsdynamic.swing.domain.LoginManager;
 import com.kidsdynamic.swing.domain.UserManager;
 import com.kidsdynamic.swing.domain.datasource.RemoteDataSource;
 import com.kidsdynamic.swing.domain.viewmodel.SubHostListModel;
+import com.kidsdynamic.swing.model.KidsEntityBean;
 import com.kidsdynamic.swing.model.WatchContact;
 import com.kidsdynamic.swing.utils.GlideHelper;
 import com.kidsdynamic.swing.view.ViewCircle;
@@ -139,6 +140,7 @@ public class ProfileMainFragment extends ProfileBaseFragment {
                 DeviceManager.saveKidsData4Shared(mSubHostRequests.getRequestTo());
 
                 loadSubHostData();
+                updateRequestFromTitle();
             }
         });
 
@@ -195,16 +197,25 @@ public class ProfileMainFragment extends ProfileBaseFragment {
         // 載入用戶的所有手錶
         if(parent != null){
             List<WatchContact.Kid> kidsForUI = DeviceManager.getKidsForUI(getContext(), parent.getUserId());
+            mViewDeviceContainer.removeAllViews();
+            //添加按钮
+            addPlusCircleView(mViewDeviceContainer,mViewDeviceAdd);
             for (WatchContact device : kidsForUI)
                 addContact(mViewDeviceContainer,null, device, mContactListener);
         }
 
-
-        // TODO: 2017/11/20 二期
         // 載入所有其它用戶與當前用戶分享的手錶
         List<WatchContact.Kid> kidsForUI = DeviceManager.getKidsForUI_sharedKids(getContext());
-        for (WatchContact device : kidsForUI)
-            addContact(mViewSharedContainer,null, device, mContactListener);
+        for (WatchContact.Kid device : kidsForUI){
+
+            RequestAddSubHostEntity sharedKidsSubHostEntity = DeviceManager.getSharedKidsSubHostEntity(mSubHostRequests, device.mId);
+            if(sharedKidsSubHostEntity != null){
+                addContact(mViewSharedContainer,sharedKidsSubHostEntity, device, mContactListener);
+            }else {
+                //如果本地数据库中有watch数据，但是subhostlist中没有，那么可能本地数据有误，删除数据缓存
+                DeviceManager.delKidsInDB(device.mId);
+            }
+        }
 
         // 載入用戶發出需求的用戶
         /* for (WatchContact user : mActivityMain.mOperator.getRequestToList()) {
@@ -223,8 +234,12 @@ public class ProfileMainFragment extends ProfileBaseFragment {
         updateRequestFromTitle();
 
         //当前focus的kids
-//        focusContact(mActivityMain.mOperator.getFocusKid(), true);
+        KidsEntityBean focusKidsInfo = DeviceManager.getFocusKidsInfo(getContext());
+        if(focusKidsInfo != null){
+            focusContact(BeanConvertor.getKidsForUI(focusKidsInfo), true);
+        }
     }
+
 
     private void loadSubHostData(){
         if(mSubHostRequests == null){
@@ -244,7 +259,12 @@ public class ProfileMainFragment extends ProfileBaseFragment {
                     addContact(mViewRequestToContainer,requestToEntity,
                             BeanConvertor.getWatchContact(requestToEntity.getRequestToUser()),
                             mContactListener);
-                }
+                }/*else if(requestToEntity.getStatus().equals(WatchContact.User.STATUS_ACCEPTED)){
+                    //别人已经同意分析的kids
+                    addContact(mViewSharedContainer,requestToEntity,
+                            BeanConvertor.getWatchContact(requestToEntity.getRequestToUser()),
+                            mContactListener);
+                }*/
             }
         }
 
@@ -276,23 +296,6 @@ public class ProfileMainFragment extends ProfileBaseFragment {
     };
 
 
-    private class AvatarSimpleTarget extends SimpleTarget<Bitmap>{
-
-        ViewCircle viewCircle;
-
-        public AvatarSimpleTarget(ViewCircle viewCircle){
-            this.viewCircle = viewCircle;
-        }
-
-        @Override
-        public void onResourceReady(Bitmap bitmap, Transition<? super Bitmap> transition) {
-            if(viewCircle != null && getActivity() != null && !getActivity().isDestroyed()){
-                viewCircle.setBitmap(bitmap);
-            }
-        }
-    }
-
-
    @OnClick(R.id.main_toolbar_action1)
     public void onToolbarAction1() {
         //修改个人信息界面
@@ -302,6 +305,7 @@ public class ProfileMainFragment extends ProfileBaseFragment {
     @OnClick(R.id.main_toolbar_action2)
     public void onToolbarAction2() {
        //option 界面
+        mActivityMain.mSubHostList.push(mSubHostRequests);
         selectFragment(ProfileOptionFragment.class.getName(),null,true);
     }
 
@@ -338,7 +342,7 @@ public class ProfileMainFragment extends ProfileBaseFragment {
 
             } else if (viewContainer == mViewSharedContainer) {
 //                focusContact(contact, false);
-                showSharedKidsProfile(contact);
+                showSharedKidsProfile(requestAddSubHostEntity,contact);
 
             } else if (viewContainer == mViewRequestToContainer) {
                 showRequestToFragment(requestAddSubHostEntity,contact);
@@ -365,11 +369,14 @@ public class ProfileMainFragment extends ProfileBaseFragment {
         }*/
 
     }
-    private void showSharedKidsProfile(WatchContact contact){
+
+    //他人共享的watch 信息展示界面
+    private void showSharedKidsProfile(RequestAddSubHostEntity requestAddSubHostEntity,WatchContact contact){
 
         if(contact instanceof WatchContact.Kid){
+            mActivityMain.mSubHostInfoEntity.push(requestAddSubHostEntity);
             WatchContact.Kid watchKidsInfo = (WatchContact.Kid) contact;
-//            selectFragment(ProfileRemoveKidsConfirmFragment.newInstance(watchKidsInfo.mId),true);
+
             selectFragment(ProfileKidsFromSharedInfoFragment.newInstance(watchKidsInfo.mId),true);
         }
 
@@ -416,18 +423,15 @@ public class ProfileMainFragment extends ProfileBaseFragment {
         ViewCircle photo = new ViewCircle(mActivityMain);
         photo.setBitmap(contact.mPhoto);
 
-        if(contact instanceof WatchContact.Kid){
-            WatchContact.Kid kid = (WatchContact.Kid) contact;
-            GlideHelper.getBitMap(getContext().getApplicationContext(),
-                    UserManager.getProfileRealUri(kid.mProfile),
-                    kid.mLastUpdate+"",new AvatarSimpleTarget(photo));
-        }
+
+        loadAvatar(contact, photo);
 
         photo.setStrokeCount(12);
         photo.setStrokeBeginEnd(12, -1);
         photo.setStrokeType(ViewCircle.STROKE_TYPE_ARC);
         photo.setStrokeColorActive(ContextCompat.getColor(mActivityMain, R.color.color_orange_main));
         photo.setStrokeColorNormal(ContextCompat.getColor(mActivityMain, R.color.color_white));
+        photo.setStrokeWidth(4.0f);
 
         photo.setTag(R.id.profile_main_photo,contact);
         photo.setTag(R.id.profile_main_request_to_container,requestAddSubHostEntity);
@@ -441,11 +445,30 @@ public class ProfileMainFragment extends ProfileBaseFragment {
         photo.setOnClickListener(listener);
     }
 
+    private void loadAvatar(WatchContact contact, ViewCircle photo) {
+        if(contact instanceof WatchContact.Kid){
+            WatchContact.Kid kid = (WatchContact.Kid) contact;
+            if(!TextUtils.isEmpty(kid.mProfile)){
+                GlideHelper.getBitMap(getContext().getApplicationContext(),
+                        UserManager.getProfileRealUri(kid.mProfile),
+                        kid.mLastUpdate+"",new AvatarSimpleTarget(photo));
+            }
+        }else if(contact instanceof WatchContact.User){
+            WatchContact.User user = (WatchContact.User) contact;
+
+            if(!TextUtils.isEmpty(user.mProfile)){
+                GlideHelper.getBitMapOnlyCacheInMemory(getContext().getApplicationContext(),
+                        UserManager.getProfileRealUri(user.mProfile),
+                        new AvatarSimpleTarget(photo));
+            }
+        }
+    }
+
     private void delContact(LinearLayout layout, WatchContact contact) {
         int count = layout.getChildCount();
         for (int idx = 0; idx < count; idx++) {
             View child = layout.getChildAt(idx);
-            WatchContact someone = (WatchContact) child.getTag();
+            WatchContact someone = (WatchContact) child.getTag(R.id.profile_main_photo);
             if (someone == contact) {
                 layout.removeViewAt(idx);
                 break;
@@ -467,7 +490,7 @@ public class ProfileMainFragment extends ProfileBaseFragment {
         for (int idx = 0; idx < count; idx++) {
             ViewCircle viewCircle = (ViewCircle) mViewDeviceContainer.getChildAt(idx);
             WatchContact.Kid kid1 = (WatchContact.Kid) contact;
-            WatchContact.Kid kid2 = (WatchContact.Kid) viewCircle.getTag();
+            WatchContact.Kid kid2 = (WatchContact.Kid) viewCircle.getTag(R.id.profile_main_photo);
 
             boolean focus = kid1 != null && kid2 != null && kid1.mId == kid2.mId && kid1.mUserId == kid2.mUserId;
             viewCircle.setActive(focus);
@@ -477,7 +500,7 @@ public class ProfileMainFragment extends ProfileBaseFragment {
         for (int idx = 0; idx < count; idx++) {
             ViewCircle viewCircle = (ViewCircle) mViewSharedContainer.getChildAt(idx);
             WatchContact.Kid kid1 = (WatchContact.Kid) contact;
-            WatchContact.Kid kid2 = (WatchContact.Kid) viewCircle.getTag();
+            WatchContact.Kid kid2 = (WatchContact.Kid) viewCircle.getTag(R.id.profile_main_photo);
             boolean focus = (kid1 != null && kid2 != null && kid1.mId == kid2.mId && kid1.mUserId == kid2.mUserId);
             viewCircle.setActive(focus);
         }

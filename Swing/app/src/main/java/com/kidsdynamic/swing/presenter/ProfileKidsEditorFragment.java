@@ -33,7 +33,6 @@ import com.kidsdynamic.data.net.kids.model.KidsInfoUpdateEntity;
 import com.kidsdynamic.data.net.user.model.UpdateKidRepEntity;
 import com.kidsdynamic.data.utils.LogUtil2;
 import com.kidsdynamic.swing.R;
-import com.kidsdynamic.swing.SwingApplication;
 import com.kidsdynamic.swing.domain.DeviceManager;
 import com.kidsdynamic.swing.domain.UserManager;
 import com.kidsdynamic.swing.model.WatchContact;
@@ -353,7 +352,7 @@ public class ProfileKidsEditorFragment extends ProfileBaseFragment {
             // TODO: 2017/12/1
             mActivityMain.mWatchContactStack.push(watchContact);
 
-            sendBroadcastUpdateAvatar();
+            DeviceManager.sendBroadcastUpdateAvatar();
 
             ToastCommon.makeText(getContext(), R.string.profile_editor_save_success);
             finishLoadingDialog();
@@ -364,11 +363,6 @@ public class ProfileKidsEditorFragment extends ProfileBaseFragment {
         }
     }
 
-    private void sendBroadcastUpdateAvatar() {
-        Intent intent = new Intent(MainFrameActivity.UI_Update_Action);
-        intent.putExtra(MainFrameActivity.Tag_Key,MainFrameActivity.Tag_Avatar_update);
-        SwingApplication.localBroadcastManager.sendBroadcast(intent);
-    }
 
     @OnClick(R.id.kids_profile_editor_photo)
     public void addPhoto() {

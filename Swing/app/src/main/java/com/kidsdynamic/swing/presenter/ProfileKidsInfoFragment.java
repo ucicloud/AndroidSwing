@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -293,10 +294,19 @@ public class ProfileKidsInfoFragment extends ProfileBaseFragment {
             GlideHelper.getBitMap(getContext().getApplicationContext(),
                     UserManager.getProfileRealUri(kid.mProfile),
                     kid.mLastUpdate+"", new AvatarSimpleTarget(photo));
+        }else if(contact instanceof WatchContact.User){
+            WatchContact.User user = (WatchContact.User) contact;
+
+            if(!TextUtils.isEmpty(user.mProfile)){
+                GlideHelper.getBitMapOnlyCacheInMemory(getContext().getApplicationContext(),
+                        UserManager.getProfileRealUri(user.mProfile),
+                        new ProfileBaseFragment.AvatarSimpleTarget(photo));
+            }
         }
 
         photo.setStrokeCount(12);
         photo.setStrokeBeginEnd(12, -1);
+        photo.setStrokeWidth(4.0f);
         photo.setStrokeType(ViewCircle.STROKE_TYPE_ARC);
         photo.setStrokeColorActive(ContextCompat.getColor(mActivityMain, R.color.color_orange_main));
         photo.setStrokeColorNormal(ContextCompat.getColor(mActivityMain, R.color.color_white));

@@ -4,14 +4,18 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
@@ -29,18 +33,22 @@ import com.kidsdynamic.swing.domain.DeviceManager;
 import com.kidsdynamic.swing.domain.LoginManager;
 import com.kidsdynamic.swing.domain.RawActivityManager;
 import com.kidsdynamic.swing.domain.UserManager;
+import com.kidsdynamic.swing.model.KidsEntityBean;
 import com.kidsdynamic.swing.model.WatchContact;
 import com.kidsdynamic.swing.model.WatchEvent;
 import com.kidsdynamic.swing.net.BaseRetrofitCallback;
 import com.kidsdynamic.swing.utils.ConfigUtil;
 import com.kidsdynamic.swing.utils.GlideHelper;
+import com.kidsdynamic.swing.view.KidsListBottomPopWindow;
 import com.kidsdynamic.swing.view.ViewIntroductionAlarmList;
 import com.kidsdynamic.swing.view.ViewIntroductionCalendarToday;
 import com.kidsdynamic.swing.view.ViewIntroductionSync;
 import com.kidsdynamic.swing.view.ViewIntroductionTodoDetail;
 import com.yy.base.BaseFragmentActivity;
+import com.yy.base.utils.ViewUtils;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Stack;
 
 import cn.carbs.android.avatarimageview.library.AvatarImageView;
@@ -167,6 +175,30 @@ public class MainFrameActivity extends BaseFragmentActivity {
         }
     }
 
+    public void onLongClickKidsTabItem() {
+        /*CharSequence array[] = new CharSequence[]{getString(R.string.profile_take_photo),
+                getString(R.string.profile_choose_from_library)};*/
+
+        List<KidsEntityBean> allKidsByUserId =
+                DeviceManager.getAllKidsByUserId(this,
+                        LoginManager.getCurrentLoginUserId(this));
+
+        KidsListBottomPopWindow.Builder builder = new KidsListBottomPopWindow.Builder(this);
+        builder.setItems(allKidsByUserId, new KidsListBottomPopWindow.Builder.OnWhichClickListener() {
+            @Override
+            public void onWhichClick(View v, long kidsId) {
+//                doWhichClick(position);
+            }
+        });
+        KidsListBottomPopWindow bottomPopWindow = builder.create();
+
+        bottomPopWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        Point navigationBarSize = ViewUtils.getNavigationBarSize(this);
+        bottomPopWindow.showAtLocation(view_tab_profile,
+                Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL,
+                0, navigationBarSize.y);
+    }
+
 
     private void initValue() {
         mCalendarBundleStack = new Stack<>();
@@ -197,6 +229,8 @@ public class MainFrameActivity extends BaseFragmentActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
 
+            Log.w("UIChangeReceiver","change broadcast");
+
             if (intent == null) {
                 return;
             }
@@ -210,9 +244,9 @@ public class MainFrameActivity extends BaseFragmentActivity {
                     if (watchContact != null && watchContact.mPhoto != null) {
                         view_tab_profile.setBitmap(watchContact.mPhoto);
                     }
-
-                    loadFocusKidsAvatar();
                 }
+
+                loadFocusKidsAvatar();
             }
 
         }
@@ -260,6 +294,15 @@ public class MainFrameActivity extends BaseFragmentActivity {
                 view_container.setVisibility(View.INVISIBLE);
             }
         });*/
+
+         //profile tab long click
+        view_tab_profile.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                onLongClickKidsTabItem();
+                return true;
+            }
+        });
     }
 
     private void initTabView() {

@@ -3,6 +3,7 @@ package com.kidsdynamic.swing.presenter;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -173,7 +174,7 @@ public class ProfileRequestToFragment extends ProfileBaseFragment {
             GlideHelper.getBitMap(getContext(),
                     UserManager.getProfileRealUri(currentLoginUserInfo.getProfile()),
                     String.valueOf(currentLoginUserInfo.getLastUpdate()),
-                    currentUserAvatarSimpleTarget);
+                    new AvatarSimpleTarget(mViewUserPhoto));
         }
 
         UserInfo requestToUser = requestTo.getRequestToUser();
@@ -184,6 +185,14 @@ public class ProfileRequestToFragment extends ProfileBaseFragment {
 
         tv_note.setText(ViewUtils.setWordColorInStr(note,requestToUserName));
 
+
+        //load avatar
+        if(!TextUtils.isEmpty(requestToUser.getProfile())){
+            GlideHelper.getBitMapOnlyCacheInMemory(getContext(),
+                    UserManager.getProfileRealUri(requestToUser.getProfile()),
+                    new AvatarSimpleTarget(mViewRequestKidPhoto));
+
+        }
 
 
         /*tv_kids_id.setText(String.valueOf(kidsInfo.getKidsId()));

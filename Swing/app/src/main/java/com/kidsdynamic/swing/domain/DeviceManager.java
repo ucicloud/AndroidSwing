@@ -1,6 +1,7 @@
 package com.kidsdynamic.swing.domain;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
@@ -23,6 +24,7 @@ import com.kidsdynamic.data.repository.disk.KidsDataStore;
 import com.kidsdynamic.swing.SwingApplication;
 import com.kidsdynamic.swing.model.KidsEntityBean;
 import com.kidsdynamic.swing.model.WatchContact;
+import com.kidsdynamic.swing.presenter.MainFrameActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,6 +67,10 @@ public class DeviceManager {
             long userId = LoginManager.getCurrentLoginUserId(context);
             List<DB_Kids> kidsInfoByParentId = kidsDataStore.getKidsInfoByParentId(userId);
             if(!ObjectUtils.isListEmpty(kidsInfoByParentId)){
+
+                //如果当前没有缓存focuskids，那边把查询到第一个设置为当前focus
+                updateFocusKids(kidsInfoByParentId.get(0).getKidsId());
+
                 return kidsInfoByParentId.get(0);
             }
         }
@@ -185,6 +191,13 @@ public class DeviceManager {
 
         return true;
 
+    }
+
+    public static void delKidsInDB(long kidsId){
+        DbUtil dbUtil = DbUtil.getInstance(SwingApplication.getAppContext());
+
+        KidsDataStore kidsDataStore = new KidsDataStore(dbUtil);
+        kidsDataStore.delKidsInfo(kidsId);
     }
 
     private static List<DB_Kids> getDBKidsForShared(int suhHostId, long parentId, List<KidInfo> kidInfos){
@@ -388,6 +401,11 @@ public class DeviceManager {
         });
     }
 
+    public static void clearSubHostRequestsInCache(){
+        PreferencesUtil preferencesUtil = PreferencesUtil.getInstance(SwingApplication.getAppContext());
+        preferencesUtil.setPreferenceStringValue(key_SubHostRequests,"");
+    }
+
     public static void updateSubHostRequestsInCache(SubHostRequests subHostRequests){
         if(subHostRequests != null){
             Gson gson = new Gson();
@@ -411,4 +429,39 @@ public class DeviceManager {
         return gson.fromJson(subHostListStr, SubHostRequests.class);
     }
 
+    public static RequestAddSubHostEntity getSharedKidsSubHostEntity(SubHostRequests mSubHostRequests, long kidsId){
+        if(mSubHostRequests != null){
+            List<RequestAddSubHostEntity> requestTo = mSubHostRequests.getRequestTo();
+
+            if(!ObjectUtils.isListEmpty(requestTo)){
+                for (RequestAddSubHostEntity requestToEntity : requestTo) {
+                    if(requestToEntity.getStatus().equals(WatchContact.User.STATUS_ACCEPTED)
+                            && !ObjectUtils.isListEmpty(requestToEntity.getKids())){
+                        if(isContainKidsId(requestToEntity.getKids(),kidsId)){
+                            return requestToEntity;
+                        }
+                    }
+                }
+            }
+        }
+
+        return null;
+    }
+
+    private static boolean isContainKidsId(List<KidInfo> kidInfoList, long kidsId){
+        for (KidInfo kidInfo :
+                kidInfoList) {
+            if(kidInfo.getId() == kidsId){
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public  static void sendBroadcastUpdateAvatar() {
+        Intent intent = new Intent(MainFrameActivity.UI_Update_Action);
+        intent.putExtra(MainFrameActivity.Tag_Key,MainFrameActivity.Tag_Avatar_update);
+        SwingApplication.localBroadcastManager.sendBroadcast(intent);
+    }
 }

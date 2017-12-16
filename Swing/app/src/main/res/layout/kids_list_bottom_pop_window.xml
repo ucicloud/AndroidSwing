@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingLeft="@dimen/base_20"
+    android:paddingRight="@dimen/base_20"
+    android:paddingEnd="@dimen/base_5">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_alignParentTop="true"
+        android:background="@color/transparent" />
+    <View
+        android:id="@+id/view_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/transparent" />
+
+    <LinearLayout
+        android:id="@+id/layout_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/view_bottom"
+        android:layout_centerHorizontal="true"
+        android:orientation="vertical"
+        android:background="@drawable/holder_item_shape_selector"
+        android:paddingTop="@dimen/base_5"
+        android:layout_marginBottom="@dimen/base_15">
+
+        <!--My devices-->
+        <LinearLayout
+            android:id="@+id/linear_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/base_56">
+
+            <com.kidsdynamic.swing.view.AvenirTextView
+                android:id="@+id/tv_devices_shared_with_me"
+                style="@style/textview_profile_group"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center"
+                android:text="@string/profile_main_hosting" />
+
+            <LinearLayout
+                android:id="@+id/linear_my_kids_items"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/base_10"
+                android:orientation="vertical" />
+
+        </LinearLayout>
+
+        <!--devices shared with me-->
+        <LinearLayout
+            android:id="@+id/linear_content_shared"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/base_56">
+
+            <com.kidsdynamic.swing.view.AvenirTextView
+                style="@style/textview_profile_group"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center"
+                android:text="@string/profile_main_shared" />
+
+            <LinearLayout
+                android:id="@+id/linear_shared_kids_items"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/base_10"
+                android:orientation="vertical" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+</RelativeLayout>

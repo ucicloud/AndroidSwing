@@ -101,6 +101,8 @@ public class ProfileOptionFragment extends ProfileBaseFragment {
     @OnClick(R.id.profile_option_watch_share)
     protected void onYourWatchShareWithOther() {
 
+        mActivityMain.mSubHostList.push(requestInfo);
+
         long focusKidsId = DeviceManager.getFocusKidsId();
         selectFragment(ProfileKidsInfoFragment.newInstance(focusKidsId),true);
     }

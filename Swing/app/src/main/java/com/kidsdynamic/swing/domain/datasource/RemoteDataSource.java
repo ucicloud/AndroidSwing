@@ -4,6 +4,7 @@ import android.app.Application;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.kidsdynamic.data.net.ApiGen;
@@ -66,6 +67,10 @@ public class RemoteDataSource {
     }
 
     public LiveData<SubHostRequests> getSuhHostList(String status) {
+        if(TextUtils.isEmpty(status)){
+            status = null;
+        }
+
         mIsLoadingSubHostRequests.setValue(true);
         hostApi.subHostList(status).enqueue(new Callback<SubHostRequests>() {
             @Override

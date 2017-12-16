@@ -218,11 +218,23 @@ public class ProfileSwitchKidsConfirmFragment extends ProfileBaseFragment {
         tv_note.setText(R.string.profile_kids_switch_done_tip);
 
 
+        //发送更新广播
+        updateTabAvatar();
+
         kidsHandler = new KidsHandler(this);
         Message message = Message.obtain();
         message.arg1 = 1;
         //3秒后关闭界面
         kidsHandler.sendMessageDelayed(message,3000);
+    }
+
+    private void updateTabAvatar() {
+        WatchContact watchContact = new WatchContact();
+        watchContact.mPhoto = mViewPhoto.getBitmap();
+        watchContact.mLabel = "editProfile";
+
+        mActivityMain.mWatchContactStack.push(watchContact);
+        DeviceManager.sendBroadcastUpdateAvatar();
     }
 
     @OnClick(R.id.btn_cancel)
