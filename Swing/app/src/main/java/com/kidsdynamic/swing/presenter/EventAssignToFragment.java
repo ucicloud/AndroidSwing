@@ -11,8 +11,10 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.kidsdynamic.commonlib.utils.ObjectUtils;
 import com.kidsdynamic.swing.R;
 import com.kidsdynamic.swing.domain.DeviceManager;
+import com.kidsdynamic.swing.domain.LoginManager;
 import com.kidsdynamic.swing.domain.UserManager;
 import com.kidsdynamic.swing.model.KidsEntityBean;
 import com.kidsdynamic.swing.model.WatchEvent;
@@ -70,21 +72,29 @@ public class EventAssignToFragment extends CalendarBaseFragment {
 
     private void initValue() {
 //        mainFrameActivity.mEventStack.pop();
-
+        userId = LoginManager.getCurrentLoginUserId(getContext());
         allKidsByUserId = DeviceManager.getAllKidsByUserId(getContext(), userId);
+        List<KidsEntityBean> allKidsByShared = DeviceManager.getAllKidsByShared(getContext());
+
+        if(!ObjectUtils.isListEmpty(allKidsByShared)){
+            allKidsByUserId.addAll(allKidsByShared);
+        }
 
         //test todo
-        KidsEntityBean kidsEntityBean = new KidsEntityBean();
+       /* KidsEntityBean kidsEntityBean = new KidsEntityBean();
         kidsEntityBean.setKidsId(123);
         kidsEntityBean.setName("Alex Smith");
         kidsEntityBean.setParentId(123);
-        allKidsByUserId.add(kidsEntityBean);
+        allKidsByUserId.add(kidsEntityBean);*/
     }
 
     private void initTitleBar() {
         tv_title.setTextColor(getResources().getColor(R.color.colorAccent));
         tv_title.setText(R.string.calendar_event_assign);
         view_left_action.setImageResource(R.drawable.icon_left);
+
+        view_right_action.setImageResource(R.drawable.icon_confirm);
+        view_right_action.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -148,12 +158,15 @@ public class EventAssignToFragment extends CalendarBaseFragment {
         boolean selected = allKidsByUserId.get(i).isSelected();
         allKidsByUserId.get(i).setSelected(!selected);
 
+        eventAssignToListAdapter.notifyDataSetChanged();
 
-        mainFrameActivity.mEventStack.push(mEvent);
-        getActivity().getSupportFragmentManager().popBackStack();
+
+        /*mainFrameActivity.mEventStack.push(mEvent);
+        getActivity().getSupportFragmentManager().popBackStack();*/
     }
 
-    private void confirmSelect(){
+    @OnClick(R.id.main_toolbar_action2)
+    protected void confirmSelect(){
         List<Long> newSelectedKidsList = new ArrayList<>();
 
         for (KidsEntityBean kidsEntityBean: allKidsByUserId) {
@@ -164,6 +177,9 @@ public class EventAssignToFragment extends CalendarBaseFragment {
 
         mEvent.mKids.clear();
         mEvent.mKids.addAll(newSelectedKidsList);
+
+        mainFrameActivity.mEventStack.push(mEvent);
+        getActivity().getSupportFragmentManager().popBackStack();
 
     }
 

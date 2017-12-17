@@ -155,7 +155,9 @@ public class ProfileMainFragment extends ProfileBaseFragment {
             }
         });
 
-        subHostListModel.refreshSubHostData("");
+        if(!isLoadSubHost){
+            subHostListModel.refreshSubHostData("");
+        }
     }
 
     @Override

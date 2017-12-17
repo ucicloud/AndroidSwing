@@ -163,7 +163,8 @@ public class KidsListBottomPopWindow extends PopupWindow {
 
             //my kids
             if(!ObjectUtils.isListEmpty(mKidsItemList)){
-                KidsEntityBean kidsEntityBean1 = mKidsItemList.get(0);
+                //下面的为测试代码
+                /*KidsEntityBean kidsEntityBean1 = mKidsItemList.get(0);
                 mKidsItemList.add(kidsEntityBean1);
 
                 KidsEntityBean kidsEntityBean2 = mKidsItemList.get(0);
@@ -172,7 +173,7 @@ public class KidsListBottomPopWindow extends PopupWindow {
                 kidsEntityBean3.setName(kidsEntityBean2.getName());
                 kidsEntityBean3.setShareType(KidsEntityBean.shareType_from_other);
 
-                mKidsItemList.add(kidsEntityBean3);
+                mKidsItemList.add(kidsEntityBean3);*/
 
                 for (KidsEntityBean kidsEntityBean : mKidsItemList) {
 

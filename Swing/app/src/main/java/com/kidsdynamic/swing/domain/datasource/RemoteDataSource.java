@@ -13,8 +13,12 @@ import com.kidsdynamic.data.net.event.model.EventWithTodo;
 import com.kidsdynamic.data.net.host.HostApi;
 import com.kidsdynamic.data.net.host.model.SubHostRequests;
 import com.kidsdynamic.data.utils.LogUtil2;
+import com.kidsdynamic.swing.SwingApplication;
 import com.kidsdynamic.swing.domain.DeviceManager;
+import com.kidsdynamic.swing.domain.EventManager;
+import com.kidsdynamic.swing.model.WatchEvent;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -31,7 +35,9 @@ public class RemoteDataSource {
 
     private static RemoteDataSource INSTANCE = null;
 
-    private final MutableLiveData<List<EventWithTodo>> mEventList;
+    private final MutableLiveData<List<WatchEvent>> mEventList;
+    private final MutableLiveData<Boolean> mIsLoadingEvent;
+
     private final MutableLiveData<SubHostRequests> mSubHostRequests;
     private final MutableLiveData<Boolean> mIsLoadingSubHostRequests;
 
@@ -41,6 +47,7 @@ public class RemoteDataSource {
         mEventList = new MutableLiveData<>();
         mSubHostRequests = new MutableLiveData<>();
         mIsLoadingSubHostRequests = new MutableLiveData<>();
+        mIsLoadingEvent = new MutableLiveData<>();
     }
 
     public static RemoteDataSource getInstance(Application application){
@@ -95,10 +102,11 @@ public class RemoteDataSource {
         return mSubHostRequests;
     }
 
-    public LiveData<List<EventWithTodo>> getEventList(){
+    public LiveData<List<WatchEvent>> getEventList(){
         final EventApi eventApi = ApiGen.getInstance(applicationContext).
                 generateApi(EventApi.class, true);
 
+        mIsLoadingEvent.setValue(true);
         eventApi.retrieveAllEventsWithTodo().enqueue(new Callback<List<EventWithTodo>>() {
             @Override
             public void onResponse(Call<List<EventWithTodo>> call, Response<List<EventWithTodo>> response) {
@@ -106,16 +114,21 @@ public class RemoteDataSource {
                 if (response.code() == 200) {//获取成功
                     LogUtil2.getUtils().d("onResponse: " + response.body());
 
-//                    new EventManager().saveEventForLogin(getContext(), response.body());
+                    //更新本地数据
+                    new EventManager().saveEventForLogin(SwingApplication.getAppContext(), response.body());
 
-                    mEventList.setValue(response.body());
+                    //查询本地数据: 因上层会有多种查询event方式，故此处只是设置空list，上层通过数据库查询最新数据
+                    mEventList.setValue(new ArrayList<WatchEvent>());
                 }
 
+                mIsLoadingEvent.setValue(false);
             }
 
             @Override
             public void onFailure(Call<List<EventWithTodo>> call, Throwable t) {
                 Log.d("syncData", "retrieveAllEventsWithTodo error, ");
+
+                mIsLoadingEvent.setValue(false);
             }
         });
 

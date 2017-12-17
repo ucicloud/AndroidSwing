@@ -227,6 +227,20 @@ public class DeviceManager {
 
     }
 
+    public static List<KidsEntityBean>  getAllKidsAndShared(Context context){
+
+        List<KidsEntityBean> allKidsByUserId =
+                getAllKidsByUserId(context,  LoginManager.getCurrentLoginUserId(context));
+
+        //其他用户共享的kids
+        List<KidsEntityBean> allKidsByShared = getAllKidsByShared(context);
+        if(!ObjectUtils.isListEmpty(allKidsByShared)){
+            allKidsByUserId.addAll(allKidsByShared);
+        }
+
+        return allKidsByUserId;
+    }
+
     public static List<KidsEntityBean>  getAllKidsByUserId(Context context, long parentId){
         DbUtil dbUtil = DbUtil.getInstance(context.getApplicationContext());
 

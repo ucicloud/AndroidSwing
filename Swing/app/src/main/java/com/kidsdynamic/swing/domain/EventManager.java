@@ -168,12 +168,16 @@ public class EventManager {
 
         QueryBuilder<DB_Event> qb = eventDao.queryBuilder();
 
-        /*rawQuery("SELECT * FROM " + TABLE_EVENT +
+
+        //modify 2017年12月17日17:55:52
+        //二期功能中，watch会与他人共享，其他用户会给共享的watch，add event；此时event的userId为其他用户，所以
+        //查询时删除userId字段
+        /*rawQury("SELECT * FROM " + TABLE_EVENT +
                 " WHERE " + REPEAT + "=''" + " AND " +
                 "((" + startTimeStamp + ">=" + START_DATE + " AND " + startTimeStamp + "<=" + END_DATE + ") OR" +
                 " (" + startTimeStamp + "<=" + START_DATE + " AND " + endTimeStamp + ">=" + END_DATE + ") OR" +
                 " (" + endTimeStamp + ">=" + START_DATE + " AND " + endTimeStamp + "<=" + END_DATE + "))", null);*/
-        List<DB_Event> dbEvents = qb.where(EventDao.Properties.UserId.eq(userId),
+        List<DB_Event> dbEvents = qb.where(/*EventDao.Properties.UserId.eq(userId),*/
                 EventDao.Properties.Repeat.eq(""),
                 qb.or(qb.and(EventDao.Properties.StartDate.le(startTimeStamp), EventDao.Properties.EndDate.ge(startTimeStamp)),
                         qb.and(EventDao.Properties.StartDate.ge(startTimeStamp), EventDao.Properties.EndDate.le(endTimeStamp)),

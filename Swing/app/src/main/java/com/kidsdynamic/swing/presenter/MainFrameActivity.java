@@ -20,6 +20,7 @@ import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.kidsdynamic.commonlib.utils.ObjectUtils;
 import com.kidsdynamic.data.dao.DB_Kids;
 import com.kidsdynamic.data.net.ApiGen;
 import com.kidsdynamic.data.net.host.model.RequestAddSubHostEntity;
@@ -182,6 +183,12 @@ public class MainFrameActivity extends BaseFragmentActivity {
         List<KidsEntityBean> allKidsByUserId =
                 DeviceManager.getAllKidsByUserId(this,
                         LoginManager.getCurrentLoginUserId(this));
+
+        //其他用户共享的kids
+        List<KidsEntityBean> allKidsByShared = DeviceManager.getAllKidsByShared(this);
+        if(!ObjectUtils.isListEmpty(allKidsByShared)){
+            allKidsByUserId.addAll(allKidsByShared);
+        }
 
         KidsListBottomPopWindow.Builder builder = new KidsListBottomPopWindow.Builder(this);
         builder.setItems(allKidsByUserId, new KidsListBottomPopWindow.Builder.OnWhichClickListener() {
@@ -409,6 +416,51 @@ public class MainFrameActivity extends BaseFragmentActivity {
 
         PreferencesUtil.getInstance(getApplicationContext()).
                 setPreferenceBooleanValue(ConfigUtil.calendar_month_first_time, false);
+    }
+
+    private boolean isHideReminderViewCheck = false;
+    //add event后的提示介绍页
+    public void showAfterAddEventIntroductionUI() {
+        ViewIntroductionSync viewIntroductionSync = new ViewIntroductionSync(this.getApplication());
+        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,
+                RelativeLayout.LayoutParams.MATCH_PARENT);
+
+        viewIntroductionSync.setOnClickListener(new ViewIntroductionSync.OnBtnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(isHideReminderViewCheck){
+                    //如果用户选择了不再提示
+                    PreferencesUtil.getInstance(getApplicationContext()).
+                            setPreferenceBooleanValue(ConfigUtil.isHideReminderAfterAddEvent, true);
+                }
+                hideIntroView();
+            }
+        });
+
+        viewIntroductionSync.setCheckUIShow();
+        viewIntroductionSync.setOnCheckClickListener(new ViewIntroductionSync.OnCheckClickListener() {
+            @Override
+            public void onCheckClick(View view, boolean isCheck) {
+                isHideReminderViewCheck = isCheck;
+            }
+        });
+
+        addIntroductionView(viewIntroductionSync, layoutParams);
+
+        view_container.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(isHideReminderViewCheck){
+                    //如果用户选择了不再提示
+                    PreferencesUtil.getInstance(getApplicationContext()).
+                            setPreferenceBooleanValue(ConfigUtil.isHideReminderAfterAddEvent, true);
+                }
+
+                hideIntroView();
+            }
+        });
+
+
     }
 
     //todoDetail 界面的介绍页

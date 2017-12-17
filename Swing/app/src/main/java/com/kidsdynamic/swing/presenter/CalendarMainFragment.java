@@ -1,8 +1,11 @@
 package com.kidsdynamic.swing.presenter;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,8 +18,11 @@ import com.kidsdynamic.data.net.event.model.EventUtils;
 import com.kidsdynamic.data.net.event.model.TodoEntity;
 import com.kidsdynamic.data.persistent.PreferencesUtil;
 import com.kidsdynamic.swing.R;
+import com.kidsdynamic.swing.SwingApplication;
 import com.kidsdynamic.swing.domain.EventManager;
 import com.kidsdynamic.swing.domain.LoginManager;
+import com.kidsdynamic.swing.domain.datasource.RemoteDataSource;
+import com.kidsdynamic.swing.domain.viewmodel.EventViewModel;
 import com.kidsdynamic.swing.model.WatchEvent;
 import com.kidsdynamic.swing.utils.ConfigUtil;
 import com.kidsdynamic.swing.view.ViewCircle;
@@ -83,6 +89,9 @@ public class CalendarMainFragment extends CalendarBaseFragment {
     private List<WatchEvent> mEventListInToday;
     private WatchEvent mNearbyEven;
     private long currentUserId;
+
+    private EventViewModel eventViewModel = null;
+    private boolean isLoadEvent = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -264,6 +273,13 @@ public class CalendarMainFragment extends CalendarBaseFragment {
         mViewSelector.setDate(mDefaultDate);
         mViewCalendarWeek.setDate(mDefaultDate);
 
+        refreshEventUI();
+
+        //异步更新event--from cloud
+        subscribeUI();
+    }
+
+    private void refreshEventUI() {
         long start = ViewCalendar.stripTime(mDefaultDate);
         long end = start + 86400000 - 1;
 
@@ -278,6 +294,42 @@ public class CalendarMainFragment extends CalendarBaseFragment {
         updateAlert();
 
         loadEvents();
+    }
+
+    private void subscribeUI() {
+        Log.w("Calendar","subscribeUI");
+
+        if (!isAdded()) {
+            return;
+        }
+
+        SwingApplication appInstance = (SwingApplication) SwingApplication.getAppContext();
+        EventViewModel.Factory factory = new EventViewModel.Factory(appInstance,
+                RemoteDataSource.getInstance(appInstance));
+        eventViewModel = ViewModelProviders.of(this, factory).get(EventViewModel.class);
+
+        eventViewModel.getWatchEventLiveData().observe(this, new Observer<List<WatchEvent>>() {
+            @Override
+            public void onChanged(@Nullable List<WatchEvent> watchEvents) {
+                refreshEventUI();
+            }
+        });
+
+        eventViewModel.getLoadState().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(@Nullable Boolean aBoolean) {
+                if(aBoolean == null){
+                    return;
+                }
+
+                isLoadEvent = aBoolean;
+            }
+        });
+
+        if(!isLoadEvent){
+            eventViewModel.refreshEvent();
+        }
+
     }
 
     // 更新中央coming soon的事件, 載入原則為今日即將發生的事件
