@@ -81,6 +81,10 @@ public class EventManager {
         //save
         eventDataStore.saveAll(BeanConvertor.getDBEventList(eventWithTodoList));
         todoItemDataStore.saveAll(BeanConvertor.getDBTodo(eventWithTodoList));
+
+        //event kids--二期功能
+        EventKidsStore eventKidsStore = new EventKidsStore(dbUtil);
+        eventKidsStore.save(BeanConvertor.getDBEventKids(eventWithTodoList));
     }
     
     public static void updateEvent(@NonNull Context context, @NonNull EventEditRep eventEditRep){
@@ -100,6 +104,11 @@ public class EventManager {
         //event的to-do更新时，to-do的id也会更新；故删除原有，然后保存新的
         todoItemDataStore.deleteByEventId(eventEditRep.getEvent().getId());
         todoItemDataStore.saveAll(BeanConvertor.getDBTodo(eventWithTodoList));
+
+        //event kids--二期功能
+        EventKidsStore eventKidsStore = new EventKidsStore(dbUtil);
+        eventKidsStore.delByEventId(eventEditRep.getEvent().getId());
+        eventKidsStore.save(BeanConvertor.getDBEventKids(eventWithTodoList));
 
     }
 
