@@ -1,6 +1,7 @@
 package com.kidsdynamic.swing.fcm;
 
 
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -45,6 +46,9 @@ public class SwingFirebaseIDService extends FirebaseInstanceIdService {
      */
     private void sendRegistrationToServer(String token) {
         // TODO: Implement this method to send token to your app server.
+        if (TextUtils.isEmpty(token)) {
+            return;
+        }
         final UserApiNeedToken userApiNeedToken = ApiGen.getInstance(getApplicationContext()).
                 generateApi(UserApiNeedToken.class, true);
         userApiNeedToken.updateAndroidRegistrationId(token).enqueue(new BaseRetrofitCallback<Object>() {
