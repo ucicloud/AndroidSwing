@@ -41,6 +41,14 @@ public class KidsDataStore {
         return null;
     }
 
+    public void delKidsInfo(long kidsId){
+        KidsDao kidsDao = dbUtil.getDaoSession().getKidsDao();
+        List<DB_Kids> kidsList = kidsDao.queryBuilder().where(KidsDao.Properties.KidsId.eq(kidsId)).list();
+        if(!ObjectUtils.isListEmpty(kidsList)){
+            kidsDao.deleteInTx(kidsList);
+        }
+    }
+
     public List<DB_Kids> getKidsInfoByParentId(long parentId){
         KidsDao kidsDao = dbUtil.getDaoSession().getKidsDao();
         List<DB_Kids> kidsList = kidsDao.queryBuilder().where(KidsDao.Properties.ParentId.eq(parentId)).list();
@@ -49,6 +57,27 @@ public class KidsDataStore {
         }
 
         return null;
+    }
+
+    public List<DB_Kids> getKidsInfoByShared(int shareType){
+        KidsDao kidsDao = dbUtil.getDaoSession().getKidsDao();
+        List<DB_Kids> kidsList = kidsDao.queryBuilder().
+                where(KidsDao.Properties.ShareType.eq(shareType)).list();
+        if(!ObjectUtils.isListEmpty(kidsList)){
+            return kidsList;
+        }
+
+        return null;
+    }
+
+    public void clearKidsInfoForShareType(int ShareType){
+        KidsDao kidsDao = dbUtil.getDaoSession().getKidsDao();
+        List<DB_Kids> db_kids = kidsDao.queryBuilder().
+                where(KidsDao.Properties.ShareType.eq(ShareType)).list();
+
+        if(!ObjectUtils.isListEmpty(db_kids)){
+            kidsDao.deleteInTx(db_kids);
+        }
     }
 
 

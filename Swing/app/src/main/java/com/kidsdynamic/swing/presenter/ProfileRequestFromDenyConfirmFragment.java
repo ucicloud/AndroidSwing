@@ -118,7 +118,6 @@ public class ProfileRequestFromDenyConfirmFragment extends ProfileBaseFragment {
 
         if(!mActivityMain.mSubHostInfoEntity.isEmpty()){
             requestInfo = mActivityMain.mSubHostInfoEntity.pop();
-            return;
         }
 
 

@@ -19,6 +19,8 @@ import com.kidsdynamic.commonlib.utils.SoftKeyBoardUtil;
 import com.kidsdynamic.data.net.ApiGen;
 import com.kidsdynamic.data.net.event.EventApi;
 import com.kidsdynamic.data.net.event.model.EventWithTodo;
+import com.kidsdynamic.data.net.host.HostApi;
+import com.kidsdynamic.data.net.host.model.SubHostRequests;
 import com.kidsdynamic.data.net.user.UserApiNeedToken;
 import com.kidsdynamic.data.net.user.UserApiNoNeedToken;
 import com.kidsdynamic.data.net.user.model.LoginEntity;
@@ -28,8 +30,10 @@ import com.kidsdynamic.data.utils.LogUtil2;
 import com.kidsdynamic.swing.BaseFragment;
 import com.kidsdynamic.swing.BuildConfig;
 import com.kidsdynamic.swing.R;
+import com.kidsdynamic.swing.domain.DeviceManager;
 import com.kidsdynamic.swing.domain.EventManager;
 import com.kidsdynamic.swing.domain.LoginManager;
+import com.kidsdynamic.swing.model.WatchContact;
 import com.kidsdynamic.swing.net.BaseRetrofitCallback;
 import com.kidsdynamic.swing.utils.SwingFontsCache;
 import com.kidsdynamic.swing.view.ViewUtils;
@@ -42,6 +46,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import retrofit2.Call;
+import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
@@ -245,8 +250,10 @@ public class SignupLoginFragment extends BaseFragment {
 
                     //先清除本地数据，然后再保存
                     new LoginManager().saveLoginData(getContext(), response.body());
-                    //继续获取信息: 获取event信息
-                    getEventInfos(response.body().getUser());
+
+                    //先查询共享的kids 信息，然后继续获取信息: 获取event信息
+//                    getEventInfos(response.body().getUser());
+                    getSharedKidsInfo(response.body().getUser());
 
                 } else {
                     finishLoadingDialog();
@@ -262,6 +269,41 @@ public class SignupLoginFragment extends BaseFragment {
             public void onFailure(Call<UserProfileRep> call, Throwable t) {
                 Log.d("syncData", "retrieveUserProfile error, ");
                 super.onFailure(call, t);
+
+                showErrInfo(R.string.signup_profile_login_failed);
+                finishLoadingDialog();
+            }
+        });
+    }
+
+    //add 2017年12月16日15:43:32 only
+    //登陆时获取其他用户共享的watch
+    private void getSharedKidsInfo(final UserProfileRep.UserEntity userEntity){
+        HostApi  hostApi =  ApiGen.getInstance(getContext()).
+                generateApi(HostApi.class,true);
+
+        hostApi.subHostList(WatchContact.User.STATUS_ACCEPTED).enqueue(new Callback<SubHostRequests>() {
+            @Override
+            public void onResponse(Call< SubHostRequests > call, Response<SubHostRequests> response) {
+                int code = response.code();
+                if(code == 200){
+                    DeviceManager.saveKidsData4Shared(response.body().getRequestTo());
+
+                    //继续获取信息: 获取event信息
+                    getEventInfos(userEntity);
+
+                }else {
+                    finishLoadingDialog();
+                    LogUtil2.getUtils().d("onResponse code: " + code);
+
+                    showErrInfo(R.string.signup_profile_login_failed);
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<SubHostRequests> call, Throwable t) {
+                t.printStackTrace();
 
                 showErrInfo(R.string.signup_profile_login_failed);
                 finishLoadingDialog();

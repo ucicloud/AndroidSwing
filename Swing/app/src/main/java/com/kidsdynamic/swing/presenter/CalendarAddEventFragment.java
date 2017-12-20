@@ -27,6 +27,7 @@ import com.kidsdynamic.data.net.event.EventApi;
 import com.kidsdynamic.data.net.event.model.EventAddEntity;
 import com.kidsdynamic.data.net.event.model.EventEditRep;
 import com.kidsdynamic.data.net.event.model.EventInfo;
+import com.kidsdynamic.data.persistent.PreferencesUtil;
 import com.kidsdynamic.swing.R;
 import com.kidsdynamic.swing.domain.BeanConvertor;
 import com.kidsdynamic.swing.domain.CalendarManager;
@@ -38,6 +39,7 @@ import com.kidsdynamic.swing.model.WatchContact;
 import com.kidsdynamic.swing.model.WatchEvent;
 import com.kidsdynamic.swing.model.WatchTodo;
 import com.kidsdynamic.swing.net.BaseRetrofitCallback;
+import com.kidsdynamic.swing.utils.ConfigUtil;
 import com.kidsdynamic.swing.utils.SwingFontsCache;
 import com.kidsdynamic.swing.view.ViewCircle;
 import com.kidsdynamic.swing.view.ViewShape;
@@ -160,7 +162,7 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
         }
 
         //获取kids list
-        allKidsByUserId = DeviceManager.getAllKidsByUserId(getContext(), userId);
+        allKidsByUserId = DeviceManager.getAllKidsAndShared(getContext());
 
         //test
         /*KidsEntityBean kidsEntityBean = new KidsEntityBean();
@@ -599,7 +601,7 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
 
     //todo 2017年11月20日22:44:38 weizg 暂不可响应
     //assign to
-//    @OnClick(R.id.calendar_event_assign_line)
+    @OnClick(R.id.calendar_event_assign_line)
     protected void onClickAssignLine(){
 
         /*Bundle args = new Bundle();
@@ -844,7 +846,8 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
                     EventManager.saveEventForAdd(getContext(), response.body());
 
                     getFragmentManager().popBackStack();
-                    showSyncDialog();
+//                    showSyncDialog();
+                    showNewSyncReminderView();
                 }
 
                 finishLoadingDialog();
@@ -873,7 +876,8 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
                     EventManager.updateEvent(getContext(), response.body());
 
                     getFragmentManager().popBackStack();
-                    showSyncDialog();
+//                    showSyncDialog();
+                    showNewSyncReminderView();
                 }else if(response.code() == 401){
                     ToastCommon.makeText(getContext(),R.string.error_api_event_update_403);
                 }else {
@@ -894,6 +898,16 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
                 finishLoadingDialog();
             }
         });
+    }
+
+    private void showNewSyncReminderView(){
+        Boolean isHideReminder = PreferencesUtil.getInstance(getContext()).
+                gPrefBooleanValue(ConfigUtil.isHideReminderAfterAddEvent, false);
+
+        if(!isHideReminder){
+            mainFrameActivity.showAfterAddEventIntroductionUI();
+        }
+
     }
 
     private void showSyncDialog() {

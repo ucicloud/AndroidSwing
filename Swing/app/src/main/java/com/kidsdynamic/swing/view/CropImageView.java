@@ -531,7 +531,8 @@ public class CropImageView extends AppCompatImageView implements ViewTreeObserve
                     compressFormat = Bitmap.CompressFormat.JPEG;
                 }
                 if (0 == quality) {
-                    quality = 30;
+//                    quality = 30;
+                    quality = 10;
                 }
                 bitmap.compress(compressFormat, quality, baos);
                 fos = new FileOutputStream(imgFile);

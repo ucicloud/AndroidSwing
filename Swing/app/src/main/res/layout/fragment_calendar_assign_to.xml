@@ -9,6 +9,7 @@
 
     <ListView
         android:id="@+id/listview_kids"
+        android:layout_marginTop="@dimen/base_1"
         android:background="@color/color_white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

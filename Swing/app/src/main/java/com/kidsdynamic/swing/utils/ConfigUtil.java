@@ -25,6 +25,7 @@ public class ConfigUtil {
 	public static final String calendar_month_first_time = "calendar_month_list";
 	public static final String calendar_main_first_time = "calendar_main_month_list";
 	public static final String todo_detail_first_time = "todo_detail";
+	public static final String isHideReminderAfterAddEvent = "is_hide_reminder";
 
 
 	/**
@@ -76,6 +77,10 @@ public class ConfigUtil {
 
 		PreferencesUtil.getInstance(SwingApplication.getAppContext()).
 				setPreferenceBooleanValue(ConfigUtil.todo_detail_first_time,true);
+
+		//默认同步后显示提示框
+		PreferencesUtil.getInstance(SwingApplication.getAppContext()).
+				setPreferenceBooleanValue(ConfigUtil.isHideReminderAfterAddEvent,false);
 	}
 
 }

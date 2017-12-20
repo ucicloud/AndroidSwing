@@ -6,6 +6,7 @@
     android:background="@drawable/main_edit_text_background">
 
     <ImageView
+        android:layout_marginStart="@dimen/base_5"
         android:id="@+id/iv_head"
         android:layout_width="@dimen/base_25"
         android:layout_height="@dimen/base_25"
@@ -35,6 +36,7 @@
 
     <ImageView
         android:id="@+id/iv_action"
+        android:layout_marginEnd="@dimen/base_5"
         android:layout_width="@dimen/base_25"
         android:layout_height="@dimen/base_25"
         android:contentDescription="@null"

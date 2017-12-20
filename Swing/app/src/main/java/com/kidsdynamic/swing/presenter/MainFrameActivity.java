@@ -4,21 +4,27 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.kidsdynamic.commonlib.utils.ObjectUtils;
 import com.kidsdynamic.data.dao.DB_Kids;
 import com.kidsdynamic.data.net.ApiGen;
 import com.kidsdynamic.data.net.host.model.RequestAddSubHostEntity;
+import com.kidsdynamic.data.net.host.model.SubHostRequests;
 import com.kidsdynamic.data.net.user.UserApiNeedToken;
 import com.kidsdynamic.data.persistent.PreferencesUtil;
 import com.kidsdynamic.data.utils.LogUtil2;
@@ -28,18 +34,22 @@ import com.kidsdynamic.swing.domain.DeviceManager;
 import com.kidsdynamic.swing.domain.LoginManager;
 import com.kidsdynamic.swing.domain.RawActivityManager;
 import com.kidsdynamic.swing.domain.UserManager;
+import com.kidsdynamic.swing.model.KidsEntityBean;
 import com.kidsdynamic.swing.model.WatchContact;
 import com.kidsdynamic.swing.model.WatchEvent;
 import com.kidsdynamic.swing.net.BaseRetrofitCallback;
 import com.kidsdynamic.swing.utils.ConfigUtil;
 import com.kidsdynamic.swing.utils.GlideHelper;
+import com.kidsdynamic.swing.view.KidsListBottomPopWindow;
 import com.kidsdynamic.swing.view.ViewIntroductionAlarmList;
 import com.kidsdynamic.swing.view.ViewIntroductionCalendarToday;
 import com.kidsdynamic.swing.view.ViewIntroductionSync;
 import com.kidsdynamic.swing.view.ViewIntroductionTodoDetail;
 import com.yy.base.BaseFragmentActivity;
+import com.yy.base.utils.ViewUtils;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Stack;
 
 import cn.carbs.android.avatarimageview.library.AvatarImageView;
@@ -79,6 +89,8 @@ public class MainFrameActivity extends BaseFragmentActivity {
     public Stack<WatchEvent> mEventStack;
     public Stack<WatchContact> mWatchContactStack;
     public Stack<RequestAddSubHostEntity> mSubHostInfoEntity;
+    public Stack<RequestAddSubHostEntity> mRemovedSubHostInfoEntity;
+    public Stack<SubHostRequests> mSubHostList;
 
     public final static String UI_Update_Action = "MainFrame_UI_action";
     public final static String Tag_Key = "tag_key";
@@ -164,6 +176,36 @@ public class MainFrameActivity extends BaseFragmentActivity {
         }
     }
 
+    public void onLongClickKidsTabItem() {
+        /*CharSequence array[] = new CharSequence[]{getString(R.string.profile_take_photo),
+                getString(R.string.profile_choose_from_library)};*/
+
+        List<KidsEntityBean> allKidsByUserId =
+                DeviceManager.getAllKidsByUserId(this,
+                        LoginManager.getCurrentLoginUserId(this));
+
+        //其他用户共享的kids
+        List<KidsEntityBean> allKidsByShared = DeviceManager.getAllKidsByShared(this);
+        if(!ObjectUtils.isListEmpty(allKidsByShared)){
+            allKidsByUserId.addAll(allKidsByShared);
+        }
+
+        KidsListBottomPopWindow.Builder builder = new KidsListBottomPopWindow.Builder(this);
+        builder.setItems(allKidsByUserId, new KidsListBottomPopWindow.Builder.OnWhichClickListener() {
+            @Override
+            public void onWhichClick(View v, long kidsId) {
+//                doWhichClick(position);
+            }
+        });
+        KidsListBottomPopWindow bottomPopWindow = builder.create();
+
+        bottomPopWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        Point navigationBarSize = ViewUtils.getNavigationBarSize(this);
+        bottomPopWindow.showAtLocation(view_tab_profile,
+                Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL,
+                0, navigationBarSize.y);
+    }
+
 
     private void initValue() {
         mCalendarBundleStack = new Stack<>();
@@ -173,7 +215,9 @@ public class MainFrameActivity extends BaseFragmentActivity {
         mWatchContactStack = new Stack<>();
 
         mSubHostInfoEntity = new Stack<>();
+        mRemovedSubHostInfoEntity = new Stack<>();
         mSignStack = new Stack<>();
+        mSubHostList = new Stack<>();
 
 
         //UI更新广播监听
@@ -192,6 +236,8 @@ public class MainFrameActivity extends BaseFragmentActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
 
+            Log.w("UIChangeReceiver","change broadcast");
+
             if (intent == null) {
                 return;
             }
@@ -205,9 +251,9 @@ public class MainFrameActivity extends BaseFragmentActivity {
                     if (watchContact != null && watchContact.mPhoto != null) {
                         view_tab_profile.setBitmap(watchContact.mPhoto);
                     }
-
-                    loadFocusKidsAvatar();
                 }
+
+                loadFocusKidsAvatar();
             }
 
         }
@@ -255,6 +301,15 @@ public class MainFrameActivity extends BaseFragmentActivity {
                 view_container.setVisibility(View.INVISIBLE);
             }
         });*/
+
+         //profile tab long click
+        view_tab_profile.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                onLongClickKidsTabItem();
+                return true;
+            }
+        });
     }
 
     private void initTabView() {
@@ -361,6 +416,51 @@ public class MainFrameActivity extends BaseFragmentActivity {
 
         PreferencesUtil.getInstance(getApplicationContext()).
                 setPreferenceBooleanValue(ConfigUtil.calendar_month_first_time, false);
+    }
+
+    private boolean isHideReminderViewCheck = false;
+    //add event后的提示介绍页
+    public void showAfterAddEventIntroductionUI() {
+        ViewIntroductionSync viewIntroductionSync = new ViewIntroductionSync(this.getApplication());
+        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,
+                RelativeLayout.LayoutParams.MATCH_PARENT);
+
+        viewIntroductionSync.setOnClickListener(new ViewIntroductionSync.OnBtnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(isHideReminderViewCheck){
+                    //如果用户选择了不再提示
+                    PreferencesUtil.getInstance(getApplicationContext()).
+                            setPreferenceBooleanValue(ConfigUtil.isHideReminderAfterAddEvent, true);
+                }
+                hideIntroView();
+            }
+        });
+
+        viewIntroductionSync.setCheckUIShow();
+        viewIntroductionSync.setOnCheckClickListener(new ViewIntroductionSync.OnCheckClickListener() {
+            @Override
+            public void onCheckClick(View view, boolean isCheck) {
+                isHideReminderViewCheck = isCheck;
+            }
+        });
+
+        addIntroductionView(viewIntroductionSync, layoutParams);
+
+        view_container.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(isHideReminderViewCheck){
+                    //如果用户选择了不再提示
+                    PreferencesUtil.getInstance(getApplicationContext()).
+                            setPreferenceBooleanValue(ConfigUtil.isHideReminderAfterAddEvent, true);
+                }
+
+                hideIntroView();
+            }
+        });
+
+
     }
 
     //todoDetail 界面的介绍页

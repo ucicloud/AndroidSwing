@@ -59,6 +59,7 @@
     <dimen name="base_48">48dp</dimen>
     <dimen name="base_51">51dp</dimen>
     <dimen name="base_56">56dp</dimen>
+    <dimen name="base_57">57dp</dimen>
     <dimen name="base_60">60dp</dimen>
     <dimen name="base_65">65dp</dimen>
     <dimen name="base_88">88dp</dimen>
@@ -80,4 +81,5 @@
     <dimen name="tab_num_margin_top">-4.0dip</dimen>
 
     <dimen name="profile_item_height">48dp</dimen>
+    <dimen name="profile_kids_horizontal_layout_height">65dp</dimen>
 </resources>

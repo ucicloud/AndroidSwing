@@ -114,7 +114,8 @@ public class LoginManager {
         //删除focus kids id
         DeviceManager.updateFocusKids(-1);
 
-
+        //删除缓存的subhostlist信息
+        DeviceManager.clearSubHostRequestsInCache();
     }
 
 

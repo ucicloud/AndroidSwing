@@ -79,4 +79,14 @@ public class EventKidsStore {
             eventKidsDao.updateInTx(list);
         }
     }
+
+    public void delByEventId(long eventId){
+
+        EventKidsDao eventKidsDao = dbUtil.getDaoSession().getEventKidsDao();
+        List<DB_EventKids> list = eventKidsDao.queryBuilder().
+                where(EventKidsDao.Properties.EventId.eq(eventId)).list();
+        if(!ObjectUtils.isListEmpty(list)){
+            eventKidsDao.deleteInTx(list);
+        }
+    }
 }

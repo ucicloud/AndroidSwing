@@ -11,22 +11,22 @@ public class SubHostRemovedKidRequest {
      * kidId : 1
      */
 
-    private int subHostId;
-    private int kidId;
+    private long subHostId;
+    private long kidId;
 
-    public int getSubHostId() {
+    public long getSubHostId() {
         return subHostId;
     }
 
-    public void setSubHostId(int subHostId) {
+    public void setSubHostId(long subHostId) {
         this.subHostId = subHostId;
     }
 
-    public int getKidId() {
+    public long getKidId() {
         return kidId;
     }
 
-    public void setKidId(int kidId) {
+    public void setKidId(long kidId) {
         this.kidId = kidId;
     }
 }

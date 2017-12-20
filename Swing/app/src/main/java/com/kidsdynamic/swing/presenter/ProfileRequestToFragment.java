@@ -3,6 +3,7 @@ package com.kidsdynamic.swing.presenter;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,11 +35,11 @@ import retrofit2.Call;
 import retrofit2.Response;
 
 /**
- * ProfileRequestToKidsInfoFragment
+ * ProfileRequestToFragment
  * Created by Administrator on 2017/12/2.
  */
 
-public class ProfileRequestToKidsInfoFragment extends ProfileBaseFragment {
+public class ProfileRequestToFragment extends ProfileBaseFragment {
     private MainFrameActivity mActivityMain;
     private static final String TAG_KIDS_ID = "kids_id";
 
@@ -71,10 +72,10 @@ public class ProfileRequestToKidsInfoFragment extends ProfileBaseFragment {
 
     private RequestAddSubHostEntity requestTo;
 
-    public static ProfileRequestToKidsInfoFragment newInstance(long kidsId) {
+    public static ProfileRequestToFragment newInstance(long kidsId) {
         Bundle args = new Bundle();
         args.putLong(TAG_KIDS_ID,kidsId);
-        ProfileRequestToKidsInfoFragment fragment = new ProfileRequestToKidsInfoFragment();
+        ProfileRequestToFragment fragment = new ProfileRequestToFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -173,7 +174,7 @@ public class ProfileRequestToKidsInfoFragment extends ProfileBaseFragment {
             GlideHelper.getBitMap(getContext(),
                     UserManager.getProfileRealUri(currentLoginUserInfo.getProfile()),
                     String.valueOf(currentLoginUserInfo.getLastUpdate()),
-                    currentUserAvatarSimpleTarget);
+                    new AvatarSimpleTarget(mViewUserPhoto));
         }
 
         UserInfo requestToUser = requestTo.getRequestToUser();
@@ -184,6 +185,14 @@ public class ProfileRequestToKidsInfoFragment extends ProfileBaseFragment {
 
         tv_note.setText(ViewUtils.setWordColorInStr(note,requestToUserName));
 
+
+        //load avatar
+        if(!TextUtils.isEmpty(requestToUser.getProfile())){
+            GlideHelper.getBitMapOnlyCacheInMemory(getContext(),
+                    UserManager.getProfileRealUri(requestToUser.getProfile()),
+                    new AvatarSimpleTarget(mViewRequestKidPhoto));
+
+        }
 
 
         /*tv_kids_id.setText(String.valueOf(kidsInfo.getKidsId()));

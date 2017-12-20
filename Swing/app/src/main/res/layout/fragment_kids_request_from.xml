@@ -42,7 +42,7 @@
                         android:background="@drawable/left_arrow"
                         style="@style/kids_request_img_arrow"
                         android:layout_weight="1"
-                        android:visibility="visible"/>
+                        android:visibility="gone"/>
 
                 </LinearLayout>
 

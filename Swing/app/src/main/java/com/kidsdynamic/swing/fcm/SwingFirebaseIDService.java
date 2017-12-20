@@ -45,6 +45,9 @@ public class SwingFirebaseIDService extends FirebaseInstanceIdService {
      * @param token The new token.
      */
     private void sendRegistrationToServer(String token) {
+        if (TextUtils.isEmpty(token)) {
+            return;
+        }
         // TODO: Implement this method to send token to your app server.
         if (TextUtils.isEmpty(token)) {
             return;

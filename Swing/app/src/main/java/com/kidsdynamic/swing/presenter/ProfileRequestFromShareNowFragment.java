@@ -18,6 +18,7 @@ import com.kidsdynamic.data.net.ApiGen;
 import com.kidsdynamic.data.net.host.HostApi;
 import com.kidsdynamic.data.net.host.model.DenySubHost;
 import com.kidsdynamic.data.net.host.model.RequestAddSubHostEntity;
+import com.kidsdynamic.data.net.host.model.SubHostRemovedKidRequest;
 import com.kidsdynamic.swing.R;
 import com.kidsdynamic.swing.domain.LoginManager;
 import com.kidsdynamic.swing.domain.ProfileManager;
@@ -187,9 +188,6 @@ public class ProfileRequestFromShareNowFragment extends ProfileBaseFragment {
         tv_title.setText(R.string.profile_title_request_from);
         view_left_action.setImageResource(R.drawable.icon_left);
 
-        /*view_right_action.setImageResource(R.drawable.icon_add);
-        view_right_action.setTag(R.drawable.icon_add);*/
-
     }
 
     @OnClick(R.id.main_toolbar_action1)
@@ -274,6 +272,8 @@ public class ProfileRequestFromShareNowFragment extends ProfileBaseFragment {
                     getFragmentManager().popBackStack();
                     //deny 成功后，需要通知上个界面关闭
                     mActivityMain.mSignStack.push(ProfileManager.sign_deny_ok);
+                    //通知上个界面是那个请求被删除
+                    mActivityMain.mRemovedSubHostInfoEntity.push(requestInfo);
                 }else {
                     ToastCommon.makeText(getContext(),R.string.normal_err,code);
                 }
@@ -291,9 +291,52 @@ public class ProfileRequestFromShareNowFragment extends ProfileBaseFragment {
         });
     }
 
+    private void deleteSubHost() {
+        if(requestInfo == null){
+            return;
+        }
+
+        showLoadingDialog(R.string.signup_login_wait);
+        //拒绝 共享请求
+        HostApi hostApi = ApiGen.getInstance(getActivity().getApplicationContext()).
+                generateApi(HostApi.class, true);
+
+        SubHostRemovedKidRequest subHostRemovedKidRequest = new SubHostRemovedKidRequest();
+        subHostRemovedKidRequest.setSubHostId(requestInfo.getId());
+        subHostRemovedKidRequest.setKidId(kidsId);
+
+        hostApi.subHostRemoveKid(subHostRemovedKidRequest).enqueue(new BaseRetrofitCallback<RequestAddSubHostEntity>() {
+            @Override
+            public void onResponse(Call<RequestAddSubHostEntity> call, Response<RequestAddSubHostEntity> response) {
+                int code = response.code();
+
+                if(200 == code){
+
+                    getFragmentManager().popBackStack();
+                    //deny 成功后，需要通知上个界面关闭
+                    mActivityMain.mSignStack.push(ProfileManager.sign_deny_ok);
+                    //通知上个界面是那个请求被删除
+                    mActivityMain.mRemovedSubHostInfoEntity.push(requestInfo);
+                }else {
+                    ToastCommon.makeText(getContext(),R.string.normal_err,code);
+                }
+
+                finishLoadingDialog();
+                super.onResponse(call, response);
+            }
+
+            @Override
+            public void onFailure(Call<RequestAddSubHostEntity> call, Throwable t) {
+                finishLoadingDialog();
+
+                super.onFailure(call, t);
+            }
+        });
+    }
+
     @OnClick(R.id.btn_remove_sharing)
     protected void onRemoveShare(){
-        denySubHost();
+        deleteSubHost();
     }
 
     private void showLayout(int layoutId){
