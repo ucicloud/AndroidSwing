@@ -15,10 +15,10 @@ public class SwingFontsCache {
     private static final String font_normal_name = "font_normal";
 
     public static Typeface getBoldType(Context context){
-        return FontCache.getTypeface(font_bold_name, context);
+        return FontCache.getTypeface(font_bold_name, context.getApplicationContext());
     }
 
     public static Typeface getNormalType(Context context){
-        return FontCache.getTypeface(font_normal_name, context);
+        return FontCache.getTypeface(font_normal_name, context.getApplicationContext());
     }
 }

@@ -170,8 +170,9 @@ public class MainFrameActivity extends BaseFragmentActivity {
         DB_Kids focusWatchInfo = DeviceManager.getFocusWatchInfo(this.getApplicationContext());
         if (focusWatchInfo != null) {
             String profileRealUri = UserManager.getProfileRealUri(focusWatchInfo.getProfile());
-            GlideHelper.showCircleImageViewWithSignature(
+            GlideHelper.showCircleImageViewWithSignatureWH(
                     this, profileRealUri, String.valueOf(focusWatchInfo.getLastUpdate()),
+                    view_tab_profile.getWidth(),view_tab_profile.getHeight(),
                     view_tab_profile);
         }
     }

@@ -33,7 +33,9 @@ import com.kidsdynamic.swing.domain.viewmodel.SubHostListModel;
 import com.kidsdynamic.swing.model.KidsEntityBean;
 import com.kidsdynamic.swing.model.WatchContact;
 import com.kidsdynamic.swing.utils.GlideHelper;
+import com.kidsdynamic.swing.utils.SwingFontsCache;
 import com.kidsdynamic.swing.view.ViewCircle;
+import com.kidsdynamic.swing.utils.ViewUtils;
 
 import java.util.List;
 import java.util.Locale;
@@ -79,6 +81,7 @@ public class ProfileMainFragment extends ProfileBaseFragment {
         mViewPhoto =  mViewMain.findViewById(R.id.profile_main_photo);
         mViewName =  mViewMain.findViewById(R.id.profile_main_name);
         mViewMail =  mViewMain.findViewById(R.id.profile_main_mail);
+        mViewMail.setTypeface(SwingFontsCache.getNormalType(getContext()));
 
         mViewDeviceContainer =  mViewMain.findViewById(R.id.profile_main_device_container);
         mViewDeviceAdd =  mViewMain.findViewById(R.id.profile_main_device_add);
@@ -93,7 +96,16 @@ public class ProfileMainFragment extends ProfileBaseFragment {
 
         mViewRequestFromContainer = mViewMain.findViewById(R.id.profile_main_request_from_container);
 
+
         ButterKnife.bind(this,mViewMain);
+
+
+        ViewUtils.setTextViewBoldTypeFace(getContext(),mViewName);
+
+        ViewUtils.setTextViewNormalTypeFace(getContext(),mViewRequestFromTitle,
+                (TextView) mViewMain.findViewById(R.id.tv_your_pending),
+                (TextView) mViewMain.findViewById(R.id.tv_devices_shared_with_me),
+                (TextView) mViewMain.findViewById(R.id.tv_my_devices));
 
         initTitleBar();
         return mViewMain;

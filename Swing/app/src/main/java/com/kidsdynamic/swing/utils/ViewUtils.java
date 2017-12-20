@@ -7,6 +7,7 @@ import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.widget.Button;
+import android.widget.TextView;
 
 /**
  * ViewUtils
@@ -44,6 +45,24 @@ public class ViewUtils {
         }
         for (Button btn : btns) {
             btn.setTypeface(SwingFontsCache.getBoldType(context));
+        }
+    }
+
+    public static void setTextViewBoldTypeFace(Context context,TextView... textViews){
+        if(textViews == null){
+            return;
+        }
+        for (TextView textView : textViews) {
+            textView.setTypeface(SwingFontsCache.getBoldType(context));
+        }
+    }
+
+    public static void setTextViewNormalTypeFace(Context context,TextView... textViews){
+        if(textViews == null){
+            return;
+        }
+        for (TextView textView : textViews) {
+            textView.setTypeface(SwingFontsCache.getNormalType(context));
         }
     }
 }

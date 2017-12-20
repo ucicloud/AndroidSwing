@@ -22,7 +22,8 @@
         app:strokeType="arc"
         app:strokeWidth="4dp" />
 
-    <com.kidsdynamic.swing.view.AvenirTextView
+    <!--<com.kidsdynamic.swing.view.AvenirTextView-->
+    <TextView
         android:id="@+id/profile_main_name"
         style="@style/textview_main"
         android:layout_width="match_parent"
@@ -31,7 +32,7 @@
         android:gravity="center"
         android:textColor="#09C3B6" />
 
-    <com.kidsdynamic.swing.view.AvenirTextView
+    <TextView
         android:id="@+id/profile_main_mail"
         style="@style/textview_hint"
         android:layout_width="match_parent"
@@ -53,7 +54,7 @@
             android:layout_height="wrap_content"
             style="@style/profile_label_layout">
 
-            <com.kidsdynamic.swing.view.AvenirTextView
+            <TextView
                 android:id="@+id/tv_my_devices"
                 style="@style/textview_profile_group"
                 android:layout_width="wrap_content"
@@ -117,7 +118,7 @@
             android:layout_height="wrap_content"
             style="@style/profile_label_layout">
 
-            <com.kidsdynamic.swing.view.AvenirTextView
+            <TextView
                 android:id="@+id/tv_devices_shared_with_me"
                 style="@style/textview_profile_group"
                 android:layout_width="wrap_content"
@@ -171,7 +172,7 @@
             android:layout_height="wrap_content"
             style="@style/profile_label_layout">
 
-            <com.kidsdynamic.swing.view.AvenirTextView
+            <TextView
                 android:id="@+id/tv_your_pending"
                 style="@style/textview_profile_group"
                 android:layout_width="wrap_content"
@@ -243,7 +244,7 @@
             android:layout_height="wrap_content"
             style="@style/profile_label_layout">
 
-            <com.kidsdynamic.swing.view.AvenirTextView
+            <TextView
                 android:id="@+id/profile_main_request_from_title"
                 style="@style/textview_profile_group"
                 android:layout_width="wrap_content"

@@ -48,6 +48,22 @@ public class GlideHelper {
         }
     }
 
+    public static void showCircleImageViewWithSignatureWH(Context context, Object mode, String lastModify,
+                                                          int width, int height,
+                                                        ImageView imageView) {
+        try {
+            RequestOptions requestOptions = RequestOptions.circleCropTransform()
+                    .override(width,height)
+                    .signature(new ObjectKey(lastModify));
+            Glide.with(context.getApplicationContext())
+                    .load(mode)
+                    .apply(requestOptions)
+                    .into(imageView);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void showSquareImageView(Context context, Object mode, ImageView imageView) {
         try {
             RequestOptions requestOptions = RequestOptions.fitCenterTransform();
