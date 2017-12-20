@@ -60,6 +60,7 @@
 
     <color name="pop_window_background">#E0A1A9AB</color>
     <color name="profile_logout_confirm_name">#14C0BD</color>
+    <color name="profile_name_color">#00C4B3</color>
     <color name="color_edit_hint_color">#9E9E9E</color>
     <color name="emotion_mask_color">#99FFFFFF</color>
     <drawable name="title_bar_bg">#FFFCFCFC</drawable>

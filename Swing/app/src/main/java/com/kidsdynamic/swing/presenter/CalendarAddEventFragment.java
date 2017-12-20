@@ -134,6 +134,8 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
     private List<KidsEntityBean> allKidsByUserId;
     private long currentUserId = -1;
 
+    private String after_add_note_type = "";
+
 
     @Nullable
     @Override
@@ -197,6 +199,10 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
     @Override
     public void onResume() {
         super.onResume();
+
+        if (!mainFrameActivity.mCalendarSignStack.isEmpty()) {
+            after_add_note_type = mainFrameActivity.mCalendarSignStack.pop();
+        }
 
         //如果stack不为空，则表示stack保存当前编辑的event；
         //如果为空，则表示需要新增一个新的event
@@ -846,7 +852,7 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
 
                     getFragmentManager().popBackStack();
 //                    showSyncDialog();
-                    showNewSyncReminderView();
+                    showSyncNotify();
                 }
 
                 finishLoadingDialog();
@@ -863,6 +869,23 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
         });
     }
 
+    private void showSyncNotify(){
+        /*if (!mainFrameActivity.mCalendarSignStack.isEmpty()) {
+            String calendarSignal = mainFrameActivity.mCalendarSignStack.pop();
+            if (signal_show_sync_layout_new.equals(calendarSignal)) {
+                showNewSyncReminderView();
+
+            }
+        }*/
+
+        if(signal_show_sync_layout_new.equals(after_add_note_type)){
+            showNewSyncReminderView();
+        }
+
+        showSyncDialog();
+
+    }
+
     private void updateEvent(EventApi eventApi) {
         EventInfo eventInfo4Update = BeanConvertor.getEventInfo4Update(mEvent);
 
@@ -875,8 +898,8 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
                     EventManager.updateEvent(getContext(), response.body());
 
                     getFragmentManager().popBackStack();
-//                    showSyncDialog();
-                    showNewSyncReminderView();
+                    showSyncDialog();
+//                    showSyncNotify();
                 }else if(response.code() == 401){
                     ToastCommon.makeText(getContext(),R.string.error_api_event_update_403);
                 }else {

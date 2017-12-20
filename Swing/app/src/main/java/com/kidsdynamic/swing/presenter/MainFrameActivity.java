@@ -85,6 +85,7 @@ public class MainFrameActivity extends BaseFragmentActivity {
 //    public Stack<WatchContact> mContactStack;
     public Stack<Bundle> mCalendarBundleStack;
     public Stack<String> mSignStack;
+    public Stack<String> mCalendarSignStack;
 
     public Stack<WatchEvent> mEventStack;
     public Stack<WatchContact> mWatchContactStack;
@@ -219,6 +220,7 @@ public class MainFrameActivity extends BaseFragmentActivity {
         mRemovedSubHostInfoEntity = new Stack<>();
         mSignStack = new Stack<>();
         mSubHostList = new Stack<>();
+        mCalendarSignStack = new Stack<>();
 
 
         //UI更新广播监听

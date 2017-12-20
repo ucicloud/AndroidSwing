@@ -240,8 +240,12 @@ public class ProfileKidsEditorFragment extends ProfileBaseFragment {
         String first = mViewFirst.getText().toString().trim();
         String last = mViewLast.getText().toString().trim();
 
-        if (!first.equals(watchKidsInfo.mName) ||
-                !last.equals(watchKidsInfo.mName)) {
+        if(TextUtils.isEmpty(first)){
+            ToastCommon.makeText(getContext(),R.string.normal_err);
+            return;
+        }
+
+        if (!first.equals(watchKidsInfo.mName) ) {
             //如果内容有变化
 
             KidsInfoUpdateEntity kidsInfoUpdateEntity = new KidsInfoUpdateEntity();

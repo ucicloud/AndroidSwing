@@ -57,7 +57,8 @@
                     android:imeOptions="actionNext"
                     android:text="11104"
                     android:textColor="@color/hex_9c9c9c"
-                    android:inputType="text" />
+                    android:inputType="text"
+                    android:visibility="gone"/>
 
                 <com.kidsdynamic.swing.view.AvenirTextView
                     android:id="@+id/logout_confirm_note"
@@ -77,6 +78,7 @@
                 android:id="@+id/btn_switch_to_account"
                 style="@style/btn_main_profile"
                 android:layout_width="match_parent"
+                android:layout_marginTop="@dimen/base_10"
                 android:text="@string/profile_switch_to_account" />
 
             <Button

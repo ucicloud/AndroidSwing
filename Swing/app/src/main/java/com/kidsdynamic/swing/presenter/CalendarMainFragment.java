@@ -199,6 +199,10 @@ public class CalendarMainFragment extends CalendarBaseFragment {
 
     @OnClick(R.id.main_toolbar_action2)
     public void onToolbarAction2() {
+
+        //新增event后，显示新提示layout标志
+        mainFrameActivity.mCalendarSignStack.push(signal_show_sync_layout_new);
+
 //        WatchEvent event = new WatchEvent(mViewCalendarWeek.getDate());
         WatchEvent event = EventManager.getWatchEventForAdd(mViewCalendarWeek.getDate());
 

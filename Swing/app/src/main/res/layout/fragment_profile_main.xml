@@ -25,12 +25,11 @@
     <!--<com.kidsdynamic.swing.view.AvenirTextView-->
     <TextView
         android:id="@+id/profile_main_name"
-        style="@style/textview_main"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:gravity="center"
-        android:textColor="#09C3B6" />
+        style="@style/profile_name_tv"/>
 
     <TextView
         android:id="@+id/profile_main_mail"

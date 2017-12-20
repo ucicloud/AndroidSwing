@@ -51,7 +51,6 @@
             android:id="@+id/watch_sync_yes"
             style="@style/button_main"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:text="@string/dashboard_main_yes" />
 
@@ -59,7 +58,6 @@
             android:id="@+id/watch_sync_no"
             style="@style/button_main"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:text="@string/dashboard_main_dashboard" />
 
@@ -67,7 +65,6 @@
             android:id="@+id/watch_sync_add"
             style="@style/button_main"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:text="@string/dashboard_main_another" />
     </LinearLayout>

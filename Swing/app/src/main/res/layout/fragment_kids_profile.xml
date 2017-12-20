@@ -46,6 +46,7 @@
                     android:inputType="text" />
 
                 <com.kidsdynamic.swing.view.AvenirTextView
+                    android:visibility="gone"
                     android:id="@+id/tv_kids_id"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
