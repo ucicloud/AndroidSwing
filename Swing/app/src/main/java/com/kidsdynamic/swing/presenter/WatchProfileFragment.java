@@ -231,7 +231,7 @@ public class WatchProfileFragment extends BaseFragment {
 
                     LogUtil2.getUtils().d("addKid error code:" + response.code());
 
-                    //todo test
+                    //test
                     /*SignupActivity signupActivity = (SignupActivity) getActivity();
                     signupActivity.setFragment(DashboardMainFragment.newInstance());*/
                 }

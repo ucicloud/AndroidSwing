@@ -291,7 +291,7 @@ public class ProfileSearchUserFragment extends ProfileBaseFragment {
                             false);
                 }else if(code == 409){
 
-                    //todo test
+                    //test
                     /*mActivityMain.mWatchContactStack.push(watchUserInfo);
 
                     selectFragment(ProfileKidsRequestAccessFragment.class.getName(),null,

@@ -599,7 +599,6 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
         selectFragment(EventRepeatOptionFragment.class.getName(),null,true);
     }
 
-    //todo 2017年11月20日22:44:38 weizg 暂不可响应
     //assign to
     @OnClick(R.id.calendar_event_assign_line)
     protected void onClickAssignLine(){

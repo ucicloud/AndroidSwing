@@ -186,14 +186,15 @@ public class ProfileMainFragment extends ProfileBaseFragment {
 
         if (watchContact == null && parent != null && !TextUtils.isEmpty(parent.getProfile())) {
             GlideHelper.getBitMap(getContext(), UserManager.getProfileRealUri(parent.getProfile()),
-                    String.valueOf(parent.getLastUpdate()), userAvatarSimpleTarget);
+                    String.valueOf(parent.getLastUpdate()), new AvatarSimpleTarget(mViewPhoto));
         }
 
         if(watchContact != null && watchContact.mPhoto != null && parent != null){
             mViewPhoto.setBitmap(watchContact.mPhoto);
-            GlideHelper.getBitMap(getContext(), UserManager.getProfileRealUri(parent.getProfile()),
+            GlideHelper.getBitMapWithWH(getContext(), UserManager.getProfileRealUri(parent.getProfile()),
                     String.valueOf(parent.getLastUpdate()),
-                    userAvatarSimpleTarget);
+                    mViewPhoto.getWidth(),mViewPhoto.getHeight(),
+                    new AvatarSimpleTarget(mViewPhoto));
         }
 
         // 載入用戶的所有手錶
@@ -459,8 +460,9 @@ public class ProfileMainFragment extends ProfileBaseFragment {
             WatchContact.User user = (WatchContact.User) contact;
 
             if(!TextUtils.isEmpty(user.mProfile)){
-                GlideHelper.getBitMapOnlyCacheInMemory(getContext().getApplicationContext(),
+                GlideHelper.getBitMapOnlyCacheInMemoryWithWH(getContext().getApplicationContext(),
                         UserManager.getProfileRealUri(user.mProfile),
+                        photo.getWidth(),photo.getHeight(),
                         new AvatarSimpleTarget(photo));
             }
         }

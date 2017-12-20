@@ -7,7 +7,7 @@ package com.kidsdynamic.data.net.event.model;
 public class TodoEntity {
     /**
      * id : 12
-     * text : test todo 2
+     * text : test to-do 2
      * status : PENDING
      * dateCreated : 2017-02-13T04:59:44Z
      * lastUpdated : 2017-02-13T01:01:51Z

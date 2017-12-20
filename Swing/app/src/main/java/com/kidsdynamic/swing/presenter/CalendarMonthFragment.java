@@ -142,7 +142,7 @@ public class CalendarMonthFragment extends CalendarBaseFragment {
         Log.d("CalendarMonthFragment", "start:" + startCalendar.getTime().toString());
         Log.d("CalendarMonthFragment", "end:  " + endCalendar.getTime().toString());
 
-        // TODO: 2017/11/8
+        //2017/11/8
 //        List<WatchEvent> list = CalendarManager.getEventList(start, end);
         List<WatchEvent> mEventList = EventManager.getEventList(currentUserId, start, end);
 

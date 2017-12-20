@@ -187,7 +187,7 @@ public class ProfileSwitchKidsConfirmFragment extends ProfileBaseFragment {
 
         GlideHelper.getBitMap(getContext(),
                 UserManager.getProfileRealUri(kidsInfo.getProfile()),
-                String.valueOf(kidsInfo.getLastUpdate()), userAvatarSimpleTarget);
+                String.valueOf(kidsInfo.getLastUpdate()), new AvatarSimpleTarget(mViewPhoto));
     }
 
 

@@ -61,7 +61,7 @@ public class EventManager {
         eventDataStore.saveAll(BeanConvertor.getDBEventList(eventWithTodoList));
         todoItemDataStore.saveAll(BeanConvertor.getDBTodo(eventWithTodoList));
 
-        // TODO: 2017/12/8  二期功能
+        // 2017/12/8  二期功能
         eventKidsStore.save(BeanConvertor.getDBEventKids(eventWithTodoList));
 
     }

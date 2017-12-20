@@ -473,7 +473,8 @@ public class CropImageView extends AppCompatImageView implements ViewTreeObserve
             return null;
         }
         bitmap = zoomBitmap(bitmap, sx, sy);
-        Bitmap target = Bitmap.createBitmap(mRadius * 2, mRadius * 2, Bitmap.Config.ARGB_4444);
+//        Bitmap target = Bitmap.createBitmap(mRadius * 2, mRadius * 2, Bitmap.Config.ARGB_4444);
+        Bitmap target = Bitmap.createBitmap(mRadius * 2, mRadius * 2, Bitmap.Config.RGB_565);
         Canvas canvas = new Canvas(target);
         canvas.drawCircle(mRadius, mRadius, mRadius, paint);
         if (isCropCircle) {
@@ -525,14 +526,15 @@ public class CropImageView extends AppCompatImageView implements ViewTreeObserve
                 return null;
             }
             if (imgFile.createNewFile()) {
-                bitmap.setConfig(Bitmap.Config.ARGB_4444);
+//                bitmap.setConfig(Bitmap.Config.ARGB_4444);
+                bitmap.setConfig(Bitmap.Config.RGB_565);
                 baos = new ByteArrayOutputStream();
                 if (null == compressFormat) {
                     compressFormat = Bitmap.CompressFormat.JPEG;
                 }
                 if (0 == quality) {
 //                    quality = 30;
-                    quality = 10;
+                    quality = 5;
                 }
                 bitmap.compress(compressFormat, quality, baos);
                 fos = new FileOutputStream(imgFile);

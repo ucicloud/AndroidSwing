@@ -35,7 +35,7 @@ public class SignupActivity extends BaseFragmentActivity {
         setContentView(R.layout.activity_signup);
         ButterKnife.bind(this);
 
-        // TODO: 2017/11/4  测试界面
+        // 2017/11/4  测试界面
         //读取配置，是否已经登陆成功，如果是，则不显示登陆界面，直接进入主界面
         if (ConfigUtil.isLoginState(this)) {
             loginSuccess();

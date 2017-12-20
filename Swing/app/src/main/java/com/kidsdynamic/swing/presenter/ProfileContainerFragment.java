@@ -51,7 +51,6 @@ public class ProfileContainerFragment extends BaseFragment {
 
         registerUIReceiver();
 
-        // TODO: 2017/12/4 一期项目直接显示option界面
         selectFragment(ProfileMainFragment.class.getName(),null,false);
 //        selectFragment(ProfileOptionFragment.class.getName(),null,false);
 

@@ -104,7 +104,8 @@ public class ProfileSwitchAccountFragment extends ProfileBaseFragment {
         if (focusKidsInfo != null && !TextUtils.isEmpty(focusKidsInfo.getProfile())) {
             GlideHelper.getBitMap(getContext(),
                     UserManager.getProfileRealUri(focusKidsInfo.getProfile()),
-                    String.valueOf(focusKidsInfo.getLastUpdate()), userAvatarSimpleTarget);
+                    String.valueOf(focusKidsInfo.getLastUpdate()),
+                    new AvatarSimpleTarget(mViewPhoto));
         }
 
         if (!mActivityMain.mSubHostList.isEmpty()) {
