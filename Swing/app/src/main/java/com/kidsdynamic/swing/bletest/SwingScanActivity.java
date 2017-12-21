@@ -120,6 +120,8 @@ public class SwingScanActivity extends AppCompatActivity implements View.OnClick
         btn_stop.setOnClickListener(this);
         btn_sync = (Button) findViewById(R.id.btn_sync);
         btn_sync.setOnClickListener(this);
+        btn_sync = (Button) findViewById(R.id.btn_update);
+        btn_sync.setOnClickListener(this);
         sync_view = (TextView) findViewById(R.id.tv_mac);
         img_loading = (ImageView) findViewById(R.id.img_loading);
         operatingAnim = AnimationUtils.loadAnimation(this, R.anim.rotate);
@@ -200,6 +202,12 @@ public class SwingScanActivity extends AppCompatActivity implements View.OnClick
                 checkPermissions();
             }
                 break;
+            case R.id.btn_update:
+            {
+                op = 3;
+                checkPermissions();
+            }
+            break;
         }
     }
 
@@ -415,6 +423,11 @@ public class SwingScanActivity extends AppCompatActivity implements View.OnClick
                     public void onDeviceVersion(String version) {
                         Log.d(TAG, "onDeviceVersion version " + version);
                     }
+
+                    @Override
+                    public void onDeviceUpdating(float percent, String timeRemain) {
+
+                    }
                 });
 
 //                mBluetoothService.scanAndSync2("7F:9F:57:8D:3F:6A", list);
@@ -422,6 +435,61 @@ public class SwingScanActivity extends AppCompatActivity implements View.OnClick
 //                mBluetoothService.scanAndSync("60:64:05:86:21:52", list);
             }
                 break;
+            case 3:
+            {
+                String mac = sync_view.getText().toString();
+                if (mac == null || mac.length() == 0)
+                {
+                    Toast.makeText(SwingScanActivity.this, "请先扫描并初始化设备", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+                List<EventModel> list = genEvents();
+
+                mBluetoothService.closeConnect();
+                progressDialog.setMessage("同步设备中");
+                progressDialog.show();
+                mBluetoothService.scanAndUpgrade(mac, null, null, new IDeviceSyncCallback() {
+                    @Override
+                    public void onSyncComplete() {
+                        progressDialog.dismiss();
+                        Toast.makeText(SwingScanActivity.this, "升级成功", Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void onSyncFail(int reason) {
+                        progressDialog.dismiss();
+                        Toast.makeText(SwingScanActivity.this, "升级失败", Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void onSyncing(String tip) {
+                        progressDialog.setMessage(tip);
+                    }
+
+                    @Override
+                    public void onSyncActivity(ActivityModel activity) {
+
+                    }
+
+                    @Override
+                    public void onDeviceBattery(int battery) {
+                        Log.d(TAG, "onDeviceBattery battery " + battery);
+                    }
+
+                    @Override
+                    public void onDeviceVersion(String version) {
+                        Log.d(TAG, "onDeviceVersion version " + version);
+                    }
+
+                    @Override
+                    public void onDeviceUpdating(float percent, String timeRemain) {
+
+                    }
+                });
+
+            }
+            break;
         }
     }
 

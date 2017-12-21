@@ -41,6 +41,7 @@ public class SwingBLEService extends Service {
     public BluetoothBinder mBinder = new BluetoothBinder();
 
     private int action = SwingBLEAttributes.BLE_INIT_ACTION;
+    private int handlerState;
     private IDeviceInitCallback initCallback = null;
     private IDeviceSyncCallback syncCallback = null;
 
@@ -53,6 +54,7 @@ public class SwingBLEService extends Service {
         public int repeatTimes;
         public int activityCount;
 
+        public String version;
         public FileInputStream fileVerA;
         public FileInputStream fileVerB;
 
@@ -81,8 +83,95 @@ public class SwingBLEService extends Service {
             }
         }
 
-        public void handleUpgrade(SwingBLEService service) {
+        public void writeOADNotify() {
+            //监听OAD_IMAGE_NOTIFY_UUID反馈数据
+            boolean success = SwingBLEService.this.notify(SwingBLEAttributes.OAD_SERVICE_UUID, SwingBLEAttributes.OAD_IMAGE_NOTIFY_UUID, new ICharacteristicCallback() {
+                @Override
+                public void onSuccess(BluetoothGattCharacteristic characteristic) {
+                    SwingBLEService.this.stopNotify(SwingBLEAttributes.OAD_SERVICE_UUID, SwingBLEAttributes.OAD_IMAGE_NOTIFY_UUID);
+                    ViseLog.i("current bin ver : " + HexUtil.encodeHexStr(characteristic.getValue()));
 
+                    if (handlerState == SwingBLEAttributes.MSG_UPGRADE_CHECK_IMAGE_A) {
+                        if (threadHandler != null) {
+                            threadHandler.removeMessages(SwingBLEAttributes.MSG_UPGRADE_CHECK_IMAGE_B);
+                        }
+                        ViseLog.i("USE IMAGE A");
+                    }
+                    else if (handlerState == SwingBLEAttributes.MSG_UPGRADE_CHECK_IMAGE_B) {
+                        if (threadHandler != null) {
+                            threadHandler.removeMessages(SwingBLEAttributes.MSG_UPGRADE_CHECK_IMAGE_TIMEOUT);
+                        }
+                        ViseLog.i("USE IMAGE B");
+                    }
+
+                    onBleFailure("OYEYE");
+                }
+
+                @Override
+                public void onFailure(BleException exception) {
+                    ViseLog.i("OAD_IMAGE_NOTIFY_UUID Notify onFailure:" + exception);
+                    onBleFailure("OAD_IMAGE_NOTIFY_UUID Notify Error");
+                }
+            });
+            if (!success)
+                return;
+            if (threadHandler != null) {
+                threadHandler.sendEmptyMessage(SwingBLEAttributes.MSG_UPGRADE_CHECK_IMAGE_A);
+            }
+        }
+
+        public void handleUpgrade(int what) {
+            switch (what) {
+                case SwingBLEAttributes.MSG_UPGRADE_CHECK_IMAGE_A:
+                {
+                    //发送0x00检查当前固件是否是Image A，如果不回应则1.5s后发0x01检查当前固件是否是Image B
+                    SwingBLEService.this.write(SwingBLEAttributes.OAD_SERVICE_UUID, SwingBLEAttributes.OAD_IMAGE_NOTIFY_UUID, "00", new ICharacteristicCallback(){
+                        @Override
+                        public void onFailure(BleException exception) {
+                            ViseLog.i("OAD_IMAGE_NOTIFY_UUID onFailure:" + exception);
+                            onBleFailure("OAD_IMAGE_NOTIFY_UUID Write Error");
+                        }
+
+                        @Override
+                        public void onSuccess(BluetoothGattCharacteristic characteristic) {
+                            ViseLog.i(characteristic.getUuid() + " characteristic onSuccess");
+                            if (threadHandler != null) {
+                                threadHandler.sendEmptyMessageDelayed(SwingBLEAttributes.MSG_UPGRADE_CHECK_IMAGE_B, 1500);
+                            }
+                        }
+                    });
+                }
+                    break;
+                case SwingBLEAttributes.MSG_UPGRADE_CHECK_IMAGE_B:
+                {
+                    //发0x01检查当前固件是否是Image B
+                    SwingBLEService.this.write(SwingBLEAttributes.OAD_SERVICE_UUID, SwingBLEAttributes.OAD_IMAGE_NOTIFY_UUID, "01", new ICharacteristicCallback(){
+                        @Override
+                        public void onFailure(BleException exception) {
+                            ViseLog.i("OAD_IMAGE_NOTIFY_UUID onFailure:" + exception);
+                            onBleFailure("OAD_IMAGE_NOTIFY_UUID Write Error");
+                        }
+
+                        @Override
+                        public void onSuccess(BluetoothGattCharacteristic characteristic) {
+                            ViseLog.i(characteristic.getUuid() + " characteristic onSuccess");
+                            if (threadHandler != null) {
+                                threadHandler.sendEmptyMessageDelayed(SwingBLEAttributes.MSG_UPGRADE_CHECK_IMAGE_TIMEOUT, 1500);
+                            }
+                        }
+                    });
+                }
+                    break;
+                case SwingBLEAttributes.MSG_UPGRADE_CHECK_IMAGE_TIMEOUT:
+                {
+                    SwingBLEService.this.stopNotify(SwingBLEAttributes.OAD_SERVICE_UUID, SwingBLEAttributes.OAD_IMAGE_NOTIFY_UUID);
+                    ViseLog.i("MSG_UPGRADE_CHECK_IMAGE_TIMEOUT");
+                    onBleFailure("MSG_UPGRADE_CHECK_IMAGE_TIMEOUT Error");
+                }
+                    break;
+                default:
+                    break;
+            }
         }
     }
 
@@ -122,7 +211,7 @@ public class SwingBLEService extends Service {
             if (!ViseBluetooth.getInstance().isConnected()) {
                 return;
             }
-
+            handlerState = msg.what;
             switch (msg.what) {
                 case SwingBLEAttributes.MSG_SYNC_READ_VERSION:
                 {
@@ -149,6 +238,7 @@ public class SwingBLEService extends Service {
                                 case SwingBLEAttributes.BLE_SYNC_ACTION:
                                 case SwingBLEAttributes.BLE_UPGRADE_ACTION:
                                     if (syncCallback != null && version != null) {
+                                        syncModel.version = version;
                                         syncCallback.onDeviceVersion(version);
                                         ViseLog.i("VERSION value: " + version);
                                     }
@@ -344,8 +434,8 @@ public class SwingBLEService extends Service {
                                         closeConnect();
                                     }
                                     else {
-                                        // TODO: 2017/12/14 开始进行升级操作
-
+                                        //开始进行升级操作
+                                        syncModel.writeOADNotify();
                                     }
                                 }
                             }
@@ -491,6 +581,7 @@ public class SwingBLEService extends Service {
                 }
                     break;
                 default:
+                    syncModel.handleUpgrade(msg.what);
                     break;
             }
 //            super.handleMessage(msg);
@@ -874,7 +965,7 @@ public class SwingBLEService extends Service {
 //        }
 
         resetInfo();
-        action = SwingBLEAttributes.BLE_SYNC_ACTION;
+        action = SwingBLEAttributes.BLE_UPGRADE_ACTION;
         syncCallback = callback2;
 
         syncModel = new SyncModel(null);

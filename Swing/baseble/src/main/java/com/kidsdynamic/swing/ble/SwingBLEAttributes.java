@@ -22,6 +22,10 @@ public class SwingBLEAttributes {
     public final static String VOICE_EVET_ALERT_TIME = "0000ffa8-0000-1000-8000-00805f9b34fb";
     public final static String HEADER = "0000ffa9-0000-1000-8000-00805f9b34fb";
 
+    public final static String OAD_SERVICE_UUID = "F000FFC0-0451-4000-B000-000000000000";
+    public final static String OAD_IMAGE_NOTIFY_UUID = "F000FFC1-0451-4000-B000-000000000000";
+    public final static String OAD_IMAGE_BLOCK_REQUEST_UUID = "F000FFC2-0451-4000-B000-000000000000";
+
     public static final int MSG_INIT_WRITE_ACCEL = 1;
     public static final int MSG_INIT_WRITE_TIME = 2;
     public static final int MSG_INIT_READ_ADDR = 3;
@@ -35,6 +39,10 @@ public class SwingBLEAttributes {
     public static final int MSG_SYNC_WRITE_CHECK_SUM = 10;
 
     public static final int MSG_SYNC_READ_VERSION = 11;
+
+    public static final int MSG_UPGRADE_CHECK_IMAGE_A = 12;
+    public static final int MSG_UPGRADE_CHECK_IMAGE_B = 13;
+    public static final int MSG_UPGRADE_CHECK_IMAGE_TIMEOUT = 14;
 
     public static final int BLE_INIT_ACTION = 1;
     public static final int BLE_SYNC_ACTION = 2;
