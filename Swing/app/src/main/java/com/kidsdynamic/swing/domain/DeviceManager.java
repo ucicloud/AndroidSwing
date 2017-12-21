@@ -328,6 +328,25 @@ public class DeviceManager {
         return null;
     }
 
+    public static List<WatchContact.Kid> getKidsByIdInCache(List<KidsEntityBean> kidsEntityBeans, List<Long> kidsIdList){
+        List<WatchContact.Kid> kidsForUI = new ArrayList<>(5);
+        if(!ObjectUtils.isListEmpty(kidsEntityBeans)){
+            for (KidsEntityBean kidsEntityBean :
+                    kidsEntityBeans) {
+             if(kidsIdList.contains(kidsEntityBean.getKidsId())){
+
+                 WatchContact.Kid kidsForUIRaw = BeanConvertor.getKidsForUI(kidsEntityBean);
+                 kidsForUIRaw.mBound = true;
+                 kidsForUIRaw.mLabel = kidsForUIRaw.mName;
+
+                 kidsForUI.add(kidsForUIRaw);
+             }
+            }
+        }
+
+        return kidsForUI;
+    }
+
 
     //界面显示需要的kids信息list
     public static List<WatchContact.Kid> getKidsForUI(Context context, long parentId){

@@ -36,7 +36,7 @@ import com.kidsdynamic.swing.domain.LoginManager;
 import com.kidsdynamic.swing.model.WatchContact;
 import com.kidsdynamic.swing.net.BaseRetrofitCallback;
 import com.kidsdynamic.swing.utils.SwingFontsCache;
-import com.kidsdynamic.swing.view.ViewUtils;
+import com.kidsdynamic.swing.utils.ViewUtils;
 import com.yy.base.utils.Functions;
 
 import java.util.HashMap;

@@ -64,8 +64,8 @@
         <item name="android:textStyle">normal</item>
         <item name="android:background">@drawable/main_button_background</item>
         <item name="android:textAllCaps">false</item>
-        <item name="android:paddingTop">10dp</item>
-        <item name="android:paddingBottom">10dp</item>
+        <item name="android:paddingTop">0dp</item>
+        <item name="android:paddingBottom">0dp</item>
         <item name="android:gravity">center</item>
     </style>
 
@@ -246,6 +246,7 @@
     <style name="profile_label_layout">
         <item name="android:paddingEnd">@dimen/base_15</item>
         <item name="android:paddingStart">@dimen/base_15</item>
+        <item name="android:layout_marginBottom">@dimen/base_3</item>
     </style>
 
     <style name="edittext_profile" parent="@android:style/Widget.EditText">

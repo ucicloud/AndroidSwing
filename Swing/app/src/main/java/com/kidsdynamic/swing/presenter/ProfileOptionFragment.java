@@ -25,7 +25,7 @@ import com.kidsdynamic.swing.domain.LoginManager;
 import com.kidsdynamic.swing.model.KidsEntityBean;
 import com.kidsdynamic.swing.model.WatchContact;
 import com.kidsdynamic.swing.net.BaseRetrofitCallback;
-import com.kidsdynamic.swing.view.ViewUtils;
+import com.kidsdynamic.swing.utils.ViewUtils;
 
 import java.util.HashMap;
 import java.util.Locale;

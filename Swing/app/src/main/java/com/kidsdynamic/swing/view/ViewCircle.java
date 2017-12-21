@@ -18,6 +18,7 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import com.kidsdynamic.swing.R;
+import com.kidsdynamic.swing.utils.ViewUtils;
 
 /**
  * ViewCircle

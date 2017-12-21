@@ -471,6 +471,9 @@
     <string name="calendar_day_word" />
     <string name="calendar_todo_del">Borrar</string>
 
+    <string name="have_no_device">No has enlazado el reloj todavía.</string>
+    <string name="select_watch">Por favor selecciona tu reloj</string>
+
     <!-- Not translated yet -->
     <string name="net_err">Net Error</string>
 </resources>

@@ -471,6 +471,9 @@
     <string name="calendar_day_word">日</string>
     <string name="calendar_todo_del">刪除</string>
 
+    <string name="have_no_device">尚未與其他裝置連結</string>
+    <string name="select_watch">請選擇你的手錶</string>
+
     <!-- Not translated yet -->
     <string name="net_err">Net Error</string>
 </resources>

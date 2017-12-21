@@ -165,10 +165,13 @@ public class ProfileKidsRequestAccessFragment extends ProfileBaseFragment {
 
         layout_user_info.setVisibility(View.VISIBLE);
 
-//        img_add.setImageResource(R.drawable.ic_icon_add_orange);
+        img_add.setImageResource(R.drawable.icon_done);
+
+        loadAvatar();
     }
 
     private void loadAvatar() {
+        mUserAvatarFileName =  watchUserInfo.mProfile;
         if(!TextUtils.isEmpty(mUserAvatarFileName)){
             GlideHelper.getCircleImageViewOnlyCacheInMemory(getContext(),
                     UserManager.getProfileRealUri(mUserAvatarFileName),

@@ -102,6 +102,7 @@ public class ProfileSearchUserFragment extends ProfileBaseFragment {
 
 //        mViewPhoto.setOnClickListener(mPhotoListener);
 
+        mViewUserEmail.setTypeface(SwingFontsCache.getBoldType(getContext()));
         btn_search.setTypeface(SwingFontsCache.getBoldType(getContext()));
         initTitleBar();
 
@@ -256,7 +257,7 @@ public class ProfileSearchUserFragment extends ProfileBaseFragment {
                     user_avatar);
         }
 
-        img_add.setImageResource(R.drawable.ic_icon_add_orange);
+        img_add.setImageResource(R.drawable.ic_icon_add_light_blue);
 
         watchUserInfo = BeanConvertor.getWatchContact(userInfo);
 

@@ -1,13 +1,20 @@
 package com.kidsdynamic.swing.utils;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.support.v7.app.AlertDialog;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.widget.Button;
 import android.widget.TextView;
+
+import com.kidsdynamic.swing.R;
+
+import java.io.ByteArrayOutputStream;
 
 /**
  * ViewUtils
@@ -64,5 +71,39 @@ public class ViewUtils {
         for (TextView textView : textViews) {
             textView.setTypeface(SwingFontsCache.getNormalType(context));
         }
+    }
+
+    public static void showMsgDialog(Context context, String msg){
+        new AlertDialog.Builder(context)
+                .setMessage(msg)
+                .setNegativeButton(R.string.ok_str, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                }).show();
+    }
+
+    public static Bitmap getSmallBitmap(Bitmap bitmap){
+        if(bitmap == null){
+            return null;
+        }
+
+        ByteArrayOutputStream baos = null;
+        try{
+            baos = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG,5,baos);
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            try{
+                if(baos != null){
+                    baos.close();
+                }
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        return bitmap;
     }
 }

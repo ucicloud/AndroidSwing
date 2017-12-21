@@ -25,6 +25,7 @@ import com.kidsdynamic.swing.domain.datasource.RemoteDataSource;
 import com.kidsdynamic.swing.domain.viewmodel.EventViewModel;
 import com.kidsdynamic.swing.model.WatchEvent;
 import com.kidsdynamic.swing.utils.ConfigUtil;
+import com.kidsdynamic.swing.utils.ViewUtils;
 import com.kidsdynamic.swing.view.ViewCircle;
 import com.kidsdynamic.swing.view.calendar.ViewCalendar;
 import com.kidsdynamic.swing.view.calendar.ViewCalendarCellWeek;
@@ -184,6 +185,9 @@ public class CalendarMainFragment extends CalendarBaseFragment {
                 selectFragment(DashboardProgressFragment.class.getName(), null,true);
             }
         });
+
+        ViewUtils.setBtnTypeFace(getContext(),mViewToday,
+                mSyncButton);
 
     }
 

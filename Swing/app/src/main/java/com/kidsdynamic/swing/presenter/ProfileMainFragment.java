@@ -102,7 +102,7 @@ public class ProfileMainFragment extends ProfileBaseFragment {
 
         ViewUtils.setTextViewBoldTypeFace(getContext(),mViewName);
 
-        ViewUtils.setTextViewNormalTypeFace(getContext(),mViewRequestFromTitle,
+        ViewUtils.setTextViewBoldTypeFace(getContext(),mViewRequestFromTitle,
                 (TextView) mViewMain.findViewById(R.id.tv_your_pending),
                 (TextView) mViewMain.findViewById(R.id.tv_devices_shared_with_me),
                 (TextView) mViewMain.findViewById(R.id.tv_my_devices));

@@ -15,6 +15,7 @@ import com.kidsdynamic.swing.domain.EventManager;
 import com.kidsdynamic.swing.domain.LoginManager;
 import com.kidsdynamic.swing.model.WatchEvent;
 import com.kidsdynamic.swing.utils.ConfigUtil;
+import com.kidsdynamic.swing.utils.ViewUtils;
 import com.kidsdynamic.swing.view.calendar.ViewCalendarCellMonth;
 import com.kidsdynamic.swing.view.calendar.ViewCalendarMonth;
 import com.kidsdynamic.swing.view.calendar.ViewCalendarSelector;
@@ -78,6 +79,8 @@ public class CalendarMonthFragment extends CalendarBaseFragment {
 
         mSyncButton.setOnClickListener(mOnSynBtnClickedListener);
 //        showSyncDialog();
+
+        ViewUtils.setBtnTypeFace(getContext(),mSyncButton);
 
         initTitleBar();
 
