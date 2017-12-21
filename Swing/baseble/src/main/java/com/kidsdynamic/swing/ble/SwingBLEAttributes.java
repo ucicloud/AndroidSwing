@@ -43,10 +43,22 @@ public class SwingBLEAttributes {
     public static final int MSG_UPGRADE_CHECK_IMAGE_A = 12;
     public static final int MSG_UPGRADE_CHECK_IMAGE_B = 13;
     public static final int MSG_UPGRADE_CHECK_IMAGE_TIMEOUT = 14;
+    public static final int MSG_UPGRADE_DOWNING_IMAGE_HEADER = 15;
+    public static final int MSG_UPGRADE_DOWNING_IMAGE = 16;
 
     public static final int BLE_INIT_ACTION = 1;
     public static final int BLE_SYNC_ACTION = 2;
     public static final int BLE_UPGRADE_ACTION = 3;
 
+    public static final int OAD_IMG_HDR_OSET = 0x0002;
+    // Image Identification size
+    public static final int OAD_IMG_ID_SIZE = 4;
+
+    // Image header size (version + length + image id size)
+    public static final int OAD_IMG_HDR_SIZE = ( 2 + 2 + OAD_IMG_ID_SIZE );
+// The Image is transporte in 16-byte blocks in order to avoid using blob operations.
+    public static final int OAD_BLOCK_SIZE = 16;
+
+    public static final int HAL_FLASH_WORD_SIZE = 4;
 }
 

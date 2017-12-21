@@ -29,6 +29,7 @@ import com.vise.baseble.model.BluetoothLeDevice;
 import com.vise.log.ViseLog;
 
 import java.io.FileInputStream;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -55,8 +56,15 @@ public class SwingBLEService extends Service {
         public int activityCount;
 
         public String version;
+        public FileInputStream currentFileVer;
         public FileInputStream fileVerA;
         public FileInputStream fileVerB;
+
+        public byte[] requestData = new byte[2 + SwingBLEAttributes.OAD_BLOCK_SIZE];
+        public int nBlocks;
+        public int nBytes;
+        public int iBlocks;
+        public int iBytes;
 
         public SyncModel(List<EventModel> list) {
             if (list == null) {
@@ -96,15 +104,22 @@ public class SwingBLEService extends Service {
                             threadHandler.removeMessages(SwingBLEAttributes.MSG_UPGRADE_CHECK_IMAGE_B);
                         }
                         ViseLog.i("USE IMAGE A");
+                        currentFileVer = fileVerA;
                     }
                     else if (handlerState == SwingBLEAttributes.MSG_UPGRADE_CHECK_IMAGE_B) {
                         if (threadHandler != null) {
                             threadHandler.removeMessages(SwingBLEAttributes.MSG_UPGRADE_CHECK_IMAGE_TIMEOUT);
                         }
                         ViseLog.i("USE IMAGE B");
+                        currentFileVer = fileVerB;
                     }
 
-                    onBleFailure("OYEYE");
+                    if (currentFileVer != null) {
+                        if (threadHandler != null) {
+                            threadHandler.sendEmptyMessage(SwingBLEAttributes.MSG_UPGRADE_DOWNING_IMAGE_HEADER);
+                        }
+                    }
+
                 }
 
                 @Override
@@ -167,6 +182,54 @@ public class SwingBLEService extends Service {
                     SwingBLEService.this.stopNotify(SwingBLEAttributes.OAD_SERVICE_UUID, SwingBLEAttributes.OAD_IMAGE_NOTIFY_UUID);
                     ViseLog.i("MSG_UPGRADE_CHECK_IMAGE_TIMEOUT");
                     onBleFailure("MSG_UPGRADE_CHECK_IMAGE_TIMEOUT Error");
+                }
+                    break;
+                case SwingBLEAttributes.MSG_UPGRADE_DOWNING_IMAGE_HEADER:
+                {
+                    try {
+                        currentFileVer.read(requestData, 2, SwingBLEAttributes.OAD_BLOCK_SIZE);
+
+                        byte[] data = new byte[SwingBLEAttributes.OAD_IMG_HDR_SIZE + 2 + 2];
+
+                        data[0] = requestData[2 + 2 + 1];
+                        data[1] = requestData[2 + 2];
+
+                        data[2] = requestData[2 + 2 + 2 + 1];
+                        data[3] = requestData[2 + 2 + 2];
+
+
+                        int len;
+
+                        len = data[2] & 0xFF;
+                        len |= (data[3] << 8) & 0xFF00;
+                        ViseLog.i("Image header = " + HexUtil.encodeHexStr(requestData));
+                        ViseLog.i("Image len = " + len + " file len = " + currentFileVer.available());
+
+                        System.arraycopy(requestData, 2 + 2 + 4, data, 4, 4);
+
+                        data[SwingBLEAttributes.OAD_IMG_HDR_SIZE + 0] = 12;
+                        data[SwingBLEAttributes.OAD_IMG_HDR_SIZE + 1] = 0x00;
+
+                        data[SwingBLEAttributes.OAD_IMG_HDR_SIZE + 2] = 15;
+                        data[SwingBLEAttributes.OAD_IMG_HDR_SIZE + 3] = 0x00;
+
+                        onBleFailure("OYEYE");
+
+                        nBlocks = len / (SwingBLEAttributes.OAD_BLOCK_SIZE / SwingBLEAttributes.HAL_FLASH_WORD_SIZE);
+                        nBytes = len * SwingBLEAttributes.HAL_FLASH_WORD_SIZE;
+                        iBlocks = 0;
+                        iBytes = 0;
+
+                    }
+                    catch (Exception e) {
+                        ViseLog.i("file read err:" + e);
+                        onBleFailure("File Read Error");
+                    }
+                }
+                break;
+                case SwingBLEAttributes.MSG_UPGRADE_DOWNING_IMAGE:
+                {
+
                 }
                     break;
                 default:
@@ -435,7 +498,17 @@ public class SwingBLEService extends Service {
                                     }
                                     else {
                                         //开始进行升级操作
-                                        syncModel.writeOADNotify();
+                                        if (syncCallback != null) {
+                                            if (syncCallback.onDeviceNeedUpdate(syncModel.version)) {
+                                                syncModel.writeOADNotify();
+                                            }
+                                            else {
+                                                syncCallback.onSyncComplete();
+                                                syncCallback = null;
+                                                closeConnect();
+                                            }
+                                        }
+
                                     }
                                 }
                             }

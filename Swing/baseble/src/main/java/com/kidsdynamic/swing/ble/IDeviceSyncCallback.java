@@ -17,5 +17,6 @@ public interface IDeviceSyncCallback {
 
     void onDeviceVersion(String version);
 
+    boolean onDeviceNeedUpdate(String version);
     void onDeviceUpdating(float percent, String timeRemain);
 }

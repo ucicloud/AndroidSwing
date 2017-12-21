@@ -621,6 +621,11 @@ public class DashboardProgressFragment extends DashboardBaseFragment {
             }
 
             @Override
+            public boolean onDeviceNeedUpdate(String version) {
+                return false;
+            }
+
+            @Override
             public void onDeviceUpdating(float percent, String timeRemain) {
 
             }

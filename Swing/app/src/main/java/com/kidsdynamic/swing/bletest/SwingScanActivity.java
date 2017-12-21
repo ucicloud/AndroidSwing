@@ -43,6 +43,7 @@ import com.vise.baseble.model.BluetoothLeDevice;
 import com.vise.log.ViseLog;
 import com.vise.log.inner.LogcatTree;
 
+import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -66,7 +67,7 @@ public class SwingScanActivity extends AppCompatActivity implements View.OnClick
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ViseLog.getLogConfig().configAllowLog(true);//配置日志信息
-        ViseLog.plant(new LogcatTree());//添加Logcat打印信息
+        //ViseLog.plant(new LogcatTree());//添加Logcat打印信息
         ViseLog.plant(new SwingLogActivity.StringTree());
         setContentView(R.layout.activity_swing_ble_scan);
         initView();
@@ -425,6 +426,11 @@ public class SwingScanActivity extends AppCompatActivity implements View.OnClick
                     }
 
                     @Override
+                    public boolean onDeviceNeedUpdate(String version) {
+                        return false;
+                    }
+
+                    @Override
                     public void onDeviceUpdating(float percent, String timeRemain) {
 
                     }
@@ -444,12 +450,25 @@ public class SwingScanActivity extends AppCompatActivity implements View.OnClick
                     return;
                 }
 
+
+
+                FileInputStream fileA = null;
+                FileInputStream fileB = null;
+                try {
+                    fileA = new FileInputStream("/sdcard/KDV0009-A_A_111017.bin");
+                    fileB = new FileInputStream("/sdcard/KDV0009-A_B_111017.bin");
+                } catch (Exception e) {
+                    Toast.makeText(SwingScanActivity.this, "固件不存在", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
                 List<EventModel> list = genEvents();
 
                 mBluetoothService.closeConnect();
-                progressDialog.setMessage("同步设备中");
+                progressDialog.setMessage("升级设备中");
                 progressDialog.show();
-                mBluetoothService.scanAndUpgrade(mac, null, null, new IDeviceSyncCallback() {
+
+                mBluetoothService.scanAndUpgrade(mac, fileA, fileB, new IDeviceSyncCallback() {
                     @Override
                     public void onSyncComplete() {
                         progressDialog.dismiss();
@@ -480,6 +499,11 @@ public class SwingScanActivity extends AppCompatActivity implements View.OnClick
                     @Override
                     public void onDeviceVersion(String version) {
                         Log.d(TAG, "onDeviceVersion version " + version);
+                    }
+
+                    @Override
+                    public boolean onDeviceNeedUpdate(String version) {
+                        return true;
                     }
 
                     @Override
