@@ -35,5 +35,10 @@ public class SwingBLEAttributes {
     public static final int MSG_SYNC_WRITE_CHECK_SUM = 10;
 
     public static final int MSG_SYNC_READ_VERSION = 11;
+
+    public static final int BLE_INIT_ACTION = 1;
+    public static final int BLE_SYNC_ACTION = 2;
+    public static final int BLE_UPGRADE_ACTION = 3;
+
 }
 

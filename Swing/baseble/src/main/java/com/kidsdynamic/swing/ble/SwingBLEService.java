@@ -28,6 +28,8 @@ import com.vise.baseble.exception.BleException;
 import com.vise.baseble.model.BluetoothLeDevice;
 import com.vise.log.ViseLog;
 
+import java.io.FileInputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashSet;
@@ -38,33 +40,78 @@ public class SwingBLEService extends Service {
 
     public BluetoothBinder mBinder = new BluetoothBinder();
 
-    private boolean isSync = false;
+    private int action = SwingBLEAttributes.BLE_INIT_ACTION;
     private IDeviceInitCallback initCallback = null;
     private IDeviceSyncCallback syncCallback = null;
 
-    private List<EventModel> eventList = null;
-    private int timeStamp;
-    private byte[] ffa4Data1;
-    private byte[] ffa4Data2;
-    private Set<Integer> timeSet;
-    private int repeatTimes;
-    private int activityCount;
+    private class SyncModel {
+        public List<EventModel> eventList = null;
+        public int timeStamp;
+        public byte[] ffa4Data1;
+        public byte[] ffa4Data2;
+        public Set<Integer> timeSet;
+        public int repeatTimes;
+        public int activityCount;
+
+        public FileInputStream fileVerA;
+        public FileInputStream fileVerB;
+
+        public SyncModel(List<EventModel> list) {
+            if (list == null) {
+                eventList = new ArrayList<EventModel>();
+            }
+            else {
+                eventList = list;
+            }
+            timeSet = new HashSet<Integer>();
+            repeatTimes = 5;
+            activityCount = 0;
+        }
+
+        public void close() {
+            if (fileVerA != null) {
+                try {
+                    fileVerA.close();
+                } catch (Exception e){}
+            }
+            if (fileVerB != null) {
+                try {
+                    fileVerB.close();
+                } catch (Exception e){}
+            }
+        }
+
+        public void handleUpgrade(SwingBLEService service) {
+
+        }
+    }
+
+    private SyncModel syncModel = null;
 
     private void onBleFailure(String info)
     {
-        if (isSync)
-        {
-            if (syncCallback != null) {
-                syncCallback.onSyncFail(0);
-                syncCallback = null;
-            }
-        }
-        else
-        {
-            if (initCallback != null) {
-                initCallback.onInitFail(0);
-                initCallback = null;
-            }
+        switch (action) {
+            case SwingBLEAttributes.BLE_SYNC_ACTION:
+                if (syncCallback != null) {
+                    syncCallback.onSyncFail(0);
+                    syncCallback = null;
+                }
+                break;
+            case SwingBLEAttributes.BLE_UPGRADE_ACTION:
+                {
+                    syncModel.close();
+                    if (syncCallback != null) {
+                        syncCallback.onSyncFail(0);
+                        syncCallback = null;
+                    }
+                }
+                break;
+            default:
+                if (initCallback != null) {
+                    initCallback.onInitFail(0);
+                    initCallback = null;
+                }
+                break;
         }
         closeConnect();
     }
@@ -98,19 +145,20 @@ public class SwingBLEService extends Service {
                                 }
                                 catch (Exception e){}
                             }
-                            if (isSync)
-                            {
-                                if (syncCallback != null && version != null) {
-                                    syncCallback.onDeviceVersion(version);
-                                    ViseLog.i("VERSION value: " + version);
-                                }
-                            }
-                            else
-                            {
-                                if (initCallback != null && version != null) {
-                                    initCallback.onDeviceVersion(version);
-                                    ViseLog.i("VERSION value: " + version);
-                                }
+                            switch (action) {
+                                case SwingBLEAttributes.BLE_SYNC_ACTION:
+                                case SwingBLEAttributes.BLE_UPGRADE_ACTION:
+                                    if (syncCallback != null && version != null) {
+                                        syncCallback.onDeviceVersion(version);
+                                        ViseLog.i("VERSION value: " + version);
+                                    }
+                                    break;
+                                default:
+                                    if (initCallback != null && version != null) {
+                                        initCallback.onDeviceVersion(version);
+                                        ViseLog.i("VERSION value: " + version);
+                                    }
+                                    break;
                             }
                             if (threadHandler != null) {
                                 threadHandler.sendEmptyMessage(SwingBLEAttributes.MSG_INIT_WRITE_ACCEL);
@@ -171,24 +219,29 @@ public class SwingBLEService extends Service {
                         @Override
                         public void onSuccess(BluetoothGattCharacteristic characteristic) {
                             ViseLog.i(characteristic.getUuid() + " characteristic onSuccess");
-                            if (isSync) {
-                                if (threadHandler != null) {
-                                    threadHandler.sendEmptyMessage(SwingBLEAttributes.MSG_SYNC_WRITE_ALERT_NUMBER);
+                            switch (action) {
+                                case SwingBLEAttributes.BLE_SYNC_ACTION:
+                                case SwingBLEAttributes.BLE_UPGRADE_ACTION:
+                                    if (threadHandler != null) {
+                                        threadHandler.sendEmptyMessage(SwingBLEAttributes.MSG_SYNC_WRITE_ALERT_NUMBER);
+                                    }
+                                    break;
+                                default:
+                                {
+                                    //初始化完成
+                                    byte[] data = characteristic.getValue();
+                                    String mac = null;
+                                    if (data != null && data.length > 0) {
+                                        mac = HexUtil.encodeHexStr(data, false);
+                                    }
+                                    if (initCallback != null) {
+                                        initCallback.onInitComplete(mac);
+                                        ViseLog.i("ADDRESS value: " + mac);
+                                        initCallback = null;
+                                    }
+                                    closeConnect();
                                 }
-                            }
-                            else {
-                                //初始化完成
-                                byte[] data = characteristic.getValue();
-                                String mac = null;
-                                if (data != null && data.length > 0) {
-                                    mac = HexUtil.encodeHexStr(data, false);
-                                }
-                                if (initCallback != null) {
-                                    initCallback.onInitComplete(mac);
-                                    ViseLog.i("ADDRESS value: " + mac);
-                                    initCallback = null;
-                                }
-                                closeConnect();
+                                    break;
                             }
                         }
                     });
@@ -196,10 +249,10 @@ public class SwingBLEService extends Service {
                     break;
                 case SwingBLEAttributes.MSG_SYNC_WRITE_ALERT_NUMBER:
                 {
-                    if (eventList.size() > 0) {
-                        EventModel m = eventList.get(0);
+                    if (syncModel.eventList.size() > 0) {
+                        EventModel m = syncModel.eventList.get(0);
                         if (syncCallback != null) {
-                            syncCallback.onSyncing("WRITE ALERT remain:" + eventList.size());
+                            syncCallback.onSyncing("WRITE ALERT remain:" + syncModel.eventList.size());
                         }
                         write(SwingBLEAttributes.WATCH_SERVICE, SwingBLEAttributes.VOICE_ALERT, HexUtil.encodeHexStr(new byte[]{(byte)m.getAlert()}), new ICharacteristicCallback(){
                             @Override
@@ -226,8 +279,8 @@ public class SwingBLEService extends Service {
                     break;
                 case SwingBLEAttributes.MSG_SYNC_WRITE_ALERT_TIME:
                 {
-                    if (eventList.size() > 0) {
-                        EventModel m = eventList.get(0);
+                    if (syncModel.eventList.size() > 0) {
+                        EventModel m = syncModel.eventList.get(0);
                         long countdown = toWatchTime(m.getStartDate().getTime());
                         byte[] timeInByte = new byte[]{(byte) (countdown), (byte) (countdown >> 8), (byte) (countdown >> 16), (byte) (countdown >> 24)};
                         write(SwingBLEAttributes.WATCH_SERVICE, SwingBLEAttributes.VOICE_EVET_ALERT_TIME, HexUtil.encodeHexStr(timeInByte), new ICharacteristicCallback(){
@@ -235,7 +288,7 @@ public class SwingBLEService extends Service {
                             public void onFailure(BleException exception) {
                                 if (exception.getCode() == BleExceptionCode.GATT_ERR) {
                                     //固件中FFA8写成功也会返回错误
-                                    eventList.remove(0);
+                                    syncModel.eventList.remove(0);
                                     if (threadHandler != null) {
                                         threadHandler.sendEmptyMessage(SwingBLEAttributes.MSG_SYNC_WRITE_ALERT_NUMBER);
                                     }
@@ -248,7 +301,7 @@ public class SwingBLEService extends Service {
                             @Override
                             public void onSuccess(BluetoothGattCharacteristic characteristic) {
                                 ViseLog.i(characteristic.getUuid() + " characteristic onSuccess");
-                                eventList.remove(0);
+                                syncModel.eventList.remove(0);
                                 if (threadHandler != null) {
                                     threadHandler.sendEmptyMessage(SwingBLEAttributes.MSG_SYNC_WRITE_ALERT_NUMBER);
                                 }
@@ -282,11 +335,18 @@ public class SwingBLEService extends Service {
                                     }
                                 }
                                 else {
-                                    if (syncCallback != null) {
-                                        syncCallback.onSyncComplete();
-                                        syncCallback = null;
+                                    //设备数据已经获取完毕
+                                    if (action == SwingBLEAttributes.BLE_SYNC_ACTION) {
+                                        if (syncCallback != null) {
+                                            syncCallback.onSyncComplete();
+                                            syncCallback = null;
+                                        }
+                                        closeConnect();
                                     }
-                                    closeConnect();
+                                    else {
+                                        // TODO: 2017/12/14 开始进行升级操作
+
+                                    }
                                 }
                             }
                             else {
@@ -310,7 +370,7 @@ public class SwingBLEService extends Service {
                             ViseLog.i(characteristic.getUuid() + " characteristic onSuccess4");
                             byte[] data = characteristic.getValue();
                             if (data != null && data.length >= 4) {
-                                timeStamp = byteToDec(data);
+                                syncModel.timeStamp = byteToDec(data);
                                 if (threadHandler != null) {
                                     threadHandler.sendEmptyMessage(SwingBLEAttributes.MSG_SYNC_READ_DATA1);
                                 }
@@ -336,7 +396,7 @@ public class SwingBLEService extends Service {
                             ViseLog.i(characteristic.getUuid() + " characteristic onSuccess");
                             byte[] data = characteristic.getValue();
                             if (data != null && data.length > 0) {
-                                ffa4Data1 = data;
+                                syncModel.ffa4Data1 = data;
                                 if (threadHandler != null) {
                                     threadHandler.sendEmptyMessage(SwingBLEAttributes.MSG_SYNC_READ_DATA2);
                                 }
@@ -363,12 +423,12 @@ public class SwingBLEService extends Service {
                             byte[] data = characteristic.getValue();
                             if (data != null && data.length > 0) {
                                 byte value;
-                                if (Arrays.equals(ffa4Data1, data)) {
+                                if (Arrays.equals(syncModel.ffa4Data1, data)) {
                                     value = 0x00;
-                                    ffa4Data2 = null;
+                                    syncModel.ffa4Data2 = null;
                                 }
                                 else {
-                                    ffa4Data2 = data;
+                                    syncModel.ffa4Data2 = data;
                                     value = 0x01;
                                 }
                                 if (threadHandler != null) {
@@ -396,23 +456,23 @@ public class SwingBLEService extends Service {
                         public void onSuccess(BluetoothGattCharacteristic characteristic) {
                             ViseLog.i(characteristic.getUuid() + " characteristic onSuccess");
                             //判断是否存在重复数据
-                            if (!timeSet.contains(timeStamp)) {
-                                timeSet.add(timeStamp);
-                                repeatTimes = 5;
+                            if (!syncModel.timeSet.contains(syncModel.timeStamp)) {
+                                syncModel.timeSet.add(syncModel.timeStamp);
+                                syncModel.repeatTimes = 5;
                                 // TODO: 2017/10/19 处理Activity数据
                                 ActivityModel m = new ActivityModel();
-                                m.parseRawData(mac, timeStamp, ffa4Data1, ffa4Data2);
+                                m.parseRawData(mac, syncModel.timeStamp, syncModel.ffa4Data1, syncModel.ffa4Data2);
 
-                                activityCount++;
+                                syncModel.activityCount++;
                                 if (syncCallback != null) {
-                                    syncCallback.onSyncing("READ ACTIVITY count:" + activityCount);
+                                    syncCallback.onSyncing("READ ACTIVITY count:" + syncModel.activityCount);
                                     syncCallback.onSyncActivity(m);
                                 }
-                                ViseLog.i("activity: time:" + timeStamp + " data1:" + HexUtil.encodeHexStr(ffa4Data1, false) + " data2:" + HexUtil.encodeHexStr(ffa4Data2, false));
+                                ViseLog.i("activity: time:" + syncModel.timeStamp + " data1:" + HexUtil.encodeHexStr(syncModel.ffa4Data1, false) + " data2:" + HexUtil.encodeHexStr(syncModel.ffa4Data2, false));
                                 ViseLog.i("model: time:" + m.getTime() + " timezone:" + m.getTimeZoneOffset() + " macId:" + m.getMacId() + " indoor:" + m.getIndoorActivity() + " outdoor:" + m.getOutdoorActivity());
                             }
                             else {
-                                if (--repeatTimes < 0) {
+                                if (--syncModel.repeatTimes < 0) {
                                     ViseLog.i("activity repeat times is max.");
                                     if (syncCallback != null) {
                                         syncCallback.onSyncComplete();
@@ -535,8 +595,7 @@ public class SwingBLEService extends Service {
 //        if (!ViseBluetooth.getInstance().getBluetoothAdapter().isEnabled()) {
 //            ViseBluetooth.getInstance().getBluetoothAdapter().enable();
 //        }
-
-        isSync = false;
+        action = SwingBLEAttributes.BLE_INIT_ACTION;
         initCallback = callback;
 
         SwingBLEService.this.name = scanResult.getDevice().getName();
@@ -605,14 +664,14 @@ public class SwingBLEService extends Service {
             }
         });
     }
-
+/*
     public void scanAndSync(String mac, List<EventModel> list, IDeviceSyncCallback callback) {
 //        if (!ViseBluetooth.getInstance().getBluetoothAdapter().isEnabled()) {
 //            ViseBluetooth.getInstance().getBluetoothAdapter().enable();
 //        }
 
         resetInfo();
-        isSync = true;
+        action = SwingBLEAttributes.BLE_SYNC_ACTION;
         syncCallback = callback;
         eventList = list;
         timeSet = new HashSet<Integer>();
@@ -691,20 +750,136 @@ public class SwingBLEService extends Service {
             }
         });
     }
-
+*/
     public void scanAndSync2(final String mac, List<EventModel> list, IDeviceSyncCallback callback2) {
 //        if (!ViseBluetooth.getInstance().getBluetoothAdapter().isEnabled()) {
 //            ViseBluetooth.getInstance().getBluetoothAdapter().enable();
 //        }
 
         resetInfo();
-        isSync = true;
+        action = SwingBLEAttributes.BLE_SYNC_ACTION;
         syncCallback = callback2;
 
-        eventList = list;
-        timeSet = new HashSet<Integer>();
-        repeatTimes = 5;
-        activityCount = 0;
+        syncModel = new SyncModel(list);
+
+        if (periodScanCallback != null) {
+            ViseBluetooth.getInstance().stopScan(periodScanCallback);
+        }
+
+        PeriodScanOnceCallback callback = new PeriodScanOnceCallback() {
+            @Override
+            public void scanTimeout() {
+                runOnMainThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        onBleFailure("ScanTimeout");
+                    }
+                });
+            }
+
+            @Override
+            public void onDeviceFound(final BluetoothLeDevice bluetoothLeDevice) {
+                runOnMainThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (syncCallback != null) {
+                            String address = bluetoothLeDevice.getDevice().getAddress();
+                            if (address != null && address.equals(mac)) {
+                                setScan(false).removeHandlerMsg().scan();
+                                ViseBluetooth.getInstance().connect(bluetoothLeDevice, false, new IConnectCallback() {
+                                    @Override
+                                    public void onConnecting(BluetoothGatt gatt, int status) {
+                                        ViseLog.i("onConnecting");
+                                    }
+
+                                    @Override
+                                    public void onConnectSuccess(BluetoothGatt gatt, int status) {
+                                        ViseLog.i("onConnectSuccess");
+                                    }
+
+                                    @Override
+                                    public void onServicesDiscovered(BluetoothGatt gatt, int status) {
+                                        SwingBLEService.this.name = gatt.getDevice().getName();
+                                        SwingBLEService.this.mac = gatt.getDevice().getAddress();
+                                        SwingBLEService.this.gatt = gatt;
+
+                                        if (Build.VERSION.SDK_INT >= 21) {
+                                            if (gatt.requestConnectionPriority(BluetoothGatt.CONNECTION_PRIORITY_HIGH)) {
+                                                ViseLog.i("enable CONNECTION_PRIORITY_HIGH");
+                                            }
+                                        }
+
+                                        runOnMainThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                read(SwingBLEAttributes.BATTERY_SERVICE, SwingBLEAttributes.BATTERY_LEVEL, new ICharacteristicCallback(){
+                                                    @Override
+                                                    public void onSuccess(BluetoothGattCharacteristic characteristic) {
+                                                        byte[] data = characteristic.getValue();
+                                                        if (data != null && data.length > 0) {
+                                                            if (syncCallback != null) {
+                                                                syncCallback.onDeviceBattery(data[0]);
+                                                                ViseLog.i("BATTERY_LEVEL value: " + data[0]);
+                                                            }
+                                                        }
+                                                        if (threadHandler != null) {
+                                                            threadHandler.sendEmptyMessage(SwingBLEAttributes.MSG_SYNC_READ_VERSION);
+                                                        }
+                                                    }
+
+                                                    @Override
+                                                    public void onFailure(BleException exception) {
+                                                        ViseLog.i("BATTERY_LEVEL onFailure:" + exception);
+                                                        onBleFailure("BATTERY_LEVEL Read Error");
+                                                    }
+                                                });
+                                            }
+                                        });
+                                    }
+
+                                    @Override
+                                    public void onConnectFailure(BleException exception) {
+                                        runOnMainThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                onBleFailure("onConnectFailure");
+                                            }
+                                        });
+                                    }
+
+                                    @Override
+                                    public void onDisconnect() {
+                                        runOnMainThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                onBleFailure("onDisconnect");
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                        }
+                    }
+                });
+            }
+        };
+
+        ViseBluetooth.getInstance().setScanTimeout(20000)
+                .startScan(callback);
+    }
+
+    public void scanAndUpgrade(final String mac, FileInputStream fileVerA, FileInputStream fileVerB, IDeviceSyncCallback callback2) {
+//        if (!ViseBluetooth.getInstance().getBluetoothAdapter().isEnabled()) {
+//            ViseBluetooth.getInstance().getBluetoothAdapter().enable();
+//        }
+
+        resetInfo();
+        action = SwingBLEAttributes.BLE_SYNC_ACTION;
+        syncCallback = callback2;
+
+        syncModel = new SyncModel(null);
+        syncModel.fileVerA = fileVerA;
+        syncModel.fileVerB = fileVerB;
 
         if (periodScanCallback != null) {
             ViseBluetooth.getInstance().stopScan(periodScanCallback);
