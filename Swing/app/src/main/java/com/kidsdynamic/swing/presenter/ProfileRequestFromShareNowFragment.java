@@ -47,6 +47,11 @@ import retrofit2.Response;
 public class ProfileRequestFromShareNowFragment extends ProfileBaseFragment {
     private MainFrameActivity mActivityMain;
 
+    private static final String TAG_LAYOUT_TYPE = "layout_type";
+    private static final String TAG_Kids_Id = "tag_kids_Id";
+    public static final String TAG_LAYOUT_TYPE_Remove_single_kids = "layout_type_remove_single";
+    public static final String TAG_LAYOUT_TYPE_Remove_SubHost_Request = "layout_type_remove_subhost_request";
+
     @BindView(R.id.user_profile_photo)
     protected ViewCircle mViewRequestFromUserPhoto;
 
@@ -74,13 +79,16 @@ public class ProfileRequestFromShareNowFragment extends ProfileBaseFragment {
     private RequestAddSubHostEntity requestInfo;
     private DB_User loginUserInfo;
 
-    /*public static ProfileRequestFromShareNowFragment newInstance(String layoutType) {
+    private String layoutType;
+
+    public static ProfileRequestFromShareNowFragment newInstance(String layoutType, long kidsId) {
         Bundle args = new Bundle();
         args.putString(TAG_LAYOUT_TYPE,layoutType);
+        args.putLong(TAG_Kids_Id,kidsId);
         ProfileRequestFromShareNowFragment fragment = new ProfileRequestFromShareNowFragment();
         fragment.setArguments(args);
         return fragment;
-    }*/
+    }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -88,15 +96,25 @@ public class ProfileRequestFromShareNowFragment extends ProfileBaseFragment {
 
         layouts.add(layout_sharing_now);
 
-        /*Bundle arguments = getArguments();
+        Bundle arguments = getArguments();
         if(arguments != null){
-            layoutType = arguments.getString(TAG_LAYOUT_TYPE, TAG_LAYOUT_TYPE_deny_confirm);
-            if(TAG_LAYOUT_TYPE_deny_confirm.equals(layoutType)){
-                showLayout(R.id.layout_stop_share);
-            }else if(TAG_LAYOUT_TYPE_share_now.equals(layoutType)){
-                showLayout(R.id.layout_sharing_now);
-            }
-        }*/
+            layoutType = arguments.getString(TAG_LAYOUT_TYPE, "-1");
+
+            kidsId = arguments.getLong(TAG_Kids_Id,-1);
+        }
+
+        if("-1".equals(layoutType)){
+            exitByKidsNull();
+            return;
+        }
+
+        //如果当前是删除单个kids，但kidsId没有
+        if(TAG_LAYOUT_TYPE_Remove_single_kids.equals(layoutType)
+                && kidsId == -1){
+            exitByKidsNull();
+            return;
+        }
+
 
         mActivityMain = (MainFrameActivity) getActivity();
 
@@ -297,7 +315,7 @@ public class ProfileRequestFromShareNowFragment extends ProfileBaseFragment {
         }
 
         showLoadingDialog(R.string.signup_login_wait);
-        //拒绝 共享请求
+        //删除单个kids 共享
         HostApi hostApi = ApiGen.getInstance(getActivity().getApplicationContext()).
                 generateApi(HostApi.class, true);
 
@@ -336,7 +354,13 @@ public class ProfileRequestFromShareNowFragment extends ProfileBaseFragment {
 
     @OnClick(R.id.btn_remove_sharing)
     protected void onRemoveShare(){
-        deleteSubHost();
+
+        if(TAG_LAYOUT_TYPE_Remove_SubHost_Request.equals(layoutType)){
+            denySubHost();
+        }else if(TAG_LAYOUT_TYPE_Remove_single_kids.equals(layoutType)){
+            deleteSubHost();
+        }
+
     }
 
     private void showLayout(int layoutId){

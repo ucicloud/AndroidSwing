@@ -347,8 +347,12 @@ public class ProfileKidsInfoFragment extends ProfileBaseFragment {
     private void showSharedKidsProfile(RequestAddSubHostEntity requestAddSubHostEntity){
 
         mActivityMain.mSubHostInfoEntity.push(requestAddSubHostEntity);
-        selectFragment(ProfileRequestFromShareNowFragment.class.getName(),null,
+        selectFragment(
+                ProfileRequestFromShareNowFragment.newInstance(
+                        ProfileRequestFromShareNowFragment.TAG_LAYOUT_TYPE_Remove_single_kids,kidsId),
                 true);
+        /*selectFragment(ProfileRequestFromShareNowFragment.class.getName(),null,
+                true);*/
 
     }
 

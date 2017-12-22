@@ -180,10 +180,13 @@ public class ProfileOptionFragment extends ProfileBaseFragment {
         selectFragment(ProfileKidsEditorFragment.class.getName(),null,true);
     }
 
-    //todo 一期先实现成重置口令
+    //二期修改为启动界面，输入新密码
     @OnClick(R.id.profile_option_change_password)
     public void resetPsw() {
-        DB_User currentLoginUserInfo = LoginManager.getCurrentLoginUserInfo();
+
+        selectFragment(ProfileResetPswFragment.class.getName(),null,true);
+
+        /*DB_User currentLoginUserInfo = LoginManager.getCurrentLoginUserInfo();
         String email = "";
         if (currentLoginUserInfo != null) {
             email = currentLoginUserInfo.getEmail();
@@ -207,7 +210,7 @@ public class ProfileOptionFragment extends ProfileBaseFragment {
                         exeResetPswFlow(email2);
                     }
                 }).show();
-
+*/
     }
 
     @OnClick(R.id.profile_option_language)
