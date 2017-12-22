@@ -131,12 +131,18 @@ public class SwingBLEService extends Service {
             if (!success)
                 return;
             if (threadHandler != null) {
-                threadHandler.sendEmptyMessage(SwingBLEAttributes.MSG_UPGRADE_CHECK_IMAGE_A);
+                //需要做延时，防止回调被Remove，BUG
+                threadHandler.sendEmptyMessageDelayed(SwingBLEAttributes.MSG_UPGRADE_CHECK_IMAGE_A, 100);
             }
         }
 
         public void handleUpgrade(int what) {
             switch (what) {
+                case SwingBLEAttributes.MSG_UPGRADE_ENABLE_NOTIFY:
+                {
+                    writeOADNotify();
+                }
+                    break;
                 case SwingBLEAttributes.MSG_UPGRADE_CHECK_IMAGE_A:
                 {
                     //发送0x00检查当前固件是否是Image A，如果不回应则1.5s后发0x01检查当前固件是否是Image B
@@ -188,24 +194,26 @@ public class SwingBLEService extends Service {
                 {
                     try {
                         currentFileVer.read(requestData, 2, SwingBLEAttributes.OAD_BLOCK_SIZE);
-
+                    }
+                    catch (Exception e) {
+                        ViseLog.i("file read err:" + e);
+                        onBleFailure("File Read Error");
+                        break;
+                    }
                         byte[] data = new byte[SwingBLEAttributes.OAD_IMG_HDR_SIZE + 2 + 2];
 
-                        data[0] = requestData[2 + 2 + 1];
-                        data[1] = requestData[2 + 2];
+                        data[0] = requestData[2 + 4];
+                        data[1] = requestData[2 + 4 + 1];
 
-                        data[2] = requestData[2 + 2 + 2 + 1];
-                        data[3] = requestData[2 + 2 + 2];
-
+                        data[2] = requestData[2 + 4 + 2];
+                        data[3] = requestData[2 + 4 + 2 + 1];
 
                         int len;
-
                         len = data[2] & 0xFF;
                         len |= (data[3] << 8) & 0xFF00;
-                        ViseLog.i("Image header = " + HexUtil.encodeHexStr(requestData));
-                        ViseLog.i("Image len = " + len + " file len = " + currentFileVer.available());
+                        ViseLog.i("Image len = " + len);
 
-                        System.arraycopy(requestData, 2 + 2 + 4, data, 4, 4);
+                        System.arraycopy(requestData, 2 + 4 + 4, data, 4, 4);
 
                         data[SwingBLEAttributes.OAD_IMG_HDR_SIZE + 0] = 12;
                         data[SwingBLEAttributes.OAD_IMG_HDR_SIZE + 1] = 0x00;
@@ -213,23 +221,77 @@ public class SwingBLEService extends Service {
                         data[SwingBLEAttributes.OAD_IMG_HDR_SIZE + 2] = 15;
                         data[SwingBLEAttributes.OAD_IMG_HDR_SIZE + 3] = 0x00;
 
-                        onBleFailure("OYEYE");
-
                         nBlocks = len / (SwingBLEAttributes.OAD_BLOCK_SIZE / SwingBLEAttributes.HAL_FLASH_WORD_SIZE);
                         nBytes = len * SwingBLEAttributes.HAL_FLASH_WORD_SIZE;
                         iBlocks = 0;
                         iBytes = 0;
 
-                    }
-                    catch (Exception e) {
-                        ViseLog.i("file read err:" + e);
-                        onBleFailure("File Read Error");
-                    }
+                        SwingBLEService.this.write(SwingBLEAttributes.OAD_SERVICE_UUID, SwingBLEAttributes.OAD_IMAGE_NOTIFY_UUID, data, new ICharacteristicCallback(){
+                            @Override
+                            public void onFailure(BleException exception) {
+                                ViseLog.i("OAD_IMAGE_NOTIFY_UUID onFailure:" + exception);
+                                onBleFailure("OAD_IMAGE_NOTIFY_UUID Write Header Error");
+                            }
+
+                            @Override
+                            public void onSuccess(BluetoothGattCharacteristic characteristic) {
+                                ViseLog.i(characteristic.getUuid() + " characteristic onSuccess");
+                                if (threadHandler != null) {
+                                    threadHandler.sendEmptyMessage(SwingBLEAttributes.MSG_UPGRADE_DOWNING_IMAGE);
+                                }
+                            }
+                        });
+
                 }
                 break;
                 case SwingBLEAttributes.MSG_UPGRADE_DOWNING_IMAGE:
                 {
+                    if(iBlocks == nBlocks) {
+                        if (syncCallback != null) {
+                            syncCallback.onSyncComplete();
+                            syncCallback = null;
+                        }
+                        syncModel.close();
+                        closeConnect();
+                        break;
+                    }
 
+                    requestData[0] = (byte) (iBlocks & 0xff);
+                    requestData[1] = (byte) ((iBlocks >> 8) & 0xff);
+                    if (iBytes > 0) {
+                        try {
+                            currentFileVer.read(requestData, 2, SwingBLEAttributes.OAD_BLOCK_SIZE);
+                        }
+                        catch (Exception e) {
+                            ViseLog.i("file read err:" + e);
+                            onBleFailure("File Read Error");
+                            break;
+                        }
+                    }
+                    iBlocks++;
+                    iBytes += SwingBLEAttributes.OAD_BLOCK_SIZE;
+
+                    //float secondsPerBlock = OAD_TRANSMIT_INTERVAL / OAD_ONCE_NUMBER;
+                    //float secondsLeft = (float)(self.nBlocks - self.iBlocks) * secondsPerBlock;
+                    if (syncCallback != null) {
+                        syncCallback.onDeviceUpdating(((float)iBlocks / (float)nBlocks), null);
+                    }
+
+                    SwingBLEService.this.write(SwingBLEAttributes.OAD_SERVICE_UUID, SwingBLEAttributes.OAD_IMAGE_BLOCK_REQUEST_UUID, requestData, new ICharacteristicCallback(){
+                        @Override
+                        public void onFailure(BleException exception) {
+                            ViseLog.i("OAD_IMAGE_BLOCK_REQUEST_UUID onFailure:" + exception);
+                            onBleFailure("OAD_IMAGE_BLOCK_REQUEST_UUID Write Error");
+                        }
+
+                        @Override
+                        public void onSuccess(BluetoothGattCharacteristic characteristic) {
+                            ViseLog.i(characteristic.getUuid() + " characteristic onSuccess");
+                            if (threadHandler != null) {
+                                threadHandler.sendEmptyMessage(SwingBLEAttributes.MSG_UPGRADE_DOWNING_IMAGE);
+                            }
+                        }
+                    });
                 }
                     break;
                 default:
@@ -343,7 +405,7 @@ public class SwingBLEService extends Service {
                 {
                     int currentTime = (int) (getCurrentTime() / 1000);
                     byte[] timeInByte = new byte[]{(byte) (currentTime), (byte) (currentTime >> 8), (byte) (currentTime >> 16), (byte) (currentTime >> 24)};
-                    write(SwingBLEAttributes.WATCH_SERVICE, SwingBLEAttributes.TIME, HexUtil.encodeHexStr(timeInByte), new ICharacteristicCallback(){
+                    write(SwingBLEAttributes.WATCH_SERVICE, SwingBLEAttributes.TIME, timeInByte, new ICharacteristicCallback(){
                         @Override
                         public void onFailure(BleException exception) {
                             ViseLog.i("TIME onFailure:" + exception);
@@ -407,7 +469,7 @@ public class SwingBLEService extends Service {
                         if (syncCallback != null) {
                             syncCallback.onSyncing("WRITE ALERT remain:" + syncModel.eventList.size());
                         }
-                        write(SwingBLEAttributes.WATCH_SERVICE, SwingBLEAttributes.VOICE_ALERT, HexUtil.encodeHexStr(new byte[]{(byte)m.getAlert()}), new ICharacteristicCallback(){
+                        write(SwingBLEAttributes.WATCH_SERVICE, SwingBLEAttributes.VOICE_ALERT, new byte[]{(byte)m.getAlert()}, new ICharacteristicCallback(){
                             @Override
                             public void onFailure(BleException exception) {
                                 ViseLog.i("VOICE_ALERT onFailure:" + exception);
@@ -436,7 +498,7 @@ public class SwingBLEService extends Service {
                         EventModel m = syncModel.eventList.get(0);
                         long countdown = toWatchTime(m.getStartDate().getTime());
                         byte[] timeInByte = new byte[]{(byte) (countdown), (byte) (countdown >> 8), (byte) (countdown >> 16), (byte) (countdown >> 24)};
-                        write(SwingBLEAttributes.WATCH_SERVICE, SwingBLEAttributes.VOICE_EVET_ALERT_TIME, HexUtil.encodeHexStr(timeInByte), new ICharacteristicCallback(){
+                        write(SwingBLEAttributes.WATCH_SERVICE, SwingBLEAttributes.VOICE_EVET_ALERT_TIME, timeInByte, new ICharacteristicCallback(){
                             @Override
                             public void onFailure(BleException exception) {
                                 if (exception.getCode() == BleExceptionCode.GATT_ERR) {
@@ -500,7 +562,9 @@ public class SwingBLEService extends Service {
                                         //开始进行升级操作
                                         if (syncCallback != null) {
                                             if (syncCallback.onDeviceNeedUpdate(syncModel.version)) {
-                                                syncModel.writeOADNotify();
+                                                if (threadHandler != null) {
+                                                    threadHandler.sendEmptyMessage(SwingBLEAttributes.MSG_UPGRADE_ENABLE_NOTIFY);
+                                                }
                                             }
                                             else {
                                                 syncCallback.onSyncComplete();
@@ -608,7 +672,7 @@ public class SwingBLEService extends Service {
                 case SwingBLEAttributes.MSG_SYNC_WRITE_CHECK_SUM:
                 {
                     byte value = (byte) msg.arg1;
-                    write(SwingBLEAttributes.WATCH_SERVICE, SwingBLEAttributes.CHECKSUM, HexUtil.encodeHexStr(new byte[]{value}), new ICharacteristicCallback(){
+                    write(SwingBLEAttributes.WATCH_SERVICE, SwingBLEAttributes.CHECKSUM, new byte[]{value}, new ICharacteristicCallback(){
                         @Override
                         public void onFailure(BleException exception) {
                             ViseLog.i("CHECKSUM onFailure:" + exception);
@@ -1157,6 +1221,10 @@ public class SwingBLEService extends Service {
 
     public boolean write(String uuid_service, String uuid_write, String hex, ICharacteristicCallback callback) {
         return ViseBluetooth.getInstance().withUUIDString(uuid_service, uuid_write, null).writeCharacteristic(HexUtil.hexStringToBytes(hex), callback);
+    }
+
+    public boolean write(String uuid_service, String uuid_write, byte[] data, ICharacteristicCallback callback) {
+        return ViseBluetooth.getInstance().withUUIDString(uuid_service, uuid_write, null).writeCharacteristic(data, callback);
     }
 
     public boolean notify(String uuid_service, String uuid_notify, ICharacteristicCallback callback) {
