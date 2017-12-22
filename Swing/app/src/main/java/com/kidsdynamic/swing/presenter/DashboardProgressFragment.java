@@ -65,7 +65,7 @@ public class DashboardProgressFragment extends DashboardBaseFragment {
 
     private static final int REQUEST_CODE_BLE = 1128;
 
-    private final int PROGRESS_INTERVAL = 100;
+    private final int PROGRESS_INTERVAL = 10;
 
     private final static int SEARCH_TIMEOUT = 300;     // 200 * PROGRESS_INTERVAL milliseconds
     private int mSearchTimeout;

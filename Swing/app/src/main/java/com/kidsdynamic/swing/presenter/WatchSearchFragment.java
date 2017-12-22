@@ -53,7 +53,7 @@ public class WatchSearchFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        progressCircle.startProgress(30, -1, -1);
+        progressCircle.startProgress(10, -1, -1);
     }
 
     @Override
