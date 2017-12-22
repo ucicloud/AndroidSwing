@@ -266,7 +266,10 @@ public class ProfileShareKidsSelectFragment extends ProfileBaseFragment {
                     //accept success
 
                     mActivityMain.mSubHostInfoEntity.push(requestInfo);
-                    selectFragment(ProfileRequestFromShareNowFragment.class.getName(),null,
+
+                    selectFragment(
+                            ProfileRequestFromShareNowFragment.newInstance(
+                                    ProfileRequestFromShareNowFragment.TAG_LAYOUT_TYPE_Remove_SubHost_Request,-1),
                             true);
                 }else {
                     ToastCommon.makeText(getContext(),R.string.normal_err,code);

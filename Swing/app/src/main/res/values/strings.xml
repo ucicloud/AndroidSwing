@@ -497,6 +497,8 @@
     <string name="error_email_null">Email is null</string>
     <string name="normal_err">Fail[%1$d], please try again</string>
     <string name="share_no_select_kids">Please select one watch</string>
+    <string name="enter_password">Please enter new password</string>
+    <string name="password_not_same">Password does not match the confirm password.</string>
 
     <!--new string 20171215 2rd-->
 
