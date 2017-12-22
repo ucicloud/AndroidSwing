@@ -471,6 +471,8 @@
     <string name="calendar_day_word" />
     <string name="calendar_todo_del">Удалить</string>
 
+    <string name="is_sharing_with">поделиться с</string>
+
     <string name="have_no_device">Вы еще не связали устройство.</string>
     <string name="select_watch">Пожалуйста, выбери часы</string>
 

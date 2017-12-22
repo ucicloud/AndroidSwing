@@ -40,7 +40,6 @@
             android:id="@+id/dashboard_add_device"
             style="@style/button_main"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:text="@string/dashboard_add_watch"/>
 
@@ -48,7 +47,6 @@
             android:id="@+id/dashboard_no_devices_goto"
             style="@style/button_main"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:text="@string/dashboard_progress_dashboard"
             android:visibility="gone"/>
     </LinearLayout>

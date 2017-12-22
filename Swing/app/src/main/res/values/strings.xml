@@ -472,6 +472,8 @@
     <string name="calendar_day_word" />
     <string name="calendar_todo_del">Delete</string>
 
+    <string name="is_sharing_with">is sharing with</string>
+
     <string name="have_no_device">You have not bind device yet.</string>
     <string name="select_watch">Please select your swing watch.</string>
 
@@ -493,10 +495,14 @@
     <string name="profile_editor_save_success">Save change success</string>
 
     <string name="error_email_null">Email is null</string>
-    <string name="normal_err">fail[%1$d], please try again</string>
+    <string name="normal_err">Fail[%1$d], please try again</string>
     <string name="share_no_select_kids">Please select one watch</string>
     <string name="enter_password">Please enter new password</string>
     <string name="password_not_same">Password does not match the confirm password.</string>
+
+    <!--new string 20171215 2rd-->
+
+    <string name="has_requests_from">has requests from</string>
 
     <!-- *************************************************************************************** -->
     <!-- Special character: Warning DO NOT translate below -->
@@ -516,7 +522,4 @@
     <!--<string name="language_es" translatable="false">"Spanish"</string>-->
     <!--<string name="language_zh_cn" translatable="false">"简体中文"</string>-->
 
-    <!--new string 20171215 2rd-->
-    <string name="is_sharing_with">is sharing with</string>
-    <string name="has_requests_from">has requests from</string>
 </resources>

@@ -100,11 +100,7 @@ public class DeviceManager {
     public static KidsEntityBean getFocusKidsInfo(Context context){
         DB_Kids focusWatchInfo = getFocusWatchInfo(context);
 
-        if(focusWatchInfo == null){
-            return null;
-        }
-
-        return BeanConvertor.convert(focusWatchInfo);
+        return null != focusWatchInfo ? BeanConvertor.convert(focusWatchInfo) : null;
     }
 
     public static String getMacID(String macAddress) {

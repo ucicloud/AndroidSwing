@@ -8,7 +8,7 @@
         style="@style/textview_main"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="2"
+        android:layout_weight="3"
         android:gravity="center"
         android:text="@string/watch_purchase_message"
         android:textStyle="bold" />
@@ -18,7 +18,7 @@
         android:layout_height="0dp"
         android:layout_marginLeft="@dimen/base_56"
         android:layout_marginRight="@dimen/base_56"
-        android:layout_weight="7"
+        android:layout_weight="6"
         android:orientation="vertical">
 
         <com.kidsdynamic.swing.view.AvenirTextView
