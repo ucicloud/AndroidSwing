@@ -654,6 +654,8 @@ public class MainFrameActivity extends BaseFragmentActivity {
             ((DashboardContainerFragment) currentFragment).setFragment(fragment, isAddBackStack);
         } else if (currentFragment instanceof CalendarContainerFragment) {
             ((CalendarContainerFragment) currentFragment).setFragment(fragment, isAddBackStack);
+        }else if (currentFragment instanceof ProfileContainerFragment) {
+            ((ProfileContainerFragment) currentFragment).setFragment(fragment,isAddBackStack);
         }
     }
 
@@ -663,6 +665,8 @@ public class MainFrameActivity extends BaseFragmentActivity {
             ((DashboardContainerFragment) currentFragment).selectFragment(className, args, isAddToBackStack);
         } else if (currentFragment instanceof CalendarContainerFragment) {
             ((CalendarContainerFragment) currentFragment).selectFragment(className, args, isAddToBackStack);
+        }else if (currentFragment instanceof ProfileContainerFragment) {
+            ((ProfileContainerFragment) currentFragment).selectFragment(className,args,isAddToBackStack);
         }
     }
 

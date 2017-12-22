@@ -331,6 +331,7 @@ public class ProfileMainFragment extends ProfileBaseFragment {
         @Override
         public void onClick(View view) {
 //            mActivityMain.selectFragment(FragmentProfileSearch.class.getName(), null);
+            selectFragment(WatchSearchFragment.newInstance(),true);
         }
     };
 
