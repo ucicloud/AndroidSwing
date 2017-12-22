@@ -85,6 +85,7 @@ public class MainFrameActivity extends BaseFragmentActivity {
 //    public Stack<WatchContact> mContactStack;
     public Stack<Bundle> mCalendarBundleStack;
     public Stack<String> mSignStack;
+    public Stack<String> mCalendarSignStack;
 
     public Stack<WatchEvent> mEventStack;
     public Stack<WatchContact> mWatchContactStack;
@@ -170,8 +171,9 @@ public class MainFrameActivity extends BaseFragmentActivity {
         DB_Kids focusWatchInfo = DeviceManager.getFocusWatchInfo(this.getApplicationContext());
         if (focusWatchInfo != null) {
             String profileRealUri = UserManager.getProfileRealUri(focusWatchInfo.getProfile());
-            GlideHelper.showCircleImageViewWithSignature(
+            GlideHelper.showCircleImageViewWithSignatureWH(
                     this, profileRealUri, String.valueOf(focusWatchInfo.getLastUpdate()),
+                    view_tab_profile.getWidth(),view_tab_profile.getHeight(),
                     view_tab_profile);
         }
     }
@@ -218,6 +220,7 @@ public class MainFrameActivity extends BaseFragmentActivity {
         mRemovedSubHostInfoEntity = new Stack<>();
         mSignStack = new Stack<>();
         mSubHostList = new Stack<>();
+        mCalendarSignStack = new Stack<>();
 
 
         //UI更新广播监听
@@ -246,7 +249,7 @@ public class MainFrameActivity extends BaseFragmentActivity {
 
             if (update_type == Tag_Avatar_update) {
                 if (!mWatchContactStack.isEmpty()) {
-                    //todo 在二期功能前，消费该对象
+                    //在二期功能前，消费该对象
                     WatchContact watchContact = mWatchContactStack.pop();
                     if (watchContact != null && watchContact.mPhoto != null) {
                         view_tab_profile.setBitmap(watchContact.mPhoto);

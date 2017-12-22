@@ -244,14 +244,14 @@ public class ProfileRequestFromFragment extends ProfileBaseFragment {
         if(!TextUtils.isEmpty(requestFromUerProfile)){
             GlideHelper.getBitMapOnlyCacheInMemory(getContext(),
                     UserManager.getProfileRealUri(requestFromUerProfile),
-                    requestFromUserAvatarSimpleTarget);
+                    new AvatarSimpleTarget(mViewRequestFromUserPhoto));
         }
 
         //current user
         GlideHelper.getBitMap(getContext(),
                 UserManager.getProfileRealUri(loginUserInfo.getProfile()),
                 loginUserInfo.getLastUpdate()+"",
-                currentUserAvatarSimpleTarget);
+                new AvatarSimpleTarget(mViewRequestToUserPhoto));
     }
 
 

@@ -252,7 +252,7 @@ public class ProfileRequestToFragment extends ProfileBaseFragment {
                                    Response<RequestAddSubHostEntity> response) {
                 int code = response.code();
                 if(code == 200){
-                    // TODO: 2017/12/6
+                    // 2017/12/6
                     getFragmentManager().popBackStack();
                 }else if(code == 401){
                     //unauthorized

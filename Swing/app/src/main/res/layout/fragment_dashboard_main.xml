@@ -51,24 +51,24 @@
             android:id="@+id/watch_sync_yes"
             style="@style/button_main"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
+            android:textStyle="bold"
             android:text="@string/dashboard_main_yes" />
 
         <com.kidsdynamic.swing.view.AvenirTextView
             android:id="@+id/watch_sync_no"
             style="@style/button_main"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
+            android:textStyle="bold"
             android:text="@string/dashboard_main_dashboard" />
 
         <com.kidsdynamic.swing.view.AvenirTextView
             android:id="@+id/watch_sync_add"
             style="@style/button_main"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
+            android:textStyle="bold"
             android:text="@string/dashboard_main_another" />
     </LinearLayout>
 </LinearLayout>

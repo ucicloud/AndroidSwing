@@ -26,8 +26,6 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.kidsdynamic.data.net.ApiGen;
-import com.kidsdynamic.data.net.firmware.FirmwareApi;
-import com.kidsdynamic.data.net.firmware.model.CurrentFirmwareVersion;
 import com.kidsdynamic.data.net.user.UserApiNeedToken;
 import com.kidsdynamic.data.net.user.model.UserProfileRep;
 import com.kidsdynamic.data.utils.LogUtil2;
@@ -56,7 +54,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
@@ -552,7 +549,7 @@ public class DashboardProgressFragment extends DashboardBaseFragment {
 
     private void bleSyncStart() {
 
-        //开始向watch同步数据 todo
+        //开始向watch同步数据
         /*if (mSearchResult != null)
             mActivityMain.mBLEMachine.Sync(mOnSyncListener, mSearchResult, mVoiceAlertList);*/
         mSyncState = SYNC_STATE_INIT;

@@ -15,6 +15,7 @@ import com.kidsdynamic.swing.domain.EventManager;
 import com.kidsdynamic.swing.domain.LoginManager;
 import com.kidsdynamic.swing.model.WatchEvent;
 import com.kidsdynamic.swing.utils.ConfigUtil;
+import com.kidsdynamic.swing.utils.ViewUtils;
 import com.kidsdynamic.swing.view.calendar.ViewCalendarCellMonth;
 import com.kidsdynamic.swing.view.calendar.ViewCalendarMonth;
 import com.kidsdynamic.swing.view.calendar.ViewCalendarSelector;
@@ -79,6 +80,8 @@ public class CalendarMonthFragment extends CalendarBaseFragment {
         mSyncButton.setOnClickListener(mOnSynBtnClickedListener);
 //        showSyncDialog();
 
+        ViewUtils.setBtnTypeFace(getContext(),mSyncButton);
+
         initTitleBar();
 
         return mViewMain;
@@ -142,7 +145,7 @@ public class CalendarMonthFragment extends CalendarBaseFragment {
         Log.d("CalendarMonthFragment", "start:" + startCalendar.getTime().toString());
         Log.d("CalendarMonthFragment", "end:  " + endCalendar.getTime().toString());
 
-        // TODO: 2017/11/8
+        //2017/11/8
 //        List<WatchEvent> list = CalendarManager.getEventList(start, end);
         List<WatchEvent> mEventList = EventManager.getEventList(currentUserId, start, end);
 

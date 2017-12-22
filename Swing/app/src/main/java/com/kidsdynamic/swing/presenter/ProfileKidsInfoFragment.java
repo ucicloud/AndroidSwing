@@ -201,7 +201,7 @@ public class ProfileKidsInfoFragment extends ProfileBaseFragment {
 
         GlideHelper.getBitMap(getContext(),
                 UserManager.getProfileRealUri(kidsInfo.getProfile()),
-                String.valueOf(kidsInfo.getLastUpdate()), userAvatarSimpleTarget);
+                String.valueOf(kidsInfo.getLastUpdate()), new AvatarSimpleTarget(mViewPhoto));
 
         //当前kids的shared信息
         //获取当前kids已经被分享的user list

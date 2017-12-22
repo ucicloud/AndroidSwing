@@ -193,7 +193,7 @@ public class ProfileEditorFragment extends ProfileBaseFragment {
     private void loadAvatar() {
         if(!TextUtils.isEmpty(mUserAvatarFileName)){
             GlideHelper.getBitMap(getContext(), UserManager.getProfileRealUri(mUserAvatarFileName),
-                    String.valueOf(mProfileInfo.getLastUpdate()),userAvatarSimpleTarget);
+                    String.valueOf(mProfileInfo.getLastUpdate()),new AvatarSimpleTarget(mViewPhoto));
         }
     }
 
@@ -229,7 +229,7 @@ public class ProfileEditorFragment extends ProfileBaseFragment {
         //加载现有头像
         if(!TextUtils.isEmpty(mUserAvatarFileName)){
             GlideHelper.getBitMap(getContext(), UserManager.getProfileRealUri(mUserAvatarFileName),
-                    String.valueOf(mProfileInfo.getLastUpdate()),userAvatarSimpleTarget);
+                    String.valueOf(mProfileInfo.getLastUpdate()),new AvatarSimpleTarget(mViewPhoto));
         }
     }
 

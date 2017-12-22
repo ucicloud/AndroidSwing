@@ -474,6 +474,9 @@
 
     <string name="is_sharing_with">is sharing with</string>
 
+    <string name="have_no_device">You have not bind device yet.</string>
+    <string name="select_watch">Please select your swing watch.</string>
+
     <!-- Not translated yet -->
     <string name="net_err">Net Error</string>
     <string name="profile_login_fail">Login fail, please try again</string>

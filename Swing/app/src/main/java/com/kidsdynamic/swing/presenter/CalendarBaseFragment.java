@@ -17,6 +17,7 @@ import butterknife.BindView;
  */
 
 public class CalendarBaseFragment extends BaseFragment {
+    public final static String signal_show_sync_layout_new = "sync_note_new";
 
 
     @BindView(R.id.main_toolbar_title)

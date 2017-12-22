@@ -399,7 +399,7 @@ public class SwingBLEService extends Service {
                             if (!timeSet.contains(timeStamp)) {
                                 timeSet.add(timeStamp);
                                 repeatTimes = 5;
-                                // TODO: 2017/10/19 处理Activity数据
+                                //2017/10/19 处理Activity数据
                                 ActivityModel m = new ActivityModel();
                                 m.parseRawData(mac, timeStamp, ffa4Data1, ffa4Data2);
 

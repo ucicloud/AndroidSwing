@@ -163,7 +163,7 @@ public class ProfileKidsFromSharedInfoFragment extends ProfileBaseFragment {
 
         GlideHelper.getBitMapOnlyCacheInMemory(getContext(),
                 UserManager.getProfileRealUri(kidsInfo.getProfile()),
-                userAvatarSimpleTarget);
+                new AvatarSimpleTarget(mViewPhoto));
     }
 
 

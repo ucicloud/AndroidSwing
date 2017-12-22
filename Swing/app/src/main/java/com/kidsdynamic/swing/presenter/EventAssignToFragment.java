@@ -80,7 +80,7 @@ public class EventAssignToFragment extends CalendarBaseFragment {
             allKidsByUserId.addAll(allKidsByShared);
         }
 
-        //test todo
+        //test
        /* KidsEntityBean kidsEntityBean = new KidsEntityBean();
         kidsEntityBean.setKidsId(123);
         kidsEntityBean.setName("Alex Smith");

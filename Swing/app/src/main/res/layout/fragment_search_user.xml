@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -21,7 +23,8 @@
             android:layout_height="wrap_content"
             android:hint="@string/signup_login_email"
             android:imeOptions="actionDone"
-            android:inputType="textEmailAddress" />
+            android:inputType="textEmailAddress"
+            android:textColor="@color/hex_9c9c9c"/>
 
         <Button
             android:id="@+id/btn_search"
@@ -34,11 +37,66 @@
 
     <include layout="@layout/item_search_user_info"
         android:id="@+id/layout_user_info"
+        android:visibility="gone"/>
+
+<!--    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/layout_user_info"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/base_35"
+        android:layout_height="@dimen/base_46"
         android:layout_marginLeft="@dimen/base_51"
         android:layout_marginRight="@dimen/base_51"
-        android:visibility="gone"/>
+        android:layout_marginTop="@dimen/base_35"
+        android:background="@drawable/main_edit_text_background"
+        android:gravity="center"
+        android:paddingEnd="@dimen/base_10"
+        android:paddingStart="@dimen/base_10"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/iv_head"
+            android:layout_width="@dimen/base_25"
+            android:layout_height="@dimen/base_25"
+            android:layout_marginStart="5dp"
+            android:contentDescription="@null"
+            android:scaleType="fitCenter"
+            android:src="@null"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_content"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_content" />
+
+        <com.kidsdynamic.swing.view.AvenirTextView
+            android:id="@+id/tv_content"
+            style="@style/textview_hint"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="12dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
+            android:gravity="start|center"
+            android:maxLines="2"
+            android:paddingBottom="6dp"
+            android:paddingTop="6dp"
+            android:text=""
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintLeft_toRightOf="@id/iv_head"
+            app:layout_constraintRight_toLeftOf="@+id/iv_action"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/iv_action"
+            android:layout_width="@dimen/base_25"
+            android:layout_height="@dimen/base_25"
+            android:layout_marginEnd="@dimen/base_5"
+            android:contentDescription="@null"
+            android:scaleType="fitCenter"
+            android:src="@null"
+            app:layout_constraintBottom_toBottomOf="@id/tv_content"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tv_content" />
+    </android.support.constraint.ConstraintLayout>-->
 
 </LinearLayout>

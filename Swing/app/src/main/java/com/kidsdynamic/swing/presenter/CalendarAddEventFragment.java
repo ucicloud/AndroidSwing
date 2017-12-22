@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.util.TypedValue;
@@ -34,12 +35,14 @@ import com.kidsdynamic.swing.domain.CalendarManager;
 import com.kidsdynamic.swing.domain.DeviceManager;
 import com.kidsdynamic.swing.domain.EventManager;
 import com.kidsdynamic.swing.domain.LoginManager;
+import com.kidsdynamic.swing.domain.UserManager;
 import com.kidsdynamic.swing.model.KidsEntityBean;
 import com.kidsdynamic.swing.model.WatchContact;
 import com.kidsdynamic.swing.model.WatchEvent;
 import com.kidsdynamic.swing.model.WatchTodo;
 import com.kidsdynamic.swing.net.BaseRetrofitCallback;
 import com.kidsdynamic.swing.utils.ConfigUtil;
+import com.kidsdynamic.swing.utils.GlideHelper;
 import com.kidsdynamic.swing.utils.SwingFontsCache;
 import com.kidsdynamic.swing.view.ViewCircle;
 import com.kidsdynamic.swing.view.ViewShape;
@@ -92,6 +95,9 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
     protected TextView mViewAssignName;
     @BindView(R.id.calendar_event_assign_container)
     protected LinearLayout mViewAssignContainer;
+    @BindView(R.id.layout_assign_kids_avatar)
+    protected LinearLayout mViewAssignAvatarContainer;
+
 
     //to-do
     @BindView(R.id.calendar_event_todo_line)
@@ -134,6 +140,8 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
     private List<KidsEntityBean> allKidsByUserId;
     private long currentUserId = -1;
 
+    private String after_add_note_type = "";
+
 
     @Nullable
     @Override
@@ -155,7 +163,7 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
         long focusKidsIdId = DeviceManager.getFocusKidsId();
 
         if(userId <= 0){
-            ToastCommon.makeText(getContext(),R.string.login_data_invalid);
+            ToastCommon.makeText(getContext(),R.string.have_no_device);
             getFragmentManager().popBackStack();
 
             return false;
@@ -179,6 +187,9 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
         }
 
         if (mEvent.mKids.size() == 0) { // assign is illegal
+
+            //del 2017年12月21日23:00:56 only
+            //根据客户要求，不再设置默认kids
             if (focusKidsIdId <= 0)
                 mEvent.insertKid(allKidsByUserId.get(0).getKidsId(), 0);
             else
@@ -197,6 +208,10 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
     @Override
     public void onResume() {
         super.onResume();
+
+        if (!mainFrameActivity.mCalendarSignStack.isEmpty()) {
+            after_add_note_type = mainFrameActivity.mCalendarSignStack.pop();
+        }
 
         //如果stack不为空，则表示stack保存当前编辑的event；
         //如果为空，则表示需要新增一个新的event
@@ -313,6 +328,9 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
         }*/
 
 
+        if(mViewAssignAvatarContainer != null){
+            mViewAssignAvatarContainer.removeAllViews();
+        }
         setAssign(mEvent.mKids.get(0));
 
     }
@@ -321,13 +339,76 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
         if (kidsId <= 0) {
             mViewAssignName.setText("");
         } else {
-            KidsEntityBean kidsByIdInCache = DeviceManager.getKidsByIdInCache(allKidsByUserId, kidsId);
+
+            if(!ObjectUtils.isListEmpty(mEvent.mKids)){
+                List<WatchContact.Kid> kidList = DeviceManager.getKidsByIdInCache(allKidsByUserId, mEvent.mKids);
+                if(!ObjectUtils.isListEmpty(kidList)){
+                    for (WatchContact device : kidList)
+                        addContact(mViewAssignAvatarContainer, device, null);
+                }
+            }
+
+            /*KidsEntityBean kidsByIdInCache = DeviceManager.getKidsByIdInCache(allKidsByUserId, kidsId);
             if(kidsByIdInCache != null){
 
                 String name = kidsByIdInCache.getName();
                 if (mEvent.mKids.size() > 1)
                     name += "...";
                 mViewAssignName.setText(name);
+            }*/
+
+        }
+    }
+
+    private void addContact(LinearLayout layout, WatchContact contact,
+                            View.OnClickListener listener) {
+
+//        layout.removeAllViews();
+
+        ViewCircle photo = new ViewCircle(mainFrameActivity);
+        photo.setBitmap(contact.mPhoto);
+
+        //avatar
+        loadAvatar(contact, photo);
+
+        photo.setStrokeCount(12);
+        photo.setStrokeBeginEnd(12, -1);
+        photo.setStrokeType(ViewCircle.STROKE_TYPE_ARC);
+        photo.setStrokeColorActive(ContextCompat.getColor(mainFrameActivity, R.color.color_blue_light2));
+        photo.setStrokeColorNormal(ContextCompat.getColor(mainFrameActivity, R.color.color_blue_light2));
+        photo.setStrokeWidth(3.0f);
+
+        photo.setTag(R.id.profile_main_photo,contact);
+
+        int margin = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, getResources().getDisplayMetrics()));
+        int width = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 30, getResources().getDisplayMetrics()));
+        int height = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 30, getResources().getDisplayMetrics()));
+
+        LinearLayout.LayoutParams layoutParams =
+                new LinearLayout.LayoutParams(width,height);
+        layoutParams.setMargins(margin, 0, margin, 0);
+
+        layout.addView(photo, 0, layoutParams);
+        photo.setOnClickListener(listener);
+    }
+
+
+    private void loadAvatar(WatchContact contact, ViewCircle photo) {
+        if(contact instanceof WatchContact.Kid){
+            WatchContact.Kid kid = (WatchContact.Kid) contact;
+            if(!TextUtils.isEmpty(kid.mProfile)){
+                GlideHelper.getBitMap(getContext().getApplicationContext(),
+                        UserManager.getProfileRealUri(kid.mProfile),
+                        kid.mLastUpdate+"",new AvatarSimpleTarget(photo));
+            }
+        }else if(contact instanceof WatchContact.User){
+            WatchContact.User user = (WatchContact.User) contact;
+
+            if(!TextUtils.isEmpty(user.mProfile)){
+                GlideHelper.getBitMapOnlyCacheInMemoryWithWH(getContext().getApplicationContext(),
+                        UserManager.getProfileRealUri(user.mProfile),
+                        photo.getWidth(),photo.getHeight(),
+                        new AvatarSimpleTarget(photo));
             }
         }
     }
@@ -599,7 +680,6 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
         selectFragment(EventRepeatOptionFragment.class.getName(),null,true);
     }
 
-    //todo 2017年11月20日22:44:38 weizg 暂不可响应
     //assign to
     @OnClick(R.id.calendar_event_assign_line)
     protected void onClickAssignLine(){
@@ -740,8 +820,9 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
     //title bar right btn; 如果是新增event或拥有者非用户本人，则不显示；否则显示；
     private void ViewDelete(boolean enable) {
 
-        int visibility = enable ? View.VISIBLE : View.INVISIBLE;
-        view_right_action.setVisibility(visibility);
+        //del 2017年12月21日21:53:03 根据客户要求，此处的删除按钮任何情况都不显示
+        /*int visibility = enable ? View.VISIBLE : View.INVISIBLE;
+        view_right_action.setVisibility(visibility);*/
     }
 
     private View addTodoView(WatchTodo todo) {
@@ -813,6 +894,11 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
             return;
         }
 
+        if(ObjectUtils.isListEmpty(mEvent.mKids)){
+            Toast.makeText(getActivity(), R.string.select_watch, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         if (mEvent.mStartDate >= mEvent.mEndDate) {
             Toast.makeText(getActivity(), R.string.event_time_select_error,
                     Toast.LENGTH_SHORT).show();
@@ -847,7 +933,7 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
 
                     getFragmentManager().popBackStack();
 //                    showSyncDialog();
-                    showNewSyncReminderView();
+                    showSyncNotify();
                 }
 
                 finishLoadingDialog();
@@ -864,6 +950,24 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
         });
     }
 
+    private void showSyncNotify(){
+        /*if (!mainFrameActivity.mCalendarSignStack.isEmpty()) {
+            String calendarSignal = mainFrameActivity.mCalendarSignStack.pop();
+            if (signal_show_sync_layout_new.equals(calendarSignal)) {
+                showNewSyncReminderView();
+
+            }
+        }*/
+
+        if(signal_show_sync_layout_new.equals(after_add_note_type)){
+            showNewSyncReminderView();
+        }else {
+            showSyncDialog();
+        }
+
+
+    }
+
     private void updateEvent(EventApi eventApi) {
         EventInfo eventInfo4Update = BeanConvertor.getEventInfo4Update(mEvent);
 
@@ -876,8 +980,8 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
                     EventManager.updateEvent(getContext(), response.body());
 
                     getFragmentManager().popBackStack();
-//                    showSyncDialog();
-                    showNewSyncReminderView();
+                    showSyncDialog();
+//                    showSyncNotify();
                 }else if(response.code() == 401){
                     ToastCommon.makeText(getContext(),R.string.error_api_event_update_403);
                 }else {

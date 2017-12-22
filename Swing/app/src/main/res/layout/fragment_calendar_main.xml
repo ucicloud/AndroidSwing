@@ -135,7 +135,6 @@
             android:id="@+id/calendar_main_today"
             style="@style/button_main"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
             android:text="@string/calendar_main_today_schedule" />
 
         <Button
@@ -154,7 +153,6 @@
             android:id="@+id/dashboard_main_sync"
             style="@style/button_main"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
             android:layout_below="@+id/calendar_main_monthly"
             android:layout_centerVertical="true"
             android:layout_marginTop="10dp"

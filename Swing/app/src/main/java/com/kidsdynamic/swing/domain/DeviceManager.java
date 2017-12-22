@@ -3,6 +3,7 @@ package com.kidsdynamic.swing.domain;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -62,19 +63,37 @@ public class DeviceManager {
         DbUtil dbUtil = DbUtil.getInstance(context.getApplicationContext());
         KidsDataStore kidsDataStore = new KidsDataStore(dbUtil);
         if(focusKidsId > 0){
-            return kidsDataStore.getKidsInfo(focusKidsId);
-        }else {
-            long userId = LoginManager.getCurrentLoginUserId(context);
-            List<DB_Kids> kidsInfoByParentId = kidsDataStore.getKidsInfoByParentId(userId);
-            if(!ObjectUtils.isListEmpty(kidsInfoByParentId)){
+            //如果focusId 有缓存，但是数据库无数据，则删除缓存文件中保持；这种情况有可能是因为
+            //focusId为共享设备，但其他用户删除了共享
+            DB_Kids kidsInfo = kidsDataStore.getKidsInfo(focusKidsId);
 
-                //如果当前没有缓存focuskids，那边把查询到第一个设置为当前focus
-                updateFocusKids(kidsInfoByParentId.get(0).getKidsId());
+            if(kidsInfo == null){
+                //删除focus kids id
+                DeviceManager.updateFocusKids(-1);
 
-                return kidsInfoByParentId.get(0);
+                return getKidsIfNoFocusCache(context, kidsDataStore);
             }
+
+            return kidsInfo;
+        }else {
+            DB_Kids kidsInfoByParentId = getKidsIfNoFocusCache(context, kidsDataStore);
+            if (kidsInfoByParentId != null) return kidsInfoByParentId;
         }
 
+        return null;
+    }
+
+    @Nullable
+    private static DB_Kids getKidsIfNoFocusCache(Context context, KidsDataStore kidsDataStore) {
+        long userId = LoginManager.getCurrentLoginUserId(context);
+        List<DB_Kids> kidsInfoByParentId = kidsDataStore.getKidsInfoByParentId(userId);
+        if(!ObjectUtils.isListEmpty(kidsInfoByParentId)){
+
+            //如果当前没有缓存focuskids，那边把查询到第一个设置为当前focus
+            updateFocusKids(kidsInfoByParentId.get(0).getKidsId());
+
+            return kidsInfoByParentId.get(0);
+        }
         return null;
     }
 
@@ -303,6 +322,25 @@ public class DeviceManager {
         }
 
         return null;
+    }
+
+    public static List<WatchContact.Kid> getKidsByIdInCache(List<KidsEntityBean> kidsEntityBeans, List<Long> kidsIdList){
+        List<WatchContact.Kid> kidsForUI = new ArrayList<>(5);
+        if(!ObjectUtils.isListEmpty(kidsEntityBeans)){
+            for (KidsEntityBean kidsEntityBean :
+                    kidsEntityBeans) {
+             if(kidsIdList.contains(kidsEntityBean.getKidsId())){
+
+                 WatchContact.Kid kidsForUIRaw = BeanConvertor.getKidsForUI(kidsEntityBean);
+                 kidsForUIRaw.mBound = true;
+                 kidsForUIRaw.mLabel = kidsForUIRaw.mName;
+
+                 kidsForUI.add(kidsForUIRaw);
+             }
+            }
+        }
+
+        return kidsForUI;
     }
 
 

@@ -197,7 +197,7 @@ public class ProfileRemoveKidsConfirmFragment extends ProfileBaseFragment {
 
         GlideHelper.getBitMap(getContext(),
                 UserManager.getProfileRealUri(kidsInfo.getProfile()),
-                String.valueOf(kidsInfo.getLastUpdate()), userAvatarSimpleTarget);
+                String.valueOf(kidsInfo.getLastUpdate()), new AvatarSimpleTarget(mViewPhoto));
     }
 
 
@@ -216,7 +216,7 @@ public class ProfileRemoveKidsConfirmFragment extends ProfileBaseFragment {
     protected void onConfirmRemove(){
         //confirm to remove account
         showLoadingDialog(R.string.signup_login_wait);
-        //拒绝 共享请求
+        //remove 别人共享的watch
         HostApi hostApi = ApiGen.getInstance(getActivity().getApplicationContext()).
                 generateApi(HostApi.class, true);
 
@@ -230,7 +230,7 @@ public class ProfileRemoveKidsConfirmFragment extends ProfileBaseFragment {
             public void onResponse(Call<RequestAddSubHostEntity> call, Response<RequestAddSubHostEntity> response) {
                 int code = response.code();
                 if(code == 200){
-                    //切换kids成功后，隐藏btn，更新note
+                    //remove kids成功后，隐藏btn，更新note
                     afterRemoveKids();
                 }else if(code == 401){
                     ToastCommon.makeText(getContext(),R.string.error_subhost_remove_kid_403);
@@ -280,6 +280,10 @@ public class ProfileRemoveKidsConfirmFragment extends ProfileBaseFragment {
     }
 
     public void exit(){
+
+        //删除本地数据
+        DeviceManager.delKidsInDB(kidsId);
+
         //remove 成功后，需要通知上个界面关闭
         mActivityMain.mSignStack.push(ProfileManager.sign_remove_ok);
         getFragmentManager().popBackStack();

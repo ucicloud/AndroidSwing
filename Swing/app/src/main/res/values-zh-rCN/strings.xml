@@ -392,7 +392,7 @@
     <string name="dialog_sync_header">Sync Data</string>
     <string name="dialog_sync_skip_button">Skip</string>
     <string name="dialog_sync_sync_button">同步</string>
-    
+
     <!--new string 20171027-->
     <string name="profile_option_edit">修改基本资料</string>
     <string name="profile_option_change_password">更新密码</string>
@@ -472,6 +472,9 @@
     <string name="calendar_todo_del">删除</string>
 
     <string name="is_sharing_with">分享与</string>
+
+    <string name="have_no_device">尚未与其他装置连接</string>
+    <string name="select_watch">请选择你的手表</string>
 
     <!-- Not translated yet -->
     <string name="net_err">Net Error</string>

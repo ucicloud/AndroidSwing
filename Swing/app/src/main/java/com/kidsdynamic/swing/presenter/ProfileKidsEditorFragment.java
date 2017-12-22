@@ -195,7 +195,7 @@ public class ProfileKidsEditorFragment extends ProfileBaseFragment {
     private void loadAvatar() {
         if(!TextUtils.isEmpty(mUserAvatarFileName)){
             GlideHelper.getBitMap(getContext(), UserManager.getProfileRealUri(mUserAvatarFileName),
-                    String.valueOf(watchKidsInfo.mLastUpdate),userAvatarSimpleTarget);
+                    String.valueOf(watchKidsInfo.mLastUpdate),new AvatarSimpleTarget(mViewPhoto));
         }
     }
 
@@ -229,7 +229,7 @@ public class ProfileKidsEditorFragment extends ProfileBaseFragment {
         //加载现有头像
         if(!TextUtils.isEmpty(mUserAvatarFileName)){
             GlideHelper.getBitMap(getContext(), UserManager.getProfileRealUri(mUserAvatarFileName),
-                    String.valueOf(watchKidsInfo.mLastUpdate),userAvatarSimpleTarget);
+                    String.valueOf(watchKidsInfo.mLastUpdate),new AvatarSimpleTarget(mViewPhoto));
         }
     }
 
@@ -240,8 +240,12 @@ public class ProfileKidsEditorFragment extends ProfileBaseFragment {
         String first = mViewFirst.getText().toString().trim();
         String last = mViewLast.getText().toString().trim();
 
-        if (!first.equals(watchKidsInfo.mName) ||
-                !last.equals(watchKidsInfo.mName)) {
+        if(TextUtils.isEmpty(first)){
+            ToastCommon.makeText(getContext(),R.string.normal_err);
+            return;
+        }
+
+        if (!first.equals(watchKidsInfo.mName) ) {
             //如果内容有变化
 
             KidsInfoUpdateEntity kidsInfoUpdateEntity = new KidsInfoUpdateEntity();
@@ -319,7 +323,6 @@ public class ProfileKidsEditorFragment extends ProfileBaseFragment {
                 //头像上传成功后
                 if(code == 200){
 
-                    // TODO: 2017/11/30
                     uploadAvatarOK(response);
                 }else {
                     finishLoadingDialog();
@@ -349,7 +352,7 @@ public class ProfileKidsEditorFragment extends ProfileBaseFragment {
             watchContact.mPhoto = mUserAvatar;
             watchContact.mLabel = "editProfile";
 
-            // TODO: 2017/12/1
+            //  2017/12/1
             mActivityMain.mWatchContactStack.push(watchContact);
 
             DeviceManager.sendBroadcastUpdateAvatar();

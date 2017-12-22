@@ -87,7 +87,6 @@ public class CalendarAlarmListFragment extends CalendarBaseFragment {
         ButterKnife.bind(this,mViewMain);
         initTitleBar();
 
-        //todo
 //        WatchContact.Kid kid = mActivityMain.mOperator.getKid(kidId);
         KidsEntityBean kid = new DeviceManager().getKidsInfo(getContext(), kidId);
         if(kid != null && kid.getFirmwareVersion() != null && kid.getFirmwareVersion().contains("KDV01")) {
@@ -142,7 +141,7 @@ public class CalendarAlarmListFragment extends CalendarBaseFragment {
     public void onResume() {
         super.onResume();
 
-        // TODO: 2017/11/5
+        //2017/11/5
         // 若由Stack非空, 則可取出處於編輯狀態下的Event
         if (!mainFrameActivity.mEventStack.isEmpty())
             mEvent = mainFrameActivity.mEventStack.pop();

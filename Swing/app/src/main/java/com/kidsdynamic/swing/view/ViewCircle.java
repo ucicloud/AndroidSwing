@@ -18,6 +18,7 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import com.kidsdynamic.swing.R;
+import com.kidsdynamic.swing.utils.ViewUtils;
 
 /**
  * ViewCircle
@@ -378,8 +379,14 @@ public class ViewCircle extends View {
             mBitmap.recycle();
         mBitmap = null;
 
-        if (bitmap == null)
+        //add 2017年12月20日17:13:15 only
+        //减小bitmap大小，防止oom
+        bitmap = ViewUtils.getSmallBitmap(bitmap);
+
+        if (bitmap == null) {
             return;
+        }
+
 
         int width = bitmap.getWidth();
         int height = bitmap.getHeight();
@@ -391,7 +398,10 @@ public class ViewCircle extends View {
         Rect rectDst = new Rect(0, 0, size, size);
         Rect rectSrc = new Rect((width - size) / 2, (height - size) / 2, (width + size) / 2, (height + size) / 2);
 
-        mBitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
+        //modify 2017年12月20日18:16:55 only
+        //更换格式，减少bitmap内存占用
+        mBitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_4444);
+//        mBitmap = Bitmap.createBitmap(size, size, Bitmap.Config.RGB_565);
 
         Canvas canvas = new Canvas(mBitmap);
         canvas.drawColor(Color.WHITE, PorterDuff.Mode.CLEAR);

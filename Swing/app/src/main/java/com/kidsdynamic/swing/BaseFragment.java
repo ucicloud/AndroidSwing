@@ -2,9 +2,14 @@ package com.kidsdynamic.swing;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.inputmethod.InputMethodManager;
+
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
+import com.kidsdynamic.swing.view.ViewCircle;
 
 /**
  * fragment 基类
@@ -58,6 +63,22 @@ public class BaseFragment extends Fragment {
                     (InputMethodManager) getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
             if(null==inputMethodManager) return;
             inputMethodManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+        }
+    }
+
+    public class AvatarSimpleTarget extends SimpleTarget<Bitmap> {
+
+        ViewCircle viewCircle;
+
+        public AvatarSimpleTarget(ViewCircle viewCircle){
+            this.viewCircle = viewCircle;
+        }
+
+        @Override
+        public void onResourceReady(Bitmap bitmap, Transition<? super Bitmap> transition) {
+            if(viewCircle != null && getActivity() != null && !getActivity().isDestroyed()){
+                viewCircle.setBitmap(bitmap);
+            }
         }
     }
 }

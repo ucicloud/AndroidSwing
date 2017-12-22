@@ -1,6 +1,5 @@
 package com.kidsdynamic.swing.presenter;
 
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -9,8 +8,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.bumptech.glide.request.target.SimpleTarget;
-import com.bumptech.glide.request.transition.Transition;
 import com.kidsdynamic.data.dao.DB_User;
 import com.kidsdynamic.swing.R;
 import com.kidsdynamic.swing.domain.LoginManager;
@@ -77,12 +74,12 @@ public class LogoutConfirmFragment extends ProfileBaseFragment {
             tv_accountName.setText(LoginManager.getUserName(currentLoginUserInfo));
 
             GlideHelper.getBitMap(getContext(), UserManager.getProfileRealUri(currentLoginUserInfo.getProfile()),
-                    String.valueOf(currentLoginUserInfo.getLastUpdate()), userAvatarSimpleTarget);
+                    String.valueOf(currentLoginUserInfo.getLastUpdate()), new AvatarSimpleTarget(mViewPhoto));
         }
 
     }
 
-    private SimpleTarget<Bitmap> userAvatarSimpleTarget = new SimpleTarget<Bitmap>(){
+    /*private SimpleTarget<Bitmap> userAvatarSimpleTarget = new SimpleTarget<Bitmap>(){
 
         @Override
         public void onResourceReady(Bitmap bitmap, Transition<? super Bitmap> transition) {
@@ -91,7 +88,7 @@ public class LogoutConfirmFragment extends ProfileBaseFragment {
                 mViewPhoto.setBitmap(bitmap);
             }
         }
-    };
+    };*/
 
     @OnClick(R.id.btn_confirm_logout)
     protected void logout(){

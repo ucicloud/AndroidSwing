@@ -4,7 +4,10 @@ import android.content.Context;
 import android.graphics.Typeface;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.widget.TextView;
+
+import com.kidsdynamic.swing.utils.SwingFontsCache;
 
 /**
  * AvenirTextView：
@@ -45,10 +48,14 @@ public class AvenirTextView extends TextView {
 
         int textStyle = attrs.getAttributeIntValue(ANDROID_SCHEMA, "textStyle", Typeface.NORMAL);
 
+        //为了减少内存使用，使用缓存的typeface
         if(textStyle == Typeface.BOLD){
-            setTypeface(Typeface.createFromAsset(getContext().getAssets(),"font_bold"));
+//            setTypeface(Typeface.createFromAsset(getContext().getAssets(),"font_bold"));
+            setTypeface(SwingFontsCache.getBoldType(getContext()));
         }else {
-            setTypeface(Typeface.createFromAsset(getContext().getAssets(),"font_normal"));
+
+//            setTypeface(Typeface.createFromAsset(getContext().getAssets(),"font_normal"));
+            setTypeface(SwingFontsCache.getNormalType(getContext()));
         }
 
     }

@@ -117,7 +117,7 @@ public class BeanConvertor {
 
             db_kids.setKidsId(kidsEntity.getId());
             db_kids.setName(kidsEntity.getName());
-            // TODO: 2017/11/28 数据库修改
+
             db_kids.setLastUpdate(System.currentTimeMillis());
             db_kids.setDateCreated(getUTCTimeStamp(kidsEntity.getDateCreated()));
             db_kids.setMacId(kidsEntity.getMacId());
