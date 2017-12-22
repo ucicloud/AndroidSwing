@@ -22,6 +22,7 @@ import com.kidsdynamic.swing.domain.DeviceManager;
 import com.kidsdynamic.swing.model.KidsEntityBean;
 import com.kidsdynamic.swing.model.WatchEvent;
 import com.kidsdynamic.swing.utils.ConfigUtil;
+import com.kidsdynamic.swing.utils.SwingFontsCache;
 import com.kidsdynamic.swing.view.AvenirTextView;
 
 import butterknife.ButterKnife;
@@ -181,6 +182,7 @@ public class CalendarAlarmListFragment extends CalendarBaseFragment {
         viewLabel.setGravity(Gravity.CENTER);
         viewLabel.setText(title);
         viewLabel.setLayoutParams(layoutParams);
+        viewLabel.setTypeface(SwingFontsCache.getBoldType(getContext()));
 
         layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.MATCH_PARENT);
         layoutParams.addRule(RelativeLayout.ALIGN_PARENT_END);

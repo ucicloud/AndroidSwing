@@ -82,4 +82,5 @@
 
     <dimen name="profile_item_height">48dp</dimen>
     <dimen name="profile_kids_horizontal_layout_height">65dp</dimen>
+    <dimen name="profile_edit_padding_StartEnd">40dp</dimen>
 </resources>

@@ -405,6 +405,8 @@
     <string name="profile_take_photo">重新拍照</string>
     <string name="profile_choose_from_library">从手机图片资料库中选择</string>
     <string name="profile_cut_pic_note">調整您照片位置</string>
+    <string name="profile_manage_access_swing">管理分享权限</string>
+
 
     <string name="dashboard_emotion_today_summary">本日总结</string>
     <string name="dashboard_emotion_indoor_steps">室內\n步数</string>
@@ -475,6 +477,7 @@
 
     <string name="have_no_device">尚未与其他装置连接</string>
     <string name="select_watch">请选择你的手表</string>
+    <string name="psw_need_longer_6">密码长度必须大于6个字符</string>
 
     <!-- Not translated yet -->
     <string name="net_err">Net Error</string>

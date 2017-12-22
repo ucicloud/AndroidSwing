@@ -27,6 +27,7 @@
     <EditText
         android:id="@+id/todo_text"
         style="@style/edittext_calendar"
+        android:textColor="@color/color_gray_main"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_centerVertical="true"

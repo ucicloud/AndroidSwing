@@ -405,6 +405,7 @@
     <string name="profile_take_photo">Tomar una nueva foto</string>
     <string name="profile_choose_from_library">Seleccionar foto</string>
     <string name="profile_cut_pic_note">Usar su dedo para ajustar la posición de la foto</string>
+    <string name="profile_manage_access_swing">Reloj compartido con otros</string>
 
     <string name="dashboard_emotion_today_summary">Resumen de hoy</string>
     <string name="dashboard_emotion_indoor_steps">Pasos\ninteriores</string>
@@ -475,6 +476,7 @@
 
     <string name="have_no_device">No has enlazado el reloj todavía.</string>
     <string name="select_watch">Por favor selecciona tu reloj</string>
+    <string name="psw_need_longer_6">The password length has to be longer than 6 characters</string>
 
     <!-- Not translated yet -->
     <string name="net_err">Net Error</string>

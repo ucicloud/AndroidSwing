@@ -32,6 +32,7 @@ import com.kidsdynamic.swing.view.calendar.ViewCalendarCellWeek;
 import com.kidsdynamic.swing.view.calendar.ViewCalendarSelector;
 import com.kidsdynamic.swing.view.calendar.ViewCalendarWeek;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -60,6 +61,10 @@ public class CalendarMainFragment extends CalendarBaseFragment {
 
     @BindView(R.id.calendar_main_alert_time)
     protected TextView mViewAlertTime;
+
+    @BindView(R.id.calendar_main_alert_time_a)
+    protected TextView mViewAlertTime_a;//时间的am，pm
+
 
     @BindView(R.id.calendar_main_alert_event)
     protected TextView mViewAlertEvent;
@@ -368,6 +373,7 @@ public class CalendarMainFragment extends CalendarBaseFragment {
 
     private void setAlertMessage(WatchEvent event) {
         String timeString;
+        String timeAmPM = "";
         String messageString;
 
         if (event == null) {
@@ -377,10 +383,22 @@ public class CalendarMainFragment extends CalendarBaseFragment {
         } else {
             Calendar cale = Calendar.getInstance();
             cale.setTimeInMillis(event.mStartDate);
-            timeString = String.format(Locale.getDefault(), "%02d:%02d", cale.get(Calendar.HOUR_OF_DAY), cale.get(Calendar.MINUTE));
+//            timeString = String.format(Locale.getDefault(), "%02d:%02d", cale.get(Calendar.HOUR_OF_DAY), cale.get(Calendar.MINUTE));
+
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm a", Locale.US);
+            SimpleDateFormat simpleDateFormat2 = new SimpleDateFormat("hh:mm", Locale.US);
+            String timeTmp = simpleDateFormat.format(event.mStartDate);
+            timeString = simpleDateFormat2.format(event.mStartDate);
             messageString = event.mName;
+
+            if(timeTmp.toLowerCase().contains("am")){
+                timeAmPM = "am";
+            }else {
+                timeAmPM = "pm";
+            }
         }
 
+        mViewAlertTime_a.setText(timeAmPM);
         mViewAlertTime.setText(timeString);
         mViewAlertEvent.setText(messageString);
     }

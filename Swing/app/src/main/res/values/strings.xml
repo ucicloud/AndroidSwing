@@ -406,6 +406,7 @@
     <string name="profile_take_photo">Take a new picture</string>
     <string name="profile_choose_from_library">Choose from Library</string>
     <string name="profile_cut_pic_note">Use your finger to adjust picture position</string>
+    <string name="profile_manage_access_swing">Manage access permission of Swing</string>
 
     <string name="dashboard_emotion_today_summary">Today\'s Summary</string>
     <string name="dashboard_emotion_indoor_steps">Indoor\nsteps</string>
@@ -476,6 +477,7 @@
 
     <string name="have_no_device">You have not bind device yet.</string>
     <string name="select_watch">Please select your swing watch.</string>
+    <string name="psw_need_longer_6">The password length has to be longer than 6 characters</string>
 
     <!-- Not translated yet -->
     <string name="net_err">Net Error</string>

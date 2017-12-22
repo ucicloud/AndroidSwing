@@ -20,8 +20,8 @@
             android:layout_height="wrap_content"
             android:paddingTop="@dimen/base_65"
             android:paddingBottom="@dimen/base_20"
-            android:paddingStart="@dimen/base_20"
-            android:paddingEnd="@dimen/base_20">
+            android:paddingStart="@dimen/profile_edit_padding_StartEnd"
+            android:paddingEnd="@dimen/profile_edit_padding_StartEnd">
 
             <EditText
                 android:id="@+id/profile_new_psw"
@@ -32,7 +32,7 @@
                 style="@style/edittext_profile"
                 android:layout_gravity="center_vertical"
                 android:hint="@string/profile_password_new"
-                android:inputType="text" />
+                android:inputType="textPassword" />
 
             <EditText
                 android:id="@+id/profile_new_psw_2"
@@ -44,7 +44,7 @@
                 android:layout_gravity="center_vertical"
                 android:paddingLeft="5dp"
                 android:hint="@string/profile_password_again"
-                android:inputType="text"/>
+                android:inputType="textPassword"/>
 
             <Button
                 android:id="@+id/btn_update_psw"

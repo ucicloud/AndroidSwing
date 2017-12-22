@@ -405,6 +405,7 @@
     <string name="profile_take_photo">Сделайте новый снимок</string>
     <string name="profile_choose_from_library">Выбрать фотографию</string>
     <string name="profile_cut_pic_note">Используйте палец, чтобы отрегулировать положение изображения</string>
+    <string name="profile_manage_access_swing">Часы используются совместно с другими пользователями</string>
 
     <string name="dashboard_emotion_today_summary">Итоги дня</string>
     <string name="dashboard_emotion_indoor_steps">Внутренние\nступени</string>
@@ -475,6 +476,7 @@
 
     <string name="have_no_device">Вы еще не связали устройство.</string>
     <string name="select_watch">Пожалуйста, выбери часы</string>
+    <string name="psw_need_longer_6">The password length has to be longer than 6 characters</string>
 
     <!-- Not translated yet -->
     <string name="net_err">Net Error</string>

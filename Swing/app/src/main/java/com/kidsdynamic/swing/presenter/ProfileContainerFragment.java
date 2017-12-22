@@ -140,7 +140,7 @@ public class ProfileContainerFragment extends BaseFragment {
     public void setFragment(Fragment fragment, boolean isAddBackStack) {
         FragmentTransaction fragmentTransaction = getFragmentManager()
                 .beginTransaction()
-                .replace(R.id.calender_fragment_container, fragment);
+                .replace(R.id.profile_fragment_container, fragment);
         if (isAddBackStack) {
             fragmentTransaction.addToBackStack(null);
         }

@@ -66,6 +66,7 @@
                 <com.kidsdynamic.swing.view.AvenirTextView
                     android:id="@+id/calendar_event_alarm_name_2"
                     style="@style/textview_calendar_hint"
+                    android:textStyle="bold"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/base_35"
                     android:layout_marginEnd="@dimen/base_10"
@@ -102,6 +103,7 @@
                     <com.kidsdynamic.swing.view.AvenirTextView
                         android:id="@+id/tv_label_start"
                         style="@style/textview_calendar_event"
+                        android:textStyle="bold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
@@ -113,6 +115,7 @@
                     <com.kidsdynamic.swing.view.AvenirTextView
                         android:id="@+id/calendar_event_start"
                         style="@style/textview_calendar_hint"
+                        android:textStyle="bold"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/base_35"
                         android:layout_marginStart="@dimen/base_5"
@@ -149,6 +152,7 @@
 
                     <com.kidsdynamic.swing.view.AvenirTextView
                         android:id="@+id/tv_label_end"
+                        android:textStyle="bold"
                         style="@style/textview_calendar_event"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -161,6 +165,7 @@
                     <com.kidsdynamic.swing.view.AvenirTextView
                         android:id="@+id/calendar_event_end"
                         style="@style/textview_calendar_hint"
+                        android:textStyle="bold"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/base_35"
                         android:layout_marginStart="@dimen/base_5"
@@ -202,6 +207,7 @@
                     <com.kidsdynamic.swing.view.AvenirTextView
                         android:id="@+id/calendar_event_color_title"
                         style="@style/textview_calendar_event"
+                        android:textStyle="bold"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="9"
@@ -266,6 +272,7 @@
 
                     <com.kidsdynamic.swing.view.AvenirTextView
                         style="@style/textview_calendar_event"
+                        android:textStyle="bold"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="3"
@@ -274,7 +281,7 @@
                         android:paddingTop="10dp"
                         android:text="@string/calendar_event_repeat" />
 
-                    <com.kidsdynamic.swing.view.AvenirTextView
+                    <TextView
                         android:id="@+id/calendar_event_repeat"
                         style="@style/textview_calendar_hint"
                         android:layout_width="0dp"
@@ -336,6 +343,7 @@
 
                     <com.kidsdynamic.swing.view.AvenirTextView
                         style="@style/textview_calendar_event"
+                        android:textStyle="bold"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="3"
@@ -467,6 +475,7 @@
 
                     <com.kidsdynamic.swing.view.AvenirTextView
                         style="@style/textview_calendar_event"
+                        android:textStyle="bold"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="9"

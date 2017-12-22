@@ -44,6 +44,7 @@ import com.kidsdynamic.swing.net.BaseRetrofitCallback;
 import com.kidsdynamic.swing.utils.ConfigUtil;
 import com.kidsdynamic.swing.utils.GlideHelper;
 import com.kidsdynamic.swing.utils.SwingFontsCache;
+import com.kidsdynamic.swing.utils.ViewUtils;
 import com.kidsdynamic.swing.view.ViewCircle;
 import com.kidsdynamic.swing.view.ViewShape;
 import com.kidsdynamic.swing.view.ViewTodo;
@@ -343,8 +344,9 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
             if(!ObjectUtils.isListEmpty(mEvent.mKids)){
                 List<WatchContact.Kid> kidList = DeviceManager.getKidsByIdInCache(allKidsByUserId, mEvent.mKids);
                 if(!ObjectUtils.isListEmpty(kidList)){
-                    for (WatchContact device : kidList)
+                    for (WatchContact device : kidList) {
                         addContact(mViewAssignAvatarContainer, device, null);
+                    }
                 }
             }
 
@@ -476,6 +478,8 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
         for (int color : WatchEvent.ColorList){
             addColor(color);
         }
+
+        ViewUtils.setTextViewBoldTypeFace(getContext(),mViewRepeat,mViewDescription);
     }
 
     private TextWatcher mDescriptionWatcher = new TextWatcher() {

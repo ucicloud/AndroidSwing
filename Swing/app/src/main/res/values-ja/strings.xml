@@ -405,6 +405,7 @@
     <string name="profile_take_photo">新しい写真を撮る</string>
     <string name="profile_choose_from_library">ライブラリーから選択する</string>
     <string name="profile_cut_pic_note">指で写真の位置を調整してください</string>
+    <string name="profile_manage_access_swing">他者と共有する時計</string>
 
     <string name="dashboard_emotion_today_summary">本日の概要</string>
     <string name="dashboard_emotion_indoor_steps">屋内\nステップ</string>
@@ -475,6 +476,7 @@
 
     <string name="have_no_device">デバイスに接続していません.</string>
     <string name="select_watch">貴方の時計をスイングウッォチを選択してください</string>
+    <string name="psw_need_longer_6">パスワードの長さは6文字より長くなければなりません</string>
 
     <!-- Not translated yet -->
     <string name="net_err">Net Error</string>

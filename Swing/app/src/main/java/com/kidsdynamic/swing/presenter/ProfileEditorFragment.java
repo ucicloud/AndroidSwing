@@ -114,6 +114,9 @@ public class ProfileEditorFragment extends ProfileBaseFragment {
 //        mViewPhoto.setOnClickListener(mPhotoListener);
 
         btn_save.setTypeface(SwingFontsCache.getBoldType(getContext()));
+        com.kidsdynamic.swing.utils.ViewUtils.setTextViewBoldTypeFace(getContext(),
+                mViewFirst,mViewLast,mViewPhone,mViewMail,mViewZip);
+
         initTitleBar();
 
         mViewMain.findViewById(R.id.layout_all).setOnClickListener(new View.OnClickListener() {

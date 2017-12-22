@@ -98,9 +98,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_gravity="center_horizontal|bottom"
-                android:layout_weight="1"
+                android:layout_weight="4"
                 android:gravity="center_horizontal|bottom"
                 android:textSize="28sp" />
+
+            <com.kidsdynamic.swing.view.AvenirTextView
+                android:id="@+id/calendar_main_alert_time_a"
+                style="@style/textview_main"
+                android:textSize="15sp"
+                android:text="pm"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_gravity="center_horizontal|bottom"
+                android:layout_weight="1"
+                android:gravity="center|top"/>
 
             <com.kidsdynamic.swing.view.AvenirTextView
                 android:id="@+id/calendar_main_alert_event"
@@ -108,7 +119,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_gravity="center_horizontal|top"
-                android:layout_weight="1"
+                android:layout_weight="4"
                 android:textStyle="bold"
                 android:gravity="center_horizontal|top" />
 

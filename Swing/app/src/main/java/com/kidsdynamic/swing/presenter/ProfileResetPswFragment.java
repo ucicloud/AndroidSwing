@@ -2,59 +2,32 @@ package com.kidsdynamic.swing.presenter;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.ProgressDialog;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Point;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.bumptech.glide.request.target.SimpleTarget;
-import com.bumptech.glide.request.transition.Transition;
 import com.kidsdynamic.commonlib.utils.SoftKeyBoardUtil;
-import com.kidsdynamic.data.dao.DB_User;
 import com.kidsdynamic.data.net.ApiGen;
-import com.kidsdynamic.data.net.avatar.AvatarApi;
-import com.kidsdynamic.data.net.avatar.PartUtils;
 import com.kidsdynamic.data.net.user.UserApiNeedToken;
-import com.kidsdynamic.data.net.user.UserApiNoNeedToken;
 import com.kidsdynamic.data.net.user.model.UpdatePasswordRequest;
-import com.kidsdynamic.data.net.user.model.UpdateProfileEntity;
-import com.kidsdynamic.data.net.user.model.UpdateProfileSuccess;
-import com.kidsdynamic.data.net.user.model.UserInfo;
-import com.kidsdynamic.data.utils.LogUtil2;
 import com.kidsdynamic.swing.R;
-import com.kidsdynamic.swing.domain.LoginManager;
-import com.kidsdynamic.swing.domain.UserManager;
-import com.kidsdynamic.swing.model.WatchContact;
 import com.kidsdynamic.swing.net.BaseRetrofitCallback;
-import com.kidsdynamic.swing.utils.GlideHelper;
 import com.kidsdynamic.swing.utils.SwingFontsCache;
-import com.kidsdynamic.swing.view.BottomPopWindow;
-import com.kidsdynamic.swing.view.CropImageView;
-import com.kidsdynamic.swing.view.CropPopWindow;
-import com.kidsdynamic.swing.view.ViewCircle;
 import com.yy.base.utils.ToastCommon;
-import com.yy.base.utils.ViewUtils;
 
-import java.io.File;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import okhttp3.MultipartBody;
 import retrofit2.Call;
 import retrofit2.Response;
 
@@ -72,7 +45,7 @@ public class ProfileResetPswFragment extends ProfileBaseFragment {
     @BindView(R.id.profile_new_psw_2)
     protected EditText mViewNewPsw_2;
 
-    @BindView(R.id.btn_update_profile)
+    @BindView(R.id.btn_update_psw)
     protected Button btn_save;
 
 
@@ -188,15 +161,26 @@ public class ProfileResetPswFragment extends ProfileBaseFragment {
 
         UpdatePasswordRequest updatePasswordRequest = new UpdatePasswordRequest();
         updatePasswordRequest.setNewPassword(newPsw);
-        userApi.updatePassword(updatePasswordRequest).enqueue(new BaseRetrofitCallback<Object>() {
+        userApi.updatePassword(updatePasswordRequest).enqueue(new BaseRetrofitCallback<Map<String,String>>() {
             @Override
-            public void onResponse(Call<Object> call, Response<Object> response) {
+            public void onResponse(Call<Map<String,String>> call, Response<Map<String,String>> response) {
                 //code == 200 update ok
                 int code = response.code();
                 Log.d("profile","update code:" + code);
                 if(code == 200){
                     ToastCommon.makeText(getContext(), R.string.profile_editor_save_success);
                     getFragmentManager().popBackStack();
+                }else if(code == 400 ){
+
+                    try {
+                        Log.d("profile","update msg:" + response.errorBody().string());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    /*String message = response.body().getMessage();
+                    Log.d("profile","update msg:" + message);*/
+                    ToastCommon.makeText(getContext(), R.string.psw_need_longer_6);
                 }else {
                     ToastCommon.makeText(getContext(), R.string.profile_editor_avatar_failed);
                 }
@@ -206,7 +190,7 @@ public class ProfileResetPswFragment extends ProfileBaseFragment {
             }
 
             @Override
-            public void onFailure(Call<Object> call, Throwable t) {
+            public void onFailure(Call<Map<String,String>> call, Throwable t) {
                 ToastCommon.makeText(getContext(), R.string.profile_editor_avatar_failed);
                 super.onFailure(call, t);
             }

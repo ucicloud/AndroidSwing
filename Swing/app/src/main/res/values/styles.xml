@@ -136,12 +136,13 @@
     <style name="textview_calendar_event">
         <item name="android:textColor">@color/color_gray_main</item>
         <item name="android:textSize">14sp</item>
-        <item name="android:textStyle">normal</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="textview_calendar_hint" parent="textview_calendar_event">
+    <style name="textview_calendar_hint">
         <item name="android:textColor">@color/color_gray_main</item>
         <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
     <style name="edittext_calendar">
@@ -229,7 +230,7 @@
 
     <style name="textview_profile_group">
         <item name="android:textColor">@color/profile_label_color</item>
-        <item name="android:textSize">14sp</item>
+        <item name="android:textSize">13sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:paddingStart">@dimen/base_10</item>
         <item name="android:paddingEnd">@dimen/base_10</item>

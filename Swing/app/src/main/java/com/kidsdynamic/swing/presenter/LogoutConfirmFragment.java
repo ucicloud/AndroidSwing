@@ -79,6 +79,11 @@ public class LogoutConfirmFragment extends ProfileBaseFragment {
 
     }
 
+    @OnClick(R.id.main_toolbar_action1)
+    public void onTopLeftBtnClick() {
+        getFragmentManager().popBackStack();
+    }
+
     /*private SimpleTarget<Bitmap> userAvatarSimpleTarget = new SimpleTarget<Bitmap>(){
 
         @Override

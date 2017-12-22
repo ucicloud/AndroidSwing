@@ -180,6 +180,10 @@ public class ViewCircle extends View {
             paintBitmap(canvas, mRectBitmap);
         }
 
+        if(mFillDarker){
+            paintCircle(canvas, mRectBorder);
+        }
+
         if (mCrossWidth > 0) {
             paintCross(canvas, mRectBitmap);
         }

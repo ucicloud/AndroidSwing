@@ -6,6 +6,7 @@
     <color name="colorAccent">#FC7125</color>
 
     <color name="color_white">#FFFFFF</color>
+    <color name="color_white_">#CCFFFFFF</color>
     <color name="color_white_snow">#FFFAFA</color>
 
     <color name="color_black">#000000</color>
@@ -14,6 +15,7 @@
     <color name="color_gray_light">#CCCCCC</color>
     <color name="color_gray_deep">#404040</color>
     <color name="color_gray_main">#9A989A</color>
+    <color name="color_gray_main_2">#999899</color>
 
     <color name="color_red">#FF4040</color>
     <color name="color_red_light">#FF6060</color>

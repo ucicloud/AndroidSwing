@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.kidsdynamic.swing.R;
 import com.kidsdynamic.swing.model.WatchTodo;
+import com.kidsdynamic.swing.utils.ViewUtils;
 
 /**
  * ViewTodo
@@ -55,6 +56,9 @@ public class ViewTodo extends RelativeLayout {
         mViewText = (EditText) findViewById(R.id.todo_text);
         mViewText.addTextChangedListener(mTextWatch);
         mViewText.setOnFocusChangeListener(mFocusListener);
+
+        ViewUtils.setTextViewBoldTypeFace(context,mViewText);
+
 
         mViewDelete = (TextView) findViewById(R.id.todo_delete);
 
