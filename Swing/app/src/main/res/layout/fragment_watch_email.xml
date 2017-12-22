@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
+        android:background="@null" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/base_25"
+        android:layout_weight="6"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/et_email"
+            style="@style/edit_text_main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/base_56"
+            android:layout_marginRight="@dimen/base_56"
+            android:hint="@string/signup_login_email"
+            android:imeOptions="actionDone"
+            android:inputType="textEmailAddress" />
+
+        <Button
+            android:id="@+id/btn_search"
+            style="@style/button_main"
+            android:layout_width="match_parent"
+            android:layout_marginLeft="@dimen/base_56"
+            android:layout_marginRight="@dimen/base_56"
+            android:layout_marginTop="@dimen/base_35"
+            android:text="@string/watch_owner_search" />
+
+        <include
+            android:id="@+id/layout_user_info"
+            layout="@layout/fragment_watch_email_linear_item"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/base_15"
+            android:layout_marginRight="@dimen/base_15"
+            android:layout_marginTop="@dimen/base_35"
+            android:visibility="gone" />
+    </LinearLayout>
+
+</LinearLayout>

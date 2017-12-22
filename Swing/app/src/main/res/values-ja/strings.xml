@@ -471,6 +471,8 @@
     <string name="calendar_day_word">日</string>
     <string name="calendar_todo_del">削除</string>
 
+    <string name="is_sharing_with">と共有しています</string>
+
     <!-- Not translated yet -->
     <string name="net_err">Net Error</string>
 </resources>

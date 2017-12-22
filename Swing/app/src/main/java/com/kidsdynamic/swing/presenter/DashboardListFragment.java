@@ -117,11 +117,11 @@ public class DashboardListFragment extends DashboardBaseFragment {
             cld.set(Calendar.HOUR_OF_DAY, 23);
             cld.set(Calendar.MINUTE, 59);
             cld.set(Calendar.SECOND, 59);
-            long end = cld.getTimeInMillis() + timezoneOffset;
+            long end = cld.getTimeInMillis() /*+ timezoneOffset*/;
 
             cld.add(Calendar.DAY_OF_MONTH, -1);
             cld.add(Calendar.SECOND, 1);
-            long start = cld.getTimeInMillis() + timezoneOffset;
+            long start = cld.getTimeInMillis() /*+ timezoneOffset*/;
 
             new KidActivityManager().retrieveHourlyDataByTime(getContext(), kidId, start, end,
                     new IRetrieveCompleteListener(start, end, timezoneOffset));
@@ -153,13 +153,13 @@ public class DashboardListFragment extends DashboardBaseFragment {
             cld.set(Calendar.HOUR_OF_DAY, 23);
             cld.set(Calendar.MINUTE, 59);
             cld.set(Calendar.SECOND, 59);
-            long end = cld.getTimeInMillis() + timezoneOffset;
+            long end = cld.getTimeInMillis()/* + timezoneOffset*/;
 
             cld.add(Calendar.DAY_OF_MONTH, -29);
             cld.set(Calendar.HOUR_OF_DAY, 0);
             cld.set(Calendar.MINUTE, 0);
             cld.set(Calendar.SECOND, 0);
-            long start = cld.getTimeInMillis() + timezoneOffset;
+            long start = cld.getTimeInMillis() /*+ timezoneOffset*/;
 
             new KidActivityManager().retrieveDataByTime(getContext(), kidId, start, end,
                     new IRetrieveCompleteListener(start, end, timezoneOffset));
@@ -172,13 +172,13 @@ public class DashboardListFragment extends DashboardBaseFragment {
             cld.set(Calendar.HOUR_OF_DAY, 23);
             cld.set(Calendar.MINUTE, 59);
             cld.set(Calendar.SECOND, 59);
-            long end = cld.getTimeInMillis() + timezoneOffset;
+            long end = cld.getTimeInMillis() /*+ timezoneOffset*/;
 
             cld.add(Calendar.MONTH, -11);
             cld.set(Calendar.HOUR_OF_DAY, 0);
             cld.set(Calendar.MINUTE, 0);
             cld.set(Calendar.SECOND, 0);
-            long start = cld.getTimeInMillis() + timezoneOffset;
+            long start = cld.getTimeInMillis() /*+ timezoneOffset*/;
 
             new KidActivityManager().retrieveDataByTime(getContext(), kidId, start, end,
                     new IRetrieveCompleteListener(start, end, timezoneOffset));
@@ -298,19 +298,20 @@ public class DashboardListFragment extends DashboardBaseFragment {
         @Override
         protected List<WatchActivity> doInBackground(Object... params) {
             RetrieveDataRep rep = (RetrieveDataRep) params[0];
+            List<WatchActivity> watchActivities = new ArrayList<>();
             List<RetrieveDataRep.ActivitiesEntity> activitiesEntities = rep.getActivities();
-            if (null == activitiesEntities || activitiesEntities.isEmpty()) {
-                return null;
-            }
+
             long start = (Long) params[1];
             long end = (Long) params[2];
             long timezoneOffset = (Long) params[3];
-            List<WatchActivity> watchActivities = new ArrayList<>();
             long millisInHour = 1000 * 60 * 60;
             long timestamp = start;
             while (timestamp < end) {
                 watchActivities.add(new WatchActivity((Long) params[4], timestamp));
                 timestamp += millisInHour;
+            }
+            if (null == activitiesEntities || activitiesEntities.isEmpty()) {
+                return watchActivities;
             }
             for (WatchActivity act : watchActivities) {
                 for (RetrieveDataRep.ActivitiesEntity entity : activitiesEntities) {
@@ -373,11 +374,8 @@ public class DashboardListFragment extends DashboardBaseFragment {
         @Override
         protected List<WatchActivity> doInBackground(Object... params) {
             RetrieveDataRep rep = (RetrieveDataRep) params[0];
-            List<RetrieveDataRep.ActivitiesEntity> activitiesEntities = rep.getActivities();
-            if (null == activitiesEntities || activitiesEntities.isEmpty()) {
-                return null;
-            }
             List<WatchActivity> watchActivities = new ArrayList<>();
+            List<RetrieveDataRep.ActivitiesEntity> activitiesEntities = rep.getActivities();
             long start = (Long) params[1];
             long end = (Long) params[2];
             long timezoneOffset = (Long) params[3];
@@ -386,6 +384,9 @@ public class DashboardListFragment extends DashboardBaseFragment {
             while (timestamp < end) {
                 watchActivities.add(new WatchActivity((Long) params[4], timestamp));
                 timestamp += millisInDay;
+            }
+            if (null == activitiesEntities || activitiesEntities.isEmpty()) {
+                return watchActivities;
             }
             for (WatchActivity act : watchActivities) {
                 for (RetrieveDataRep.ActivitiesEntity entity : activitiesEntities) {
@@ -443,11 +444,8 @@ public class DashboardListFragment extends DashboardBaseFragment {
         @Override
         protected List<WatchActivity> doInBackground(Object... params) {
             RetrieveDataRep rep = (RetrieveDataRep) params[0];
-            List<RetrieveDataRep.ActivitiesEntity> activitiesEntities = rep.getActivities();
-            if (null == activitiesEntities || activitiesEntities.isEmpty()) {
-                return null;
-            }
             List<WatchActivity> watchActivities = new ArrayList<>();
+            List<RetrieveDataRep.ActivitiesEntity> activitiesEntities = rep.getActivities();
             long start = (Long) params[1];
             long end = (Long) params[2];
             long timezoneOffset = (Long) params[3];
@@ -456,6 +454,9 @@ public class DashboardListFragment extends DashboardBaseFragment {
             while (timestamp < end) {
                 watchActivities.add(new WatchActivity((Long) params[4], timestamp));
                 timestamp += millisInDay;
+            }
+            if (null == activitiesEntities || activitiesEntities.isEmpty()) {
+                return watchActivities;
             }
             for (WatchActivity act : watchActivities) {
                 for (RetrieveDataRep.ActivitiesEntity entity : activitiesEntities) {

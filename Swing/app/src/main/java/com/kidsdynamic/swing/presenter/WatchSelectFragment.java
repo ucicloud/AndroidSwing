@@ -27,6 +27,7 @@ import com.kidsdynamic.data.net.ApiGen;
 import com.kidsdynamic.data.net.kids.KidsApi;
 import com.kidsdynamic.data.net.kids.model.KidsWithParent;
 import com.kidsdynamic.data.net.kids.model.WhoRegisterMacIDResp;
+import com.kidsdynamic.data.net.user.model.UserInfo;
 import com.kidsdynamic.data.utils.LogUtil2;
 import com.kidsdynamic.swing.BaseFragment;
 import com.kidsdynamic.swing.R;
@@ -234,10 +235,12 @@ public class WatchSelectFragment extends BaseFragment {
 
                 KidsWithParent kidsWithParent = null;
                 if (response.code() == 200) {
-                    kidsWithParent = response.body().getKid();
+                    WhoRegisterMacIDResp resp = response.body();
+                    kidsWithParent = resp.getKid();
                     LogUtil2.getUtils().d("watch binder: ");
-                    LogUtil2.getUtils().d("watch binder info: " + kidsWithParent.getName());
-                    LogUtil2.getUtils().d("watch binder info: " + kidsWithParent.getParent().getFirstName());
+                    LogUtil2.getUtils().d("watch binder info: " + (null != kidsWithParent ? kidsWithParent.getName() : ""));
+                    UserInfo parentInfo = null != kidsWithParent ? kidsWithParent.getParent() : null;
+                    LogUtil2.getUtils().d("watch binder info: " + (null != parentInfo ? parentInfo.getFirstName() : ""));
                     //绑定过的设备暂时不显示，二期多设备功能才显示。
                 } else if (response.code() == 404) {
                     kidsWithParent = new KidsWithParent();

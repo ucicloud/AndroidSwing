@@ -471,6 +471,8 @@
     <string name="calendar_day_word" />
     <string name="calendar_todo_del">Удалить</string>
 
+    <string name="is_sharing_with">поделиться с</string>
+
     <!-- Not translated yet -->
     <string name="net_err">Net Error</string>
 </resources>
