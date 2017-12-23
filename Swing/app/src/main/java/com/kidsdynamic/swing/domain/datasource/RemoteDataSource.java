@@ -41,7 +41,7 @@ public class RemoteDataSource {
     private final MutableLiveData<SubHostRequests> mSubHostRequests;
     private final MutableLiveData<Boolean> mIsLoadingSubHostRequests;
 
-    private final HostApi hostApi;
+    private HostApi hostApi;
 
     {
         mEventList = new MutableLiveData<>();
@@ -65,8 +65,8 @@ public class RemoteDataSource {
     private RemoteDataSource(Application application){
         this.applicationContext = application.getApplicationContext();
 
-        hostApi =  ApiGen.getInstance(applicationContext).
-                generateApi(HostApi.class,true);
+        /*hostApi =  ApiGen.getInstance(applicationContext).
+                generateApi(HostApi.class,true);*/
     }
 
     public LiveData<Boolean> isLoadingSubHostList() {
@@ -77,6 +77,9 @@ public class RemoteDataSource {
         if(TextUtils.isEmpty(status)){
             status = null;
         }
+
+        hostApi =  ApiGen.getInstance(applicationContext).
+                generateApi(HostApi.class,true);
 
         mIsLoadingSubHostRequests.setValue(true);
         hostApi.subHostList(status).enqueue(new Callback<SubHostRequests>() {

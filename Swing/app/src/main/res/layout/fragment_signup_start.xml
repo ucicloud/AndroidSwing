@@ -17,11 +17,10 @@
         android:layout_weight="7"
         android:orientation="vertical">
 
-        <com.kidsdynamic.swing.view.AvenirTextView
+        <Button
             android:id="@+id/signup_start_login"
             style="@style/button_main"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:text="@string/signup_start_login" />
 
         <com.kidsdynamic.swing.view.AvenirTextView
@@ -39,7 +38,6 @@
             android:id="@+id/signup_login_facebook"
             style="@style/button_main"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:text="@string/signup_start_facebook"
             android:visibility="invisible" />

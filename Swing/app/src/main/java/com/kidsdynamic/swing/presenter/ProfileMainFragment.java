@@ -125,7 +125,7 @@ public class ProfileMainFragment extends ProfileBaseFragment {
 
         mSubHostRequests = DeviceManager.getSubHostRequestsInCache();
 
-        subscribeUI();
+//        subscribeUI();
     }
 
     private void subscribeUI() {
@@ -223,13 +223,22 @@ public class ProfileMainFragment extends ProfileBaseFragment {
         List<WatchContact.Kid> kidsForUI = DeviceManager.getKidsForUI_sharedKids(getContext());
         for (WatchContact.Kid device : kidsForUI){
 
-            RequestAddSubHostEntity sharedKidsSubHostEntity = DeviceManager.getSharedKidsSubHostEntity(mSubHostRequests, device.mId);
-            if(sharedKidsSubHostEntity != null){
-                addContact(mViewSharedContainer,sharedKidsSubHostEntity, device, mContactListener);
+            if(mSubHostRequests != null){
+
+                RequestAddSubHostEntity sharedKidsSubHostEntity = DeviceManager.getSharedKidsSubHostEntity(mSubHostRequests, device.mId);
+                if(sharedKidsSubHostEntity != null){
+                    addContact(mViewSharedContainer,sharedKidsSubHostEntity, device, mContactListener);
+                }else {
+                    //如果本地数据库中有watch数据，但是subhostlist中没有，那么可能本地数据有误，删除数据缓存
+                    DeviceManager.delKidsInDB(device.mId);
+                }
             }else {
-                //如果本地数据库中有watch数据，但是subhostlist中没有，那么可能本地数据有误，删除数据缓存
-                DeviceManager.delKidsInDB(device.mId);
+                //如果尚未获取到最新的subHostList，则以数据库数据为准
+                RequestAddSubHostEntity sharedKidsSubHostEntity = new RequestAddSubHostEntity();
+                sharedKidsSubHostEntity.setId(device.subHostId);
+                addContact(mViewSharedContainer,sharedKidsSubHostEntity, device, mContactListener);
             }
+
         }
 
         // 載入用戶發出需求的用戶
@@ -253,6 +262,8 @@ public class ProfileMainFragment extends ProfileBaseFragment {
         if(focusKidsInfo != null){
             focusContact(BeanConvertor.getKidsForUI(focusKidsInfo), true);
         }
+
+        subscribeUI();
     }
 
 

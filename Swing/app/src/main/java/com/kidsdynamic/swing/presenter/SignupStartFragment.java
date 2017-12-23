@@ -5,10 +5,13 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.kidsdynamic.swing.BaseFragment;
 import com.kidsdynamic.swing.R;
+import com.kidsdynamic.swing.utils.ViewUtils;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -19,6 +22,8 @@ import butterknife.OnClick;
  */
 
 public class SignupStartFragment extends BaseFragment {
+    @BindView(R.id.signup_start_login)
+    protected Button btn_login;
 
     public static SignupStartFragment newInstance() {
         Bundle args = new Bundle();
@@ -33,6 +38,8 @@ public class SignupStartFragment extends BaseFragment {
                              @Nullable Bundle savedInstanceState) {
         View layout = inflater.inflate(R.layout.fragment_signup_start, container, false);
         ButterKnife.bind(this, layout);
+
+        ViewUtils.setBtnTypeFace(getContext(),btn_login);
         return layout;
     }
 

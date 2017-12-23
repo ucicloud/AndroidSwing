@@ -13,6 +13,7 @@ import com.kidsdynamic.data.net.event.EventApi;
 import com.kidsdynamic.data.net.event.model.TodoDoneEntity;
 import com.kidsdynamic.data.persistent.PreferencesUtil;
 import com.kidsdynamic.swing.R;
+import com.kidsdynamic.swing.domain.DeviceManager;
 import com.kidsdynamic.swing.domain.EventManager;
 import com.kidsdynamic.swing.domain.LoginManager;
 import com.kidsdynamic.swing.model.WatchEvent;
@@ -61,6 +62,7 @@ public class CalendarTodoFragment extends CalendarBaseFragment {
     private WatchEvent mEvent;
     private long currentEventId;
     private long currentUserId;
+    private long currentKidsId;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -204,7 +206,9 @@ public class CalendarTodoFragment extends CalendarBaseFragment {
     //load week event
     private void loadWeekEventList() {
         currentUserId = LoginManager.getCurrentLoginUserId(getContext());
-        List<WatchEvent> list = EventManager.getEventList(currentUserId,
+        currentKidsId = DeviceManager.getFocusKidsId();
+
+        List<WatchEvent> list = EventManager.getEventList(currentUserId,currentKidsId,
                 mViewCalendar.getDateBegin(), mViewCalendar.getDateEnd());
 
         //add 2017年11月21日11:42:53

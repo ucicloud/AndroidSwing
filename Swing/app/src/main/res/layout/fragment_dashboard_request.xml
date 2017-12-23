@@ -40,7 +40,6 @@
             android:id="@+id/dashboard_request_access"
             style="@style/button_main"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:text="@string/dashboard_request_request"
             android:visibility="gone" />
@@ -49,7 +48,6 @@
             android:id="@+id/dashboard_request_profile"
             style="@style/button_main"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:text="@string/dashboard_request_profile" />
     </LinearLayout>
 

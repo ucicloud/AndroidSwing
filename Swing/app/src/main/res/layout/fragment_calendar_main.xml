@@ -226,7 +226,6 @@
             <Button
                 android:id="@+id/btn_save_even_change"
                 android:layout_width="match_parent"
-                android:layout_height="40sp"
                 style="@style/button_main"
                 android:layout_weight="1"
                 android:text="@string/calendar_event_save"/>
@@ -239,7 +238,6 @@
             <Button
                 android:id="@+id/btn_del_even_change"
                 android:layout_width="match_parent"
-                android:layout_height="40sp"
                 style="@style/button_main"
                 android:layout_weight="1"
                 android:text="@string/event_del"/>

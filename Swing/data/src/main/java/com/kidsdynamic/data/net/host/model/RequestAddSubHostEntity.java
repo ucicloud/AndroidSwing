@@ -21,7 +21,7 @@ public class RequestAddSubHostEntity {
      * kids : [{"id":9,"name":"Another KID","dateCreated":"2017-01-17T00:56:58Z","macId":"Test2","profile":""},{"id":10,"name":"KIDLLE123124","dateCreated":"2017-01-17T02:39:36Z","macId":"Test3","profile":""}]
      */
 
-    private int id;
+    private long id;
     private UserInfo requestFromUser;
     private UserInfo requestToUser;
     private String status;
@@ -29,11 +29,11 @@ public class RequestAddSubHostEntity {
     private String lastUpdated;
     private List<KidInfo> kids;
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

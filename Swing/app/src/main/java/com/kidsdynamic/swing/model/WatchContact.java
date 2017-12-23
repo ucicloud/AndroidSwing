@@ -46,6 +46,7 @@ public class WatchContact implements Serializable {
         public String mProfile;
         public long mUserId;
         public boolean mBound = false;
+        public long subHostId;
 
         public Kid() {
             super(null, "");

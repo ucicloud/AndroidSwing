@@ -13,14 +13,14 @@ public class AcceptSubHostRequest {
      * kidId : [9,10]
      */
 
-    private int subHostId;
+    private long subHostId;
     private List<Long> kidId;
 
-    public int getSubHostId() {
+    public long getSubHostId() {
         return subHostId;
     }
 
-    public void setSubHostId(int subHostId) {
+    public void setSubHostId(long subHostId) {
         this.subHostId = subHostId;
     }
 

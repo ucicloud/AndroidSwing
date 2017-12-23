@@ -641,6 +641,7 @@ public class BeanConvertor {
         kid.mUserId = kidsEntityBean.getParentId();
         kid.mFirmwareVersion = kidsEntityBean.getFirmwareVersion();
         kid.mProfile = kidsEntityBean.getProfile();
+        kid.subHostId = kidsEntityBean.getSubHostId();
 
         return kid;
 

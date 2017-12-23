@@ -49,7 +49,6 @@
             android:id="@+id/watch_select_dashboard"
             style="@style/button_main"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:text="@string/watch_select_dashboard" />
     </LinearLayout>

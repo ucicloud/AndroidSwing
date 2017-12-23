@@ -63,6 +63,8 @@ public class SignupLoginFragment extends BaseFragment {
     EditText et_password;
     @BindView(R.id.signup_login_hint_text)
     TextView tvHint;
+    @BindView(R.id.signup_login_login)
+    TextView btn_login;
 
     @BindView(R.id.signup_login_reset_pwd)
     TextView btn_resetPsw;
@@ -88,6 +90,8 @@ public class SignupLoginFragment extends BaseFragment {
     private void initEditTextStyle() {
         et_email.setTypeface(SwingFontsCache.getNormalType(getContext()));
         et_password.setTypeface(SwingFontsCache.getNormalType(getContext()));
+
+        ViewUtils.setTextViewBoldTypeFace(getContext(),btn_login);
     }
 
     @Override

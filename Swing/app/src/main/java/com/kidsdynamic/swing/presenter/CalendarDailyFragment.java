@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 
 import com.kidsdynamic.swing.R;
+import com.kidsdynamic.swing.domain.DeviceManager;
 import com.kidsdynamic.swing.domain.EventManager;
 import com.kidsdynamic.swing.domain.LoginManager;
 import com.kidsdynamic.swing.model.WatchEvent;
@@ -37,6 +38,7 @@ public class CalendarDailyFragment extends CalendarBaseFragment {
 
     private long mDefaultDate = -1;
     private long currentUserId;
+    private long currentKidsId;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -100,6 +102,7 @@ public class CalendarDailyFragment extends CalendarBaseFragment {
         super.onResume();
 
         currentUserId = LoginManager.getCurrentLoginUserId(getContext());
+        currentKidsId = DeviceManager.getFocusKidsId();
 
         // 帶入的Arguments, 表示日曆需設置的日期
         if(mDefaultDate == -1){
@@ -121,7 +124,7 @@ public class CalendarDailyFragment extends CalendarBaseFragment {
 
     //load week event
     private void loadWeekEventList() {
-        List<WatchEvent> list = EventManager.getEventList(currentUserId,
+        List<WatchEvent> list = EventManager.getEventList(currentUserId,currentKidsId,
                 mViewCalendar.getDateBegin(), mViewCalendar.getDateEnd());
 
         //add 2017年11月21日11:42:53
@@ -138,7 +141,7 @@ public class CalendarDailyFragment extends CalendarBaseFragment {
         long start = ViewCalendar.stripTime(date);
         long end = start + 86400000 - 1;
         // 依起迄時間載入事件列表
-        List<WatchEvent> list = EventManager.getEventList(currentUserId, start, end);;
+        List<WatchEvent> list = EventManager.getEventList(currentUserId, currentKidsId,start, end);;
 
         // 載入當日的所有事件
         for (WatchEvent event : list){

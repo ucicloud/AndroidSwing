@@ -39,7 +39,6 @@
             android:id="@+id/watch_sorry_search"
             style="@style/button_main"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:text="@string/watch_sorry_again" />
 
@@ -47,7 +46,6 @@
             android:id="@+id/watch_sorry_request"
             style="@style/button_main"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:text="@string/watch_sorry_others"
             android:visibility="gone" />
@@ -56,7 +54,6 @@
             android:id="@+id/watch_sorry_contact"
             style="@style/button_main"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:text="@string/watch_sorry_contact_us" />
     </LinearLayout>
 

@@ -5,9 +5,11 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.kidsdynamic.swing.R;
+import com.kidsdynamic.swing.utils.ViewUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -24,9 +26,9 @@ public class DashboardNoDevicesFragment extends DashboardBaseFragment {
     @BindView(R.id.dashboard_request_message)
     TextView tvMessage;
     @BindView(R.id.dashboard_add_device)
-    TextView tvAddDevice;
+    Button tvAddDevice;
     @BindView(R.id.dashboard_no_devices_goto)
-    TextView tvGotoDashboard;
+    Button tvGotoDashboard;
 
     public static DashboardNoDevicesFragment newInstance() {
         Bundle args = new Bundle();
@@ -41,6 +43,8 @@ public class DashboardNoDevicesFragment extends DashboardBaseFragment {
                              @Nullable Bundle savedInstanceState) {
         View layout = inflater.inflate(R.layout.fragment_dashboard_nodevices, container, false);
         ButterKnife.bind(this, layout);
+
+        ViewUtils.setBtnTypeFace(getContext(),tvAddDevice,tvGotoDashboard);
         return layout;
     }
 

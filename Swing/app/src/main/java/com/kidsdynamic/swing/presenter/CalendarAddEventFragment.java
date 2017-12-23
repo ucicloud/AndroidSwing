@@ -181,7 +181,7 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
         allKidsByUserId.add(kidsEntityBean);*/
 
         if(ObjectUtils.isListEmpty(allKidsByUserId)){
-            ToastCommon.makeText(getContext(),R.string.login_data_invalid);
+            ToastCommon.makeText(getContext(),R.string.have_no_device);
             getFragmentManager().popBackStack();
 
             return false;

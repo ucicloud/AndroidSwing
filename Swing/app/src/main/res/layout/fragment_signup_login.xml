@@ -64,14 +64,12 @@
             android:id="@+id/signup_login_login"
             style="@style/button_main"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:text="@string/signup_login_enter" />
 
         <com.kidsdynamic.swing.view.AvenirTextView
             android:id="@+id/signup_login_reset_pwd"
             style="@style/button_main"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/base_10"
             android:text="@string/signup_login_reset_password"
             android:visibility="invisible" />

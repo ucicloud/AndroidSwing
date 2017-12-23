@@ -11,6 +11,7 @@ import android.widget.Button;
 
 import com.kidsdynamic.data.persistent.PreferencesUtil;
 import com.kidsdynamic.swing.R;
+import com.kidsdynamic.swing.domain.DeviceManager;
 import com.kidsdynamic.swing.domain.EventManager;
 import com.kidsdynamic.swing.domain.LoginManager;
 import com.kidsdynamic.swing.model.WatchEvent;
@@ -44,6 +45,7 @@ public class CalendarMonthFragment extends CalendarBaseFragment {
 
     private long mDefaultDate = System.currentTimeMillis();
     private long currentUserId;
+    private long currentKidsId;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -131,6 +133,7 @@ public class CalendarMonthFragment extends CalendarBaseFragment {
 
         //从cache中读取当前userid
         currentUserId = LoginManager.getCurrentLoginUserId(getContext());
+        currentKidsId = DeviceManager.getFocusKidsId();
 
         loadEventList(mViewCalendar.getDateBegin(), mViewCalendar.getDateEnd());
     }
@@ -147,7 +150,7 @@ public class CalendarMonthFragment extends CalendarBaseFragment {
 
         //2017/11/8
 //        List<WatchEvent> list = CalendarManager.getEventList(start, end);
-        List<WatchEvent> mEventList = EventManager.getEventList(currentUserId, start, end);
+        List<WatchEvent> mEventList = EventManager.getEventList(currentUserId,currentKidsId, start, end);
 
         for (WatchEvent event : mEventList) {
 /*

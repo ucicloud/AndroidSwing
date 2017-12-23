@@ -112,7 +112,7 @@ public class EventManager {
 
     }
 
-    public static List<WatchEvent> getEventList(long userId, long startTimeStamp, long endTimeStamp){
+    public static List<WatchEvent> getEventList(long userId, long kidsId, long startTimeStamp, long endTimeStamp){
         boolean isTestData = false;
         if(isTestData){
             return getTestEventList(startTimeStamp, endTimeStamp);
@@ -120,20 +120,25 @@ public class EventManager {
 
         List<WatchEvent> result = new ArrayList<>();
 
+        if(kidsId <= 0){
+
+            return result;
+        }
+
         DbUtil dbUtil = DbUtil.getInstance(SwingApplication.getAppContext());
         EventDataStore eventDataStore = new EventDataStore(dbUtil);
 
         EventDao eventDao = eventDataStore.getDbUtil().getDaoSession().getEventDao();
 
         //首先查询非repeat，且时间符合的event
-        List<WatchEvent> notRepeatEvent = getNotRepeatEvent(userId, startTimeStamp, endTimeStamp, eventDao);
+        List<WatchEvent> notRepeatEvent = getNotRepeatEvent(userId, kidsId , startTimeStamp, endTimeStamp, eventDao);
         result.addAll(notRepeatEvent);
 
         //分别获取Daily, Weekly及Monthly的event；此回傳列表已會展開repeat, 換言之，若有Daily，則會直接
         // 展成一個月的events.
-        List<WatchEvent> dailyResult = getEventRepeat(eventDao,userId,startTimeStamp, endTimeStamp, "DAILY");
-        List<WatchEvent> weeklyResult = getEventRepeat(eventDao,userId,startTimeStamp, endTimeStamp, "WEEKLY");
-        List<WatchEvent> monthlyResult = getEventRepeat(eventDao,userId,startTimeStamp, endTimeStamp, "MONTHLY");
+        List<WatchEvent> dailyResult = getEventRepeat(eventDao,userId,kidsId,startTimeStamp, endTimeStamp, "DAILY");
+        List<WatchEvent> weeklyResult = getEventRepeat(eventDao,userId,kidsId,startTimeStamp, endTimeStamp, "WEEKLY");
+        List<WatchEvent> monthlyResult = getEventRepeat(eventDao,userId,kidsId,startTimeStamp, endTimeStamp, "MONTHLY");
 
         result.addAll(dailyResult);
         result.addAll(weeklyResult);
@@ -172,7 +177,7 @@ public class EventManager {
 
     }
 
-    private static List<WatchEvent> getNotRepeatEvent(long userId, long startTimeStamp, long endTimeStamp, EventDao eventDao) {
+    private static List<WatchEvent> getNotRepeatEvent(long userId, long kidsId, long startTimeStamp, long endTimeStamp, EventDao eventDao) {
         List<WatchEvent> result = new ArrayList<>();
 
         QueryBuilder<DB_Event> qb = eventDao.queryBuilder();
@@ -187,6 +192,7 @@ public class EventManager {
                 " (" + startTimeStamp + "<=" + START_DATE + " AND " + endTimeStamp + ">=" + END_DATE + ") OR" +
                 " (" + endTimeStamp + ">=" + START_DATE + " AND " + endTimeStamp + "<=" + END_DATE + "))", null);*/
         List<DB_Event> dbEvents = qb.where(/*EventDao.Properties.UserId.eq(userId),*/
+                EventDao.Properties.KidIds.like("%"+kidsId+"%"),
                 EventDao.Properties.Repeat.eq(""),
                 qb.or(qb.and(EventDao.Properties.StartDate.le(startTimeStamp), EventDao.Properties.EndDate.ge(startTimeStamp)),
                         qb.and(EventDao.Properties.StartDate.ge(startTimeStamp), EventDao.Properties.EndDate.le(endTimeStamp)),
@@ -250,7 +256,7 @@ public class EventManager {
         return list;
     }
 
-    private static List<WatchEvent> getEventRepeat(EventDao eventDao, long userId,
+    private static List<WatchEvent> getEventRepeat(EventDao eventDao, long userId, long kidsId,
                                                    long startTimeStamp, long endTimeStamp, String repeat){
         List<WatchEvent> resultRaw = new ArrayList<>();
         QueryBuilder<DB_Event> qb = eventDao.queryBuilder();
@@ -260,7 +266,10 @@ public class EventManager {
                 REPEAT + "='" + repeat + "'" + " AND " +
                 endTimeStamp + ">=" + START_DATE, null);*/
 
-        List<DB_Event> dbEvents = qb.where(EventDao.Properties.Repeat.eq(repeat),
+        //2017年12月23日22:38:41 新增kids字段过滤
+        List<DB_Event> dbEvents = qb.where(
+                EventDao.Properties.KidIds.like("%"+kidsId+"%"),
+                EventDao.Properties.Repeat.eq(repeat),
                 EventDao.Properties.StartDate.le(endTimeStamp)).
                 orderAsc(EventDao.Properties.StartDate).list();
 
@@ -384,7 +393,7 @@ public class EventManager {
         cal.add(Calendar.MONTH, 1);
         long endTimeStamp = cal.getTimeInMillis();
 
-        List<WatchEvent> list = getEventList(kid.getParentId(),startTimeStamp, endTimeStamp);
+        List<WatchEvent> list = getEventList(kid.getParentId(),kid.getKidsId(), startTimeStamp, endTimeStamp);
         List<WatchEvent> rtn = new ArrayList<>();
         Log.d("Sync", "!!!!!!!!! ignore kid !!!!!!!! " + startTimeStamp);
 

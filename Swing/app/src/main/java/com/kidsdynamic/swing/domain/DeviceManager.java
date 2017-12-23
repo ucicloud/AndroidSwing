@@ -219,7 +219,7 @@ public class DeviceManager {
         kidsDataStore.delKidsInfo(kidsId);
     }
 
-    private static List<DB_Kids> getDBKidsForShared(int suhHostId, long parentId, List<KidInfo> kidInfos){
+    private static List<DB_Kids> getDBKidsForShared(long suhHostId, long parentId, List<KidInfo> kidInfos){
         List<DB_Kids> db_kidsList = new ArrayList<>(kidInfos.size());
 
         for (KidInfo kidInfo : kidInfos) {

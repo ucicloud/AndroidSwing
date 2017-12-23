@@ -49,7 +49,6 @@
             android:id="@+id/watch_request_search"
             style="@style/button_main"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:text="@string/watch_request_search_again" />
 
@@ -57,7 +56,6 @@
             android:id="@+id/watch_request_dashboard"
             style="@style/button_main"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:text="@string/watch_request_cancel_and_dashboard" />
     </LinearLayout>

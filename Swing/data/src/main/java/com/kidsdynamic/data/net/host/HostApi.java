@@ -70,6 +70,6 @@ public interface HostApi {
 //401	Unauthorized. The user doesn't have permission
 //500	Internal error. Please send me the error. I will fix it
     @DELETE("v1/subHost/delete")
-    Call<RequestAddSubHostEntity> subHostDelete(@Query("subHostId") int subHostId);
+    Call<RequestAddSubHostEntity> subHostDelete(@Query("subHostId") long subHostId);
 
 }

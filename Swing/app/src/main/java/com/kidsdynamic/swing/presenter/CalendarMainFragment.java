@@ -19,6 +19,7 @@ import com.kidsdynamic.data.net.event.model.TodoEntity;
 import com.kidsdynamic.data.persistent.PreferencesUtil;
 import com.kidsdynamic.swing.R;
 import com.kidsdynamic.swing.SwingApplication;
+import com.kidsdynamic.swing.domain.DeviceManager;
 import com.kidsdynamic.swing.domain.EventManager;
 import com.kidsdynamic.swing.domain.LoginManager;
 import com.kidsdynamic.swing.domain.datasource.RemoteDataSource;
@@ -95,6 +96,7 @@ public class CalendarMainFragment extends CalendarBaseFragment {
     private List<WatchEvent> mEventListInToday;
     private WatchEvent mNearbyEven;
     private long currentUserId;
+    private long currentKidsId;
 
     private EventViewModel eventViewModel = null;
     private boolean isLoadEvent = false;
@@ -298,11 +300,13 @@ public class CalendarMainFragment extends CalendarBaseFragment {
 
         //从cache中读取当前userid
         currentUserId = LoginManager.getCurrentLoginUserId(getContext());
+        currentKidsId = DeviceManager.getFocusKidsId();
+
 //        mEventList = EventManager.getEventList(currentUserId, start, end);
-        mEventList = EventManager.getEventList(currentUserId,
+        mEventList = EventManager.getEventList(currentUserId,currentKidsId,
                 mViewCalendarWeek.getDateBegin(), mViewCalendarWeek.getDateEnd());
 
-        mEventListInToday = EventManager.getEventList(currentUserId,start, end);
+        mEventListInToday = EventManager.getEventList(currentUserId,currentKidsId,start, end);
 
         updateAlert();
 
@@ -444,7 +448,7 @@ public class CalendarMainFragment extends CalendarBaseFragment {
         public void OnSelect(View view, long offset, long date) {
             mViewCalendarWeek.setDate(date);
 
-            mEventList = EventManager.getEventList(currentUserId,
+            mEventList = EventManager.getEventList(currentUserId,currentKidsId,
                     mViewCalendarWeek.getDateBegin(), mViewCalendarWeek.getDateEnd());
 
             loadEvents();

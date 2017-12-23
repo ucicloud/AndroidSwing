@@ -17,6 +17,7 @@ import com.kidsdynamic.swing.utils.ConfigUtil;
 import com.kidsdynamic.swing.utils.GlideHelper;
 import com.kidsdynamic.swing.utils.ViewUtils;
 import com.kidsdynamic.swing.view.ViewCircle;
+import com.yy.base.ActivityController;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -104,7 +105,11 @@ public class LogoutConfirmFragment extends ProfileBaseFragment {
         RawActivityManager.delAllRawActivity();
 
         ConfigUtil.logoutState();
-        getActivity().finish();
+//        getActivity().finish();
+
+        ActivityController.getInstance().exit();
+        //退出程序
+        android.os.Process.killProcess(android.os.Process.myPid());
 
     }
 

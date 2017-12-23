@@ -25,7 +25,6 @@
             android:id="@+id/watch_purchase_yes"
             style="@style/button_main"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:text="@string/watch_purchase_yes" />
 
@@ -33,7 +32,6 @@
             android:id="@+id/watch_purchase_request"
             style="@style/button_main"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:text="@string/watch_purchase_others" />
     </LinearLayout>
