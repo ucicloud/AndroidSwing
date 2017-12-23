@@ -103,20 +103,21 @@ public class SwingBLEService extends Service {
                         if (threadHandler != null) {
                             threadHandler.removeMessages(SwingBLEAttributes.MSG_UPGRADE_CHECK_IMAGE_B);
                         }
-                        ViseLog.i("USE IMAGE A");
-                        currentFileVer = fileVerA;
+                        ViseLog.i("USE IMAGE B");
+                        currentFileVer = fileVerB;
                     }
                     else if (handlerState == SwingBLEAttributes.MSG_UPGRADE_CHECK_IMAGE_B) {
                         if (threadHandler != null) {
                             threadHandler.removeMessages(SwingBLEAttributes.MSG_UPGRADE_CHECK_IMAGE_TIMEOUT);
                         }
-                        ViseLog.i("USE IMAGE B");
-                        currentFileVer = fileVerB;
+                        ViseLog.i("USE IMAGE A");
+                        currentFileVer = fileVerA;
                     }
 
                     if (currentFileVer != null) {
                         if (threadHandler != null) {
-                            threadHandler.sendEmptyMessage(SwingBLEAttributes.MSG_UPGRADE_DOWNING_IMAGE_HEADER);
+//                            threadHandler.sendEmptyMessage(SwingBLEAttributes.MSG_UPGRADE_DOWNING_IMAGE_HEADER);
+                            threadHandler.sendEmptyMessageDelayed(SwingBLEAttributes.MSG_UPGRADE_DOWNING_IMAGE_HEADER, 1000);
                         }
                     }
 
@@ -237,7 +238,7 @@ public class SwingBLEService extends Service {
                             public void onSuccess(BluetoothGattCharacteristic characteristic) {
                                 ViseLog.i(characteristic.getUuid() + " characteristic onSuccess");
                                 if (threadHandler != null) {
-                                    threadHandler.sendEmptyMessage(SwingBLEAttributes.MSG_UPGRADE_DOWNING_IMAGE);
+                                    threadHandler.sendEmptyMessage(SwingBLEAttributes.MSG_UPGRADE_DOWNING_IMAGE_NO_RESPONSE);
                                 }
                             }
                         });
@@ -247,12 +248,9 @@ public class SwingBLEService extends Service {
                 case SwingBLEAttributes.MSG_UPGRADE_DOWNING_IMAGE:
                 {
                     if(iBlocks == nBlocks) {
-                        if (syncCallback != null) {
-                            syncCallback.onSyncComplete();
-                            syncCallback = null;
+                        if (threadHandler != null) {
+                            threadHandler.sendEmptyMessageDelayed(SwingBLEAttributes.MSG_UPGRADE_DONE_IMAGE, 500);
                         }
-                        syncModel.close();
-                        closeConnect();
                         break;
                     }
 
@@ -292,6 +290,65 @@ public class SwingBLEService extends Service {
                             }
                         }
                     });
+                }
+                    break;
+                case SwingBLEAttributes.MSG_UPGRADE_DOWNING_IMAGE_NO_RESPONSE:
+                {
+                    // This block is run 4 times, this is needed to get CoreBluetooth to send consequetive packets in the same connection interval.
+                    for (int ii = 0; ii < SwingBLEAttributes.OAD_ONCE_NUMBER; ii++) {
+                        requestData[0] = (byte) (iBlocks & 0xff);
+                        requestData[1] = (byte) ((iBlocks >> 8) & 0xff);
+                        if (iBytes > 0) {
+                            try {
+                                currentFileVer.read(requestData, 2, SwingBLEAttributes.OAD_BLOCK_SIZE);
+                            } catch (Exception e) {
+                                ViseLog.i("file read err:" + e);
+                                onBleFailure("File Read Error");
+                                return;
+                            }
+                        }
+                        iBlocks++;
+                        iBytes += SwingBLEAttributes.OAD_BLOCK_SIZE;
+
+                        BluetoothGattCharacteristic characteristic = ViseBluetooth.getInstance().withUUIDString(SwingBLEAttributes.OAD_SERVICE_UUID, SwingBLEAttributes.OAD_IMAGE_BLOCK_REQUEST_UUID, null)
+                                .getCharacteristic();
+                        characteristic.setWriteType(BluetoothGattCharacteristic.WRITE_TYPE_NO_RESPONSE);
+                        characteristic.setValue(requestData);
+                        ViseLog.i(characteristic.getUuid() + " characteristic write bytes: " + Arrays.toString(requestData) + " ,hex: " + HexUtil.encodeHexStr
+                                (requestData));
+                        if(ViseBluetooth.getInstance().getBluetoothGatt().writeCharacteristic(characteristic)) {
+                            if(iBlocks == nBlocks) {
+                                if (threadHandler != null) {
+                                    threadHandler.sendEmptyMessageDelayed(SwingBLEAttributes.MSG_UPGRADE_DONE_IMAGE, SwingBLEAttributes.OAD_TRANSMIT_INTERVAL);
+                                }
+                                return;
+                            }
+                        }
+                        else {
+                            ViseLog.i("OAD_IMAGE_BLOCK_REQUEST_UUID WRITE_TYPE_NO_RESPONSE Error:");
+                            onBleFailure("OAD_IMAGE_BLOCK_REQUEST_UUID Write Error");
+                            return;
+                        }
+                    }
+                    //float secondsPerBlock = OAD_TRANSMIT_INTERVAL / OAD_ONCE_NUMBER;
+                    //float secondsLeft = (float)(self.nBlocks - self.iBlocks) * secondsPerBlock;
+                    if (syncCallback != null) {
+                        syncCallback.onDeviceUpdating(((float) iBlocks / (float) nBlocks), null);
+                    }
+
+                    if (threadHandler != null) {
+                        threadHandler.sendEmptyMessageDelayed(SwingBLEAttributes.MSG_UPGRADE_DOWNING_IMAGE_NO_RESPONSE, SwingBLEAttributes.OAD_TRANSMIT_INTERVAL);
+                    }
+                }
+                    break;
+                case SwingBLEAttributes.MSG_UPGRADE_DONE_IMAGE:
+                {
+                    if (syncCallback != null) {
+                        syncCallback.onSyncComplete();
+                        syncCallback = null;
+                    }
+                    syncModel.close();
+                    closeConnect();
                 }
                     break;
                 default:

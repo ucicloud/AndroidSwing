@@ -46,6 +46,8 @@ public class SwingBLEAttributes {
     public static final int MSG_UPGRADE_CHECK_IMAGE_TIMEOUT = 15;
     public static final int MSG_UPGRADE_DOWNING_IMAGE_HEADER = 16;
     public static final int MSG_UPGRADE_DOWNING_IMAGE = 17;
+    public static final int MSG_UPGRADE_DOWNING_IMAGE_NO_RESPONSE = 18;
+    public static final int MSG_UPGRADE_DONE_IMAGE = 19;
 
     public static final int BLE_INIT_ACTION = 1;
     public static final int BLE_SYNC_ACTION = 2;
@@ -61,5 +63,8 @@ public class SwingBLEAttributes {
     public static final int OAD_BLOCK_SIZE = 16;
 
     public static final int HAL_FLASH_WORD_SIZE = 4;
+
+    public static final int OAD_TRANSMIT_INTERVAL = 30;//ms
+    public static final int OAD_ONCE_NUMBER = 1;
 }
 

@@ -348,6 +348,8 @@ public class SwingScanActivity extends AppCompatActivity implements View.OnClick
         }
     }
 
+    private boolean oye = false;
+
     private void exec() {
         switch (op) {
             case 1:
@@ -450,22 +452,36 @@ public class SwingScanActivity extends AppCompatActivity implements View.OnClick
                     return;
                 }
 
-
-
+                oye = !oye;
+                String name = null;
                 FileInputStream fileA = null;
                 FileInputStream fileB = null;
-                try {
-                    fileA = new FileInputStream("/sdcard/KDV0009-A_A_111017.bin");
-                    fileB = new FileInputStream("/sdcard/KDV0009-A_B_111017.bin");
-                } catch (Exception e) {
-                    Toast.makeText(SwingScanActivity.this, "固件不存在", Toast.LENGTH_LONG).show();
-                    return;
+                if (oye)
+                {
+                    try {
+                        name = "A_20171010.bin";
+                        fileA = new FileInputStream("/sdcard/A_20171010.bin");
+                        fileB = new FileInputStream("/sdcard/B_20171010.bin");
+                    } catch (Exception e) {
+                        Toast.makeText(SwingScanActivity.this, "固件不存在", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                }
+                else {
+                    try {
+                        name = "KDV0009-A_A_111017.bin";
+                        fileA = new FileInputStream("/sdcard/KDV0009-A_A_111017.bin");
+                        fileB = new FileInputStream("/sdcard/KDV0009-A_B_111017.bin");
+                    } catch (Exception e) {
+                        Toast.makeText(SwingScanActivity.this, "固件不存在", Toast.LENGTH_LONG).show();
+                        return;
+                    }
                 }
 
                 List<EventModel> list = genEvents();
 
                 mBluetoothService.closeConnect();
-                progressDialog.setMessage("升级设备中");
+                progressDialog.setMessage("升级设备中" + name);
                 progressDialog.show();
 
                 mBluetoothService.scanAndUpgrade(mac, fileA, fileB, new IDeviceSyncCallback() {
