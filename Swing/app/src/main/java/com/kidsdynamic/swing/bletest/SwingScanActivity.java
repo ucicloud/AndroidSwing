@@ -43,6 +43,7 @@ import com.vise.baseble.model.BluetoothLeDevice;
 import com.vise.log.ViseLog;
 import com.vise.log.inner.LogcatTree;
 
+import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -66,7 +67,7 @@ public class SwingScanActivity extends AppCompatActivity implements View.OnClick
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ViseLog.getLogConfig().configAllowLog(true);//配置日志信息
-        ViseLog.plant(new LogcatTree());//添加Logcat打印信息
+        //ViseLog.plant(new LogcatTree());//添加Logcat打印信息
         ViseLog.plant(new SwingLogActivity.StringTree());
         setContentView(R.layout.activity_swing_ble_scan);
         initView();
@@ -119,6 +120,8 @@ public class SwingScanActivity extends AppCompatActivity implements View.OnClick
         btn_stop = (Button) findViewById(R.id.btn_stop);
         btn_stop.setOnClickListener(this);
         btn_sync = (Button) findViewById(R.id.btn_sync);
+        btn_sync.setOnClickListener(this);
+        btn_sync = (Button) findViewById(R.id.btn_update);
         btn_sync.setOnClickListener(this);
         sync_view = (TextView) findViewById(R.id.tv_mac);
         img_loading = (ImageView) findViewById(R.id.img_loading);
@@ -200,6 +203,12 @@ public class SwingScanActivity extends AppCompatActivity implements View.OnClick
                 checkPermissions();
             }
                 break;
+            case R.id.btn_update:
+            {
+                op = 3;
+                checkPermissions();
+            }
+            break;
         }
     }
 
@@ -339,6 +348,8 @@ public class SwingScanActivity extends AppCompatActivity implements View.OnClick
         }
     }
 
+    private boolean oye = false;
+
     private void exec() {
         switch (op) {
             case 1:
@@ -415,6 +426,16 @@ public class SwingScanActivity extends AppCompatActivity implements View.OnClick
                     public void onDeviceVersion(String version) {
                         Log.d(TAG, "onDeviceVersion version " + version);
                     }
+
+                    @Override
+                    public boolean onDeviceNeedUpdate(String version) {
+                        return false;
+                    }
+
+                    @Override
+                    public void onDeviceUpdating(float percent, String timeRemain) {
+
+                    }
                 });
 
 //                mBluetoothService.scanAndSync2("7F:9F:57:8D:3F:6A", list);
@@ -422,6 +443,91 @@ public class SwingScanActivity extends AppCompatActivity implements View.OnClick
 //                mBluetoothService.scanAndSync("60:64:05:86:21:52", list);
             }
                 break;
+            case 3:
+            {
+                String mac = sync_view.getText().toString();
+                if (mac == null || mac.length() == 0)
+                {
+                    Toast.makeText(SwingScanActivity.this, "请先扫描并初始化设备", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+//                oye = !oye;
+                String name = null;
+                FileInputStream fileA = null;
+                FileInputStream fileB = null;
+                if (oye)
+                {
+                    try {
+                        name = "A_20171010.bin";
+                        fileA = new FileInputStream("/sdcard/A_20171010.bin");
+                        fileB = new FileInputStream("/sdcard/B_20171010.bin");
+                    } catch (Exception e) {
+                        Toast.makeText(SwingScanActivity.this, "固件不存在", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                }
+                else {
+                    try {
+                        name = "KDV0009-A_A_111017.bin";
+                        fileA = new FileInputStream("/sdcard/KDV0009-A_A_111017.bin");
+                        fileB = new FileInputStream("/sdcard/KDV0009-A_B_111017.bin");
+                    } catch (Exception e) {
+                        Toast.makeText(SwingScanActivity.this, "固件不存在", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                }
+                
+                mBluetoothService.closeConnect();
+                progressDialog.setMessage("升级设备中" + name);
+                progressDialog.show();
+
+                mBluetoothService.scanAndUpgrade(mac, fileA, fileB, new IDeviceSyncCallback() {
+                    @Override
+                    public void onSyncComplete() {
+                        progressDialog.dismiss();
+                        Toast.makeText(SwingScanActivity.this, "升级成功", Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void onSyncFail(int reason) {
+                        progressDialog.dismiss();
+                        Toast.makeText(SwingScanActivity.this, "升级失败", Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void onSyncing(String tip) {
+                        progressDialog.setMessage(tip);
+                    }
+
+                    @Override
+                    public void onSyncActivity(ActivityModel activity) {
+
+                    }
+
+                    @Override
+                    public void onDeviceBattery(int battery) {
+                        Log.d(TAG, "onDeviceBattery battery " + battery);
+                    }
+
+                    @Override
+                    public void onDeviceVersion(String version) {
+                        Log.d(TAG, "onDeviceVersion version " + version);
+                    }
+
+                    @Override
+                    public boolean onDeviceNeedUpdate(String version) {
+                        return true;
+                    }
+
+                    @Override
+                    public void onDeviceUpdating(float percent, String timeRemain) {
+                        progressDialog.setMessage("%" + percent * 100);
+                    }
+                });
+
+            }
+            break;
         }
     }
 

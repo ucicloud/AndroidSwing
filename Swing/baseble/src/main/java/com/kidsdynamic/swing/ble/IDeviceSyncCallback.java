@@ -16,4 +16,7 @@ public interface IDeviceSyncCallback {
     void onDeviceBattery(int battery);
 
     void onDeviceVersion(String version);
+
+    boolean onDeviceNeedUpdate(String version);
+    void onDeviceUpdating(float percent, String timeRemain);
 }

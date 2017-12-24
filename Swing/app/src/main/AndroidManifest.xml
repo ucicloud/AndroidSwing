@@ -34,54 +34,54 @@
             android:name=".presenter.SignupActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan|stateHidden">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+    </activity>
 
-        <activity
-            android:name=".presenter.MainFrameActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan|stateHidden" />
+    <activity
+        android:name=".presenter.MainFrameActivity"
+        android:launchMode="singleTask"
+        android:screenOrientation="portrait"
+        android:windowSoftInputMode="adjustPan|stateHidden" />
 
-        <activity
-            android:name=".presenter.VirtualCameraActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/ThemeTranslucent" />
+    <activity
+        android:name=".presenter.VirtualCameraActivity"
+        android:screenOrientation="portrait"
+        android:theme="@style/ThemeTranslucent" />
 
-        <activity
-            android:name=".presenter.VirtualResultActivity"
-            android:screenOrientation="portrait" />
+    <activity
+        android:name=".presenter.VirtualResultActivity"
+        android:screenOrientation="portrait" />
 
-        <activity
-            android:name=".presenter.VirtualAlbumActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/ThemeTranslucent" />
+    <activity
+        android:name=".presenter.VirtualAlbumActivity"
+        android:screenOrientation="portrait"
+        android:theme="@style/ThemeTranslucent" />
 
-        <meta-data
-            android:name="com.google.firebase.messaging.default_notification_icon"
-            android:resource="@mipmap/notification_icon" />
+    <meta-data
+        android:name="com.google.firebase.messaging.default_notification_icon"
+        android:resource="@mipmap/notification_icon" />
 
-        <service
-            android:name=".fcm.SwingMessageService"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT" />
-            </intent-filter>
-        </service>
+    <service
+        android:name=".fcm.SwingMessageService"
+        android:exported="false">
+        <intent-filter>
+            <action android:name="com.google.firebase.MESSAGING_EVENT" />
+        </intent-filter>
+    </service>
 
-        <service
-            android:name=".fcm.SwingFirebaseIDService"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
-            </intent-filter>
-        </service>
+    <service
+        android:name=".fcm.SwingFirebaseIDService"
+        android:exported="false">
+        <intent-filter>
+            <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+        </intent-filter>
+    </service>
 
-        <!-- The below is for testing -->
+    <!-- The below is for testing -->
         <activity android:name=".MainActivity">
             <!--<intent-filter>
                 <action android:name="android.intent.action.MAIN" />

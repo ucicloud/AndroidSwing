@@ -616,6 +616,16 @@ public class DashboardProgressFragment extends DashboardBaseFragment {
                 //上传服务器
                 new DeviceManager().uploadFirmwareVersion(DeviceManager.getMacID(mMacAddress), version);
             }
+
+            @Override
+            public boolean onDeviceNeedUpdate(String version) {
+                return false;
+            }
+
+            @Override
+            public void onDeviceUpdating(float percent, String timeRemain) {
+
+            }
         });
     }
 
