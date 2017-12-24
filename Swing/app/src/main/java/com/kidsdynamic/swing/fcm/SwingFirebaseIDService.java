@@ -49,6 +49,9 @@ public class SwingFirebaseIDService extends FirebaseInstanceIdService {
             return;
         }
         // TODO: Implement this method to send token to your app server.
+        if (TextUtils.isEmpty(token)) {
+            return;
+        }
         final UserApiNeedToken userApiNeedToken = ApiGen.getInstance(getApplicationContext()).
                 generateApi(UserApiNeedToken.class, true);
         userApiNeedToken.updateAndroidRegistrationId(token).enqueue(new BaseRetrofitCallback<Object>() {
