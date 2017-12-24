@@ -109,31 +109,7 @@ public class DashboardEmotionFragment extends DashboardBaseFragment {
 //        animLoading = (Animatable) view_left_action.getDrawable();
 //        animLoading.start();
 
-        WatchActivity wa = DataUtil.getInstance().getWatchActivityInEmotionFragment();
-        if (null != wa) {
-            setWatchActivity(wa);
-            return;
-        }
-
-        KidsEntityBean kid = DeviceManager.getFocusKidsInfo(getContext());
-        if (null == kid) {
-            return;
-        }
-//        showLoadingDialog(R.string.signup_login_wait);
-        Calendar cld = Calendar.getInstance();
-        int timezoneOffset = cld.getTimeZone().getOffset(cld.getTimeInMillis());
-
-        cld.set(Calendar.HOUR_OF_DAY, 23);
-        cld.set(Calendar.MINUTE, 59);
-        cld.set(Calendar.SECOND, 59);
-        long end = cld.getTimeInMillis() + timezoneOffset;
-
-        cld.add(Calendar.DAY_OF_MONTH, -1);
-        cld.add(Calendar.SECOND, 1);
-        long start = cld.getTimeInMillis() + timezoneOffset;
-
-        new KidActivityManager().retrieveDataByTime(getContext(), kid.getKidsId(), start, end,
-                new IRetrieveCompleteListener(start, end, timezoneOffset, kid.getKidsId()));
+        loadData();
     }
 
     @Override
@@ -143,6 +119,7 @@ public class DashboardEmotionFragment extends DashboardBaseFragment {
         if (null == root) {
             return;
         }
+        loadData();
         root.setFocusableInTouchMode(true);
         root.requestFocus();
         root.setOnKeyListener(new View.OnKeyListener() {
@@ -192,6 +169,35 @@ public class DashboardEmotionFragment extends DashboardBaseFragment {
 
     @OnClick(R.id.tv_uv_detection)
     public void clickUVDetection() {
+
+    }
+
+    private void loadData() {
+        WatchActivity wa = DataUtil.getInstance().getWatchActivityInEmotionFragment();
+        if (null != wa) {
+            setWatchActivity(wa);
+            return;
+        }
+
+        KidsEntityBean kid = DeviceManager.getFocusKidsInfo(getContext());
+        if (null == kid) {
+            return;
+        }
+//        showLoadingDialog(R.string.signup_login_wait);
+        Calendar cld = Calendar.getInstance();
+        int timezoneOffset = cld.getTimeZone().getOffset(cld.getTimeInMillis());
+
+        cld.set(Calendar.HOUR_OF_DAY, 23);
+        cld.set(Calendar.MINUTE, 59);
+        cld.set(Calendar.SECOND, 59);
+        long end = cld.getTimeInMillis() + timezoneOffset;
+
+        cld.add(Calendar.DAY_OF_MONTH, -1);
+        cld.add(Calendar.SECOND, 1);
+        long start = cld.getTimeInMillis() + timezoneOffset;
+
+        new KidActivityManager().retrieveDataByTime(getContext(), kid.getKidsId(), start, end,
+                new IRetrieveCompleteListener(start, end, timezoneOffset, kid.getKidsId()));
 
     }
 

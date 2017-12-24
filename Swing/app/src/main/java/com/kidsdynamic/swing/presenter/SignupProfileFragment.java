@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.kidsdynamic.commonlib.utils.SoftKeyBoardUtil;
 import com.kidsdynamic.data.net.ApiGen;
@@ -71,8 +72,10 @@ public class SignupProfileFragment extends BaseFragment {
     EditText et_last;
     @BindView(R.id.signup_profile_phone)
     EditText et_phone;
-//    @BindView(R.id.signup_profile_zip)
-//    EditText et_zip;
+    //    @BindView(R.id.signup_profile_zip)
+    //    EditText et_zip;
+    @BindView(R.id.signup_profile_submit)
+    TextView tvSubmit;
 
     private File profile;
 
@@ -105,6 +108,8 @@ public class SignupProfileFragment extends BaseFragment {
         et_last.setTypeface(SwingFontsCache.getNormalType(getContext()));
         et_phone.setTypeface(SwingFontsCache.getNormalType(getContext()));
 //        et_zip.setTypeface(SwingFontsCache.getNormalType(getContext()));
+        com.kidsdynamic.swing.utils.ViewUtils.setTextViewNormalTypeFace(getContext(), tvSubmit);
+
     }
 
     @Override
@@ -126,7 +131,7 @@ public class SignupProfileFragment extends BaseFragment {
     @OnClick(R.id.ib_back)
     public void back() {
         SignupActivity signupActivity = (SignupActivity) getActivity();
-        signupActivity.setFragment(SignupLoginFragment.newInstance(),false);
+        signupActivity.setFragment(SignupLoginFragment.newInstance(), false);
     }
 
     @OnClick(R.id.signup_profile_photo)
@@ -311,17 +316,17 @@ public class SignupProfileFragment extends BaseFragment {
                     new LoginManager().saveLoginData(getContext(), response.body());
 
                     //记录状态
-                    new LoginManager().cacheLoginOK(getContext(),response.body().getUser());
+                    new LoginManager().cacheLoginOK(getContext(), response.body().getUser());
 
                     finishLoadingDialog();
 
                     SignupActivity signupActivity = (SignupActivity) getActivity();
-                    signupActivity.setFragment(WatchHaveFragment.newInstance(),false);
+                    signupActivity.setFragment(WatchHaveFragment.newInstance(), false);
 
                 } else {
                     finishLoadingDialog();
                     gotoLoginFragment();
-                    ToastCommon.makeText(getContext(),R.string.profile_login_fail);
+                    ToastCommon.makeText(getContext(), R.string.profile_login_fail);
                 }
 
                 super.onResponse(call, response);
@@ -332,7 +337,7 @@ public class SignupProfileFragment extends BaseFragment {
                 Log.d("syncData", "retrieveUserProfile error, ");
                 super.onFailure(call, t);
 
-                ToastCommon.makeText(getContext(),R.string.cloud_api_call_net_error);
+                ToastCommon.makeText(getContext(), R.string.cloud_api_call_net_error);
                 finishLoadingDialog();
 
                 gotoLoginFragment();
@@ -341,9 +346,9 @@ public class SignupProfileFragment extends BaseFragment {
     }
 
     //如果注册成功，但是登录失败，则跳转到login
-    private void gotoLoginFragment(){
+    private void gotoLoginFragment() {
         SignupActivity signupActivity = (SignupActivity) getActivity();
-        signupActivity.setFragment(SignupLoginFragment.newInstance(),false);
+        signupActivity.setFragment(SignupLoginFragment.newInstance(), false);
     }
 
     private void doWhichClick(int position) {

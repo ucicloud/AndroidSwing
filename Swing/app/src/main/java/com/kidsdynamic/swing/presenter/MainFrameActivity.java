@@ -26,6 +26,7 @@ import com.kidsdynamic.data.net.ApiGen;
 import com.kidsdynamic.data.net.host.model.RequestAddSubHostEntity;
 import com.kidsdynamic.data.net.host.model.SubHostRequests;
 import com.kidsdynamic.data.net.user.UserApiNeedToken;
+import com.kidsdynamic.data.net.user.model.AndroidRegistrationId;
 import com.kidsdynamic.data.persistent.PreferencesUtil;
 import com.kidsdynamic.data.utils.LogUtil2;
 import com.kidsdynamic.swing.R;
@@ -134,9 +135,11 @@ public class MainFrameActivity extends BaseFragmentActivity {
         if (TextUtils.isEmpty(token)) {
             return;
         }
+        AndroidRegistrationId ari = new AndroidRegistrationId();
+        ari.setRegistrationId(token);
         final UserApiNeedToken userApiNeedToken = ApiGen.getInstance(getApplicationContext()).
                 generateApi(UserApiNeedToken.class, true);
-        userApiNeedToken.updateAndroidRegistrationId(token).enqueue(new BaseRetrofitCallback<Object>() {
+        userApiNeedToken.updateAndroidRegistrationId(ari).enqueue(new BaseRetrofitCallback<Object>() {
             @Override
             public void onResponse(Call<Object> call, Response<Object> response) {
                 super.onResponse(call, response);
@@ -173,7 +176,7 @@ public class MainFrameActivity extends BaseFragmentActivity {
             String profileRealUri = UserManager.getProfileRealUri(focusWatchInfo.getProfile());
             GlideHelper.showCircleImageViewWithSignatureWH(
                     this, profileRealUri, String.valueOf(focusWatchInfo.getLastUpdate()),
-                    view_tab_profile.getWidth(),view_tab_profile.getHeight(),
+                    view_tab_profile.getWidth(), view_tab_profile.getHeight(),
                     view_tab_profile);
         }
     }
@@ -188,7 +191,7 @@ public class MainFrameActivity extends BaseFragmentActivity {
 
         //其他用户共享的kids
         List<KidsEntityBean> allKidsByShared = DeviceManager.getAllKidsByShared(this);
-        if(!ObjectUtils.isListEmpty(allKidsByShared)){
+        if (!ObjectUtils.isListEmpty(allKidsByShared)) {
             allKidsByUserId.addAll(allKidsByShared);
         }
 
@@ -239,7 +242,7 @@ public class MainFrameActivity extends BaseFragmentActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
 
-            Log.w("UIChangeReceiver","change broadcast");
+            Log.w("UIChangeReceiver", "change broadcast");
 
             if (intent == null) {
                 return;
@@ -305,7 +308,7 @@ public class MainFrameActivity extends BaseFragmentActivity {
             }
         });*/
 
-         //profile tab long click
+        //profile tab long click
         view_tab_profile.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
@@ -422,6 +425,7 @@ public class MainFrameActivity extends BaseFragmentActivity {
     }
 
     private boolean isHideReminderViewCheck = false;
+
     //add event后的提示介绍页
     public void showAfterAddEventIntroductionUI() {
         ViewIntroductionSync viewIntroductionSync = new ViewIntroductionSync(this.getApplication());
@@ -431,7 +435,7 @@ public class MainFrameActivity extends BaseFragmentActivity {
         viewIntroductionSync.setOnClickListener(new ViewIntroductionSync.OnBtnClickListener() {
             @Override
             public void onClick(View view) {
-                if(isHideReminderViewCheck){
+                if (isHideReminderViewCheck) {
                     //如果用户选择了不再提示
                     PreferencesUtil.getInstance(getApplicationContext()).
                             setPreferenceBooleanValue(ConfigUtil.isHideReminderAfterAddEvent, true);
@@ -453,7 +457,7 @@ public class MainFrameActivity extends BaseFragmentActivity {
         view_container.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(isHideReminderViewCheck){
+                if (isHideReminderViewCheck) {
                     //如果用户选择了不再提示
                     PreferencesUtil.getInstance(getApplicationContext()).
                             setPreferenceBooleanValue(ConfigUtil.isHideReminderAfterAddEvent, true);
@@ -654,8 +658,8 @@ public class MainFrameActivity extends BaseFragmentActivity {
             ((DashboardContainerFragment) currentFragment).setFragment(fragment, isAddBackStack);
         } else if (currentFragment instanceof CalendarContainerFragment) {
             ((CalendarContainerFragment) currentFragment).setFragment(fragment, isAddBackStack);
-        }else if (currentFragment instanceof ProfileContainerFragment) {
-            ((ProfileContainerFragment) currentFragment).setFragment(fragment,isAddBackStack);
+        } else if (currentFragment instanceof ProfileContainerFragment) {
+            ((ProfileContainerFragment) currentFragment).setFragment(fragment, isAddBackStack);
         }
     }
 
@@ -665,8 +669,8 @@ public class MainFrameActivity extends BaseFragmentActivity {
             ((DashboardContainerFragment) currentFragment).selectFragment(className, args, isAddToBackStack);
         } else if (currentFragment instanceof CalendarContainerFragment) {
             ((CalendarContainerFragment) currentFragment).selectFragment(className, args, isAddToBackStack);
-        }else if (currentFragment instanceof ProfileContainerFragment) {
-            ((ProfileContainerFragment) currentFragment).selectFragment(className,args,isAddToBackStack);
+        } else if (currentFragment instanceof ProfileContainerFragment) {
+            ((ProfileContainerFragment) currentFragment).selectFragment(className, args, isAddToBackStack);
         }
     }
 

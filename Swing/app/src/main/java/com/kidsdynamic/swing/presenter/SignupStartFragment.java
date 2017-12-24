@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.kidsdynamic.swing.BaseFragment;
 import com.kidsdynamic.swing.R;
@@ -22,8 +23,15 @@ import butterknife.OnClick;
  */
 
 public class SignupStartFragment extends BaseFragment {
+
     @BindView(R.id.signup_start_login)
-    protected Button btn_login;
+    Button btn_login;
+    @BindView(R.id.signup_start_or)
+    TextView tvOr;
+    @BindView(R.id.signup_login_facebook)
+    TextView tvFacebook;
+    @BindView(R.id.signup_login_google)
+    TextView tvGoogle;
 
     public static SignupStartFragment newInstance() {
         Bundle args = new Bundle();
@@ -39,7 +47,8 @@ public class SignupStartFragment extends BaseFragment {
         View layout = inflater.inflate(R.layout.fragment_signup_start, container, false);
         ButterKnife.bind(this, layout);
 
-        ViewUtils.setBtnTypeFace(getContext(),btn_login);
+        ViewUtils.setBtnTypeFace(getContext(), btn_login);
+        ViewUtils.setTextViewNormalTypeFace(getContext(), tvOr, tvFacebook, tvGoogle);
         return layout;
     }
 
