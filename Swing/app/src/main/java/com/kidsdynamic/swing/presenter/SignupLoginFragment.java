@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -64,10 +65,10 @@ public class SignupLoginFragment extends BaseFragment {
     @BindView(R.id.signup_login_hint_text)
     TextView tvHint;
     @BindView(R.id.signup_login_login)
-    TextView btn_login;
+    Button btn_login;
 
     @BindView(R.id.signup_login_reset_pwd)
-    TextView btn_resetPsw;
+    Button btn_resetPsw;
 
     public static SignupLoginFragment newInstance() {
         Bundle args = new Bundle();

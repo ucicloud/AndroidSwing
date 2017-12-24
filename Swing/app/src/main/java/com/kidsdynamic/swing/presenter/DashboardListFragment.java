@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.kidsdynamic.data.net.activity.model.RetrieveDataRep;
 import com.kidsdynamic.data.repository.disk.ActivityCloudDataStore;
 import com.kidsdynamic.swing.R;
+import com.kidsdynamic.swing.SwingApplication;
 import com.kidsdynamic.swing.domain.BeanConvertor;
 import com.kidsdynamic.swing.domain.DeviceManager;
 import com.kidsdynamic.swing.domain.KidActivityManager;
@@ -275,14 +276,14 @@ public class DashboardListFragment extends DashboardBaseFragment {
                 }
             } else {
 //                finishLoadingDialog();
-                ToastCommon.makeText(getContext(), R.string.dashboard_enqueue_fail_common);
+                ToastCommon.makeText(SwingApplication.getAppContext(), R.string.dashboard_enqueue_fail_common);
             }
         }
 
         @Override
         public void onFailed(String Command, int statusCode) {
 //            finishLoadingDialog();
-            ToastCommon.showToast(getContext(), Command);
+            ToastCommon.showToast(SwingApplication.getAppContext(), Command);
         }
     }
 

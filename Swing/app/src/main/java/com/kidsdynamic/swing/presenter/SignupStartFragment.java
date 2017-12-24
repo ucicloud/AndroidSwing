@@ -29,9 +29,9 @@ public class SignupStartFragment extends BaseFragment {
     @BindView(R.id.signup_start_or)
     TextView tvOr;
     @BindView(R.id.signup_login_facebook)
-    TextView tvFacebook;
+    Button btnFacebook;
     @BindView(R.id.signup_login_google)
-    TextView tvGoogle;
+    Button btnGoogle;
 
     public static SignupStartFragment newInstance() {
         Bundle args = new Bundle();
@@ -48,7 +48,7 @@ public class SignupStartFragment extends BaseFragment {
         ButterKnife.bind(this, layout);
 
         ViewUtils.setBtnTypeFace(getContext(), btn_login);
-        ViewUtils.setTextViewNormalTypeFace(getContext(), tvOr, tvFacebook, tvGoogle);
+        ViewUtils.setTextViewNormalTypeFace(getContext(), tvOr, btnFacebook, btnGoogle);
         return layout;
     }
 
