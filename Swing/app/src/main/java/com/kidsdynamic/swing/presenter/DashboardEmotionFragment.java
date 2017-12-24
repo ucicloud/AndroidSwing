@@ -7,7 +7,6 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -315,8 +314,9 @@ public class DashboardEmotionFragment extends DashboardBaseFragment {
 
         @Override
         public void onFailed(String Command, int statusCode) {
+            //del 失败后不提醒
 //            finishLoadingDialog();
-            ToastCommon.showToast(getContext(), Command);
+//            ToastCommon.showToast(getContext(), Command);
         }
     }
 
