@@ -1,19 +1,16 @@
 package com.kidsdynamic.swing.presenter;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.kidsdynamic.data.dao.DB_User;
 import com.kidsdynamic.data.net.ApiGen;
 import com.kidsdynamic.data.net.host.model.SubHostRequests;
 import com.kidsdynamic.data.net.user.UserApiNeedToken;
@@ -21,7 +18,6 @@ import com.kidsdynamic.swing.BuildConfig;
 import com.kidsdynamic.swing.R;
 import com.kidsdynamic.swing.domain.BeanConvertor;
 import com.kidsdynamic.swing.domain.DeviceManager;
-import com.kidsdynamic.swing.domain.LoginManager;
 import com.kidsdynamic.swing.model.KidsEntityBean;
 import com.kidsdynamic.swing.model.WatchContact;
 import com.kidsdynamic.swing.net.BaseRetrofitCallback;
@@ -52,6 +48,31 @@ public class ProfileOptionFragment extends ProfileBaseFragment {
 
     private SubHostRequests requestInfo;
 
+    @BindView(R.id.tv_edit_profile)
+    TextView tv_edit_profile;
+    @BindView(R.id.tv_change_psw)
+    TextView tv_change_psw;
+    @BindView(R.id.tv_edit_kids)
+    TextView tv_edit_kids;
+    @BindView(R.id.tv_manager_access)
+    TextView tv_manager_access;
+    @BindView(R.id.tv_switch_account)
+    TextView tv_switch_account;
+    @BindView(R.id.tv_logout)
+    TextView tv_logout;
+    @BindView(R.id.tv_about)
+    TextView tv_about;
+    @BindView(R.id.tv_language)
+    TextView tv_language;
+    @BindView(R.id.tv_contact_us)
+    TextView tv_contact_us;
+    @BindView(R.id.tv_privacy)
+    TextView tv_privacy;
+    @BindView(R.id.tv_user_guide)
+    TextView tv_user_guide;
+    @BindView(R.id.tv_version)
+    TextView tv_label_version;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,6 +92,10 @@ public class ProfileOptionFragment extends ProfileBaseFragment {
 
     private void initView() {
         tv_version.setText(String.format("%s %s", BuildConfig.VERSION_NAME, BuildConfig.BUILD_TYPE));
+
+        ViewUtils.setTextViewBoldTypeFace(getContext(),tv_edit_profile,tv_change_psw,
+                tv_edit_kids,tv_manager_access,tv_switch_account,tv_logout,tv_about,
+                tv_language,tv_contact_us,tv_privacy,tv_user_guide,tv_version,tv_label_version);
     }
 
     private void initTitleBar() {

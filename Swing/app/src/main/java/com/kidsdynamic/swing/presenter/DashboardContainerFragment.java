@@ -3,7 +3,6 @@ package com.kidsdynamic.swing.presenter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -68,10 +67,16 @@ public class DashboardContainerFragment extends BaseFragment {
         //modify 2017年11月12日11:01:44 only_app
         //如果当前还未绑定kids，则进入到无设备界面；注意情况：绑定了设备，但未设置focus device
         long currentLoginUserId = LoginManager.getCurrentLoginUserId(getContext());
+
+        // 修改为同时获取自己的设备和别人共享的设备
+       /* List<KidsEntityBean> allKidsByUserId =
+                DeviceManager.getAllKidsByUserId(getContext(), currentLoginUserId);*/
         List<KidsEntityBean> allKidsByUserId =
-                DeviceManager.getAllKidsByUserId(getContext(), currentLoginUserId);
+                DeviceManager.getAllKidsAndShared(getContext());
+
 
         if (ObjectUtils.isListEmpty(allKidsByUserId)) {
+
             // modify 2017年12月13日 Stefan
             // 进入到无设备界面后，会执行到WatchProfileFragment界面，需要return
             if (null != currentFragment && currentFragment instanceof WatchProfileFragment) {

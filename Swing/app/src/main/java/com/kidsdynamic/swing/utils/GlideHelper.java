@@ -109,12 +109,30 @@ public class GlideHelper {
             e.printStackTrace();
         }
     }
+
+    public static void getBitMapWithWH(Context context, String uri, String lastModify,
+                                 int width, int height,
+                                 ImageView imageView) {
+        try {
+            RequestOptions requestOptions = RequestOptions.circleCropTransform()
+                    .placeholder(R.drawable.ic_icon_profile_)
+                    .override(width,height)
+                    .signature(new ObjectKey(lastModify));
+
+            Glide.with(context.getApplicationContext()).asBitmap()
+                    .load(uri)
+                    .apply(requestOptions)
+                    .into(imageView);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
     public static void getBitMapOnlyCacheInMemory(Context context, String uri,
                                                   SimpleTarget<Bitmap> SimpleTarget) {
         try {
             RequestOptions requestOptions = RequestOptions.circleCropTransform()
                     .placeholder(R.drawable.ic_icon_profile_)
-                    .skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.NONE);
+                    .skipMemoryCache(false).diskCacheStrategy(DiskCacheStrategy.NONE);
             Glide.with(context.getApplicationContext()).asBitmap()
                     .load(uri)
                     .apply(requestOptions)
@@ -131,11 +149,27 @@ public class GlideHelper {
             RequestOptions requestOptions = RequestOptions.circleCropTransform()
                     .placeholder(R.drawable.ic_icon_profile_)
                     .override(width,height)
-                    .skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.NONE);
+                    .skipMemoryCache(false).diskCacheStrategy(DiskCacheStrategy.NONE);
             Glide.with(context.getApplicationContext()).asBitmap()
                     .load(uri)
                     .apply(requestOptions)
                     .into(SimpleTarget);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public static void getBitMapOnlyCacheInMemoryWithWH(Context context, String uri,
+                                                  int width,int height,
+                                                        ImageView imageView) {
+        try {
+            RequestOptions requestOptions = RequestOptions.circleCropTransform()
+                    .placeholder(R.drawable.ic_icon_profile_)
+                    .override(width,height)
+                    .skipMemoryCache(false).diskCacheStrategy(DiskCacheStrategy.NONE);
+            Glide.with(context.getApplicationContext()).asBitmap()
+                    .load(uri)
+                    .apply(requestOptions)
+                    .into(imageView);
         } catch (Exception e) {
             e.printStackTrace();
         }

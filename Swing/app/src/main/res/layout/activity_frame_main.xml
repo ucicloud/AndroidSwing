@@ -86,8 +86,8 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_centerInParent="true"
-                android:padding="@dimen/base_2"
-                android:src="@drawable/default_avatar"
+                android:padding="@dimen/base_1"
+                android:src="@drawable/ic_icon_profile_"
                 android:background="@drawable/control_button_profile"
                 android:visibility="visible" />
         </RelativeLayout>
