@@ -66,6 +66,11 @@ public class ProfileKidsInfoFragment extends ProfileBaseFragment {
     @BindView(R.id.profile_main_request_from_container)
     protected LinearLayout mViewRequestFromContainer;
 
+    @BindView(R.id.tv_devices_shared_with_me)
+    TextView tv_devices_shared_with_me;
+    @BindView(R.id.profile_main_request_from_title)
+    TextView profile_main_request_from_title;
+
     @BindView(R.id.btn_edit_kid_profile)
     protected Button btn_editKidsProfile;
 
@@ -123,6 +128,8 @@ public class ProfileKidsInfoFragment extends ProfileBaseFragment {
     }
 
     private void initView() {
+        ViewUtils.setTextViewBoldTypeFace(getContext(),tv_kidsName,
+                tv_devices_shared_with_me,profile_main_request_from_title);
 
         ViewUtils.setBtnTypeFace(getContext(),btn_editKidsProfile,
                 btn_switchAccount,btn_remove);

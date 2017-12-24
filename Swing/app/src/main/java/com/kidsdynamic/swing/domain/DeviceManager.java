@@ -94,6 +94,17 @@ public class DeviceManager {
 
             return kidsInfoByParentId.get(0);
         }
+
+        //如果当前用户没有自己的设备，则查询下共享设备
+        List<DB_Kids> allKidsByShared_dbKids = getAllKidsByShared_DBKids(context);
+        if(!ObjectUtils.isListEmpty(allKidsByShared_dbKids)){
+
+            //如果当前没有缓存focuskids，那边把查询到第一个设置为当前focus
+            updateFocusKids(allKidsByShared_dbKids.get(0).getKidsId());
+
+            return allKidsByShared_dbKids.get(0);
+        }
+
         return null;
     }
 
@@ -276,6 +287,21 @@ public class DeviceManager {
         }
 
         return kidsEntityBeanList;
+    }
+
+    //获取他人分享给自己的watch list
+    public static List<DB_Kids>  getAllKidsByShared_DBKids(Context context){
+        DbUtil dbUtil = DbUtil.getInstance(context.getApplicationContext());
+
+        KidsDataStore kidsDataStore = new KidsDataStore(dbUtil);
+        List<DB_Kids> dbKids = kidsDataStore.getKidsInfoByShared(kidsType_other_kids);
+
+        if(!ObjectUtils.isListEmpty(dbKids)){
+            return dbKids;
+        }
+
+
+        return null;
     }
 
     //获取他人分享给自己的watch list

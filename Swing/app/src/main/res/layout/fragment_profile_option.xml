@@ -38,7 +38,8 @@
         android:paddingEnd="10dp"
         android:paddingStart="10dp">
 
-        <com.kidsdynamic.swing.view.AvenirTextView
+        <TextView
+            android:id="@+id/tv_edit_profile"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
@@ -60,7 +61,8 @@
         android:paddingEnd="10dp"
         android:paddingStart="10dp">
 
-        <com.kidsdynamic.swing.view.AvenirTextView
+        <TextView
+            android:id="@+id/tv_change_psw"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
@@ -82,7 +84,8 @@
         android:paddingEnd="10dp"
         android:paddingStart="10dp">
 
-        <com.kidsdynamic.swing.view.AvenirTextView
+        <TextView
+            android:id="@+id/tv_edit_kids"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
@@ -105,7 +108,8 @@
         android:paddingEnd="10dp"
         android:paddingStart="10dp">
 
-        <com.kidsdynamic.swing.view.AvenirTextView
+        <TextView
+            android:id="@+id/tv_manager_access"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
@@ -129,7 +133,8 @@
         android:paddingStart="10dp"
         android:visibility="visible">
 
-        <com.kidsdynamic.swing.view.AvenirTextView
+        <TextView
+            android:id="@+id/tv_switch_account"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
@@ -181,7 +186,8 @@
         android:paddingEnd="10dp"
         android:paddingStart="10dp">
 
-        <com.kidsdynamic.swing.view.AvenirTextView
+        <TextView
+            android:id="@+id/tv_logout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
@@ -194,7 +200,8 @@
     <View
         style="@style/option_line" />
 
-    <com.kidsdynamic.swing.view.AvenirTextView
+    <TextView
+        android:id="@+id/tv_about"
         style="@style/textview_toolbar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/profile_item_height"
@@ -212,7 +219,8 @@
         android:paddingEnd="10dp"
         android:paddingStart="10dp">
 
-        <com.kidsdynamic.swing.view.AvenirTextView
+        <TextView
+            android:id="@+id/tv_language"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
@@ -233,7 +241,8 @@
         android:paddingEnd="10dp"
         android:paddingStart="10dp">
 
-        <com.kidsdynamic.swing.view.AvenirTextView
+        <TextView
+            android:id="@+id/tv_contact_us"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
@@ -258,7 +267,8 @@
         android:paddingStart="10dp"
         android:visibility="gone">
 
-        <com.kidsdynamic.swing.view.AvenirTextView
+        <TextView
+            android:id="@+id/tv_privacy"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
@@ -284,7 +294,8 @@
         android:paddingEnd="10dp"
         android:paddingStart="10dp">
 
-        <com.kidsdynamic.swing.view.AvenirTextView
+        <TextView
+            android:id="@+id/tv_user_guide"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
@@ -304,7 +315,8 @@
         android:paddingEnd="10dp"
         android:paddingStart="10dp">
 
-        <com.kidsdynamic.swing.view.AvenirTextView
+        <TextView
+            android:id="@+id/tv_version"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical"

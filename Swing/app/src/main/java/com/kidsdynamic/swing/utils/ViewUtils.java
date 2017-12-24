@@ -92,7 +92,7 @@ public class ViewUtils {
         ByteArrayOutputStream baos = null;
         try{
             baos = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.JPEG,5,baos);
+            bitmap.compress(Bitmap.CompressFormat.JPEG,1,baos);
         }catch (Exception e){
             e.printStackTrace();
         }finally {

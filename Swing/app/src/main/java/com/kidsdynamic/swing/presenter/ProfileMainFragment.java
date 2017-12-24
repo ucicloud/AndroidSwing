@@ -476,9 +476,12 @@ public class ProfileMainFragment extends ProfileBaseFragment {
         if(contact instanceof WatchContact.Kid){
             WatchContact.Kid kid = (WatchContact.Kid) contact;
             if(!TextUtils.isEmpty(kid.mProfile)){
-                GlideHelper.getBitMap(getContext().getApplicationContext(),
+
+                GlideHelper.getBitMapWithWH(getContext().getApplicationContext(),
                         UserManager.getProfileRealUri(kid.mProfile),
-                        kid.mLastUpdate+"",new AvatarSimpleTarget(photo));
+                        kid.mLastUpdate+"",
+                        photo.getWidth(),photo.getHeight(),
+                        new AvatarSimpleTarget(photo));
             }
         }else if(contact instanceof WatchContact.User){
             WatchContact.User user = (WatchContact.User) contact;
