@@ -13,8 +13,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.kidsdynamic.commonlib.utils.SoftKeyBoardUtil;
 import com.kidsdynamic.data.net.ApiGen;
@@ -33,7 +33,6 @@ import com.kidsdynamic.swing.BaseFragment;
 import com.kidsdynamic.swing.R;
 import com.kidsdynamic.swing.domain.LoginManager;
 import com.kidsdynamic.swing.net.BaseRetrofitCallback;
-import com.kidsdynamic.swing.utils.SwingFontsCache;
 import com.kidsdynamic.swing.view.BottomPopWindow;
 import com.kidsdynamic.swing.view.CropImageView;
 import com.kidsdynamic.swing.view.CropPopWindow;
@@ -75,7 +74,7 @@ public class SignupProfileFragment extends BaseFragment {
     //    @BindView(R.id.signup_profile_zip)
     //    EditText et_zip;
     @BindView(R.id.signup_profile_submit)
-    TextView tvSubmit;
+    Button btnSubmit;
 
     private File profile;
 
@@ -104,11 +103,8 @@ public class SignupProfileFragment extends BaseFragment {
     }
 
     private void initEditTextStyle() {
-        et_first.setTypeface(SwingFontsCache.getNormalType(getContext()));
-        et_last.setTypeface(SwingFontsCache.getNormalType(getContext()));
-        et_phone.setTypeface(SwingFontsCache.getNormalType(getContext()));
-//        et_zip.setTypeface(SwingFontsCache.getNormalType(getContext()));
-        com.kidsdynamic.swing.utils.ViewUtils.setTextViewNormalTypeFace(getContext(), tvSubmit);
+        com.kidsdynamic.swing.utils.ViewUtils.setTextViewNormalTypeFace(getContext(), et_first,
+                et_last, et_phone, btnSubmit);
 
     }
 

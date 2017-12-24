@@ -60,13 +60,13 @@
             android:textSize="15sp"
             android:visibility="invisible" />
 
-        <TextView
+        <Button
             android:id="@+id/signup_login_login"
             style="@style/button_main"
             android:layout_width="match_parent"
             android:text="@string/signup_login_enter" />
 
-        <TextView
+        <Button
             android:id="@+id/signup_login_reset_pwd"
             style="@style/button_main"
             android:layout_width="match_parent"

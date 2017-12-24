@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.kidsdynamic.data.net.activity.model.RetrieveDataRep;
 import com.kidsdynamic.data.repository.disk.ActivityCloudDataStore;
 import com.kidsdynamic.swing.R;
+import com.kidsdynamic.swing.SwingApplication;
 import com.kidsdynamic.swing.domain.BeanConvertor;
 import com.kidsdynamic.swing.domain.DeviceManager;
 import com.kidsdynamic.swing.domain.KidActivityManager;
@@ -111,6 +112,11 @@ public class DashboardChartSingleFragment extends DashboardBaseFragment {
 //        int right = (int) getResources().getDimension(R.dimen.base_12);
 //        view_right_action.setPadding(0, 0, right, 0);
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         Bundle args = getArguments();
         Integer door = DataUtil.getInstance().getDoorTypeInSingleChart();
         if (null == door) {
@@ -119,12 +125,7 @@ public class DashboardChartSingleFragment extends DashboardBaseFragment {
         mRadioButtonIndoor.setChecked(INDOOR == door);
         mRadioButtonOutdoor.setChecked(OUTDOOR == door);
         mRadioGroup.setOnCheckedChangeListener(onCheckedChangeListener);
-//    }
-//
-//    @Override
-//    public void onResume() {
-//        super.onResume();
-//        Bundle args = getArguments();
+
         Integer emotion = DataUtil.getInstance().getEmotionInSingleChart();
         if (null == emotion) {
             WatchActivity wa = null != args ? (WatchActivity) args.getSerializable(WATCH_ACTIVITY) : null;
@@ -141,13 +142,19 @@ public class DashboardChartSingleFragment extends DashboardBaseFragment {
                 getString(R.string.dashboard_chart_this_year)));
 
         mViewIndicator.setDotCount(mViewSelector.getCount());
-        mViewIndicator.setDotPosition(0);
+        Integer chartType = DataUtil.getInstance().getChartTypeInSingleChart();
+        if (null == chartType) {
+            mViewIndicator.setDotPosition(0);
+            mViewSelector.select(0);
+        } else {
+            mViewIndicator.setDotPosition(chartType);
+            mViewSelector.select(chartType);
+        }
 
         initViewPager();
 
         setEmotion(emotion);
 
-        Integer chartType = DataUtil.getInstance().getChartTypeInSingleChart();
         if (null == chartType) {
             chartType = null != args ? args.getInt(CHART_TYPE, CHART_TODAY) : CHART_TODAY;
             showChart(chartType);
@@ -161,11 +168,6 @@ public class DashboardChartSingleFragment extends DashboardBaseFragment {
                 loadData();
             }
         }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
         View root = getView();
         if (null == root) {
             return;
@@ -187,7 +189,6 @@ public class DashboardChartSingleFragment extends DashboardBaseFragment {
 
     @OnClick(R.id.main_toolbar_action1)
     public void onToolbarAction1() {
-//        mActivityMain.popFragment();
         clearSavedData();
         getFragmentManager().popBackStack();
     }
@@ -234,14 +235,14 @@ public class DashboardChartSingleFragment extends DashboardBaseFragment {
                         .execute(arg, start, end, timezoneOffset);
             } else {
 //                finishLoadingDialog();
-                ToastCommon.makeText(getContext(), R.string.dashboard_enqueue_fail_common);
+                ToastCommon.makeText(SwingApplication.getAppContext(), R.string.dashboard_enqueue_fail_common);
             }
         }
 
         @Override
         public void onFailed(String Command, int statusCode) {
 //            finishLoadingDialog();
-            ToastCommon.showToast(getContext(), Command);
+//            ToastCommon.showToast(SwingApplication.getAppContext(), Command);
         }
     }
 
@@ -347,6 +348,7 @@ public class DashboardChartSingleFragment extends DashboardBaseFragment {
     private View.OnClickListener onChartClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+            setSavedData();
             setFragment(DashboardListFragment.newInstance(getDoor(), mCurrentChart, mEmotion), true);
         }
     };
