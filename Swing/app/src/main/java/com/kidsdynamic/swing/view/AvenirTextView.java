@@ -51,11 +51,11 @@ public class AvenirTextView extends TextView {
         //为了减少内存使用，使用缓存的typeface
         if(textStyle == Typeface.BOLD){
 //            setTypeface(Typeface.createFromAsset(getContext().getAssets(),"font_bold"));
-            setTypeface(SwingFontsCache.getBoldType(getContext()));
+            setTypeface(SwingFontsCache.getBoldType(context));
         }else {
 
 //            setTypeface(Typeface.createFromAsset(getContext().getAssets(),"font_normal"));
-            setTypeface(SwingFontsCache.getNormalType(getContext()));
+            setTypeface(SwingFontsCache.getNormalType(context));
         }
 
     }

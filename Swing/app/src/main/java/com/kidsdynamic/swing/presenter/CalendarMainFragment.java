@@ -115,6 +115,10 @@ public class CalendarMainFragment extends CalendarBaseFragment {
         InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(mViewMain.getWindowToken(), 0);
 
+
+        ViewUtils.setTextViewBoldTypeFace(getContext(),mViewAlertTime,mViewAlertTime_a,
+                mViewAlertEvent);
+
         initTitleBar();
         initCalendar();
 

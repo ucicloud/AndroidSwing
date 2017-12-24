@@ -28,7 +28,8 @@ public class KidsDataStore {
 
     public void save(@NonNull List<DB_Kids> kidsList){
         KidsDao kidsDao = dbUtil.getDaoSession().getKidsDao();
-        kidsDao.insertInTx(kidsList);
+//        kidsDao.insertOrReplaceInTx();
+        kidsDao.insertOrReplaceInTx(kidsList);
     }
 
     public DB_Kids getKidsInfo(long kidsId){

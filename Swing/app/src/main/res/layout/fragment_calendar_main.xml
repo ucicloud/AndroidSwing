@@ -92,7 +92,7 @@
             android:paddingEnd="10dp"
             android:paddingStart="10dp">
 
-            <com.kidsdynamic.swing.view.AvenirTextView
+            <TextView
                 android:id="@+id/calendar_main_alert_time"
                 style="@style/textview_main"
                 android:layout_width="match_parent"
@@ -102,7 +102,7 @@
                 android:gravity="center_horizontal|bottom"
                 android:textSize="28sp" />
 
-            <com.kidsdynamic.swing.view.AvenirTextView
+            <TextView
                 android:id="@+id/calendar_main_alert_time_a"
                 style="@style/textview_main"
                 android:textSize="15sp"
@@ -113,7 +113,7 @@
                 android:layout_weight="1"
                 android:gravity="center|top"/>
 
-            <com.kidsdynamic.swing.view.AvenirTextView
+            <TextView
                 android:id="@+id/calendar_main_alert_event"
                 style="@style/textview_toolbar"
                 android:layout_width="match_parent"
@@ -184,7 +184,7 @@
         android:background="#7573C0"
         android:visibility="gone">
 
-        <com.kidsdynamic.swing.view.AvenirTextView
+        <TextView
             android:id="@+id/tv_event_time"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -193,7 +193,7 @@
             android:textSize="@dimen/body1_14"
             android:text="03:00-04:00 pm"/>
 
-        <com.kidsdynamic.swing.view.AvenirTextView
+        <TextView
             android:id="@+id/tv_event_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -204,7 +204,7 @@
             android:textStyle="bold"
             android:text="03:00-04:00 pm"/>
 
-        <com.kidsdynamic.swing.view.AvenirTextView
+        <TextView
             android:id="@+id/tv_event_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -212,8 +212,7 @@
             android:layout_marginTop="@dimen/base_5"
             android:layout_marginBottom="@dimen/base_5"
             android:textColor="@color/color_white"
-            android:textSize="@dimen/body1_14"
-            android:text="Well there are a few ways to go about this depending on the intended behavior, but this link should give you all the best solutions and not surprisingly is from Dianne Hackborn"/>
+            android:textSize="@dimen/body1_14"/>
 
         <LinearLayout
             android:id="@+id/layout_btn"

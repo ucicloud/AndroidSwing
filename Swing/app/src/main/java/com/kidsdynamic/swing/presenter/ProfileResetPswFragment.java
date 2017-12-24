@@ -19,6 +19,8 @@ import com.kidsdynamic.data.net.ApiGen;
 import com.kidsdynamic.data.net.user.UserApiNeedToken;
 import com.kidsdynamic.data.net.user.model.UpdatePasswordRequest;
 import com.kidsdynamic.swing.R;
+import com.kidsdynamic.swing.SwingApplication;
+import com.kidsdynamic.swing.domain.LoginManager;
 import com.kidsdynamic.swing.net.BaseRetrofitCallback;
 import com.kidsdynamic.swing.utils.SwingFontsCache;
 import com.yy.base.utils.ToastCommon;
@@ -181,12 +183,17 @@ public class ProfileResetPswFragment extends ProfileBaseFragment {
                     /*String message = response.body().getMessage();
                     Log.d("profile","update msg:" + message);*/
                     ToastCommon.makeText(getContext(), R.string.psw_need_longer_6);
+                } else if(403 == response.code()){//token 无效，提示重新登录
+                    ToastCommon.makeText(SwingApplication.getAppContext(), R.string.token_invalid);
+
+                    LoginManager.clearAcvShowLogin();
+
                 }else {
                     ToastCommon.makeText(getContext(), R.string.profile_editor_avatar_failed);
                 }
 
                 finishLoadingDialog();
-                super.onResponse(call, response);
+//                super.onResponse(call, response);
             }
 
             @Override

@@ -13,6 +13,7 @@ import com.kidsdynamic.data.dao.DB_Kids;
 import com.kidsdynamic.swing.BaseFragment;
 import com.kidsdynamic.swing.R;
 import com.kidsdynamic.swing.domain.DeviceManager;
+import com.kidsdynamic.swing.utils.ViewUtils;
 import com.kidsdynamic.swing.view.ViewCircle;
 
 import java.util.Locale;
@@ -51,6 +52,8 @@ public class FragmentDevice extends BaseFragment {
         mViewCapacity = (TextView) mViewMain.findViewById(R.id.device_capacity);
         mViewProgress = (ViewCircle) mViewMain.findViewById(R.id.device_battery);
         mViewProgress.setOnProgressListener(mProgressListener);
+
+        ViewUtils.setTextViewBoldTypeFace(getContext(),mViewStatus,mViewCapacity);
 
         mHandler = new Handler();
 

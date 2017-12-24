@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.kidsdynamic.data.dao.DB_Kids;
@@ -13,6 +14,7 @@ import com.kidsdynamic.swing.R;
 import com.kidsdynamic.swing.domain.DeviceManager;
 import com.kidsdynamic.swing.domain.UserManager;
 import com.kidsdynamic.swing.utils.GlideHelper;
+import com.kidsdynamic.swing.utils.ViewUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -35,6 +37,15 @@ public class DashboardMainFragment extends DashboardBaseFragment {
 
     @BindView(R.id.tv_kids_name)
     TextView tv_kids_name;
+    @BindView(R.id.tv_dashboard_main_note)
+    TextView tv_textview_main;
+
+    @BindView(R.id.watch_sync_yes)
+    Button btn_sync_yes;
+    @BindView(R.id.watch_sync_no)
+    Button btn_sync_no;
+    @BindView(R.id.watch_sync_add)
+    Button btn_sync_add;
 
     private String mAvatarFilename = "";
     private String kidName;
@@ -68,6 +79,9 @@ public class DashboardMainFragment extends DashboardBaseFragment {
                              @Nullable Bundle savedInstanceState) {
         View layout = inflater.inflate(R.layout.fragment_dashboard_main, container, false);
         ButterKnife.bind(this, layout);
+
+        ViewUtils.setBtnTypeFace(getContext(),btn_sync_yes,btn_sync_no,btn_sync_add);
+        ViewUtils.setTextViewBoldTypeFace(getContext(), tv_kids_name,tv_textview_main);
         return layout;
     }
 

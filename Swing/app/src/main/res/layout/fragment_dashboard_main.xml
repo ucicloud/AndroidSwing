@@ -17,7 +17,7 @@
         app:crossWidth="2dp"
         app:strokeColorNormal="@color/hex_1b89cd" />
 
-    <com.kidsdynamic.swing.view.AvenirTextView
+    <TextView
         android:id="@+id/tv_kids_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -28,7 +28,8 @@
         android:textSize="20sp"
         android:textStyle="bold" />
 
-    <com.kidsdynamic.swing.view.AvenirTextView
+    <TextView
+        android:id="@+id/tv_dashboard_main_note"
         style="@style/textview_main"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -47,7 +48,7 @@
         android:layout_weight="6"
         android:orientation="vertical">
 
-        <com.kidsdynamic.swing.view.AvenirTextView
+        <Button
             android:id="@+id/watch_sync_yes"
             style="@style/button_main"
             android:layout_width="match_parent"
@@ -55,7 +56,7 @@
             android:textStyle="bold"
             android:text="@string/dashboard_main_yes" />
 
-        <com.kidsdynamic.swing.view.AvenirTextView
+        <Button
             android:id="@+id/watch_sync_no"
             style="@style/button_main"
             android:layout_width="match_parent"
@@ -63,7 +64,7 @@
             android:textStyle="bold"
             android:text="@string/dashboard_main_dashboard" />
 
-        <com.kidsdynamic.swing.view.AvenirTextView
+        <Button
             android:id="@+id/watch_sync_add"
             style="@style/button_main"
             android:layout_width="match_parent"

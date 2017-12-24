@@ -114,7 +114,7 @@ public class GlideHelper {
         try {
             RequestOptions requestOptions = RequestOptions.circleCropTransform()
                     .placeholder(R.drawable.ic_icon_profile_)
-                    .skipMemoryCache(false).diskCacheStrategy(DiskCacheStrategy.NONE);
+                    .skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.NONE);
             Glide.with(context.getApplicationContext()).asBitmap()
                     .load(uri)
                     .apply(requestOptions)
@@ -131,7 +131,7 @@ public class GlideHelper {
             RequestOptions requestOptions = RequestOptions.circleCropTransform()
                     .placeholder(R.drawable.ic_icon_profile_)
                     .override(width,height)
-                    .skipMemoryCache(false).diskCacheStrategy(DiskCacheStrategy.NONE);
+                    .skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.NONE);
             Glide.with(context.getApplicationContext()).asBitmap()
                     .load(uri)
                     .apply(requestOptions)
@@ -172,7 +172,7 @@ public class GlideHelper {
         try {
             RequestOptions requestOptions = RequestOptions.circleCropTransform()
                     .placeholder(R.drawable.ic_icon_profile_)
-                    .skipMemoryCache(false).diskCacheStrategy(DiskCacheStrategy.NONE);
+                    .skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.NONE);
             Glide.with(context.getApplicationContext())
                     .load(mode)
                     .apply(requestOptions)

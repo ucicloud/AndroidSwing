@@ -63,13 +63,13 @@
                 app:strokeEnd="-1"
                 app:strokeWidth="10dp" />
 
-            <com.kidsdynamic.swing.view.AvenirTextView
+            <TextView
                 android:id="@+id/device_base_line"
                 android:layout_width="match_parent"
                 android:layout_height="20dp"
                 android:layout_centerInParent="true" />
 
-            <com.kidsdynamic.swing.view.AvenirTextView
+            <TextView
                 android:id="@+id/device_capacity"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
