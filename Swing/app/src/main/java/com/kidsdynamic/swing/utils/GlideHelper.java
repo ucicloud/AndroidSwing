@@ -25,6 +25,7 @@ public class GlideHelper {
     public static void showCircleImageView(Context context, Object mode, ImageView imageView) {
         try {
             RequestOptions requestOptions = RequestOptions.circleCropTransform()
+                    .encodeQuality(50)
                     .placeholder(R.drawable.ic_icon_profile_);
             Glide.with(context.getApplicationContext())
                     .load(mode)
@@ -38,6 +39,7 @@ public class GlideHelper {
     public static void showCircleImageViewWithSignature(Context context, Object mode, String lastModify, ImageView imageView) {
         try {
             RequestOptions requestOptions = RequestOptions.circleCropTransform()
+                    .encodeQuality(50)
                     .signature(new ObjectKey(lastModify));
             Glide.with(context.getApplicationContext())
                     .load(mode)
@@ -53,6 +55,7 @@ public class GlideHelper {
                                                         ImageView imageView) {
         try {
             RequestOptions requestOptions = RequestOptions.circleCropTransform()
+                    .encodeQuality(50)
                     .override(width,height)
                     .signature(new ObjectKey(lastModify));
             Glide.with(context.getApplicationContext())
@@ -80,6 +83,7 @@ public class GlideHelper {
     public static void getBitMap(Context context, String uri, String lastModify, SimpleTarget<Bitmap> SimpleTarget) {
         try {
             RequestOptions requestOptions = RequestOptions.circleCropTransform()
+                    .encodeQuality(50)
                     .placeholder(R.drawable.ic_icon_profile_)
                     .signature(new ObjectKey(lastModify));
 
@@ -97,6 +101,7 @@ public class GlideHelper {
                                  SimpleTarget<Bitmap> SimpleTarget) {
         try {
             RequestOptions requestOptions = RequestOptions.circleCropTransform()
+                    .encodeQuality(50)
                     .placeholder(R.drawable.ic_icon_profile_)
                     .override(width,height)
                     .signature(new ObjectKey(lastModify));
@@ -132,6 +137,7 @@ public class GlideHelper {
         try {
             RequestOptions requestOptions = RequestOptions.circleCropTransform()
                     .placeholder(R.drawable.ic_icon_profile_)
+                    .encodeQuality(50)
                     .skipMemoryCache(false).diskCacheStrategy(DiskCacheStrategy.NONE);
             Glide.with(context.getApplicationContext()).asBitmap()
                     .load(uri)
@@ -149,6 +155,7 @@ public class GlideHelper {
             RequestOptions requestOptions = RequestOptions.circleCropTransform()
                     .placeholder(R.drawable.ic_icon_profile_)
                     .override(width,height)
+                    .encodeQuality(50)
                     .skipMemoryCache(false).diskCacheStrategy(DiskCacheStrategy.NONE);
             Glide.with(context.getApplicationContext()).asBitmap()
                     .load(uri)
@@ -206,6 +213,7 @@ public class GlideHelper {
         try {
             RequestOptions requestOptions = RequestOptions.circleCropTransform()
                     .placeholder(R.drawable.ic_icon_profile_)
+                    .encodeQuality(50)
                     .skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.NONE);
             Glide.with(context.getApplicationContext())
                     .load(mode)

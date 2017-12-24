@@ -91,7 +91,8 @@ public class SignupLoginFragment extends BaseFragment {
         et_email.setTypeface(SwingFontsCache.getNormalType(getContext()));
         et_password.setTypeface(SwingFontsCache.getNormalType(getContext()));
 
-        ViewUtils.setTextViewBoldTypeFace(getContext(),btn_login);
+        ViewUtils.setTextViewBoldTypeFace(getContext(), et_email, et_password, tvHint, btn_login,
+                btn_resetPsw);
     }
 
     @Override
@@ -282,21 +283,21 @@ public class SignupLoginFragment extends BaseFragment {
 
     //add 2017年12月16日15:43:32 only
     //登陆时获取其他用户共享的watch
-    private void getSharedKidsInfo(final UserProfileRep.UserEntity userEntity){
-        HostApi  hostApi =  ApiGen.getInstance(getContext()).
-                generateApi(HostApi.class,true);
+    private void getSharedKidsInfo(final UserProfileRep.UserEntity userEntity) {
+        HostApi hostApi = ApiGen.getInstance(getContext()).
+                generateApi(HostApi.class, true);
 
         hostApi.subHostList(WatchContact.User.STATUS_ACCEPTED).enqueue(new Callback<SubHostRequests>() {
             @Override
-            public void onResponse(Call< SubHostRequests > call, Response<SubHostRequests> response) {
+            public void onResponse(Call<SubHostRequests> call, Response<SubHostRequests> response) {
                 int code = response.code();
-                if(code == 200){
+                if (code == 200) {
                     DeviceManager.saveKidsData4Shared(response.body().getRequestTo());
 
                     //继续获取信息: 获取event信息
                     getEventInfos(userEntity);
 
-                }else {
+                } else {
                     finishLoadingDialog();
                     LogUtil2.getUtils().d("onResponse code: " + code);
 

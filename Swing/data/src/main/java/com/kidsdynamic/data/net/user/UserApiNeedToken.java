@@ -1,5 +1,6 @@
 package com.kidsdynamic.data.net.user;
 
+import com.kidsdynamic.data.net.user.model.AndroidRegistrationId;
 import com.kidsdynamic.data.net.user.model.UpdatePasswordRequest;
 import com.kidsdynamic.data.net.user.model.UserInfo;
 import com.kidsdynamic.data.net.user.model.UserProfileRep;
@@ -51,22 +52,21 @@ public interface UserApiNeedToken {
     //   400 Bad request. The token is invalid
     //   500 Internal error. Please send me the error. I will fix it
     /*
-Success - Return 200 status with empty json
-{
-}
-Error 400
-{
+    Success - Return 200 status with empty json
+    {
+    }
+    Error 400
+    {
     "message": "The password has to be longer than 6 characters"
-}
+    }
     * */
     @POST("v1/user/updatePassword ")
-    Call<Map<String,String>> updatePassword(@Body UpdatePasswordRequest updatePasswordRequest);
+    Call<Map<String, String>> updatePassword(@Body UpdatePasswordRequest updatePasswordRequest);
 
     //   200 Update the registration id successfully
     //   400 Bad request. The token is invalid
     //   500 Internal error. Please send me the error. I will fix it
-    @Headers("Content-Type: application/json; charset=UTF-8")
     @PUT("v1/user/updateAndroidRegistrationId")
-    Call<Object> updateAndroidRegistrationId(@Body String registrationId);
+    Call<Object> updateAndroidRegistrationId(@Body AndroidRegistrationId androidRegistrationId);
 
 }

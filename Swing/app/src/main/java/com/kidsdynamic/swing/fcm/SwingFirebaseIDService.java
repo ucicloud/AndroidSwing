@@ -8,6 +8,7 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
 import com.kidsdynamic.data.net.ApiGen;
 import com.kidsdynamic.data.net.user.UserApiNeedToken;
+import com.kidsdynamic.data.net.user.model.AndroidRegistrationId;
 import com.kidsdynamic.swing.net.BaseRetrofitCallback;
 
 import retrofit2.Call;
@@ -49,12 +50,11 @@ public class SwingFirebaseIDService extends FirebaseInstanceIdService {
             return;
         }
         // TODO: Implement this method to send token to your app server.
-        if (TextUtils.isEmpty(token)) {
-            return;
-        }
+        AndroidRegistrationId ari = new AndroidRegistrationId();
+        ari.setRegistrationId(token);
         final UserApiNeedToken userApiNeedToken = ApiGen.getInstance(getApplicationContext()).
                 generateApi(UserApiNeedToken.class, true);
-        userApiNeedToken.updateAndroidRegistrationId(token).enqueue(new BaseRetrofitCallback<Object>() {
+        userApiNeedToken.updateAndroidRegistrationId(ari).enqueue(new BaseRetrofitCallback<Object>() {
             @Override
             public void onResponse(Call<Object> call, Response<Object> response) {
                 super.onResponse(call, response);

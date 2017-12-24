@@ -455,9 +455,6 @@ public class DashboardListFragment extends DashboardBaseFragment {
                 watchActivities.add(new WatchActivity((Long) params[4], timestamp));
                 timestamp += millisInDay;
             }
-            if (null == activitiesEntities || activitiesEntities.isEmpty()) {
-                return watchActivities;
-            }
             for (WatchActivity act : watchActivities) {
                 for (RetrieveDataRep.ActivitiesEntity entity : activitiesEntities) {
                     long receiveDate = BeanConvertor.getLocalTimeStamp(entity.getReceivedDate());

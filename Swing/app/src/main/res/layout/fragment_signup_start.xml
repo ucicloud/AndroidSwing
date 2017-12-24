@@ -23,7 +23,7 @@
             android:layout_width="match_parent"
             android:text="@string/signup_start_login" />
 
-        <com.kidsdynamic.swing.view.AvenirTextView
+        <TextView
             android:id="@+id/signup_start_or"
             style="@style/textview_main"
             android:layout_width="wrap_content"
@@ -34,7 +34,7 @@
             android:textStyle="bold"
             android:visibility="invisible" />
 
-        <com.kidsdynamic.swing.view.AvenirTextView
+        <TextView
             android:id="@+id/signup_login_facebook"
             style="@style/button_main"
             android:layout_width="match_parent"
@@ -42,7 +42,7 @@
             android:text="@string/signup_start_facebook"
             android:visibility="invisible" />
 
-        <com.kidsdynamic.swing.view.AvenirTextView
+        <TextView
             android:id="@+id/signup_login_google"
             style="@style/button_main"
             android:layout_width="match_parent"
