@@ -452,7 +452,7 @@ public class SwingScanActivity extends AppCompatActivity implements View.OnClick
                     return;
                 }
 
-                oye = !oye;
+//                oye = !oye;
                 String name = null;
                 FileInputStream fileA = null;
                 FileInputStream fileB = null;
@@ -477,9 +477,7 @@ public class SwingScanActivity extends AppCompatActivity implements View.OnClick
                         return;
                     }
                 }
-
-                List<EventModel> list = genEvents();
-
+                
                 mBluetoothService.closeConnect();
                 progressDialog.setMessage("升级设备中" + name);
                 progressDialog.show();

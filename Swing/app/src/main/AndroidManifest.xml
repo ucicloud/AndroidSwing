@@ -33,11 +33,11 @@
             android:name=".presenter.SignupActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan|stateHidden">
-        <!--<intent-filter>
+        <intent-filter>
             <action android:name="android.intent.action.MAIN" />
 
             <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>-->
+        </intent-filter>
     </activity>
 
     <activity
@@ -95,11 +95,11 @@
         <activity
             android:name="com.kidsdynamic.swing.bletest.SwingScanActivity"
             android:screenOrientation="portrait">
-            <intent-filter>
+            <!--<intent-filter>
                     <action android:name="android.intent.action.MAIN" />
 
                     <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            </intent-filter>-->
         </activity>
     </application>
 

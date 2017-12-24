@@ -65,6 +65,6 @@ public class SwingBLEAttributes {
     public static final int HAL_FLASH_WORD_SIZE = 4;
 
     public static final int OAD_TRANSMIT_INTERVAL = 30;//ms
-    public static final int OAD_ONCE_NUMBER = 1;
+    public static final int OAD_ONCE_NUMBER = 4;
 }
 

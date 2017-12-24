@@ -116,8 +116,8 @@ public class SwingBLEService extends Service {
 
                     if (currentFileVer != null) {
                         if (threadHandler != null) {
-//                            threadHandler.sendEmptyMessage(SwingBLEAttributes.MSG_UPGRADE_DOWNING_IMAGE_HEADER);
-                            threadHandler.sendEmptyMessageDelayed(SwingBLEAttributes.MSG_UPGRADE_DOWNING_IMAGE_HEADER, 1000);
+                            threadHandler.sendEmptyMessage(SwingBLEAttributes.MSG_UPGRADE_DOWNING_IMAGE_HEADER);
+//                            threadHandler.sendEmptyMessageDelayed(SwingBLEAttributes.MSG_UPGRADE_DOWNING_IMAGE_HEADER, 1000);
                         }
                     }
 
@@ -238,7 +238,7 @@ public class SwingBLEService extends Service {
                             public void onSuccess(BluetoothGattCharacteristic characteristic) {
                                 ViseLog.i(characteristic.getUuid() + " characteristic onSuccess");
                                 if (threadHandler != null) {
-                                    threadHandler.sendEmptyMessage(SwingBLEAttributes.MSG_UPGRADE_DOWNING_IMAGE_NO_RESPONSE);
+                                    threadHandler.sendEmptyMessage(SwingBLEAttributes.MSG_UPGRADE_DOWNING_IMAGE);
                                 }
                             }
                         });
@@ -319,7 +319,7 @@ public class SwingBLEService extends Service {
                         if(ViseBluetooth.getInstance().getBluetoothGatt().writeCharacteristic(characteristic)) {
                             if(iBlocks == nBlocks) {
                                 if (threadHandler != null) {
-                                    threadHandler.sendEmptyMessageDelayed(SwingBLEAttributes.MSG_UPGRADE_DONE_IMAGE, SwingBLEAttributes.OAD_TRANSMIT_INTERVAL);
+                                    threadHandler.sendEmptyMessageDelayed(SwingBLEAttributes.MSG_UPGRADE_DONE_IMAGE, 500);
                                 }
                                 return;
                             }
@@ -1208,10 +1208,12 @@ public class SwingBLEService extends Service {
                                         SwingBLEService.this.gatt = gatt;
 
                                         if (Build.VERSION.SDK_INT >= 21) {
-                                            if (gatt.requestConnectionPriority(BluetoothGatt.CONNECTION_PRIORITY_HIGH)) {
-                                                ViseLog.i("enable CONNECTION_PRIORITY_HIGH");
-                                            }
+                                            //升级时禁用高优先级连接，否则将导致升级失败
+//                                            if (gatt.requestConnectionPriority(BluetoothGatt.CONNECTION_PRIORITY_HIGH)) {
+//                                                ViseLog.i("enable CONNECTION_PRIORITY_HIGH");
+//                                            }
                                         }
+
 
                                         runOnMainThread(new Runnable() {
                                             @Override
