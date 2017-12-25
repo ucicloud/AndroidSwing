@@ -8,8 +8,8 @@ ext {
     butterKnifeVersion = '8.8.1'
 
     //    rxJavaVersion = '1.0.14'
-    rxJavaVersion = '1.1.1'
-    rxAndroidVersion = '1.0.1'
+//    rxJavaVersion = '1.1.1'
+//    rxAndroidVersion = '1.0.1'
 
     //greenDao
     greenDaoVersion = '2.1.0'

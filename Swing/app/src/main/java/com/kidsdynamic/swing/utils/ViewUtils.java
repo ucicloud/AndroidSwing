@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.kidsdynamic.swing.R;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 
 /**
@@ -89,10 +90,17 @@ public class ViewUtils {
             return null;
         }
 
+        Bitmap compressBitMap = null;
+
         ByteArrayOutputStream baos = null;
+        ByteArrayInputStream inputStream = null;
         try{
             baos = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.JPEG,1,baos);
+            bitmap.compress(Bitmap.CompressFormat.JPEG,10,baos);
+
+            /*inputStream = new ByteArrayInputStream(baos.toByteArray());
+            compressBitMap = BitmapFactory.decodeStream(inputStream);*/
+
         }catch (Exception e){
             e.printStackTrace();
         }finally {
@@ -100,10 +108,18 @@ public class ViewUtils {
                 if(baos != null){
                     baos.close();
                 }
+                if(inputStream != null){
+                    inputStream.close();
+                }
             }catch (Exception e){
                 e.printStackTrace();
             }
         }
-        return bitmap;
+
+        if(compressBitMap != null){
+            return compressBitMap;
+        }else {
+            return bitmap;
+        }
     }
 }

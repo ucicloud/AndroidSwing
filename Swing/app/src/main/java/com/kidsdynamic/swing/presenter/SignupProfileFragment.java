@@ -416,7 +416,7 @@ public class SignupProfileFragment extends BaseFragment {
                 vc_photo.setStrokeWidth(4.0f);
                 vc_photo.setCrossWidth(0.0f);
                 vc_photo.setBitmap(result.bitmap);
-                profile = file;
+                profile = result.file;
             }
         });
     }

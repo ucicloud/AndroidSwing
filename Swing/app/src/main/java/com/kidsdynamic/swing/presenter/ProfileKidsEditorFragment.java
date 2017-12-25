@@ -194,8 +194,10 @@ public class ProfileKidsEditorFragment extends ProfileBaseFragment {
 
     private void loadAvatar() {
         if(!TextUtils.isEmpty(mUserAvatarFileName)){
-            GlideHelper.getBitMap(getContext(), UserManager.getProfileRealUri(mUserAvatarFileName),
-                    String.valueOf(watchKidsInfo.mLastUpdate),new AvatarSimpleTarget(mViewPhoto));
+            GlideHelper.getBitMapWithWH(getContext(), UserManager.getProfileRealUri(mUserAvatarFileName),
+                    String.valueOf(watchKidsInfo.mLastUpdate),
+                    mViewPhoto.getWidth(),mViewPhoto.getHeight(),
+                    new AvatarSimpleTarget(mViewPhoto));
         }
     }
 
@@ -282,6 +284,10 @@ public class ProfileKidsEditorFragment extends ProfileBaseFragment {
                         //更新头像，如果变更
                         updateUserAvatar(watchKidsInfo.mId);
                     }else {
+
+                        //更新本地缓存
+                        updateCacheKidsAvatar(mViewPhoto.getBitmap(),response.body().getKid().getId());
+
                         finishLoadingDialog();
                         getFragmentManager().popBackStack();
                     }
@@ -304,7 +310,7 @@ public class ProfileKidsEditorFragment extends ProfileBaseFragment {
 
     }
 
-    private void updateUserAvatar(long kidsId) {
+    private void updateUserAvatar(final long kidsId) {
 
         Map<String, RequestBody> paramMap = new HashMap<>();
         PartUtils.putRequestBodyMap(paramMap,AvatarApi.param_kidId,String.valueOf(kidsId));
@@ -325,6 +331,10 @@ public class ProfileKidsEditorFragment extends ProfileBaseFragment {
 
                     uploadAvatarOK(response);
                 }else {
+
+                    //更新本地缓存
+                    updateCacheKidsAvatar(mViewPhoto.getBitmap(),kidsId);
+
                     finishLoadingDialog();
                     ToastCommon.makeText(getContext(),R.string.profile_editor_avatar_failed);
                 }
@@ -348,12 +358,18 @@ public class ProfileKidsEditorFragment extends ProfileBaseFragment {
             //更新本地数据库
             DeviceManager.updateKidsProfile2DB(response.body().getKid());
 
-            WatchContact watchContact = new WatchContact();
+            WatchContact.Kid watchContact = new WatchContact.Kid();
             watchContact.mPhoto = mUserAvatar;
             watchContact.mLabel = "editProfile";
+            watchContact.mId = response.body().getKid().getId();
 
             //  2017/12/1
             mActivityMain.mWatchContactStack.push(watchContact);
+
+            //更新本地缓存
+           /* updateCacheKidsAvatar(mActivityMain.mWatchContactStack.peek().mPhoto,
+                    response.body().getKid().getId());*/
+
 
             DeviceManager.sendBroadcastUpdateAvatar();
 
@@ -364,6 +380,18 @@ public class ProfileKidsEditorFragment extends ProfileBaseFragment {
             finishLoadingDialog();
             ToastCommon.makeText(getContext(),R.string.profile_editor_avatar_failed);
         }
+    }
+
+    private void updateCacheKidsAvatar(Bitmap bitmap, long kidId){
+        /*KidsEntityBean kidsInfo = DeviceManager.getKidsInfo(getContext(), kidId);
+        if(kidsInfo != null){
+            GlideHelper.getBitMapWithWHByLocal(getContext(), bitmap,
+                    String.valueOf(kidsInfo.getLastUpdate())*//*,
+                    mViewPhoto.getWidth(),mViewPhoto.getHeight(),
+                    new AvatarSimpleTarget(mViewPhoto)*//*);
+
+            Log.w("profile", "kids edit lastUpdate: " + kidsInfo.getLastUpdate());
+        }*/
     }
 
 
@@ -474,7 +502,9 @@ public class ProfileKidsEditorFragment extends ProfileBaseFragment {
                 mViewPhoto.setBitmap(result.bitmap);
 
                 mUserAvatar = result.bitmap;
-                avatarFile = file;
+                avatarFile = result.file;
+
+                Log.w("cropImg","compress file editor: " + file.length());
 
                 mUserAvatarChanged = true;
             }

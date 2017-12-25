@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -205,11 +206,14 @@ public class ProfileKidsInfoFragment extends ProfileBaseFragment {
             //如果不为null，则为edit界面返回数据
             mViewPhoto.setBitmap(watchContact.mPhoto);
 
+            Log.w("profile", "profileKidsInfo watchContact ");
         }
 
         GlideHelper.getBitMap(getContext(),
                 UserManager.getProfileRealUri(kidsInfo.getProfile()),
                 String.valueOf(kidsInfo.getLastUpdate()), new AvatarSimpleTarget(mViewPhoto));
+
+        Log.w("profile", "kids lastUpdate: " + kidsInfo.getLastUpdate());
 
         //当前kids的shared信息
         //获取当前kids已经被分享的user list

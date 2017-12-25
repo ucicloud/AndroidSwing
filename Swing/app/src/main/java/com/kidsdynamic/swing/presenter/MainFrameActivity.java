@@ -255,7 +255,13 @@ public class MainFrameActivity extends BaseFragmentActivity {
                     //在二期功能前，消费该对象
                     WatchContact watchContact = mWatchContactStack.pop();
                     if (watchContact != null && watchContact.mPhoto != null) {
-                        view_tab_profile.setBitmap(watchContact.mPhoto);
+
+                        if(watchContact instanceof WatchContact.Kid){
+                            long focusKidsId = DeviceManager.getFocusKidsId();
+                            if (((WatchContact.Kid) watchContact).mId == focusKidsId) {
+                                view_tab_profile.setBitmap(watchContact.mPhoto);
+                            }
+                        }
                     }
                 }
 

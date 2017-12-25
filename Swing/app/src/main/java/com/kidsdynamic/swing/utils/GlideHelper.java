@@ -115,6 +115,23 @@ public class GlideHelper {
         }
     }
 
+    public static void getBitMapWithWHByLocal(Context context, Bitmap bitmap, String lastModify) {
+        try {
+            RequestOptions requestOptions = RequestOptions.circleCropTransform()
+                    .encodeQuality(50)
+                    .placeholder(R.drawable.ic_icon_profile_)
+//                    .override(width,height)
+                    .signature(new ObjectKey(lastModify));
+
+            Glide.with(context.getApplicationContext()).asBitmap()
+                    .load(bitmap)
+                    .apply(requestOptions)
+                    .preload();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void getBitMapWithWH(Context context, String uri, String lastModify,
                                  int width, int height,
                                  ImageView imageView) {
@@ -154,7 +171,7 @@ public class GlideHelper {
         try {
             RequestOptions requestOptions = RequestOptions.circleCropTransform()
                     .placeholder(R.drawable.ic_icon_profile_)
-                    .override(width,height)
+//                    .override(width,height)
                     .encodeQuality(50)
                     .skipMemoryCache(false).diskCacheStrategy(DiskCacheStrategy.NONE);
             Glide.with(context.getApplicationContext()).asBitmap()

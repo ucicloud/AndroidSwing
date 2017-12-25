@@ -197,8 +197,10 @@ public class ProfileMainFragment extends ProfileBaseFragment {
 
 
         if (watchContact == null && parent != null && !TextUtils.isEmpty(parent.getProfile())) {
-            GlideHelper.getBitMap(getContext(), UserManager.getProfileRealUri(parent.getProfile()),
-                    String.valueOf(parent.getLastUpdate()), new AvatarSimpleTarget(mViewPhoto));
+            GlideHelper.getBitMapWithWH(getContext(), UserManager.getProfileRealUri(parent.getProfile()),
+                    String.valueOf(parent.getLastUpdate()),
+                    mViewPhoto.getWidth(),mViewPhoto.getHeight(),
+                    new AvatarSimpleTarget(mViewPhoto));
         }
 
         if(watchContact != null && watchContact.mPhoto != null && parent != null){

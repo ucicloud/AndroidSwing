@@ -476,7 +476,7 @@ public class ProfileEditorFragment extends ProfileBaseFragment {
                 mViewPhoto.setBitmap(result.bitmap);
 
                 mUserAvatar = result.bitmap;
-                avatarFile = file;
+                avatarFile = result.file;
 
                 mUserAvatarChanged = true;
             }

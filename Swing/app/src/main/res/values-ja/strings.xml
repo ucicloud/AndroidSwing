@@ -479,5 +479,6 @@
     <string name="have_no_device">デバイスに接続していません.</string>
     <string name="select_watch">貴方の時計をスイングウッォチを選択してください</string>
     <string name="psw_need_longer_6">パスワードの長さは6文字より長くなければなりません</string>
+    <string name="uploading">アップロード</string>
 
 </resources>

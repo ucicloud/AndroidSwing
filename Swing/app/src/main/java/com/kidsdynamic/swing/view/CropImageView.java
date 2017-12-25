@@ -17,18 +17,24 @@ import android.os.AsyncTask;
 import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.ViewTreeObserver;
 
 import com.kidsdynamic.commonlib.utils.FileUtil;
+import com.kidsdynamic.swing.SwingApplication;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
+import java.util.concurrent.CountDownLatch;
+
+import me.shaohui.advancedluban.Luban;
+import me.shaohui.advancedluban.OnCompressListener;
 
 /**
  * WrhImageView
@@ -473,8 +479,13 @@ public class CropImageView extends AppCompatImageView implements ViewTreeObserve
             return null;
         }
         bitmap = zoomBitmap(bitmap, sx, sy);
-//        Bitmap target = Bitmap.createBitmap(mRadius * 2, mRadius * 2, Bitmap.Config.ARGB_4444);
-        Bitmap target = Bitmap.createBitmap(mRadius * 2, mRadius * 2, Bitmap.Config.RGB_565);
+        Bitmap target = Bitmap.createBitmap(mRadius * 2, mRadius * 2, Bitmap.Config.ARGB_4444);
+//        Bitmap target = Bitmap.createBitmap(mRadius * 2, mRadius * 2, Bitmap.Config.RGB_565);
+
+        //压缩bitmap
+        /*target = com.kidsdynamic.swing.utils.ViewUtils.getSmallBitmap(target).
+                copy(Bitmap.Config.RGB_565,true);*/
+
         Canvas canvas = new Canvas(target);
         canvas.drawCircle(mRadius, mRadius, mRadius, paint);
         if (isCropCircle) {
@@ -526,21 +537,25 @@ public class CropImageView extends AppCompatImageView implements ViewTreeObserve
                 return null;
             }
             if (imgFile.createNewFile()) {
-//                bitmap.setConfig(Bitmap.Config.ARGB_4444);
-                bitmap.setConfig(Bitmap.Config.RGB_565);
+                bitmap.setConfig(Bitmap.Config.ARGB_4444);
+//                bitmap.setConfig(Bitmap.Config.RGB_565);
                 baos = new ByteArrayOutputStream();
                 if (null == compressFormat) {
                     compressFormat = Bitmap.CompressFormat.JPEG;
                 }
                 if (0 == quality) {
-//                    quality = 30;
-                    quality = 1;
+                    quality = 90;
+//                    quality = 1;
                 }
                 bitmap.compress(compressFormat, quality, baos);
                 fos = new FileOutputStream(imgFile);
                 fos.write(baos.toByteArray());
                 fos.flush();
                 fos.close();
+
+                //add 2017年12月25日21:41:37 only
+                //进一步压缩图片
+                imgFile = compressImg(imgFile);
             }
         } finally {
             try {
@@ -557,6 +572,59 @@ public class CropImageView extends AppCompatImageView implements ViewTreeObserve
             }
         }
         return imgFile;
+    }
+
+
+    static boolean isCompressOK = false;
+    static File compressImgFile;
+    static CountDownLatch countDownLatch;
+    private static File compressImg(File imgFile){
+        isCompressOK = false;
+        compressImgFile = null;
+
+        countDownLatch = new CountDownLatch(1);
+
+        Luban.compress(SwingApplication.getAppContext(), imgFile)
+                .putGear(Luban.CUSTOM_GEAR)
+                /*.setMaxHeight(options.getMaxHeight())
+                .setMaxWidth(options.getMaxWidth())*/
+                .setMaxSize(200)//不超过200k
+                .launch(new OnCompressListener() {
+                    @Override public void onStart() {
+
+                    }
+
+                    @Override public void onSuccess(File file) {
+                        isCompressOK = true;
+
+                        compressImgFile = file;
+
+                        Log.w("cropImg","compress file: " + file.length());
+
+                        countDownLatch.countDown();
+                    }
+
+                    @Override public void onError(Throwable e) {
+                        isCompressOK = false;
+
+                        countDownLatch.countDown();
+                    }
+                });
+
+        try {
+            countDownLatch.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        if(isCompressOK && compressImgFile != null){
+            Log.w("cropImg","compress ok");
+            Log.w("cropImg","compress file compressImgFile: " + compressImgFile.length());
+            return compressImgFile;
+        }else {
+            return imgFile;
+        }
+
     }
 
     /**

@@ -569,6 +569,9 @@ public class DashboardProgressFragment extends DashboardBaseFragment {
             @Override
             public void onSyncComplete() {
                 LogUtil.getUtils().d("sync data complete: ok");
+                mViewLabel.setText(getResources().
+                        getString(R.string.uploading));
+
                 //与watch同步数据完成后，开始逐条上传数据
 
                 new RawActivityManager().uploadRawActivity(mDevice.getMacId(),
