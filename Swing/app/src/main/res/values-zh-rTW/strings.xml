@@ -421,6 +421,8 @@
     <string name="dashboard_chart_goal">目標</string>
     <string name="dashboard_chart_start">"開始時間"</string>
     <string name="dashboard_chart_end">"結束時間"</string>
+    <string name="dashboard_progress_uploading">上傳中</string>
+    <string name="dashboard_progress_processing">"处理中"</string>
 
     <string name="calendar_okay">好</string>
 
@@ -478,6 +480,4 @@
     <string name="select_watch">請選擇你的手錶</string>
     <string name="psw_need_longer_6">密碼長度必須大於6個字元</string>
 
-    <!-- Not translated yet -->
-    <string name="net_err">Net Error</string>
 </resources>

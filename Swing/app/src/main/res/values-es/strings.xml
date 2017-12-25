@@ -421,6 +421,8 @@
     <string name="dashboard_chart_goal">Gol</string>
     <string name="dashboard_chart_start">Empieza</string>
     <string name="dashboard_chart_end">Termina</string>
+    <string name="dashboard_progress_uploading">cargando</string>
+    <string name="dashboard_progress_processing">Procesando</string>
 
     <string name="calendar_okay">bueno</string>
 
@@ -478,6 +480,4 @@
     <string name="select_watch">Por favor selecciona tu reloj</string>
     <string name="psw_need_longer_6">The password length has to be longer than 6 characters</string>
 
-    <!-- Not translated yet -->
-    <string name="net_err">Net Error</string>
 </resources>

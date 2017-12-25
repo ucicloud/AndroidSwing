@@ -421,6 +421,8 @@
     <string name="dashboard_chart_goal">Цель</string>
     <string name="dashboard_chart_start">Начинается</string>
     <string name="dashboard_chart_end">Заканчивается</string>
+    <string name="dashboard_progress_uploading">загрузка</string>
+    <string name="dashboard_progress_processing">Идет обработка</string>
 
     <string name="calendar_okay">Хорошо</string>
 
@@ -478,6 +480,4 @@
     <string name="select_watch">Пожалуйста, выбери часы</string>
     <string name="psw_need_longer_6">The password length has to be longer than 6 characters</string>
 
-    <!-- Not translated yet -->
-    <string name="net_err">Net Error</string>
 </resources>

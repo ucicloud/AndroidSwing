@@ -421,6 +421,8 @@
     <string name="dashboard_chart_goal">目標</string>
     <string name="dashboard_chart_start">開始時間</string>
     <string name="dashboard_chart_end">終了時間</string>
+    <string name="dashboard_progress_uploading">アップロード</string>
+    <string name="dashboard_progress_processing">処理中です</string>
 
     <string name="calendar_okay">はい</string>
 
@@ -478,6 +480,4 @@
     <string name="select_watch">貴方の時計をスイングウッォチを選択してください</string>
     <string name="psw_need_longer_6">パスワードの長さは6文字より長くなければなりません</string>
 
-    <!-- Not translated yet -->
-    <string name="net_err">Net Error</string>
 </resources>
