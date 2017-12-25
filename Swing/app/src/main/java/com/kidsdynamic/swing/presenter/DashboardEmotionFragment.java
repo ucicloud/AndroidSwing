@@ -190,15 +190,14 @@ public class DashboardEmotionFragment extends DashboardBaseFragment {
         cld.set(Calendar.HOUR_OF_DAY, 23);
         cld.set(Calendar.MINUTE, 59);
         cld.set(Calendar.SECOND, 59);
-        long end = cld.getTimeInMillis() + timezoneOffset;
+        long end = cld.getTimeInMillis()/* + timezoneOffset*/;
 
         cld.add(Calendar.DAY_OF_MONTH, -1);
         cld.add(Calendar.SECOND, 1);
-        long start = cld.getTimeInMillis() + timezoneOffset;
+        long start = cld.getTimeInMillis() /*+ timezoneOffset*/;
 
         new KidActivityManager().retrieveDataByTime(getContext(), kid.getKidsId(), start, end,
                 new IRetrieveCompleteListener(start, end, timezoneOffset, kid.getKidsId()));
-
     }
 
     private void setWatchActivity(WatchActivity wa) {

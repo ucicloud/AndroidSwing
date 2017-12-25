@@ -422,6 +422,8 @@
     <string name="dashboard_chart_goal">Goal</string>
     <string name="dashboard_chart_start">Start</string>
     <string name="dashboard_chart_end">End</string>
+    <string name="dashboard_progress_uploading">Uploading</string>
+    <string name="dashboard_progress_processing">Processing</string>
 
     <string name="calendar_okay">Okay</string>
 

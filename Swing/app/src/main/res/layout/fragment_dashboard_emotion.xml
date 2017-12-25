@@ -333,7 +333,8 @@
             android:text="@string/dashboard_emotion_activity"
             android:textColor="@color/color_blue_main"
             android:textSize="14sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:visibility="gone" />
 
         <LinearLayout
             android:id="@+id/v_sponge"
