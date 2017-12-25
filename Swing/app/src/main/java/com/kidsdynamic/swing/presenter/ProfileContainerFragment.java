@@ -62,6 +62,13 @@ public class ProfileContainerFragment extends BaseFragment {
 
 //        selectFragment(ProfileMainFragment.class.getName(),null,false);
 
+        Fragment fragmentById = getFragmentManager().findFragmentById(R.id.profile_fragment_container);
+        if(fragmentById != null
+                && fragmentById instanceof ProfileMainFragment){
+
+            Log.w("profile","profileContainer show ProfileMainFragment");
+            fragmentById.onResume();
+        }
     }
 
     private void registerUIReceiver() {

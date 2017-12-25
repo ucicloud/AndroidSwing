@@ -187,6 +187,7 @@ public class ProfileShareKidsSelectFragment extends ProfileBaseFragment {
         }
 
         // 載入用戶的所有手錶
+        mViewDeviceContainer.removeAllViews();
         if(parent != null){
             List<WatchContact.Kid> kidsForUI = DeviceManager.getKidsForUI(getContext(), parent.getUserId());
             for (WatchContact.Kid device : kidsForUI){
@@ -311,8 +312,6 @@ public class ProfileShareKidsSelectFragment extends ProfileBaseFragment {
     }
 
     private void addContact(LinearLayout layout, WatchContact contact, View.OnClickListener listener) {
-
-        layout.removeAllViews();
 
         ViewCircle photo = new ViewCircle(mActivityMain);
         photo.setBitmap(contact.mPhoto);

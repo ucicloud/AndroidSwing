@@ -33,6 +33,7 @@ import com.yy.base.utils.ToastCommon;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -266,6 +267,8 @@ public class ProfileKidsInfoFragment extends ProfileBaseFragment {
 
             if(mViewRequestFromContainer.getChildCount() > 0){
                 layout_kids_request_from.setVisibility(View.VISIBLE);
+
+                updateRequestFromTitle();
             }else {
                 layout_kids_request_from.setVisibility(View.GONE);
             }
@@ -425,5 +428,12 @@ public class ProfileKidsInfoFragment extends ProfileBaseFragment {
         }
     }
 
+    private void updateRequestFromTitle() {
+        int count = mViewRequestFromContainer.getChildCount();
+
+        String string = String.format(Locale.getDefault(),
+                getResources().getString(R.string.profile_main_request_from), count);
+        profile_main_request_from_title.setText(string);
+    }
 
 }

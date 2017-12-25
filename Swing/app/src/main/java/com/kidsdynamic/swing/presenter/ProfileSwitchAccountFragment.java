@@ -190,12 +190,13 @@ public class ProfileSwitchAccountFragment extends ProfileBaseFragment {
     public void onToolbarAction1() {
         //修改个人信息界面
 //        selectFragment(ProfileEditorFragment.class.getName(), null,true);
+       getFragmentManager().popBackStack();
     }
 
     @OnClick(R.id.main_toolbar_action2)
     public void onToolbarAction2() {
        //option 界面
-        selectFragment(ProfileOptionFragment.class.getName(),null,true);
+//        selectFragment(ProfileOptionFragment.class.getName(),null,true);
     }
 
     public void onToolbarTitle() {
