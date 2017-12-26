@@ -145,7 +145,7 @@ public class DashboardMainFragment extends DashboardBaseFragment {
 
     @OnClick(R.id.watch_sync_add)
     public void add() {
-
+        setFragment(WatchSearchFragment.newInstance(),true);
     }
 
 }
