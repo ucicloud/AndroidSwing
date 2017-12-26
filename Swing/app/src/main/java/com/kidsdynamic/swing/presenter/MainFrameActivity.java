@@ -658,6 +658,15 @@ public class MainFrameActivity extends BaseFragmentActivity {
         selectTabItem(clickedItemIndex);
     }
 
+    public void switchToDashBoardFragmentAfterSyncComplete(){
+        Fragment currentFragment = getCurrentFragment();
+        if (currentFragment instanceof DashboardContainerFragment) {
+            switchToDashBoardFragment();
+        }else {
+            getFragmentManager().popBackStack();
+        }
+    }
+
     public void setFragment(Fragment fragment, boolean isAddBackStack) {
         Fragment currentFragment = getCurrentFragment();
         if (currentFragment instanceof DashboardContainerFragment) {

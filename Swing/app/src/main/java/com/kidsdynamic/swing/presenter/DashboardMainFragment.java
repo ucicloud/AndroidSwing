@@ -1,8 +1,14 @@
 package com.kidsdynamic.swing.presenter;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.util.Log;
+import android.util.LongSparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,11 +16,16 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.kidsdynamic.data.dao.DB_Kids;
+import com.kidsdynamic.swing.BaseFragment;
 import com.kidsdynamic.swing.R;
+import com.kidsdynamic.swing.SwingApplication;
+import com.kidsdynamic.swing.domain.ConfigManager;
 import com.kidsdynamic.swing.domain.DeviceManager;
 import com.kidsdynamic.swing.domain.UserManager;
 import com.kidsdynamic.swing.utils.GlideHelper;
 import com.kidsdynamic.swing.utils.ViewUtils;
+
+import java.io.File;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -49,6 +60,8 @@ public class DashboardMainFragment extends DashboardBaseFragment {
 
     private String mAvatarFilename = "";
     private String kidName;
+
+    private static LongSparseArray<File> cacheAvatarMap = new LongSparseArray<>(1);
 
     public static DashboardMainFragment newInstance() {
         Bundle args = new Bundle();
@@ -89,7 +102,9 @@ public class DashboardMainFragment extends DashboardBaseFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         initTitleBar();
-        //just test
+
+        registerUIReceiver();
+
         DB_Kids focusWatchInfo = DeviceManager.getFocusWatchInfo(getContext());
         if (focusWatchInfo != null) {
             kidName = focusWatchInfo.getName();
@@ -100,10 +115,25 @@ public class DashboardMainFragment extends DashboardBaseFragment {
             String profileRealUri = UserManager.getProfileRealUri(focusWatchInfo.getProfile());
 //            Log.d("dash_main", "avatar: " + profileRealUri);
 //            GlideHelper.showCircleImageView(getContext(), profileRealUri, vc_photo);
-            GlideHelper.showCircleImageViewWithSignature(
+
+            /*GlideHelper.showCircleImageViewWithSignature(
                     getContext(),
                     profileRealUri, String.valueOf(focusWatchInfo.getLastUpdate()),
-                    vc_photo);
+                    vc_photo);*/
+
+            //modify 2017年12月26日19:22:28 only
+            File avatarFile = cacheAvatarMap.get(focusWatchInfo.getKidsId());
+            if(avatarFile != null){
+                //如果有缓存
+                GlideHelper.getBitMapOnlyCacheInMemory(getContext(),avatarFile,
+                        new AvatarSimpleTarget(vc_photo));
+            }
+
+            GlideHelper.getBitMapWithWH(getContext(),
+                    profileRealUri,
+                    String.valueOf(focusWatchInfo.getLastUpdate()),
+                    vc_photo.getWidth(),vc_photo.getHeight(),
+                    new AvatarSimpleTarget(vc_photo));
         }
 
     }
@@ -148,4 +178,50 @@ public class DashboardMainFragment extends DashboardBaseFragment {
         setFragment(WatchSearchFragment.newInstance(),true);
     }
 
+
+    private void registerUIReceiver() {
+        if (SwingApplication.localBroadcastManager != null) {
+            IntentFilter intentFilter = new IntentFilter(ConfigManager.Avatar_Update_Action);
+            SwingApplication.localBroadcastManager.registerReceiver(UIChangeReceiver,
+                    intentFilter);
+        }
+    }
+
+    private BroadcastReceiver UIChangeReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            Log.w("UIChangeReceiver", "change broadcast");
+
+            if (intent == null) {
+                return;
+            }
+
+            int update_type = intent.getIntExtra(ConfigManager.Tag_Key, -1);
+
+            //如果是dev avatar更新
+            if (update_type == ConfigManager.Tag_Update_Type_Kids_Avatar) {
+
+                long updateKidsId = intent.getLongExtra(ConfigManager.Tag_KidsId_Key, -1);
+//                Uri avatarUri = (Uri) intent.getParcelableExtra(ConfigManager.Tag_Avatar_File_Uri_Key);
+                String avatarFilePath = intent.getStringExtra(ConfigManager.Tag_Avatar_File_Uri_Key);
+
+                Log.w("UIChangeReceiver", "avatar: " + avatarFilePath);
+                if(updateKidsId != -1 && !TextUtils.isEmpty(avatarFilePath)){
+
+                    cacheAvatarMap.put(updateKidsId,new File(avatarFilePath));
+                }
+
+//                loadFocusKidsAvatar();
+            }
+
+        }
+    };
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        SwingApplication.localBroadcastManager.unregisterReceiver(UIChangeReceiver);
+    }
 }
