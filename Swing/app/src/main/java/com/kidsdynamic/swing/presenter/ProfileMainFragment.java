@@ -2,12 +2,19 @@ package com.kidsdynamic.swing.presenter;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.LongSparseArray;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +32,7 @@ import com.kidsdynamic.data.net.host.model.SubHostRequests;
 import com.kidsdynamic.swing.R;
 import com.kidsdynamic.swing.SwingApplication;
 import com.kidsdynamic.swing.domain.BeanConvertor;
+import com.kidsdynamic.swing.domain.ConfigManager;
 import com.kidsdynamic.swing.domain.DeviceManager;
 import com.kidsdynamic.swing.domain.LoginManager;
 import com.kidsdynamic.swing.domain.UserManager;
@@ -37,6 +45,8 @@ import com.kidsdynamic.swing.utils.SwingFontsCache;
 import com.kidsdynamic.swing.view.ViewCircle;
 import com.kidsdynamic.swing.utils.ViewUtils;
 
+import java.io.File;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -67,6 +77,8 @@ public class ProfileMainFragment extends ProfileBaseFragment {
     private SubHostListModel subHostListModel = null;
     private boolean isLoadSubHost = false;
     private SubHostRequests mSubHostRequests;
+
+    private LongSparseArray<File> cacheAvatarMap = new LongSparseArray<>(3);
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -124,6 +136,8 @@ public class ProfileMainFragment extends ProfileBaseFragment {
         super.onActivityCreated(savedInstanceState);
 
         mSubHostRequests = DeviceManager.getSubHostRequestsInCache();
+
+        registerUIReceiver();
 
 //        subscribeUI();
     }
@@ -479,6 +493,15 @@ public class ProfileMainFragment extends ProfileBaseFragment {
             WatchContact.Kid kid = (WatchContact.Kid) contact;
             if(!TextUtils.isEmpty(kid.mProfile)){
 
+                File avatarFile = cacheAvatarMap.get(kid.mId);
+                if(avatarFile != null){
+
+                    Log.w("UIChange", "avatarFile: " + avatarFile.getName());
+
+                    GlideHelper.getBitMapOnlyCacheInMemory(getContext(),avatarFile,
+                            new AvatarSimpleTarget(photo));
+                }
+
                 GlideHelper.getBitMapWithWH(getContext().getApplicationContext(),
                         UserManager.getProfileRealUri(kid.mProfile),
                         kid.mLastUpdate+"",
@@ -552,5 +575,51 @@ public class ProfileMainFragment extends ProfileBaseFragment {
         String string = String.format(Locale.getDefault(),
                 getResources().getString(R.string.profile_main_request_from), count);
         mViewRequestFromTitle.setText(string);
+    }
+
+    private void registerUIReceiver() {
+        if (SwingApplication.localBroadcastManager != null) {
+            IntentFilter intentFilter = new IntentFilter(ConfigManager.Avatar_Update_Action);
+            SwingApplication.localBroadcastManager.registerReceiver(UIChangeReceiver,
+                    intentFilter);
+        }
+    }
+
+    private BroadcastReceiver UIChangeReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            Log.w("UIChangeReceiver", "change broadcast");
+
+            if (intent == null) {
+                return;
+            }
+
+            int update_type = intent.getIntExtra(ConfigManager.Tag_Key, -1);
+
+            //如果是dev avatar更新
+            if (update_type == ConfigManager.Tag_Update_Type_Kids_Avatar) {
+
+                long updateKidsId = intent.getLongExtra(ConfigManager.Tag_KidsId_Key, -1);
+//                Uri avatarUri = (Uri) intent.getParcelableExtra(ConfigManager.Tag_Avatar_File_Uri_Key);
+                String avatarFilePath = intent.getStringExtra(ConfigManager.Tag_Avatar_File_Uri_Key);
+
+                Log.w("UIChangeReceiver", "avatar: " + avatarFilePath);
+                if(updateKidsId != -1 && !TextUtils.isEmpty(avatarFilePath)){
+
+                    cacheAvatarMap.put(updateKidsId,new File(avatarFilePath));
+                }
+
+//                loadFocusKidsAvatar();
+            }
+
+        }
+    };
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        SwingApplication.localBroadcastManager.unregisterReceiver(UIChangeReceiver);
     }
 }

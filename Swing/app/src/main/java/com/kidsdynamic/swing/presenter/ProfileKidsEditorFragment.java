@@ -33,8 +33,11 @@ import com.kidsdynamic.data.net.kids.model.KidsInfoUpdateEntity;
 import com.kidsdynamic.data.net.user.model.UpdateKidRepEntity;
 import com.kidsdynamic.data.utils.LogUtil2;
 import com.kidsdynamic.swing.R;
+import com.kidsdynamic.swing.SwingApplication;
+import com.kidsdynamic.swing.domain.ConfigManager;
 import com.kidsdynamic.swing.domain.DeviceManager;
 import com.kidsdynamic.swing.domain.UserManager;
+import com.kidsdynamic.swing.model.KidsEntityBean;
 import com.kidsdynamic.swing.model.WatchContact;
 import com.kidsdynamic.swing.net.BaseRetrofitCallback;
 import com.kidsdynamic.swing.utils.GlideHelper;
@@ -286,7 +289,7 @@ public class ProfileKidsEditorFragment extends ProfileBaseFragment {
                     }else {
 
                         //更新本地缓存
-                        updateCacheKidsAvatar(mViewPhoto.getBitmap(),response.body().getKid().getId());
+                        updateCacheKidsAvatar(response.body().getKid().getId());
 
                         finishLoadingDialog();
                         getFragmentManager().popBackStack();
@@ -333,7 +336,7 @@ public class ProfileKidsEditorFragment extends ProfileBaseFragment {
                 }else {
 
                     //更新本地缓存
-                    updateCacheKidsAvatar(mViewPhoto.getBitmap(),kidsId);
+                    updateCacheKidsAvatar(kidsId);
 
                     finishLoadingDialog();
                     ToastCommon.makeText(getContext(),R.string.profile_editor_avatar_failed);
@@ -367,9 +370,9 @@ public class ProfileKidsEditorFragment extends ProfileBaseFragment {
             mActivityMain.mWatchContactStack.push(watchContact);
 
             //更新本地缓存
-           /* updateCacheKidsAvatar(mActivityMain.mWatchContactStack.peek().mPhoto,
-                    response.body().getKid().getId());*/
+            updateCacheKidsAvatar(response.body().getKid().getId());
 
+            sendKidsAvatarUpdate(response.body().getKid().getId());
 
             DeviceManager.sendBroadcastUpdateAvatar();
 
@@ -382,16 +385,32 @@ public class ProfileKidsEditorFragment extends ProfileBaseFragment {
         }
     }
 
-    private void updateCacheKidsAvatar(Bitmap bitmap, long kidId){
-        /*KidsEntityBean kidsInfo = DeviceManager.getKidsInfo(getContext(), kidId);
+    private void sendKidsAvatarUpdate(long kidsId) {
+
+        if(avatarFile == null){
+            return;
+        }
+
+        Intent intent = new Intent(ConfigManager.Avatar_Update_Action);
+        intent.putExtra(ConfigManager.Tag_Key,ConfigManager.Tag_Update_Type_Kids_Avatar);
+        intent.putExtra(ConfigManager.Tag_KidsId_Key,kidsId);
+
+        /*Uri uriForFile = FileProvider.getUriForFile(getContext().getApplicationContext(),
+                getContext().getPackageName(), avatarFile);*/
+        intent.putExtra(ConfigManager.Tag_Avatar_File_Uri_Key,avatarFile.getAbsolutePath());
+
+        SwingApplication.localBroadcastManager.sendBroadcast(intent);
+    }
+
+    private void updateCacheKidsAvatar(long kidId){
+        KidsEntityBean kidsInfo = DeviceManager.getKidsInfo(getContext(), kidId);
         if(kidsInfo != null){
-            GlideHelper.getBitMapWithWHByLocal(getContext(), bitmap,
-                    String.valueOf(kidsInfo.getLastUpdate())*//*,
-                    mViewPhoto.getWidth(),mViewPhoto.getHeight(),
-                    new AvatarSimpleTarget(mViewPhoto)*//*);
+            GlideHelper.getBitMapPreload(getContext(),
+                    UserManager.getProfileRealUri(kidId),
+                    String.valueOf(kidsInfo.getLastUpdate()));
 
             Log.w("profile", "kids edit lastUpdate: " + kidsInfo.getLastUpdate());
-        }*/
+        }
     }
 
 

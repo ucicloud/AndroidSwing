@@ -12,6 +12,7 @@ import com.bumptech.glide.signature.ObjectKey;
 import com.kidsdynamic.swing.R;
 import com.kidsdynamic.swing.SwingApplication;
 
+import java.io.File;
 import java.util.concurrent.Executors;
 
 /**
@@ -21,6 +22,12 @@ import java.util.concurrent.Executors;
  */
 
 public class GlideHelper {
+
+    private static RequestOptions getRequestOptions(String lastModify) {
+        return RequestOptions.circleCropTransform()
+                .encodeQuality(50)
+                .signature(new ObjectKey(lastModify));
+    }
 
     public static void showCircleImageView(Context context, Object mode, ImageView imageView) {
         try {
@@ -38,9 +45,7 @@ public class GlideHelper {
 
     public static void showCircleImageViewWithSignature(Context context, Object mode, String lastModify, ImageView imageView) {
         try {
-            RequestOptions requestOptions = RequestOptions.circleCropTransform()
-                    .encodeQuality(50)
-                    .signature(new ObjectKey(lastModify));
+            RequestOptions requestOptions = getRequestOptions(lastModify);
             Glide.with(context.getApplicationContext())
                     .load(mode)
                     .apply(requestOptions)
@@ -50,14 +55,25 @@ public class GlideHelper {
         }
     }
 
+    public static void showCircleImageViewWithSignature(Context context, File file, String lastModify,
+                                                        ImageView imageView) {
+        try {
+            RequestOptions requestOptions = getRequestOptions(lastModify);
+            Glide.with(context.getApplicationContext())
+                    .load(file)
+                    .apply(requestOptions)
+                    .into(imageView);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
     public static void showCircleImageViewWithSignatureWH(Context context, Object mode, String lastModify,
                                                           int width, int height,
                                                         ImageView imageView) {
         try {
-            RequestOptions requestOptions = RequestOptions.circleCropTransform()
-                    .encodeQuality(50)
-                    .override(width,height)
-                    .signature(new ObjectKey(lastModify));
+            RequestOptions requestOptions = getRequestOptions(lastModify);
             Glide.with(context.getApplicationContext())
                     .load(mode)
                     .apply(requestOptions)
@@ -103,7 +119,7 @@ public class GlideHelper {
             RequestOptions requestOptions = RequestOptions.circleCropTransform()
                     .encodeQuality(50)
                     .placeholder(R.drawable.ic_icon_profile_)
-                    .override(width,height)
+//                    .override(width,height)
                     .signature(new ObjectKey(lastModify));
 
             Glide.with(context.getApplicationContext()).asBitmap()
@@ -115,7 +131,7 @@ public class GlideHelper {
         }
     }
 
-    public static void getBitMapWithWHByLocal(Context context, Bitmap bitmap, String lastModify) {
+    public static void getBitMapPreload(Context context, String uri, String lastModify) {
         try {
             RequestOptions requestOptions = RequestOptions.circleCropTransform()
                     .encodeQuality(50)
@@ -124,7 +140,7 @@ public class GlideHelper {
                     .signature(new ObjectKey(lastModify));
 
             Glide.with(context.getApplicationContext()).asBitmap()
-                    .load(bitmap)
+                    .load(uri)
                     .apply(requestOptions)
                     .preload();
         } catch (Exception e) {
@@ -158,6 +174,22 @@ public class GlideHelper {
                     .skipMemoryCache(false).diskCacheStrategy(DiskCacheStrategy.NONE);
             Glide.with(context.getApplicationContext()).asBitmap()
                     .load(uri)
+                    .apply(requestOptions)
+                    .into(SimpleTarget);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void getBitMapOnlyCacheInMemory(Context context, File file,
+                                                  SimpleTarget<Bitmap> SimpleTarget) {
+        try {
+            RequestOptions requestOptions = RequestOptions.circleCropTransform()
+                    .placeholder(R.drawable.ic_icon_profile_)
+                    .encodeQuality(50)
+                    .skipMemoryCache(false).diskCacheStrategy(DiskCacheStrategy.NONE);
+            Glide.with(context.getApplicationContext()).asBitmap()
+                    .load(file)
                     .apply(requestOptions)
                     .into(SimpleTarget);
         } catch (Exception e) {

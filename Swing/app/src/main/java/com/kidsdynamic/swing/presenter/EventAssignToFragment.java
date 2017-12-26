@@ -238,8 +238,8 @@ public class EventAssignToFragment extends CalendarBaseFragment {
                         profileRealUri,dbKids.getLastUpdate()+"",
                         viewHolder.kidsAvatarView);
             }
-            GlideHelper.showCircleImageView(getContext().getApplicationContext(),profileRealUri,
-                    viewHolder.kidsAvatarView);
+            /*GlideHelper.showCircleImageView(getContext().getApplicationContext(),profileRealUri,
+                    viewHolder.kidsAvatarView);*/
 
             viewHolder.tv_kids_name.setText(dbKids.getName());
 
