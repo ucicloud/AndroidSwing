@@ -21,6 +21,7 @@
             style="@style/textview_main"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:textSize="22sp"
             android:gravity="center"
             android:text="@string/dashboard_progress_searching"
             android:textStyle="bold"
