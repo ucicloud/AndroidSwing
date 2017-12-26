@@ -118,11 +118,11 @@ public class DashboardListFragment extends DashboardBaseFragment {
             cld.set(Calendar.HOUR_OF_DAY, 23);
             cld.set(Calendar.MINUTE, 59);
             cld.set(Calendar.SECOND, 59);
-            long end = cld.getTimeInMillis() /*+ timezoneOffset*/;
+            long end = cld.getTimeInMillis() + timezoneOffset;
 
             cld.add(Calendar.DAY_OF_MONTH, -1);
             cld.add(Calendar.SECOND, 1);
-            long start = cld.getTimeInMillis() /*+ timezoneOffset*/;
+            long start = cld.getTimeInMillis() + timezoneOffset;
 
             new KidActivityManager().retrieveHourlyDataByTime(getContext(), kidId, start, end,
                     new IRetrieveCompleteListener(start, end, timezoneOffset));
@@ -154,13 +154,13 @@ public class DashboardListFragment extends DashboardBaseFragment {
             cld.set(Calendar.HOUR_OF_DAY, 23);
             cld.set(Calendar.MINUTE, 59);
             cld.set(Calendar.SECOND, 59);
-            long end = cld.getTimeInMillis()/* + timezoneOffset*/;
+            long end = cld.getTimeInMillis() + timezoneOffset;
 
             cld.add(Calendar.DAY_OF_MONTH, -29);
             cld.set(Calendar.HOUR_OF_DAY, 0);
             cld.set(Calendar.MINUTE, 0);
             cld.set(Calendar.SECOND, 0);
-            long start = cld.getTimeInMillis() /*+ timezoneOffset*/;
+            long start = cld.getTimeInMillis() + timezoneOffset;
 
             new KidActivityManager().retrieveDataByTime(getContext(), kidId, start, end,
                     new IRetrieveCompleteListener(start, end, timezoneOffset));
@@ -173,13 +173,13 @@ public class DashboardListFragment extends DashboardBaseFragment {
             cld.set(Calendar.HOUR_OF_DAY, 23);
             cld.set(Calendar.MINUTE, 59);
             cld.set(Calendar.SECOND, 59);
-            long end = cld.getTimeInMillis() /*+ timezoneOffset*/;
+            long end = cld.getTimeInMillis() + timezoneOffset;
 
             cld.add(Calendar.MONTH, -11);
             cld.set(Calendar.HOUR_OF_DAY, 0);
             cld.set(Calendar.MINUTE, 0);
             cld.set(Calendar.SECOND, 0);
-            long start = cld.getTimeInMillis() /*+ timezoneOffset*/;
+            long start = cld.getTimeInMillis() + timezoneOffset;
 
             new KidActivityManager().retrieveDataByTime(getContext(), kidId, start, end,
                     new IRetrieveCompleteListener(start, end, timezoneOffset));
