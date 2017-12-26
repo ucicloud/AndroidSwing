@@ -435,9 +435,12 @@ public class DashboardProgressFragment extends DashboardBaseFragment {
 
         @Override
         public void onClick(View view) {
+
+            //modify 2017年12月26日17:46:44 only 根据当前tabItem，调整不同界面
             //modify 2017年11月29日22:49:17 only
             //同步完成后，点击exit，只是pop fragment
-            getFragmentManager().popBackStack();
+//            getFragmentManager().popBackStack();
+            mActivityMain.switchToDashBoardFragmentAfterSyncComplete();
         }
     };
 

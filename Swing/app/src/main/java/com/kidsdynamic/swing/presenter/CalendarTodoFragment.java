@@ -27,6 +27,7 @@ import com.kidsdynamic.swing.view.calendar.ViewCalendarWeek;
 import com.yy.base.utils.ToastCommon;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
@@ -266,22 +267,27 @@ public class CalendarTodoFragment extends CalendarBaseFragment {
             int count = mViewContainer.getChildCount();
 
             if(count <= 0){
+                //如果没有list，则直接pop
+                getFragmentManager().popBackStack();
                 return;
             }
 
             doneWatchTodoQueue.clear();
 
+            List<WatchTodo> mTodoList = new ArrayList<>(count);
             for (int idx = 0; idx < count; idx++) {
                 ViewTodoForDetail viewTodo = (ViewTodoForDetail) mViewContainer.getChildAt(idx);
                 WatchTodo todo = (WatchTodo) viewTodo.getTag();
 
                 viewTodo.save(todo);
                 todo.mLastUpdated = System.currentTimeMillis();
+
+                mTodoList.add(todo);
             }
 
 
             //save done status to cloud
-            saveTodoItemDone();
+            saveTodoItemDone(mTodoList);
 
 
            /* mProcessDialog = ProgressDialog.show(mActivityMain,
@@ -294,11 +300,11 @@ public class CalendarTodoFragment extends CalendarBaseFragment {
         }
     };
 
-    private void saveTodoItemDone() {
+    private void saveTodoItemDone(List<WatchTodo> mTodoList) {
         showLoadingDialog(R.string.activity_main_wait);
 
         //首先过滤出标记为已完成的item
-        for (WatchTodo watchTodo:mEvent.mTodoList) {
+        for (WatchTodo watchTodo : mTodoList) {
             if (watchTodo.mStatus.equals(WatchTodo.STATUS_DONE)) {
                 doneWatchTodoQueue.add(watchTodo);
             }
@@ -310,6 +316,10 @@ public class CalendarTodoFragment extends CalendarBaseFragment {
 
         if(!doneWatchTodoQueue.isEmpty()){
             sendSingleTodoStatueToCloud(eventApi,doneWatchTodoQueue.peek());
+        }else{
+            //如果没有完成的
+            finishLoadingDialog();
+            getFragmentManager().popBackStack();
         }
     }
 

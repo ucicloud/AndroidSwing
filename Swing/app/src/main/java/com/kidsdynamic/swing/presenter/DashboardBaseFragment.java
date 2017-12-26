@@ -1,13 +1,17 @@
 package com.kidsdynamic.swing.presenter;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.kidsdynamic.swing.BaseFragment;
 import com.kidsdynamic.swing.R;
+import com.kidsdynamic.swing.view.ViewCircle;
 
 import butterknife.BindView;
 
@@ -72,6 +76,22 @@ public class DashboardBaseFragment extends BaseFragment {
             fragmentTransaction.addToBackStack(null);
         }
         fragmentTransaction.commit();
+    }
+
+    public class AvatarSimpleTarget extends SimpleTarget<Bitmap> {
+
+        ImageView viewCircle;
+
+        public AvatarSimpleTarget(ImageView viewCircle){
+            this.viewCircle = viewCircle;
+        }
+
+        @Override
+        public void onResourceReady(Bitmap bitmap, Transition<? super Bitmap> transition) {
+            if(viewCircle != null && getActivity() != null && !getActivity().isDestroyed()){
+                viewCircle.setImageBitmap(bitmap);
+            }
+        }
     }
 
 }
