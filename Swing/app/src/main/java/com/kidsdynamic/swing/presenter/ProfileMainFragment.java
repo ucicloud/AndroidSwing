@@ -7,11 +7,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.LongSparseArray;
@@ -42,11 +40,10 @@ import com.kidsdynamic.swing.model.KidsEntityBean;
 import com.kidsdynamic.swing.model.WatchContact;
 import com.kidsdynamic.swing.utils.GlideHelper;
 import com.kidsdynamic.swing.utils.SwingFontsCache;
-import com.kidsdynamic.swing.view.ViewCircle;
 import com.kidsdynamic.swing.utils.ViewUtils;
+import com.kidsdynamic.swing.view.ViewCircle;
 
 import java.io.File;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -79,6 +76,7 @@ public class ProfileMainFragment extends ProfileBaseFragment {
     private SubHostRequests mSubHostRequests;
 
     private LongSparseArray<File> cacheAvatarMap = new LongSparseArray<>(3);
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -502,11 +500,19 @@ public class ProfileMainFragment extends ProfileBaseFragment {
                             new AvatarSimpleTarget(photo));
                 }
 
-                GlideHelper.getBitMapWithWH(getContext().getApplicationContext(),
-                        UserManager.getProfileRealUri(kid.mProfile),
-                        kid.mLastUpdate+"",
-                        photo.getWidth(),photo.getHeight(),
-                        new AvatarSimpleTarget(photo));
+                if(kid.subHostId <= 0){
+                    //自己的设备
+                    GlideHelper.getBitMapWithWH(getContext().getApplicationContext(),
+                            UserManager.getProfileRealUri(kid.mProfile),
+                            kid.mLastUpdate+"",
+                            photo.getWidth(),photo.getHeight(),
+                            new AvatarSimpleTarget(photo));
+                }else {
+                    //他人共享的设备，头像更新周期为一个小时
+                    GlideHelper.getBitMapCacheOneHour(getContext().getApplicationContext(),
+                            UserManager.getProfileRealUri(kid.mProfile),
+                            new AvatarSimpleTarget(photo));
+                }
             }
         }else if(contact instanceof WatchContact.User){
             WatchContact.User user = (WatchContact.User) contact;

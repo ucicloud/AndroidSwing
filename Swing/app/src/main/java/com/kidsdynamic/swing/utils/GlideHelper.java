@@ -11,6 +11,7 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.signature.ObjectKey;
 import com.kidsdynamic.swing.R;
 import com.kidsdynamic.swing.SwingApplication;
+import com.yy.base.utils.TimeUtils;
 
 import java.io.File;
 import java.util.concurrent.Executors;
@@ -130,6 +131,23 @@ public class GlideHelper {
             e.printStackTrace();
         }
     }
+    public static void getBitMapCacheOneHour(Context context, String uri,
+                                 SimpleTarget<Bitmap> SimpleTarget) {
+        try {
+            RequestOptions requestOptions = RequestOptions.circleCropTransform()
+                    .encodeQuality(50)
+                    .placeholder(R.drawable.ic_icon_profile_)
+//                    .override(width,height)
+                    .signature(new ObjectKey(TimeUtils.getTodayDateString()));
+
+            Glide.with(context.getApplicationContext()).asBitmap()
+                    .load(uri)
+                    .apply(requestOptions)
+                    .into(SimpleTarget);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     public static void getBitMapPreload(Context context, String uri, String lastModify) {
         try {
@@ -165,13 +183,16 @@ public class GlideHelper {
             e.printStackTrace();
         }
     }
+
+    //修改缓存策略：图片换成一小时
     public static void getBitMapOnlyCacheInMemory(Context context, String uri,
                                                   SimpleTarget<Bitmap> SimpleTarget) {
         try {
             RequestOptions requestOptions = RequestOptions.circleCropTransform()
                     .placeholder(R.drawable.ic_icon_profile_)
                     .encodeQuality(50)
-                    .skipMemoryCache(false).diskCacheStrategy(DiskCacheStrategy.NONE);
+                    .skipMemoryCache(false)/*.diskCacheStrategy(DiskCacheStrategy.NONE)*/
+                    .signature(new ObjectKey(TimeUtils.getTodayDateString()));;
             Glide.with(context.getApplicationContext()).asBitmap()
                     .load(uri)
                     .apply(requestOptions)
@@ -197,6 +218,7 @@ public class GlideHelper {
         }
     }
 
+    //该方法加载的头像，会一个小时
     public static void getBitMapOnlyCacheInMemoryWithWH(Context context, String uri,
                                                   int width,int height,
                                                   SimpleTarget<Bitmap> SimpleTarget) {
@@ -205,7 +227,8 @@ public class GlideHelper {
                     .placeholder(R.drawable.ic_icon_profile_)
 //                    .override(width,height)
                     .encodeQuality(50)
-                    .skipMemoryCache(false).diskCacheStrategy(DiskCacheStrategy.NONE);
+                    .skipMemoryCache(false)
+                    .signature(new ObjectKey(TimeUtils.getTodayDateString()));
             Glide.with(context.getApplicationContext()).asBitmap()
                     .load(uri)
                     .apply(requestOptions)

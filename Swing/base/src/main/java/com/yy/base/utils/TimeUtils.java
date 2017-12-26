@@ -1,8 +1,11 @@
 package com.yy.base.utils;
 
+import android.util.Log;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * <br>author: wzg<br/>
@@ -151,5 +154,19 @@ public class TimeUtils {
 
     public static String formatTimeYearMonthDay(Date date){
         return sdf3.format(date);
+    }
+
+    public static String getTodayDateString() {
+
+        long ms = System.currentTimeMillis();
+        Date date = new Date(ms);
+
+        String format = "yyyy/MM/dd-HH";
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format, Locale.getDefault());
+
+        Log.w("time","format: " + simpleDateFormat.format(date));
+
+        return simpleDateFormat.format(date);
     }
 }
