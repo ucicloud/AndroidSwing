@@ -337,10 +337,10 @@ public class DashboardListFragment extends DashboardBaseFragment {
 
 //            Collections.reverse(watchActivities);
 
-//            for (WatchActivity act : watchActivities) {
-//                act.mIndoor.mTimestamp -= timezoneOffset;
-//                act.mOutdoor.mTimestamp -= timezoneOffset;
-//            }
+            for (WatchActivity act : watchActivities) {
+                act.mIndoor.mTimestamp -= timezoneOffset;
+                act.mOutdoor.mTimestamp -= timezoneOffset;
+            }
 
             return watchActivities;
         }
