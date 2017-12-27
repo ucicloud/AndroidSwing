@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -17,8 +18,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.kidsdynamic.commonlib.utils.ObjectUtils;
 import com.kidsdynamic.data.dao.DB_Kids;
@@ -174,10 +178,33 @@ public class MainFrameActivity extends BaseFragmentActivity {
         DB_Kids focusWatchInfo = DeviceManager.getFocusWatchInfo(this.getApplicationContext());
         if (focusWatchInfo != null) {
             String profileRealUri = UserManager.getProfileRealUri(focusWatchInfo.getProfile());
-            GlideHelper.showCircleImageViewWithSignatureWH(
+
+            GlideHelper.getBitMapWithWH(this,
+                    profileRealUri,
+                    String.valueOf(focusWatchInfo.getLastUpdate()),
+                    view_tab_profile.getWidth(),view_tab_profile.getHeight(),
+                    new AvatarSimpleTarget(view_tab_profile));
+
+            /*GlideHelper.showCircleImageViewWithSignatureWH(
                     this, profileRealUri, String.valueOf(focusWatchInfo.getLastUpdate()),
                     view_tab_profile.getWidth(), view_tab_profile.getHeight(),
-                    view_tab_profile);
+                    view_tab_profile);*/
+        }
+    }
+
+    public class AvatarSimpleTarget extends SimpleTarget<Bitmap> {
+
+        ImageView viewCircle;
+
+        public AvatarSimpleTarget(ImageView viewCircle){
+            this.viewCircle = viewCircle;
+        }
+
+        @Override
+        public void onResourceReady(Bitmap bitmap, Transition<? super Bitmap> transition) {
+            if(viewCircle != null && !isDestroyed()){
+                viewCircle.setImageBitmap(bitmap);
+            }
         }
     }
 
