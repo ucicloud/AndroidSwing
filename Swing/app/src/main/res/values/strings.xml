@@ -481,6 +481,7 @@
     <string name="select_watch">Please select your swing watch.</string>
     <string name="psw_need_longer_6">The password length has to be longer than 6 characters</string>
     <string name="uploading">Uploading</string>
+    <string name="you_on_this_account_now">You are on this account now</string>
 
     <!-- Not translated yet -->
     <string name="net_err">Net Error</string>
@@ -504,7 +505,6 @@
     <string name="share_no_select_kids">Please select one watch</string>
     <string name="enter_password">Please enter new password</string>
     <string name="password_not_same">Password does not match the confirm password.</string>
-    <string name="search_mail_not_self">Can\'t search self.</string>
 
     <!--new string 20171215 2rd-->
 

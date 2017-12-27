@@ -480,5 +480,6 @@
     <string name="select_watch">請選擇你的手錶</string>
     <string name="psw_need_longer_6">密碼長度必須大於6個字元</string>
     <string name="uploading">資料上傳中</string>
+    <string name="you_on_this_account_now">您已在此帳號</string>
 
 </resources>

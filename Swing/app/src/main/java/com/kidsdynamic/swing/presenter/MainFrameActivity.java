@@ -382,6 +382,8 @@ public class MainFrameActivity extends BaseFragmentActivity {
                     switchShowFragment(R.id.main_console_dashboard);
                     break;
                 case R.id.main_control_profile:
+                    //尝试加载一次头像
+                    loadFocusKidsAvatar();
                     switchShowFragment(R.id.main_control_profile);
                     break;
             }

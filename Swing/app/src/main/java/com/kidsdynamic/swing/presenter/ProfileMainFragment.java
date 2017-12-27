@@ -508,6 +508,8 @@ public class ProfileMainFragment extends ProfileBaseFragment {
                             photo.getWidth(),photo.getHeight(),
                             new AvatarSimpleTarget(photo));
                 }else {
+                    Log.w("UIChange", "shared avatarFile: ");
+
                     //他人共享的设备，头像更新周期为一个小时
                     GlideHelper.getBitMapCacheOneHour(getContext().getApplicationContext(),
                             UserManager.getProfileRealUri(kid.mProfile),

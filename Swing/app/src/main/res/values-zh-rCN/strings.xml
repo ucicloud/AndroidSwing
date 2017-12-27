@@ -480,5 +480,6 @@
     <string name="select_watch">请选择你的手表</string>
     <string name="psw_need_longer_6">密码长度必须大于6个字符</string>
     <string name="uploading">资料上传中</string>
+    <string name="you_on_this_account_now">您已在此账号</string>
 
 </resources>

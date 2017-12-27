@@ -214,7 +214,7 @@ public class ProfileSearchUserFragment extends ProfileBaseFragment {
         DB_User currentLoginUserInfo = LoginManager.getCurrentLoginUserInfo();
         if(currentLoginUserInfo != null
                 && userEmail.equals(currentLoginUserInfo.getEmail())){
-            ToastCommon.makeText(getContext(),R.string.search_mail_not_self);
+            ToastCommon.makeText(getContext(),R.string.you_on_this_account_now);
             return;
         }
 

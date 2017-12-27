@@ -480,5 +480,6 @@
     <string name="select_watch">貴方の時計をスイングウッォチを選択してください</string>
     <string name="psw_need_longer_6">パスワードの長さは6文字より長くなければなりません</string>
     <string name="uploading">アップロード</string>
+    <string name="you_on_this_account_now">あなたはこのアカウントでログインしています</string>
 
 </resources>

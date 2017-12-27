@@ -418,7 +418,10 @@ public class BeanConvertor {
         kidsEntityBean.setBattery(db_kids.getBattery());
         if(db_kids.getSubHostId() == null){
             kidsEntityBean.setSubHostId(-1);
+        }else {
+            kidsEntityBean.setSubHostId(db_kids.getSubHostId());
         }
+
         kidsEntityBean.setShareType(db_kids.getShareType());
 
         return kidsEntityBean;
