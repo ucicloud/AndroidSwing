@@ -108,10 +108,6 @@ public class DashboardChartSingleFragment extends DashboardBaseFragment {
         isFirstLoad = true;
         view_left_action.setImageResource(R.drawable.icon_left);
         tv_title.setText(R.string.dashboard_chart_activity);
-//        view_right_action.setImageResource(R.drawable.icon_uv_blue_light2_);
-//        int right = (int) getResources().getDimension(R.dimen.base_12);
-//        view_right_action.setPadding(0, 0, right, 0);
-
     }
 
     @Override
@@ -194,7 +190,6 @@ public class DashboardChartSingleFragment extends DashboardBaseFragment {
     }
 
     private void loadData() {
-//        showLoadingDialog(R.string.signup_login_wait);
         Calendar cld = Calendar.getInstance();
         int timezoneOffset = cld.getTimeZone().getOffset(cld.getTimeInMillis());
 
@@ -234,14 +229,12 @@ public class DashboardChartSingleFragment extends DashboardBaseFragment {
                 new DataTask(DashboardChartSingleFragment.this)
                         .execute(arg, start, end, timezoneOffset);
             } else {
-//                finishLoadingDialog();
                 ToastCommon.makeText(SwingApplication.getAppContext(), R.string.dashboard_enqueue_fail_common);
             }
         }
 
         @Override
         public void onFailed(String Command, int statusCode) {
-//            finishLoadingDialog();
 //            ToastCommon.showToast(SwingApplication.getAppContext(), Command);
         }
     }
@@ -294,10 +287,10 @@ public class DashboardChartSingleFragment extends DashboardBaseFragment {
 
             Collections.reverse(watchActivities);
 
-//            for (WatchActivity act : theFragment.watchActivities) {
-//                act.mIndoor.mTimestamp -= timezoneOffset;
-//                act.mOutdoor.mTimestamp -= timezoneOffset;
-//            }
+            for (WatchActivity act : watchActivities) {
+                act.mIndoor.mTimestamp -= timezoneOffset;
+                act.mOutdoor.mTimestamp -= timezoneOffset;
+            }
 
             return watchActivities;
         }
@@ -307,7 +300,6 @@ public class DashboardChartSingleFragment extends DashboardBaseFragment {
             super.onPostExecute(watchActivities);
             try {
                 theFragment.handlePostExecute(watchActivities);
-//            theFragment.finishLoadingDialog();
             } catch (Exception e) {
                 e.printStackTrace();
             }

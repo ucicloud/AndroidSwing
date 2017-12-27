@@ -16,6 +16,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.kidsdynamic.data.net.activity.model.RetrieveDataRep;
+import com.kidsdynamic.data.net.activity.model.RetrieveMonthlyActivity;
 import com.kidsdynamic.data.repository.disk.ActivityCloudDataStore;
 import com.kidsdynamic.swing.R;
 import com.kidsdynamic.swing.SwingApplication;
@@ -111,7 +112,6 @@ public class DashboardListFragment extends DashboardBaseFragment {
         listType = args.getInt(LIST_TYPE, LIST_TODAY);
         if (LIST_TODAY == listType) {
             tv_title.setText(R.string.dashboard_chart_today);
-//            showLoadingDialog(R.string.signup_login_wait);
             Calendar cld = Calendar.getInstance();
             int timezoneOffset = cld.getTimeZone().getOffset(cld.getTimeInMillis());
 
@@ -128,7 +128,6 @@ public class DashboardListFragment extends DashboardBaseFragment {
                     new IRetrieveCompleteListener(start, end, timezoneOffset));
         } else if (LIST_WEEK == listType) {
             tv_title.setText(R.string.dashboard_chart_this_week);
-//            showLoadingDialog(R.string.signup_login_wait);
             Calendar cld = Calendar.getInstance();
             int timezoneOffset = cld.getTimeZone().getOffset(cld.getTimeInMillis());
 
@@ -147,7 +146,6 @@ public class DashboardListFragment extends DashboardBaseFragment {
                     new IRetrieveCompleteListener(start, end, timezoneOffset));
         } else if (LIST_MONTH == listType) {
             tv_title.setText(R.string.dashboard_chart_this_month);
-//            showLoadingDialog(R.string.signup_login_wait);
             Calendar cld = Calendar.getInstance();
             int timezoneOffset = cld.getTimeZone().getOffset(cld.getTimeInMillis());
 
@@ -166,7 +164,6 @@ public class DashboardListFragment extends DashboardBaseFragment {
                     new IRetrieveCompleteListener(start, end, timezoneOffset));
         } else {
             tv_title.setText(R.string.dashboard_chart_this_year);
-//            showLoadingDialog(R.string.signup_login_wait);
             Calendar cld = Calendar.getInstance();
             int timezoneOffset = cld.getTimeZone().getOffset(cld.getTimeInMillis());
 
@@ -176,19 +173,19 @@ public class DashboardListFragment extends DashboardBaseFragment {
             long end = cld.getTimeInMillis() + timezoneOffset;
 
             cld.add(Calendar.MONTH, -11);
+            cld.set(Calendar.DATE, 1);
             cld.set(Calendar.HOUR_OF_DAY, 0);
             cld.set(Calendar.MINUTE, 0);
             cld.set(Calendar.SECOND, 0);
             long start = cld.getTimeInMillis() + timezoneOffset;
 
-            new KidActivityManager().retrieveDataByTime(getContext(), kidId, start, end,
+            new KidActivityManager().retrieveMonthlyActivity(getContext(), kidId, start, end,
                     new IRetrieveCompleteListener(start, end, timezoneOffset));
         }
     }
 
     @OnClick(R.id.main_toolbar_action1)
     public void onToolbarAction1() {
-//        mActivityMain.popFragment();
         getFragmentManager().popBackStack();
     }
 
@@ -263,26 +260,24 @@ public class DashboardListFragment extends DashboardBaseFragment {
 
         @Override
         public void onComplete(Object arg, int statusCode) {
-            if (200 == statusCode && null != arg && arg instanceof RetrieveDataRep) {
-                if (LIST_TODAY == listType) {
+            if (200 == statusCode && null != arg) {
+                if (LIST_TODAY == listType && arg instanceof RetrieveDataRep) {
                     new HourlyTask(DashboardListFragment.this)
                             .execute(arg, start, end, timezoneOffset, kidId);
-                } else if (LIST_WEEK == listType || LIST_MONTH == listType) {
+                } else if ((LIST_WEEK == listType || LIST_MONTH == listType) && arg instanceof RetrieveDataRep) {
                     new WeeklyAndMonthlyTask(DashboardListFragment.this)
                             .execute(arg, start, end, timezoneOffset, kidId);
-                } else {
+                } else if (LIST_YEAR == listType && arg instanceof RetrieveMonthlyActivity) {
                     new YearlyTask(DashboardListFragment.this)
                             .execute(arg, start, end, timezoneOffset, kidId);
                 }
             } else {
-//                finishLoadingDialog();
                 ToastCommon.makeText(SwingApplication.getAppContext(), R.string.dashboard_enqueue_fail_common);
             }
         }
 
         @Override
         public void onFailed(String Command, int statusCode) {
-//            finishLoadingDialog();
             ToastCommon.showToast(SwingApplication.getAppContext(), Command);
         }
     }
@@ -312,6 +307,10 @@ public class DashboardListFragment extends DashboardBaseFragment {
                 timestamp += millisInHour;
             }
             if (null == activitiesEntities || activitiesEntities.isEmpty()) {
+                for (WatchActivity act : watchActivities) {
+                    act.mIndoor.mTimestamp -= timezoneOffset;
+                    act.mOutdoor.mTimestamp -= timezoneOffset;
+                }
                 return watchActivities;
             }
             for (WatchActivity act : watchActivities) {
@@ -350,7 +349,6 @@ public class DashboardListFragment extends DashboardBaseFragment {
             super.onPostExecute(watchActivities);
             try {
                 theFragment.handleHourlyData(watchActivities);
-//            theFragment.finishLoadingDialog();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -387,6 +385,10 @@ public class DashboardListFragment extends DashboardBaseFragment {
                 timestamp += millisInDay;
             }
             if (null == activitiesEntities || activitiesEntities.isEmpty()) {
+                for (WatchActivity act : watchActivities) {
+                    act.mIndoor.mTimestamp -= timezoneOffset;
+                    act.mOutdoor.mTimestamp -= timezoneOffset;
+                }
                 return watchActivities;
             }
             for (WatchActivity act : watchActivities) {
@@ -411,10 +413,10 @@ public class DashboardListFragment extends DashboardBaseFragment {
 
 //            Collections.reverse(watchActivities);
 
-//            for (WatchActivity act : watchActivities) {
-//                act.mIndoor.mTimestamp -= timezoneOffset;
-//                act.mOutdoor.mTimestamp -= timezoneOffset;
-//            }
+            for (WatchActivity act : watchActivities) {
+                act.mIndoor.mTimestamp -= timezoneOffset;
+                act.mOutdoor.mTimestamp -= timezoneOffset;
+            }
 
             return watchActivities;
         }
@@ -444,30 +446,40 @@ public class DashboardListFragment extends DashboardBaseFragment {
 
         @Override
         protected List<WatchActivity> doInBackground(Object... params) {
-            RetrieveDataRep rep = (RetrieveDataRep) params[0];
-            List<WatchActivity> watchActivities = new ArrayList<>();
-            List<RetrieveDataRep.ActivitiesEntity> activitiesEntities = rep.getActivities();
+            RetrieveMonthlyActivity rep = (RetrieveMonthlyActivity) params[0];
+            List<RetrieveMonthlyActivity.ActivitiesEntity> activitiesEntities = rep.getActivities();
             long start = (Long) params[1];
             long end = (Long) params[2];
             long timezoneOffset = (Long) params[3];
-            long millisInDay = 1000 * 60 * 60 * 24;
-            long timestamp = start;
-            while (timestamp < end) {
-                watchActivities.add(new WatchActivity((Long) params[4], timestamp));
-                timestamp += millisInDay;
+
+            List<WatchActivity> thisYear = new ArrayList<>();
+            Calendar cld = Calendar.getInstance();
+            cld.setTimeInMillis(start);
+            for (int i = 0; i < 12; i++) {
+                long timestamp = cld.getTimeInMillis();
+                WatchActivity watchActivity = new WatchActivity(0, timestamp);
+                thisYear.add(watchActivity);
+                cld.add(Calendar.MONTH, 1);
             }
-            for (WatchActivity act : watchActivities) {
-                for (RetrieveDataRep.ActivitiesEntity entity : activitiesEntities) {
-                    long receiveDate = BeanConvertor.getLocalTimeStamp(entity.getReceivedDate());
-                    long actEnd = act.mIndoor.mTimestamp + millisInDay;
-                    if (receiveDate >= act.mIndoor.mTimestamp && receiveDate < actEnd) {
+
+            if (null == activitiesEntities || activitiesEntities.isEmpty()) {
+                for (WatchActivity act : thisYear) {
+                    act.mIndoor.mTimestamp -= timezoneOffset;
+                    act.mOutdoor.mTimestamp -= timezoneOffset;
+                }
+                return thisYear;
+            }
+            for (WatchActivity act : thisYear) {
+                long timestamp = act.mIndoor.mTimestamp;
+                cld.setTimeInMillis(timestamp);
+                int month = cld.get(Calendar.MONTH) + 1;
+                for (RetrieveMonthlyActivity.ActivitiesEntity entity : activitiesEntities) {
+                    if (month == entity.getMonth()) {
                         if (entity.type.equals(ActivityCloudDataStore.Activity_type_indoor)) {
-                            act.mIndoor.mId = entity.getId();
                             act.mIndoor.mMacId = entity.getMacId();
                             act.mIndoor.mSteps += entity.getSteps();
                             act.mIndoor.mDistance += entity.getDistance();
                         } else if (entity.type.equals(ActivityCloudDataStore.Activity_type_outdoor)) {
-                            act.mOutdoor.mId = entity.getId();
                             act.mOutdoor.mMacId = entity.getMacId();
                             act.mOutdoor.mSteps += entity.getSteps();
                             act.mOutdoor.mDistance += entity.getDistance();
@@ -476,58 +488,12 @@ public class DashboardListFragment extends DashboardBaseFragment {
                 }
             }
 
-            List<WatchActivity> thisYear = new ArrayList<>();
-            Calendar cld = Calendar.getInstance();
-
-            cld.add(Calendar.MONTH, -11);
-            cld.set(Calendar.DATE, 1);
-            cld.set(Calendar.HOUR_OF_DAY, 0);
-            cld.set(Calendar.MINUTE, 0);
-            cld.set(Calendar.SECOND, 0);
-            long startTimestamp = cld.getTimeInMillis();
-
-            for (int i = 0; i < 12; i++) {
-                WatchActivity watchActivity = new WatchActivity(0, startTimestamp);
-
-                // 下一个起始时间加一个月后，再减去一秒，作为本月的结束时间
-                cld.setTimeInMillis(startTimestamp);
-                cld.add(Calendar.MONTH, 1);
-                cld.set(Calendar.DATE, 1);
-                cld.set(Calendar.HOUR_OF_DAY, 0);
-                cld.set(Calendar.MINUTE, 0);
-                cld.set(Calendar.SECOND, 0);
-                cld.add(Calendar.SECOND, -1);
-                long endTimestamp = cld.getTimeInMillis();
-
-                int days = 0;
-                for (WatchActivity src : watchActivities) {
-                    boolean isInTimeRange = watchActivity.addInTimeRange(src, startTimestamp, endTimestamp);
-                    if (isInTimeRange) {
-                        days += 1;
-                    }
-                }
-                if (days > 0) {
-                    watchActivity.mOutdoor.mSteps = watchActivity.mOutdoor.mSteps / days;
-                    watchActivity.mIndoor.mSteps = watchActivity.mIndoor.mSteps / days;
-                }
-                thisYear.add(watchActivity);
-
-                // 本次起始时间加一个月，作为下一个起始时间
-                cld.setTimeInMillis(startTimestamp);
-                cld.add(Calendar.MONTH, 1);
-                cld.set(Calendar.DATE, 1);
-                cld.set(Calendar.HOUR_OF_DAY, 0);
-                cld.set(Calendar.MINUTE, 0);
-                cld.set(Calendar.SECOND, 0);
-                startTimestamp = cld.getTimeInMillis();
-            }
-
 //            Collections.reverse(thisYear);
 
-//            for (WatchActivity act : thisYear) {
-//                act.mIndoor.mTimestamp -= timezoneOffset;
-//                act.mOutdoor.mTimestamp -= timezoneOffset;
-//            }
+            for (WatchActivity act : thisYear) {
+                act.mIndoor.mTimestamp -= timezoneOffset;
+                act.mOutdoor.mTimestamp -= timezoneOffset;
+            }
 
             return thisYear;
         }

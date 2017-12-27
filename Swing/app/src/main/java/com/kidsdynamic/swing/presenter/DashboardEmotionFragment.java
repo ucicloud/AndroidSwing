@@ -21,9 +21,7 @@ import com.kidsdynamic.swing.model.WatchActivity;
 import com.kidsdynamic.swing.utils.DataUtil;
 import com.yy.base.utils.ToastCommon;
 
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -163,7 +161,6 @@ public class DashboardEmotionFragment extends DashboardBaseFragment {
 
     @OnClick(R.id.tv_activity)
     public void clickActivity() {
-//        setFragment(DashboardChartTripleFragment.newInstance(OUTDOOR), true);
         DataUtil.getInstance().setWatchActivityInEmotionFragment(watchActivity);
         setFragment(DashboardChartSingleFragment.newInstance(OUTDOOR, CHART_TODAY, watchActivity), true);
     }
@@ -187,7 +184,6 @@ public class DashboardEmotionFragment extends DashboardBaseFragment {
         if (null == kid) {
             return;
         }
-//        showLoadingDialog(R.string.signup_login_wait);
         Calendar cld = Calendar.getInstance();
         int timezoneOffset = cld.getTimeZone().getOffset(cld.getTimeInMillis());
 
@@ -316,63 +312,46 @@ public class DashboardEmotionFragment extends DashboardBaseFragment {
                     e.printStackTrace();
                 }
             } else {
-//                finishLoadingDialog();
                 ToastCommon.makeText(getContext(), R.string.dashboard_enqueue_fail_common);
             }
-//            finishLoadingDialog();
+            isLoadExecuting = false;
         }
 
         @Override
         public void onFailed(String Command, int statusCode) {
             //del 失败后不提醒
-//            finishLoadingDialog();
 //            ToastCommon.showToast(getContext(), Command);
+            isLoadExecuting = false;
         }
     }
 
     private void handleRetrieveData(Object arg, long start, long end, long timezoneOffset, long kidId) {
         RetrieveDataRep rep = (RetrieveDataRep) arg;
+        WatchActivity act = new WatchActivity(kidId, 0);
         List<RetrieveDataRep.ActivitiesEntity> activitiesEntities = rep.getActivities();
         if (null == activitiesEntities || activitiesEntities.isEmpty()) {
             setEmotion(0);
+            setData(act);
             return;
         }
-        List<WatchActivity> watchActivities = new ArrayList<>();
-        long millisInDay = 1000 * 60 * 60 * 24;
-        long timestamp = start;
-        while (timestamp < end) {
-            watchActivities.add(new WatchActivity(kidId, timestamp));
-            timestamp += millisInDay;
-        }
-        for (WatchActivity act : watchActivities) {
-            for (RetrieveDataRep.ActivitiesEntity entity : activitiesEntities) {
-                long receiveDate = BeanConvertor.getLocalTimeStamp(entity.getReceivedDate());
-                long actEnd = act.mIndoor.mTimestamp + millisInDay;
-                if (receiveDate >= act.mIndoor.mTimestamp && receiveDate < actEnd) {
-                    if (entity.type.equals(ActivityCloudDataStore.Activity_type_indoor)) {
-                        act.mIndoor.mId = entity.getId();
-                        act.mIndoor.mMacId = entity.getMacId();
-                        act.mIndoor.mSteps += entity.getSteps();
-                        act.mIndoor.mDistance += entity.getDistance();
-                    } else if (entity.type.equals(ActivityCloudDataStore.Activity_type_outdoor)) {
-                        act.mOutdoor.mId = entity.getId();
-                        act.mOutdoor.mMacId = entity.getMacId();
-                        act.mOutdoor.mSteps += entity.getSteps();
-                        act.mOutdoor.mDistance += entity.getDistance();
-                    }
+        for (RetrieveDataRep.ActivitiesEntity entity : activitiesEntities) {
+            long receiveDate = BeanConvertor.getLocalTimeStamp(entity.getReceivedDate());
+            if (receiveDate >= start && receiveDate < end) {
+                if (entity.type.equals(ActivityCloudDataStore.Activity_type_indoor)) {
+                    act.mIndoor.mId = entity.getId();
+                    act.mIndoor.mMacId = entity.getMacId();
+                    act.mIndoor.mSteps += entity.getSteps();
+                    act.mIndoor.mDistance += entity.getDistance();
+                } else if (entity.type.equals(ActivityCloudDataStore.Activity_type_outdoor)) {
+                    act.mOutdoor.mId = entity.getId();
+                    act.mOutdoor.mMacId = entity.getMacId();
+                    act.mOutdoor.mSteps += entity.getSteps();
+                    act.mOutdoor.mDistance += entity.getDistance();
                 }
             }
         }
 
-        Collections.reverse(watchActivities);
-
-        for (WatchActivity act : watchActivities) {
-            act.mIndoor.mTimestamp -= timezoneOffset;
-            act.mOutdoor.mTimestamp -= timezoneOffset;
-        }
-
-        setWatchActivity(watchActivities.get(0));
-        isLoadExecuting = false;
+        setWatchActivity(act);
     }
 
 }
