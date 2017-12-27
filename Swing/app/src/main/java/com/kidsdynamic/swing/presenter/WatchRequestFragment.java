@@ -180,7 +180,7 @@ public class WatchRequestFragment extends BaseFragment {
             }
             T t = getItem(position);
             if (t instanceof KidsWithParent) {
-                KidsWithParent kidsWithParent = (KidsWithParent) t;
+                final KidsWithParent kidsWithParent = (KidsWithParent) t;
                 String url;
                 final long id = kidsWithParent.getId();
                 String profile = kidsWithParent.getProfile();
@@ -200,7 +200,8 @@ public class WatchRequestFragment extends BaseFragment {
                 holder.iv_action.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        doRequestClick(id, tv_title, tv_dashboard, holder.iv_action);
+                        UserInfo parentInfo = kidsWithParent.getParent();
+                        doRequestClick(parentInfo.getId(), tv_title, tv_dashboard, holder.iv_action);
                     }
                 });
             } else if (t instanceof UserInfo) {
