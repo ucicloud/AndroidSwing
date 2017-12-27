@@ -255,7 +255,8 @@ public class WatchSelectFragment extends BaseFragment {
                     kidsWithParent.setMacId(watchMacId);
                     LogUtil2.getUtils().d("watch not bind");
                 }
-                if (null != kidsWithParent) {
+                if (null != kidsWithParent
+                        && getContext() != null) {
                     //add 2017年12月27日17:09:08 新增过滤条件，当前自己的和别人分享的都不显示
                     if(ObjectUtils.isListEmpty(allKidsNow)){
                         allKidsNow = DeviceManager.getAllKidsAndShared(getContext());
