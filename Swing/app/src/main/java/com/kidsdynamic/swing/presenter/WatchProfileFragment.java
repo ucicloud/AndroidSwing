@@ -24,6 +24,8 @@ import com.kidsdynamic.data.net.user.model.UpdateKidRepEntity;
 import com.kidsdynamic.data.utils.LogUtil2;
 import com.kidsdynamic.swing.BaseFragment;
 import com.kidsdynamic.swing.R;
+import com.kidsdynamic.swing.SwingApplication;
+import com.kidsdynamic.swing.domain.ConfigManager;
 import com.kidsdynamic.swing.domain.DeviceManager;
 import com.kidsdynamic.swing.domain.UserManager;
 import com.kidsdynamic.swing.net.BaseRetrofitCallback;
@@ -197,7 +199,10 @@ public class WatchProfileFragment extends BaseFragment {
                     int kidId = kidsWithParent.getId();
                     LogUtil2.getUtils().d("addKid rep kid ID: " + kidId);
 
-                    DeviceManager.updateFocusKids(kidId);
+                    //如果当前没有focusKids，则设置新增的为
+                    if (DeviceManager.getFocusKidsId() <= 0) {
+                        DeviceManager.updateFocusKids(kidId);
+                    }
 
                     kidsWithParent.setFirmwareVersion(firmwareVersion);
                     //add 2017年11月7日13:45:21 only_app save kids info to db
@@ -254,7 +259,7 @@ public class WatchProfileFragment extends BaseFragment {
      * @param profile File
      * @param kidsId  String
      */
-    public void uploadAvatar(File profile, String kidsId) {
+    public void uploadAvatar(final File profile, final String kidsId) {
         final AvatarApi avatarApi = ApiGen.getInstance(getContext().getApplicationContext()).
                 generateApi4Avatar(AvatarApi.class);
         MultipartBody.Part filePart =
@@ -279,6 +284,9 @@ public class WatchProfileFragment extends BaseFragment {
                                     UserManager.getProfileRealUri(response.body().getKid().getProfile()));
 
                             gotoAddSuccessFragment(bundle);
+
+                            //发送头像更新消息
+                            sendKidsAvatarUpdate(profile,Long.valueOf(kidsId));
                         } else {
                             ToastCommon.makeText(getContext(), R.string.error_api_unknown);
                             LogUtil2.getUtils().d("uploadKidAvatar error code:" + response.code());
@@ -292,6 +300,23 @@ public class WatchProfileFragment extends BaseFragment {
                         t.printStackTrace();
                     }
                 });
+    }
+
+    private void sendKidsAvatarUpdate(File avatarFile, long kidsId) {
+
+        if(avatarFile == null){
+            return;
+        }
+
+        Intent intent = new Intent(ConfigManager.Avatar_Update_Action);
+        intent.putExtra(ConfigManager.Tag_Key,ConfigManager.Tag_Update_Type_Kids_Avatar);
+        intent.putExtra(ConfigManager.Tag_KidsId_Key,kidsId);
+
+        /*Uri uriForFile = FileProvider.getUriForFile(getContext().getApplicationContext(),
+                getContext().getPackageName(), avatarFile);*/
+        intent.putExtra(ConfigManager.Tag_Avatar_File_Uri_Key,avatarFile.getAbsolutePath());
+
+        SwingApplication.localBroadcastManager.sendBroadcast(intent);
     }
 
     private void gotoAddSuccessFragment(Bundle bundle) {

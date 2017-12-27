@@ -169,12 +169,12 @@ public class DeviceManager {
         return preferencesUtil.gPrefLongValue(key_focus_kids);
     }
 
+    //在数据库中新增一个kids
     public boolean saveKidsData(@NonNull Context context, KidsWithParent kidsWithParent){
         //首先清除；然后保存
         DbUtil dbUtil = DbUtil.getInstance(context.getApplicationContext());
 
         KidsDataStore kidsDataStore = new KidsDataStore(dbUtil);
-        kidsDataStore.clearAllData();
 
         //开始保存
         List<DB_Kids> db_kidsList = new ArrayList<>(1);
