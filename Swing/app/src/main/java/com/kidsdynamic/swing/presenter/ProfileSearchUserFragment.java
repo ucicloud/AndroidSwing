@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.kidsdynamic.commonlib.utils.SoftKeyBoardUtil;
+import com.kidsdynamic.data.dao.DB_User;
 import com.kidsdynamic.data.net.ApiGen;
 import com.kidsdynamic.data.net.host.HostApi;
 import com.kidsdynamic.data.net.host.model.AddSubHost;
@@ -206,6 +207,14 @@ public class ProfileSearchUserFragment extends ProfileBaseFragment {
         String userEmail = mViewUserEmail.getText().toString().trim();
         if(!Functions.isValidEmail(userEmail)){
             ToastCommon.makeText(getContext(),R.string.error_email_null);
+            return;
+        }
+
+        //检查是否在搜索自己
+        DB_User currentLoginUserInfo = LoginManager.getCurrentLoginUserInfo();
+        if(currentLoginUserInfo != null
+                && userEmail.equals(currentLoginUserInfo.getEmail())){
+            ToastCommon.makeText(getContext(),R.string.search_mail_not_self);
             return;
         }
 

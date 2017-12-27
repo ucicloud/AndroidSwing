@@ -257,6 +257,21 @@ public class DeviceManager {
 
     }
 
+    public static boolean isContain(List<KidsEntityBean> kidsEntityBeans, KidsWithParent kidsWithParent){
+        boolean isContain = false;
+
+        if(ObjectUtils.isListEmpty(kidsEntityBeans) && kidsWithParent != null){
+            for (KidsEntityBean kidsEntityBean : kidsEntityBeans) {
+                if(kidsEntityBean.getKidsId() == kidsWithParent.getId()){
+                    isContain = true;
+                    break;
+                }
+            }
+        }
+
+        return isContain;
+    }
+
     public static List<KidsEntityBean>  getAllKidsAndShared(Context context){
 
         List<KidsEntityBean> allKidsByUserId =

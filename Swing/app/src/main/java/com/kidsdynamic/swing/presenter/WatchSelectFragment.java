@@ -23,6 +23,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.kidsdynamic.commonlib.utils.ObjectUtils;
 import com.kidsdynamic.data.net.ApiGen;
 import com.kidsdynamic.data.net.kids.KidsApi;
 import com.kidsdynamic.data.net.kids.model.KidsWithParent;
@@ -36,6 +37,7 @@ import com.kidsdynamic.swing.ble.IDeviceScanCallback;
 import com.kidsdynamic.swing.ble.SwingBLEService;
 import com.kidsdynamic.swing.domain.DeviceManager;
 import com.kidsdynamic.swing.domain.UserManager;
+import com.kidsdynamic.swing.model.KidsEntityBean;
 import com.kidsdynamic.swing.net.BaseRetrofitCallback;
 import com.kidsdynamic.swing.utils.GlideHelper;
 import com.kidsdynamic.swing.view.ListLinearLayout;
@@ -73,6 +75,8 @@ public class WatchSelectFragment extends BaseFragment {
     private Map<String, BluetoothLeDevice> mDeviceMap = new HashMap<>();
     private SwingBLEService mBluetoothService;
 
+    private List<KidsEntityBean> allKidsNow;
+
     public static WatchSelectFragment newInstance() {
         Bundle args = new Bundle();
         WatchSelectFragment fragment = new WatchSelectFragment();
@@ -101,6 +105,8 @@ public class WatchSelectFragment extends BaseFragment {
     public void onResume() {
         super.onResume();
         checkPermissions();
+
+        allKidsNow = DeviceManager.getAllKidsAndShared(getContext());
     }
 
     @Override
@@ -250,10 +256,17 @@ public class WatchSelectFragment extends BaseFragment {
                     LogUtil2.getUtils().d("watch not bind");
                 }
                 if (null != kidsWithParent) {
-                    //业务上用的macId需要吧address中的":"删除
-                    mDeviceMap.put(watchMacId, scanResult);
-                    dataAdapter.addItem(kidsWithParent);
-                    ll_select.setAdapter(dataAdapter);
+                    //add 2017年12月27日17:09:08 新增过滤条件，当前自己的和别人分享的都不显示
+                    if(ObjectUtils.isListEmpty(allKidsNow)){
+                        allKidsNow = DeviceManager.getAllKidsAndShared(getContext());
+                    }
+
+                    if(!DeviceManager.isContain(allKidsNow,kidsWithParent)){
+                        //业务上用的macId需要吧address中的":"删除
+                        mDeviceMap.put(watchMacId, scanResult);
+                        dataAdapter.addItem(kidsWithParent);
+                        ll_select.setAdapter(dataAdapter);
+                    }
                 }
 
                 super.onResponse(call, response);
@@ -267,6 +280,9 @@ public class WatchSelectFragment extends BaseFragment {
             }
         });
     }
+
+
+
 
     private class DataAdapter extends BaseAdapter {
 
