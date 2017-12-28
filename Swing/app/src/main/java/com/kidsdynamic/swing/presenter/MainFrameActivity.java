@@ -283,6 +283,7 @@ public class MainFrameActivity extends BaseFragmentActivity {
 
             if (update_type == Tag_Avatar_update) {
                 if (!mWatchContactStack.isEmpty()) {
+                    view_tab_profile.setImageResource(R.drawable.ic_icon_profile_);
                     //在二期功能前，消费该对象
                     WatchContact watchContact = mWatchContactStack.pop();
                     if (watchContact != null && watchContact.mPhoto != null) {
