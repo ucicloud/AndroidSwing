@@ -360,8 +360,15 @@ public class ProfileMainFragment extends ProfileBaseFragment {
         public void onClick(View view) {
 //            mActivityMain.selectFragment(FragmentProfileSearch.class.getName(), null);
             selectFragment(WatchSearchFragment.newInstance(),true);
+//            tsWatchAdd();
         }
     };
+
+   private void tsWatchAdd(){
+       String macId = "12qwas" + System.currentTimeMillis();
+       String nowFirmwareVersion = "123";
+       selectFragment(WatchProfileFragment.newInstance(macId, nowFirmwareVersion), true);
+   }
 
     private View.OnClickListener mAddRequestToListener = new View.OnClickListener() {
         @Override
@@ -615,7 +622,7 @@ public class ProfileMainFragment extends ProfileBaseFragment {
 //                Uri avatarUri = (Uri) intent.getParcelableExtra(ConfigManager.Tag_Avatar_File_Uri_Key);
                 String avatarFilePath = intent.getStringExtra(ConfigManager.Tag_Avatar_File_Uri_Key);
 
-                Log.w("UIChangeReceiver", "avatar: " + avatarFilePath);
+                Log.w("UIChangeReceiver", "profile-avatar: " + avatarFilePath + "-" + updateKidsId);
                 if(updateKidsId != -1 && !TextUtils.isEmpty(avatarFilePath)){
 
                     cacheAvatarMap.put(updateKidsId,new File(avatarFilePath));

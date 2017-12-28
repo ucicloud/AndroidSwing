@@ -42,6 +42,7 @@ import static com.kidsdynamic.swing.domain.BeanConvertor.getUTCTimeStamp;
 
 public class DeviceManager {
     public final static String BUNDLE_KEY_AVATAR = "AVATAR";
+    public final static String BUNDLE_KEY_AVATAR_FILE = "AVATAR_FILE";
     public final static String BUNDLE_KEY_KID_NAME = "KID_NAME";
     public final static String BUNDLE_KEY_KID_ID = "KID_ID";
     public final static String BUNDLE_KEY_USER_ID = "USER_ID";
