@@ -480,5 +480,7 @@
     <string name="select_watch">Por favor selecciona tu reloj</string>
     <string name="psw_need_longer_6">The password length has to be longer than 6 characters</string>
     <string name="uploading">Actualizar ahora</string>
+    <string name="you_on_this_account_now">Estás en esta cuenta ahora</string>
+    <string name="calendar_hide_this_reminder">Ocultar recordatorio</string>
 
 </resources>

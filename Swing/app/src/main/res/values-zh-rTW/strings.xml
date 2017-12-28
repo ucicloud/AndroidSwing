@@ -62,7 +62,7 @@
     <string name="dashboard_chart_message_below">"別放棄!\n你能做到的!"</string>
     <string name="dashboard_chart_message_almost">"再多試試!\n你快完成了!"</string>
     <string name="dashboard_chart_message_excellent">"哇! \n你完成目標了!"</string>
-    <string name="dashboard_chart_steps">腳步</string>
+    <string name="dashboard_chart_steps">步數</string>
 
     <!-- FragmentDashboardMain -->
     <string name="dashboard_main_message">"立刻同步?"</string>
@@ -76,7 +76,7 @@
     <string name="dashboard_emotion_excellent">"棒極了!"</string>
     <string name="dashboard_emotion_almost">"快完成了!"</string>
     <string name="dashboard_emotion_below">"再多加油!"</string>
-    <string name="dashboard_emotion_steps">腳步</string>
+    <string name="dashboard_emotion_steps">步數</string>
 
     <!-- FragmentDashboardProgress -->
     <string name="dashboard_progress_searching">"尋找裝置!"</string>
@@ -481,5 +481,6 @@
     <string name="psw_need_longer_6">密碼長度必須大於6個字元</string>
     <string name="uploading">資料上傳中</string>
     <string name="you_on_this_account_now">您已在此帳號</string>
+    <string name="calendar_hide_this_reminder">永久不顯示提醒</string>
 
 </resources>

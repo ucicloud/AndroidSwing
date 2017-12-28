@@ -79,23 +79,27 @@ public class WatchAddSuccessFragment extends BaseFragment {
 
     @OnClick(R.id.watch_go_to_dashboard)
     public void gotoDashboard() {
-
         FragmentActivity activity = getActivity();
-        if(activity instanceof MainFrameActivity){
+        if (activity instanceof MainFrameActivity) {
             ((MainFrameActivity) activity).
                     switchToDashBoardFragment();
-        }else {
-
+        } else {
             getActivity().finish();
             //跳转到主界面
-            startActivity(new Intent(getActivity(),MainFrameActivity.class));
+            startActivity(new Intent(getActivity(), MainFrameActivity.class));
         }
-
     }
 
     @OnClick(R.id.watch_add_other)
     public void add() {
-
+        FragmentActivity activity = getActivity();
+        if (activity instanceof MainFrameActivity) {
+            MainFrameActivity mainFrameActivity = (MainFrameActivity) activity;
+            mainFrameActivity.setFragment(WatchSearchFragment.newInstance(), true);
+        } else if (activity instanceof SignupActivity) {
+            SignupActivity signupActivity = (SignupActivity) activity;
+            signupActivity.setFragment(WatchSearchFragment.newInstance(), true);
+        }
     }
 
 }

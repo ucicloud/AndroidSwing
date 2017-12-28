@@ -55,7 +55,7 @@
     <!-- FragmentDashboardChart -->
     <string name="dashboard_chart_indoor">室内</string>
     <string name="dashboard_chart_outdoor">室外</string>
-    <string name="dashboard_chart_today">今日/本日</string>
+    <string name="dashboard_chart_today">今日</string>
     <string name="dashboard_chart_this_week">今週</string>
     <string name="dashboard_chart_this_month">今月</string>
     <string name="dashboard_chart_this_year">今年</string>
@@ -82,7 +82,7 @@
     <string name="dashboard_progress_searching">貴方の時計を\n検索しています</string>
     <string name="dashboard_progress_found">貴方の時計\n見つけました。</string>
     <string name="dashboard_progress_sync_now">接続を始めます</string>
-    <string name="dashboard_progress_syncing">接続ています</string>
+    <string name="dashboard_progress_syncing">接続しています</string>
     <string name="dashboard_progress_completed">完成した</string>
     <string name="dashboard_progress_dashboard">イベント・レコードを開きます</string>
     <string name="dashboard_progress_not_found">あなたの時計が\n見つかりません</string>
@@ -142,9 +142,9 @@
 
     <!-- FragmentProfileMain -->
     <string name="profile_main_hosting">私の時計</string>
-    <string name="profile_main_shared">わたしと共有する時計</string>
-    <string name="profile_main_request_to">への保留中のリクエスト</string>
-    <string name="profile_main_request_from">から %d のリクエストがあります</string>
+    <string name="profile_main_shared">共有している時計</string>
+    <string name="profile_main_request_to">リクエスト中の時計</string>
+    <string name="profile_main_request_from">リクエストがきています</string>
 
     <!-- FragmentProfileOption -->
     <string name="profile_option_account">アカウント</string>
@@ -388,7 +388,7 @@
     <string name="error_subhost_remove_kid_400">パラメータエラーかタイプミスです</string>
     <string name="error_subhost_remove_kid_403">ユーザーが許可されていません</string>
 
-    <string name="dialog_sync_content">イベントを編集すると、時計のシンクロをして下さい。</string>
+    <string name="dialog_sync_content">イベントを編集した後は、時計のシンクロをしてください</string>
     <string name="dialog_sync_header">Sync Data</string>
     <string name="dialog_sync_skip_button">Skip</string>
     <string name="dialog_sync_sync_button">接続</string>
@@ -432,7 +432,7 @@
     <string name="introduction_calendar_today">日付かイベントをタップし、今日のスケジュールを確認する。</string>
 
     <string name="profile_edit_kids_profile">子どものプロフィールを編集する</string>
-    <string name="profile_switch_to_account">このアカウントに切り替える</string>
+    <string name="profile_switch_to_account">アカウントを切り替える</string>
     <string name="title_kids_profile">子どものプロフィール</string>
 
     <string name="profile_kids_switch_tip">このアカウントに切り替えますか</string>
@@ -481,5 +481,6 @@
     <string name="psw_need_longer_6">パスワードの長さは6文字より長くなければなりません</string>
     <string name="uploading">アップロード</string>
     <string name="you_on_this_account_now">あなたはこのアカウントでログインしています</string>
+    <string name="calendar_hide_this_reminder">リマインダーで通知しない</string>
 
 </resources>

@@ -482,6 +482,7 @@
     <string name="psw_need_longer_6">The password length has to be longer than 6 characters</string>
     <string name="uploading">Uploading</string>
     <string name="you_on_this_account_now">You are on this account now</string>
+    <string name="calendar_hide_this_reminder">Hide this reminder</string>
 
     <!-- Not translated yet -->
     <string name="net_err">Net Error</string>
@@ -494,7 +495,6 @@
     <string name="save_todo_done_statue_err">Save fail, try again[%1$d]</string>
 
     <string name="dashboard_progress_sync_fail">Sync Fail</string>
-    <string name="calendar_hide_this_reminder">Hide this reminder</string>
 
     <string name="event_time_select_error">Event end time invalid</string>
 
