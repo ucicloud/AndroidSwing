@@ -172,11 +172,11 @@ public class ProfileSearchUserFragment extends ProfileBaseFragment {
     }
 
     private void loadAvatar() {
-        if(!TextUtils.isEmpty(mUserAvatarFileName)){
+       /* if(!TextUtils.isEmpty(mUserAvatarFileName)){
             GlideHelper.getCircleImageViewOnlyCacheInMemory(getContext(),
                     UserManager.getProfileRealUri(mUserAvatarFileName),
                     user_avatar);
-        }
+        }*/
     }
 
 /*    private SimpleTarget<Bitmap> userAvatarSimpleTarget = new SimpleTarget<Bitmap>(){
@@ -261,9 +261,13 @@ public class ProfileSearchUserFragment extends ProfileBaseFragment {
                 userInfo.getLastName()));
 
         if(!TextUtils.isEmpty(userInfo.getProfile())){
-            GlideHelper.getCircleImageViewOnlyCacheInMemory(getContext(),
+            /*GlideHelper.getCircleImageViewOnlyCacheInMemory(getContext(),
                     UserManager.getProfileRealUri(userInfo.getProfile()),
-                    user_avatar);
+                    user_avatar);*/
+
+            GlideHelper.getBitMapCacheOneHour(getContext(),
+                    UserManager.getProfileRealUri(userInfo.getProfile()),
+                    new AvatarSimpleTargetImageView(user_avatar));
         }
 
         img_add.setImageResource(R.drawable.ic_icon_add_light_blue);

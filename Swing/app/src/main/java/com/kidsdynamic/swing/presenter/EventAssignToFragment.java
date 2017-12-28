@@ -2,6 +2,7 @@ package com.kidsdynamic.swing.presenter;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -226,18 +227,21 @@ public class EventAssignToFragment extends CalendarBaseFragment {
 
             //获取真实的头像地址，并显示
             String profileRealUri = UserManager.getProfileRealUri(dbKids.getProfile());
-            if(dbKids.getShareType() == KidsEntityBean.shareType_from_other){
-                //如果是别人共享的设备，则头像仅仅内存cache
-                GlideHelper.getCircleImageViewOnlyCacheInMemory(
-                        getContext().getApplicationContext(),
-                        profileRealUri,
-                        viewHolder.kidsAvatarView);
-            }else {
-                GlideHelper.showCircleImageViewWithSignature(
-                        getContext().getApplicationContext(),
-                        profileRealUri,dbKids.getLastUpdate()+"",
-                        viewHolder.kidsAvatarView);
+            if(!TextUtils.isEmpty(dbKids.getProfile())){
+                if(dbKids.getShareType() == KidsEntityBean.shareType_from_other){
+                    //如果是别人共享的设备，则头像仅仅内存cache
+                    GlideHelper.getCircleImageViewOnlyCacheInMemory(
+                            getContext().getApplicationContext(),
+                            profileRealUri,
+                            viewHolder.kidsAvatarView);
+                }else {
+                    GlideHelper.showCircleImageViewWithSignature(
+                            getContext().getApplicationContext(),
+                            profileRealUri,dbKids.getLastUpdate()+"",
+                            viewHolder.kidsAvatarView);
+                }
             }
+
             /*GlideHelper.showCircleImageView(getContext().getApplicationContext(),profileRealUri,
                     viewHolder.kidsAvatarView);*/
 

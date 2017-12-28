@@ -217,10 +217,13 @@ public class ProfileMainFragment extends ProfileBaseFragment {
 
         if(watchContact != null && watchContact.mPhoto != null && parent != null){
             mViewPhoto.setBitmap(watchContact.mPhoto);
-            GlideHelper.getBitMapWithWH(getContext(), UserManager.getProfileRealUri(parent.getProfile()),
-                    String.valueOf(parent.getLastUpdate()),
-                    mViewPhoto.getWidth(),mViewPhoto.getHeight(),
-                    new AvatarSimpleTarget(mViewPhoto));
+
+            if(!TextUtils.isEmpty(parent.getProfile())){
+                GlideHelper.getBitMapWithWH(getContext(), UserManager.getProfileRealUri(parent.getProfile()),
+                        String.valueOf(parent.getLastUpdate()),
+                        mViewPhoto.getWidth(),mViewPhoto.getHeight(),
+                        new AvatarSimpleTarget(mViewPhoto));
+            }
         }
 
         // 載入用戶的所有手錶

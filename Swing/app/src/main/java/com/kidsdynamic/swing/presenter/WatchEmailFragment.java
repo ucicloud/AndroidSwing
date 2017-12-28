@@ -142,9 +142,14 @@ public class WatchEmailFragment extends BaseFragment {
                 userInfo.getLastName()));
 
         if (!TextUtils.isEmpty(userInfo.getProfile())) {
-            GlideHelper.getCircleImageViewOnlyCacheInMemory(getContext(),
+
+            GlideHelper.getBitMapCacheOneHour(getContext(),
                     UserManager.getProfileRealUri(userInfo.getProfile()),
-                    user_avatar);
+                    new AvatarSimpleTargetImageView(user_avatar));
+
+            /*GlideHelper.getCircleImageViewOnlyCacheInMemory(getContext(),
+                    UserManager.getProfileRealUri(userInfo.getProfile()),
+                    user_avatar);*/
         }
 
         img_add.setImageResource(R.drawable.ic_icon_add_orange);

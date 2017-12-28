@@ -2,6 +2,7 @@ package com.kidsdynamic.swing.presenter;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -74,8 +75,10 @@ public class LogoutConfirmFragment extends ProfileBaseFragment {
             tv_accountEmail.setText(currentLoginUserInfo.getEmail());
             tv_accountName.setText(LoginManager.getUserName(currentLoginUserInfo));
 
-            GlideHelper.getBitMap(getContext(), UserManager.getProfileRealUri(currentLoginUserInfo.getProfile()),
-                    String.valueOf(currentLoginUserInfo.getLastUpdate()), new AvatarSimpleTarget(mViewPhoto));
+            if(!TextUtils.isEmpty(currentLoginUserInfo.getProfile())){
+                GlideHelper.getBitMap(getContext(), UserManager.getProfileRealUri(currentLoginUserInfo.getProfile()),
+                        String.valueOf(currentLoginUserInfo.getLastUpdate()), new AvatarSimpleTarget(mViewPhoto));
+            }
         }
 
     }

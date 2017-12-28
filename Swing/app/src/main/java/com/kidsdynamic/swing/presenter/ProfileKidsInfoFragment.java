@@ -231,9 +231,12 @@ public class ProfileKidsInfoFragment extends ProfileBaseFragment {
                     new BaseFragment.AvatarSimpleTarget(mViewPhoto));
         }
 
-        GlideHelper.getBitMap(getContext(),
-                UserManager.getProfileRealUri(kidsInfo.getProfile()),
-                String.valueOf(kidsInfo.getLastUpdate()), new AvatarSimpleTarget(mViewPhoto));
+        //头像非空
+        if(!TextUtils.isEmpty(kidsInfo.getProfile())){
+            GlideHelper.getBitMap(getContext(),
+                    UserManager.getProfileRealUri(kidsInfo.getProfile()),
+                    String.valueOf(kidsInfo.getLastUpdate()), new AvatarSimpleTarget(mViewPhoto));
+        }
 
         Log.w("profile", "kids lastUpdate: " + kidsInfo.getLastUpdate());
 
@@ -327,9 +330,12 @@ public class ProfileKidsInfoFragment extends ProfileBaseFragment {
 
         if(contact instanceof WatchContact.Kid){
             WatchContact.Kid kid = (WatchContact.Kid) contact;
-            GlideHelper.getBitMap(getContext().getApplicationContext(),
-                    UserManager.getProfileRealUri(kid.mProfile),
-                    kid.mLastUpdate+"", new AvatarSimpleTarget(photo));
+
+            if(!TextUtils.isEmpty(kid.mProfile)){
+                GlideHelper.getBitMap(getContext().getApplicationContext(),
+                        UserManager.getProfileRealUri(kid.mProfile),
+                        kid.mLastUpdate+"", new AvatarSimpleTarget(photo));
+            }
         }else if(contact instanceof WatchContact.User){
             WatchContact.User user = (WatchContact.User) contact;
 

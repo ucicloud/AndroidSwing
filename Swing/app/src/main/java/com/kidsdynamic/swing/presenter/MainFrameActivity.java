@@ -179,16 +179,20 @@ public class MainFrameActivity extends BaseFragmentActivity {
         if (focusWatchInfo != null) {
             String profileRealUri = UserManager.getProfileRealUri(focusWatchInfo.getProfile());
 
-            GlideHelper.getBitMapWithWH(this,
-                    profileRealUri,
-                    String.valueOf(focusWatchInfo.getLastUpdate()),
-                    view_tab_profile.getWidth(),view_tab_profile.getHeight(),
-                    new AvatarSimpleTarget(view_tab_profile));
+            if(!TextUtils.isEmpty(focusWatchInfo.getProfile())){
+                //如果非空
+                GlideHelper.getBitMapWithWH(this,
+                        profileRealUri,
+                        String.valueOf(focusWatchInfo.getLastUpdate()),
+                        view_tab_profile.getWidth(),view_tab_profile.getHeight(),
+                        new AvatarSimpleTarget(view_tab_profile));
 
             /*GlideHelper.showCircleImageViewWithSignatureWH(
                     this, profileRealUri, String.valueOf(focusWatchInfo.getLastUpdate()),
                     view_tab_profile.getWidth(), view_tab_profile.getHeight(),
                     view_tab_profile);*/
+            }
+
         }
     }
 

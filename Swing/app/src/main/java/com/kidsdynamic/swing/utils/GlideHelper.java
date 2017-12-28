@@ -276,19 +276,20 @@ public class GlideHelper {
     }
 
     /**
-     * 获取img并显示到指定imagview；该方法只在内存缓存获取到的图片
+     * 获取img并显示到指定imagview；该方法缓存获取到的图片,但有效期只有一个小时
      * @param context context
-     * @param mode url
+     * @param url url
      * @param imageView 要显示的控件
      */
-    public static void getCircleImageViewOnlyCacheInMemory(Context context, Object mode, ImageView imageView) {
+    public static void getCircleImageViewOnlyCacheInMemory(Context context, String url, ImageView imageView) {
         try {
             RequestOptions requestOptions = RequestOptions.circleCropTransform()
                     .placeholder(R.drawable.ic_icon_profile_)
                     .encodeQuality(50)
-                    .skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.NONE);
+                    .skipMemoryCache(false)/*.diskCacheStrategy(DiskCacheStrategy.NONE)*/
+                    .signature(new ObjectKey(TimeUtils.getTodayDateString()));
             Glide.with(context.getApplicationContext())
-                    .load(mode)
+                    .load(url)
                     .apply(requestOptions)
                     .into(imageView);
         } catch (Exception e) {
