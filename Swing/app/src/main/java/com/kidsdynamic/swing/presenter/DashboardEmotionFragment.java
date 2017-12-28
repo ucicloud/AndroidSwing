@@ -1,6 +1,7 @@
 package com.kidsdynamic.swing.presenter;
 
 import android.content.res.Resources;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.KeyEvent;
@@ -19,8 +20,8 @@ import com.kidsdynamic.swing.domain.KidActivityManager;
 import com.kidsdynamic.swing.model.KidsEntityBean;
 import com.kidsdynamic.swing.model.WatchActivity;
 import com.kidsdynamic.swing.utils.DataUtil;
-import com.yy.base.utils.ToastCommon;
 
+import java.lang.ref.WeakReference;
 import java.util.Calendar;
 import java.util.List;
 
@@ -145,13 +146,13 @@ public class DashboardEmotionFragment extends DashboardBaseFragment {
     @OnClick(R.id.rl_indoor_steps)
     public void clickIndoorSteps() {
         DataUtil.getInstance().setWatchActivityInEmotionFragment(watchActivity);
-        setFragment(DashboardChartSingleFragment.newInstance(INDOOR, CHART_TODAY, watchActivity), true);
+        setFragment(DashboardChartSingleFragment.newInstance(INDOOR, CHART_TODAY), true);
     }
 
     @OnClick(R.id.rl_outdoor_steps)
     public void clickOutdoorSteps() {
         DataUtil.getInstance().setWatchActivityInEmotionFragment(watchActivity);
-        setFragment(DashboardChartSingleFragment.newInstance(OUTDOOR, CHART_TODAY, watchActivity), true);
+        setFragment(DashboardChartSingleFragment.newInstance(OUTDOOR, CHART_TODAY), true);
     }
 
     @OnClick(R.id.rl_uv_exposure)
@@ -162,7 +163,7 @@ public class DashboardEmotionFragment extends DashboardBaseFragment {
     @OnClick(R.id.tv_activity)
     public void clickActivity() {
         DataUtil.getInstance().setWatchActivityInEmotionFragment(watchActivity);
-        setFragment(DashboardChartSingleFragment.newInstance(OUTDOOR, CHART_TODAY, watchActivity), true);
+        setFragment(DashboardChartSingleFragment.newInstance(OUTDOOR, CHART_TODAY), true);
     }
 
     @OnClick(R.id.tv_uv_detection)
@@ -306,52 +307,77 @@ public class DashboardEmotionFragment extends DashboardBaseFragment {
         @Override
         public void onComplete(Object arg, int statusCode) {
             if (200 == statusCode && null != arg && arg instanceof RetrieveDataRep) {
-                try {
-                    handleRetrieveData(arg, start, end, timezoneOffset, kidId);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                new DataTask(DashboardEmotionFragment.this)
+                        .execute(arg, start, end, timezoneOffset, kidId);
             } else {
-                ToastCommon.makeText(getContext(), R.string.dashboard_enqueue_fail_common);
+                isLoadExecuting = false;
+//                ToastCommon.makeText(SwingApplication.getAppContext(), R.string.dashboard_enqueue_fail_common);
             }
-            isLoadExecuting = false;
         }
 
         @Override
         public void onFailed(String Command, int statusCode) {
-            //del 失败后不提醒
-//            ToastCommon.showToast(getContext(), Command);
+//            ToastCommon.showToastSwingApplication.getAppContext(), Command);
             isLoadExecuting = false;
         }
     }
 
-    private void handleRetrieveData(Object arg, long start, long end, long timezoneOffset, long kidId) {
-        RetrieveDataRep rep = (RetrieveDataRep) arg;
-        WatchActivity act = new WatchActivity(kidId, 0);
-        List<RetrieveDataRep.ActivitiesEntity> activitiesEntities = rep.getActivities();
-        if (null == activitiesEntities || activitiesEntities.isEmpty()) {
-            setEmotion(0);
-            setData(act);
-            return;
+    private static class DataTask extends AsyncTask<Object, Integer, WatchActivity> {
+
+        private DashboardEmotionFragment theFragment;
+
+        DataTask(DashboardEmotionFragment instance) {
+            WeakReference<DashboardEmotionFragment> wr = new WeakReference<>(instance);
+            theFragment = wr.get();
         }
-        for (RetrieveDataRep.ActivitiesEntity entity : activitiesEntities) {
-            long receiveDate = BeanConvertor.getLocalTimeStamp(entity.getReceivedDate());
-            if (receiveDate >= start && receiveDate < end) {
-                if (entity.type.equals(ActivityCloudDataStore.Activity_type_indoor)) {
-                    act.mIndoor.mId = entity.getId();
-                    act.mIndoor.mMacId = entity.getMacId();
-                    act.mIndoor.mSteps += entity.getSteps();
-                    act.mIndoor.mDistance += entity.getDistance();
-                } else if (entity.type.equals(ActivityCloudDataStore.Activity_type_outdoor)) {
-                    act.mOutdoor.mId = entity.getId();
-                    act.mOutdoor.mMacId = entity.getMacId();
-                    act.mOutdoor.mSteps += entity.getSteps();
-                    act.mOutdoor.mDistance += entity.getDistance();
+
+
+        @Override
+        protected WatchActivity doInBackground(Object... params) {
+            RetrieveDataRep rep = (RetrieveDataRep) params[0];
+            WatchActivity act = new WatchActivity((Long) params[4], 0);
+            List<RetrieveDataRep.ActivitiesEntity> activitiesEntities = rep.getActivities();
+            if (null == activitiesEntities || activitiesEntities.isEmpty()) {
+                return act;
+            }
+            long start = (Long) params[1];
+            long end = (Long) params[2];
+            long timezoneOffset = (Long) params[3];
+            for (RetrieveDataRep.ActivitiesEntity entity : activitiesEntities) {
+                long receiveDate = BeanConvertor.getLocalTimeStamp(entity.getReceivedDate());
+                if (receiveDate >= start && receiveDate < end) {
+                    if (entity.type.equals(ActivityCloudDataStore.Activity_type_indoor)) {
+                        act.mIndoor.mId = entity.getId();
+                        act.mIndoor.mMacId = entity.getMacId();
+                        act.mIndoor.mSteps += entity.getSteps();
+                        act.mIndoor.mDistance += entity.getDistance();
+                    } else if (entity.type.equals(ActivityCloudDataStore.Activity_type_outdoor)) {
+                        act.mOutdoor.mId = entity.getId();
+                        act.mOutdoor.mMacId = entity.getMacId();
+                        act.mOutdoor.mSteps += entity.getSteps();
+                        act.mOutdoor.mDistance += entity.getDistance();
+                    }
                 }
+            }
+
+            return act;
+        }
+
+        @Override
+        protected void onPostExecute(WatchActivity activity) {
+            super.onPostExecute(activity);
+            try {
+                theFragment.handleData(activity);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
 
-        setWatchActivity(act);
+    }
+
+    private void handleData(WatchActivity activity) {
+        setWatchActivity(activity);
+        isLoadExecuting = false;
     }
 
 }

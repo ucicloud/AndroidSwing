@@ -2,7 +2,7 @@ package com.kidsdynamic.data.net.activity;
 
 import com.kidsdynamic.data.net.activity.model.RawActivityDataEntity;
 import com.kidsdynamic.data.net.activity.model.RetrieveDataRep;
-import com.kidsdynamic.data.net.activity.model.RetrieveMonthlyActivity;
+import com.kidsdynamic.data.net.activity.model.RetrieveMonthlyActivityRep;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -68,6 +68,6 @@ public interface ActivityApi {
 //    400	Bad request. Missing some parameters, or the type is wrong
 //    500	Internal error. Please send me the error. I will fix it
     @GET("v1/activity/retrieveMonthlyActivity")
-    Call<RetrieveMonthlyActivity> retrieveMonthlyActivity(@Query("start") long start, @Query("end") long end,
-                                                          @Query("kidId") long kidId);
+    Call<RetrieveMonthlyActivityRep> retrieveMonthlyActivity(@Query("start") long start, @Query("end") long end,
+                                                             @Query("kidId") long kidId);
 }

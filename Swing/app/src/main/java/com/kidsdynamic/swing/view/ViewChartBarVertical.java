@@ -39,7 +39,7 @@ public class ViewChartBarVertical extends ViewChart {
     private Rect mRectH;
     private Rect mRectV;
 
-    private float mGoal;
+    private float mGoal = WatchActivity.STEP_GOAL;
     private List<WatchActivity.Act> mValue;
 
     private List<Rect> barRectList;

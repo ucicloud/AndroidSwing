@@ -160,7 +160,7 @@
     <!-- FragmentProfilePassword -->
     <string name="profile_password_current">"現在密碼"</string>
     <string name="profile_password_new">"新密碼"</string>
-    <string name="profile_password_again">"請再次輸入新密碼!"</string>
+    <string name="profile_password_again">"請再次輸入新密碼"</string>
     <string name="profile_reset_password_confirmation">確定要更新密碼?</string>
     <string name="profile_reset_password_note">更新密碼的郵件已經寄到您的信箱%s，更新密碼的連結會在24小時後失效</string>
 

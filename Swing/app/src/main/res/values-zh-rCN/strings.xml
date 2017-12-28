@@ -160,7 +160,7 @@
     <!-- FragmentProfilePassword -->
     <string name="profile_password_current">"当前密码"</string>
     <string name="profile_password_new">"新密码"</string>
-    <string name="profile_password_again">"请再次输入新密码!"</string>
+    <string name="profile_password_again">"请再次输入新密码"</string>
     <string name="profile_reset_password_confirmation">确定要更新密码？</string>
     <string name="profile_reset_password_note">更新密码的邮件已经发到您的信箱%s，更新密码的链接会在24小时后失效</string>
 
@@ -211,7 +211,7 @@
     <string name="signup_login_wait">"请稍候&#8230;"</string>
 
     <string name="signup_login_enter">登入</string>
-    <string name="signup_login_reset_password">重新設置密码</string>
+    <string name="signup_login_reset_password">重新设置密码</string>
 
     <!-- FragmentSignupLanguage -->
     <string name="signup_language_message">"请选择语言"</string>

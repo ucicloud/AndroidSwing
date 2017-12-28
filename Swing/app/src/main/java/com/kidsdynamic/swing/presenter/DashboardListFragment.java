@@ -16,22 +16,19 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.kidsdynamic.data.net.activity.model.RetrieveDataRep;
-import com.kidsdynamic.data.net.activity.model.RetrieveMonthlyActivity;
+import com.kidsdynamic.data.net.activity.model.RetrieveMonthlyActivityRep;
 import com.kidsdynamic.data.repository.disk.ActivityCloudDataStore;
 import com.kidsdynamic.swing.R;
-import com.kidsdynamic.swing.SwingApplication;
 import com.kidsdynamic.swing.domain.BeanConvertor;
 import com.kidsdynamic.swing.domain.DeviceManager;
 import com.kidsdynamic.swing.domain.KidActivityManager;
 import com.kidsdynamic.swing.model.KidsEntityBean;
 import com.kidsdynamic.swing.model.WatchActivity;
 import com.kidsdynamic.swing.utils.SwingFontsCache;
-import com.yy.base.utils.ToastCommon;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -63,9 +60,6 @@ public class DashboardListFragment extends DashboardBaseFragment {
 
     private int mEmotion;
     private int mEmotionColor;
-
-    private long kidId;
-    private int listType;
     private DataAdapter dataAdapter;
 
     public static DashboardListFragment newInstance(int doorType, int listType, int emotion) {
@@ -105,11 +99,12 @@ public class DashboardListFragment extends DashboardBaseFragment {
         }
         mRadioGroup.setOnCheckedChangeListener(onCheckedChangeListener);
 
+        long kidId = 0;
         KidsEntityBean kid = DeviceManager.getFocusKidsInfo(getContext());
         if (null != kid) {
             kidId = kid.getKidsId();
         }
-        listType = args.getInt(LIST_TYPE, LIST_TODAY);
+        int listType = args.getInt(LIST_TYPE, LIST_TODAY);
         if (LIST_TODAY == listType) {
             tv_title.setText(R.string.dashboard_chart_today);
             Calendar cld = Calendar.getInstance();
@@ -125,7 +120,7 @@ public class DashboardListFragment extends DashboardBaseFragment {
             long start = cld.getTimeInMillis() + timezoneOffset;
 
             new KidActivityManager().retrieveHourlyDataByTime(getContext(), kidId, start, end,
-                    new IRetrieveCompleteListener(start, end, timezoneOffset));
+                    new IRetrieveCompleteListener(listType, kidId, start, end, timezoneOffset));
         } else if (LIST_WEEK == listType) {
             tv_title.setText(R.string.dashboard_chart_this_week);
             Calendar cld = Calendar.getInstance();
@@ -143,7 +138,7 @@ public class DashboardListFragment extends DashboardBaseFragment {
             long start = cld.getTimeInMillis() + timezoneOffset;
 
             new KidActivityManager().retrieveDataByTime(getContext(), kidId, start, end,
-                    new IRetrieveCompleteListener(start, end, timezoneOffset));
+                    new IRetrieveCompleteListener(listType, kidId, start, end, timezoneOffset));
         } else if (LIST_MONTH == listType) {
             tv_title.setText(R.string.dashboard_chart_this_month);
             Calendar cld = Calendar.getInstance();
@@ -161,7 +156,7 @@ public class DashboardListFragment extends DashboardBaseFragment {
             long start = cld.getTimeInMillis() + timezoneOffset;
 
             new KidActivityManager().retrieveDataByTime(getContext(), kidId, start, end,
-                    new IRetrieveCompleteListener(start, end, timezoneOffset));
+                    new IRetrieveCompleteListener(listType, kidId, start, end, timezoneOffset));
         } else {
             tv_title.setText(R.string.dashboard_chart_this_year);
             Calendar cld = Calendar.getInstance();
@@ -180,7 +175,7 @@ public class DashboardListFragment extends DashboardBaseFragment {
             long start = cld.getTimeInMillis() + timezoneOffset;
 
             new KidActivityManager().retrieveMonthlyActivity(getContext(), kidId, start, end,
-                    new IRetrieveCompleteListener(start, end, timezoneOffset));
+                    new IRetrieveCompleteListener(listType, kidId, start, end, timezoneOffset));
         }
     }
 
@@ -250,9 +245,13 @@ public class DashboardListFragment extends DashboardBaseFragment {
 
     private class IRetrieveCompleteListener implements KidActivityManager.ICompleteListener {
 
+        private int listType;
+        private long kidId;
         private long start, end, timezoneOffset;
 
-        IRetrieveCompleteListener(long start, long end, long timezoneOffset) {
+        IRetrieveCompleteListener(int listType, long kidId, long start, long end, long timezoneOffset) {
+            this.listType = listType;
+            this.kidId = kidId;
             this.start = start;
             this.end = end;
             this.timezoneOffset = timezoneOffset;
@@ -263,22 +262,22 @@ public class DashboardListFragment extends DashboardBaseFragment {
             if (200 == statusCode && null != arg) {
                 if (LIST_TODAY == listType && arg instanceof RetrieveDataRep) {
                     new HourlyTask(DashboardListFragment.this)
-                            .execute(arg, start, end, timezoneOffset, kidId);
+                            .execute(listType, arg, start, end, timezoneOffset, kidId);
                 } else if ((LIST_WEEK == listType || LIST_MONTH == listType) && arg instanceof RetrieveDataRep) {
                     new WeeklyAndMonthlyTask(DashboardListFragment.this)
-                            .execute(arg, start, end, timezoneOffset, kidId);
-                } else if (LIST_YEAR == listType && arg instanceof RetrieveMonthlyActivity) {
+                            .execute(listType, arg, start, end, timezoneOffset, kidId);
+                } else if (LIST_YEAR == listType && arg instanceof RetrieveMonthlyActivityRep) {
                     new YearlyTask(DashboardListFragment.this)
-                            .execute(arg, start, end, timezoneOffset, kidId);
+                            .execute(listType, arg, start, end, timezoneOffset, kidId);
                 }
             } else {
-                ToastCommon.makeText(SwingApplication.getAppContext(), R.string.dashboard_enqueue_fail_common);
+//                ToastCommon.makeText(SwingApplication.getAppContext(), R.string.dashboard_enqueue_fail_common);
             }
         }
 
         @Override
         public void onFailed(String Command, int statusCode) {
-            ToastCommon.showToast(SwingApplication.getAppContext(), Command);
+//            ToastCommon.showToast(SwingApplication.getAppContext(), Command);
         }
     }
 
@@ -293,17 +292,18 @@ public class DashboardListFragment extends DashboardBaseFragment {
 
         @Override
         protected List<WatchActivity> doInBackground(Object... params) {
-            RetrieveDataRep rep = (RetrieveDataRep) params[0];
+            int listType = (int) params[0];
+            RetrieveDataRep rep = (RetrieveDataRep) params[1];
             List<WatchActivity> watchActivities = new ArrayList<>();
             List<RetrieveDataRep.ActivitiesEntity> activitiesEntities = rep.getActivities();
 
-            long start = (Long) params[1];
-            long end = (Long) params[2];
-            long timezoneOffset = (Long) params[3];
+            long start = (Long) params[2];
+            long end = (Long) params[3];
+            long timezoneOffset = (Long) params[4];
             long millisInHour = 1000 * 60 * 60;
             long timestamp = start;
             while (timestamp < end) {
-                watchActivities.add(new WatchActivity((Long) params[4], timestamp));
+                watchActivities.add(new WatchActivity((Long) params[5], timestamp));
                 timestamp += millisInHour;
             }
             if (null == activitiesEntities || activitiesEntities.isEmpty()) {
@@ -363,6 +363,7 @@ public class DashboardListFragment extends DashboardBaseFragment {
 
     private static class WeeklyAndMonthlyTask extends AsyncTask<Object, Integer, List<WatchActivity>> {
 
+        private int listType;
         private DashboardListFragment theFragment;
 
         WeeklyAndMonthlyTask(DashboardListFragment instance) {
@@ -372,16 +373,18 @@ public class DashboardListFragment extends DashboardBaseFragment {
 
         @Override
         protected List<WatchActivity> doInBackground(Object... params) {
-            RetrieveDataRep rep = (RetrieveDataRep) params[0];
+            listType = (int) params[0];
+            RetrieveDataRep rep = (RetrieveDataRep) params[1];
             List<WatchActivity> watchActivities = new ArrayList<>();
             List<RetrieveDataRep.ActivitiesEntity> activitiesEntities = rep.getActivities();
-            long start = (Long) params[1];
-            long end = (Long) params[2];
-            long timezoneOffset = (Long) params[3];
+
+            long start = (Long) params[2];
+            long end = (Long) params[3];
+            long timezoneOffset = (Long) params[4];
             long millisInDay = 1000 * 60 * 60 * 24;
             long timestamp = start;
             while (timestamp < end) {
-                watchActivities.add(new WatchActivity((Long) params[4], timestamp));
+                watchActivities.add(new WatchActivity((Long) params[5], timestamp));
                 timestamp += millisInDay;
             }
             if (null == activitiesEntities || activitiesEntities.isEmpty()) {
@@ -424,12 +427,15 @@ public class DashboardListFragment extends DashboardBaseFragment {
         @Override
         protected void onPostExecute(List<WatchActivity> watchActivities) {
             super.onPostExecute(watchActivities);
-            theFragment.handleWeeklyAndMonthlyData(watchActivities);
-            theFragment.finishLoadingDialog();
+            try {
+                theFragment.handleWeeklyAndMonthlyData(this.listType, watchActivities);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
-    private void handleWeeklyAndMonthlyData(List<WatchActivity> watchActivities) {
+    private void handleWeeklyAndMonthlyData(int listType, List<WatchActivity> watchActivities) {
         Bundle args = getArguments();
         int door = null != args ? args.getInt(DOOR_TYPE, INDOOR) : INDOOR;
         setDataAdapter(watchActivities, listType, door, mEmotionColor);
@@ -446,34 +452,35 @@ public class DashboardListFragment extends DashboardBaseFragment {
 
         @Override
         protected List<WatchActivity> doInBackground(Object... params) {
-            RetrieveMonthlyActivity rep = (RetrieveMonthlyActivity) params[0];
-            List<RetrieveMonthlyActivity.ActivitiesEntity> activitiesEntities = rep.getActivities();
-            long start = (Long) params[1];
-            long end = (Long) params[2];
-            long timezoneOffset = (Long) params[3];
+            int listType = (int) params[0];
+            RetrieveMonthlyActivityRep rep = (RetrieveMonthlyActivityRep) params[1];
+            List<RetrieveMonthlyActivityRep.ActivitiesEntity> activitiesEntities = rep.getActivities();
+            long start = (Long) params[2];
+            long end = (Long) params[3];
+            long timezoneOffset = (Long) params[4];
 
-            List<WatchActivity> thisYear = new ArrayList<>();
+            List<WatchActivity> watchActivities = new ArrayList<>();
             Calendar cld = Calendar.getInstance();
             cld.setTimeInMillis(start);
             for (int i = 0; i < 12; i++) {
                 long timestamp = cld.getTimeInMillis();
-                WatchActivity watchActivity = new WatchActivity(0, timestamp);
-                thisYear.add(watchActivity);
+                WatchActivity watchActivity = new WatchActivity((Long) params[5], timestamp);
+                watchActivities.add(watchActivity);
                 cld.add(Calendar.MONTH, 1);
             }
 
             if (null == activitiesEntities || activitiesEntities.isEmpty()) {
-                for (WatchActivity act : thisYear) {
+                for (WatchActivity act : watchActivities) {
                     act.mIndoor.mTimestamp -= timezoneOffset;
                     act.mOutdoor.mTimestamp -= timezoneOffset;
                 }
-                return thisYear;
+                return watchActivities;
             }
-            for (WatchActivity act : thisYear) {
+            for (WatchActivity act : watchActivities) {
                 long timestamp = act.mIndoor.mTimestamp;
                 cld.setTimeInMillis(timestamp);
                 int month = cld.get(Calendar.MONTH) + 1;
-                for (RetrieveMonthlyActivity.ActivitiesEntity entity : activitiesEntities) {
+                for (RetrieveMonthlyActivityRep.ActivitiesEntity entity : activitiesEntities) {
                     if (month == entity.getMonth()) {
                         if (entity.type.equals(ActivityCloudDataStore.Activity_type_indoor)) {
                             act.mIndoor.mMacId = entity.getMacId();
@@ -488,28 +495,31 @@ public class DashboardListFragment extends DashboardBaseFragment {
                 }
             }
 
-//            Collections.reverse(thisYear);
+//            Collections.reverse(watchActivities);
 
-            for (WatchActivity act : thisYear) {
+            for (WatchActivity act : watchActivities) {
                 act.mIndoor.mTimestamp -= timezoneOffset;
                 act.mOutdoor.mTimestamp -= timezoneOffset;
             }
 
-            return thisYear;
+            return watchActivities;
         }
 
         @Override
         protected void onPostExecute(List<WatchActivity> watchActivities) {
             super.onPostExecute(watchActivities);
-            theFragment.handleYearlyData(watchActivities);
-            theFragment.finishLoadingDialog();
+            try {
+                theFragment.handleYearlyData(watchActivities);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
     private void handleYearlyData(List<WatchActivity> watchActivities) {
         Bundle args = getArguments();
         int door = null != args ? args.getInt(DOOR_TYPE, INDOOR) : INDOOR;
-        setDataAdapter(watchActivities, listType, door, mEmotionColor);
+        setDataAdapter(watchActivities, LIST_YEAR, door, mEmotionColor);
     }
 
     private class DataAdapter<E> extends BaseAdapter {
