@@ -14,6 +14,7 @@ import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 
+import com.kidsdynamic.swing.model.WatchActivity;
 import com.kidsdynamic.swing.utils.SwingFontsCache;
 
 import java.util.ArrayList;
@@ -31,7 +32,7 @@ public class ViewChartBarHorizontal extends ViewChart {
     private int mDesiredWidth = 160;
     private int mDesiredHeight = 100;
 
-    private float mGoal;
+    private float mGoal = WatchActivity.STEP_GOAL;
     private List<HorizontalBar> mBars = new ArrayList<>();
 
     private Paint mPaint;

@@ -509,6 +509,7 @@
     <!--new string 20171215 2rd-->
 
     <string name="has_requests_from">has requests from</string>
+    <string name="watch_init_fail">Watch init fail</string>
 
     <!-- *************************************************************************************** -->
     <!-- Special character: Warning DO NOT translate below -->

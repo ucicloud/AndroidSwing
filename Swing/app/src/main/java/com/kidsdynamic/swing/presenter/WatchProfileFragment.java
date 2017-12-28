@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,7 +29,9 @@ import com.kidsdynamic.swing.SwingApplication;
 import com.kidsdynamic.swing.domain.ConfigManager;
 import com.kidsdynamic.swing.domain.DeviceManager;
 import com.kidsdynamic.swing.domain.UserManager;
+import com.kidsdynamic.swing.model.KidsEntityBean;
 import com.kidsdynamic.swing.net.BaseRetrofitCallback;
+import com.kidsdynamic.swing.utils.GlideHelper;
 import com.kidsdynamic.swing.utils.SwingFontsCache;
 import com.kidsdynamic.swing.view.BottomPopWindow;
 import com.kidsdynamic.swing.view.CropImageView;
@@ -277,13 +280,25 @@ public class WatchProfileFragment extends BaseFragment {
                         //code == 200 upload ok
                         int code = response.code();
                         if (200 == code) {//上传头像成功后，跳转界面
+
+                            //更新本地缓存
+                            DeviceManager.updateKidsProfile2DB(response.body().getKid());
+
+                            //挑战到下个添加成功界面
                             Bundle bundle = new Bundle();
                             bundle.putString(DeviceManager.BUNDLE_KEY_KID_NAME,
                                     response.body().getKid().getName());
                             bundle.putString(DeviceManager.BUNDLE_KEY_AVATAR,
                                     UserManager.getProfileRealUri(response.body().getKid().getProfile()));
+                            bundle.putString(DeviceManager.BUNDLE_KEY_AVATAR_FILE,
+                                    profile.getAbsolutePath());
+                            bundle.putLong(DeviceManager.BUNDLE_KEY_KID_ID,
+                                    Long.valueOf(kidsId));
 
                             gotoAddSuccessFragment(bundle);
+
+                            //更新本地缓存
+                            updateCacheKidsAvatar(response.body().getKid().getId());
 
                             //发送头像更新消息
                             sendKidsAvatarUpdate(profile,Long.valueOf(kidsId));
@@ -301,6 +316,18 @@ public class WatchProfileFragment extends BaseFragment {
                     }
                 });
     }
+
+    private void updateCacheKidsAvatar(long kidId){
+        KidsEntityBean kidsInfo = DeviceManager.getKidsInfo(getContext(), kidId);
+        if(kidsInfo != null){
+            GlideHelper.getBitMapPreload(getContext(),
+                    UserManager.getProfileRealUri(kidsInfo.getProfile()),
+                    String.valueOf(kidsInfo.getLastUpdate()));
+
+            Log.w("profile", "kids edit lastUpdate: " + kidsInfo.getLastUpdate());
+        }
+    }
+
 
     private void sendKidsAvatarUpdate(File avatarFile, long kidsId) {
 

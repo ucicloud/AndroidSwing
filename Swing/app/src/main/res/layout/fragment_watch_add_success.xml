@@ -18,7 +18,7 @@
         app:crossColor="@color/hex_1b89cd"
         app:crossWidth="2dp"
         app:strokeColorNormal="@color/hex_1b89cd"
-        android:src="@drawable/default_avatar"/>
+        android:src="@drawable/ic_icon_profile_"/>
 
     <com.kidsdynamic.swing.view.AvenirTextView
         android:id="@+id/tv_kids_name"

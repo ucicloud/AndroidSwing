@@ -129,11 +129,14 @@ public class DashboardMainFragment extends DashboardBaseFragment {
                         new AvatarSimpleTarget(vc_photo));
             }
 
-            GlideHelper.getBitMapWithWH(getContext(),
-                    profileRealUri,
-                    String.valueOf(focusWatchInfo.getLastUpdate()),
-                    vc_photo.getWidth(),vc_photo.getHeight(),
-                    new AvatarSimpleTarget(vc_photo));
+            if(!TextUtils.isEmpty(focusWatchInfo.getProfile())){
+                GlideHelper.getBitMapWithWH(getContext(),
+                        profileRealUri,
+                        String.valueOf(focusWatchInfo.getLastUpdate()),
+                        vc_photo.getWidth(),vc_photo.getHeight(),
+                        new AvatarSimpleTarget(vc_photo));
+            }
+
         }
 
     }

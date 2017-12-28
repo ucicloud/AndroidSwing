@@ -8,7 +8,7 @@ import com.kidsdynamic.data.dao.DB_FormatActivity;
 import com.kidsdynamic.data.net.ApiGen;
 import com.kidsdynamic.data.net.activity.ActivityApi;
 import com.kidsdynamic.data.net.activity.model.RetrieveDataRep;
-import com.kidsdynamic.data.net.activity.model.RetrieveMonthlyActivity;
+import com.kidsdynamic.data.net.activity.model.RetrieveMonthlyActivityRep;
 import com.kidsdynamic.data.persistent.DbUtil;
 import com.kidsdynamic.data.repository.disk.ActivityCloudDataStore;
 import com.kidsdynamic.data.repository.disk.ActivityFormatDataStore;
@@ -243,15 +243,15 @@ public class KidActivityManager {
                 .generateApi(ActivityApi.class, true);
         activityApi
                 .retrieveMonthlyActivity(start / 1000, end / 1000, kidId)
-                .enqueue(new BaseRetrofitCallback<RetrieveMonthlyActivity>() {
+                .enqueue(new BaseRetrofitCallback<RetrieveMonthlyActivityRep>() {
                     @Override
-                    public void onResponse(Call<RetrieveMonthlyActivity> call, Response<RetrieveMonthlyActivity> response) {
+                    public void onResponse(Call<RetrieveMonthlyActivityRep> call, Response<RetrieveMonthlyActivityRep> response) {
                         super.onResponse(call, response);
-                        RetrieveMonthlyActivity retrieveMonthlyActivity = response.body();
+                        RetrieveMonthlyActivityRep retrieveMonthlyActivityRep = response.body();
                         int code = response.code();
-                        if (200 == code && null != retrieveMonthlyActivity) {
+                        if (200 == code && null != retrieveMonthlyActivityRep) {
                             if (completeListener != null) {
-                                completeListener.onComplete(retrieveMonthlyActivity, code);
+                                completeListener.onComplete(retrieveMonthlyActivityRep, code);
                             }
                         } else {
                             if (completeListener != null) {
@@ -261,7 +261,7 @@ public class KidActivityManager {
                     }
 
                     @Override
-                    public void onFailure(Call<RetrieveMonthlyActivity> call, Throwable t) {
+                    public void onFailure(Call<RetrieveMonthlyActivityRep> call, Throwable t) {
                         super.onFailure(call, t);
                         if (completeListener != null) {
                             completeListener.onFailed(context.getString(R.string.net_err), -1);

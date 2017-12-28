@@ -3,12 +3,12 @@ package com.kidsdynamic.data.net.activity.model;
 import java.util.List;
 
 /**
- * RetrieveMonthlyActivity
+ * RetrieveMonthlyActivityRep
  * <p>
  * Created by Stefan on 2017/12/27.
  */
 
-public class RetrieveMonthlyActivity {
+public class RetrieveMonthlyActivityRep {
 
     private List<ActivitiesEntity> activities;
 

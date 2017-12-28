@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ImageView;
 
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
@@ -78,6 +79,22 @@ public class BaseFragment extends Fragment {
         public void onResourceReady(Bitmap bitmap, Transition<? super Bitmap> transition) {
             if(viewCircle != null && getActivity() != null && !getActivity().isDestroyed()){
                 viewCircle.setBitmap(bitmap);
+            }
+        }
+    }
+
+    public class AvatarSimpleTargetImageView extends SimpleTarget<Bitmap> {
+
+        ImageView viewCircle;
+
+        public AvatarSimpleTargetImageView(ImageView viewCircle){
+            this.viewCircle = viewCircle;
+        }
+
+        @Override
+        public void onResourceReady(Bitmap bitmap, Transition<? super Bitmap> transition) {
+            if(viewCircle != null && getActivity() != null && !getActivity().isDestroyed()){
+                viewCircle.setImageBitmap(bitmap);
             }
         }
     }

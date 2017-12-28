@@ -217,10 +217,13 @@ public class ProfileMainFragment extends ProfileBaseFragment {
 
         if(watchContact != null && watchContact.mPhoto != null && parent != null){
             mViewPhoto.setBitmap(watchContact.mPhoto);
-            GlideHelper.getBitMapWithWH(getContext(), UserManager.getProfileRealUri(parent.getProfile()),
-                    String.valueOf(parent.getLastUpdate()),
-                    mViewPhoto.getWidth(),mViewPhoto.getHeight(),
-                    new AvatarSimpleTarget(mViewPhoto));
+
+            if(!TextUtils.isEmpty(parent.getProfile())){
+                GlideHelper.getBitMapWithWH(getContext(), UserManager.getProfileRealUri(parent.getProfile()),
+                        String.valueOf(parent.getLastUpdate()),
+                        mViewPhoto.getWidth(),mViewPhoto.getHeight(),
+                        new AvatarSimpleTarget(mViewPhoto));
+            }
         }
 
         // 載入用戶的所有手錶
@@ -357,8 +360,15 @@ public class ProfileMainFragment extends ProfileBaseFragment {
         public void onClick(View view) {
 //            mActivityMain.selectFragment(FragmentProfileSearch.class.getName(), null);
             selectFragment(WatchSearchFragment.newInstance(),true);
+//            tsWatchAdd();
         }
     };
+
+   private void tsWatchAdd(){
+       String macId = "12qwas" + System.currentTimeMillis();
+       String nowFirmwareVersion = "123";
+       selectFragment(WatchProfileFragment.newInstance(macId, nowFirmwareVersion), true);
+   }
 
     private View.OnClickListener mAddRequestToListener = new View.OnClickListener() {
         @Override
@@ -612,7 +622,7 @@ public class ProfileMainFragment extends ProfileBaseFragment {
 //                Uri avatarUri = (Uri) intent.getParcelableExtra(ConfigManager.Tag_Avatar_File_Uri_Key);
                 String avatarFilePath = intent.getStringExtra(ConfigManager.Tag_Avatar_File_Uri_Key);
 
-                Log.w("UIChangeReceiver", "avatar: " + avatarFilePath);
+                Log.w("UIChangeReceiver", "profile-avatar: " + avatarFilePath + "-" + updateKidsId);
                 if(updateKidsId != -1 && !TextUtils.isEmpty(avatarFilePath)){
 
                     cacheAvatarMap.put(updateKidsId,new File(avatarFilePath));

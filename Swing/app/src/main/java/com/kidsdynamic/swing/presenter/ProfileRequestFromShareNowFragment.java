@@ -239,10 +239,12 @@ public class ProfileRequestFromShareNowFragment extends ProfileBaseFragment {
         }
 
         //current user
-        GlideHelper.getBitMap(getContext(),
-                UserManager.getProfileRealUri(loginUserInfo.getProfile()),
-                loginUserInfo.getLastUpdate()+"",
-                new AvatarSimpleTarget(mViewRequestToUserPhoto));
+        if(!TextUtils.isEmpty(loginUserInfo.getProfile())){
+            GlideHelper.getBitMap(getContext(),
+                    UserManager.getProfileRealUri(loginUserInfo.getProfile()),
+                    loginUserInfo.getLastUpdate()+"",
+                    new AvatarSimpleTarget(mViewRequestToUserPhoto));
+        }
     }
 
 

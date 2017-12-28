@@ -263,9 +263,11 @@ public class ProfileSwitchAccountFragment extends ProfileBaseFragment {
 
         if(contact instanceof WatchContact.Kid){
             WatchContact.Kid kid = (WatchContact.Kid) contact;
-            GlideHelper.getBitMap(getContext().getApplicationContext(),
-                    UserManager.getProfileRealUri(kid.mProfile),
-                    kid.mLastUpdate+"",new AvatarSimpleTarget(photo));
+            if(!TextUtils.isEmpty(kid.mProfile)){
+                GlideHelper.getBitMap(getContext().getApplicationContext(),
+                        UserManager.getProfileRealUri(kid.mProfile),
+                        kid.mLastUpdate+"",new AvatarSimpleTarget(photo));
+            }
         }
 
         photo.setStrokeCount(12);

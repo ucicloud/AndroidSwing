@@ -30,7 +30,7 @@ public class ViewChartToday extends ViewChart {
     private int mDesiredHeight = 100;
 
     private float mTotal;
-    private float mGoal;
+    private float mGoal = WatchActivity.STEP_GOAL;
     private WatchActivity.Act mValue;
 
     private Paint mPaint;

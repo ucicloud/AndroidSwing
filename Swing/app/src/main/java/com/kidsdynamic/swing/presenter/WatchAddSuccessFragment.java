@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +13,11 @@ import android.widget.TextView;
 import com.kidsdynamic.swing.BaseFragment;
 import com.kidsdynamic.swing.R;
 import com.kidsdynamic.swing.domain.DeviceManager;
+import com.kidsdynamic.swing.domain.UserManager;
+import com.kidsdynamic.swing.model.KidsEntityBean;
 import com.kidsdynamic.swing.utils.GlideHelper;
+
+import java.io.File;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -33,8 +38,10 @@ public class WatchAddSuccessFragment extends BaseFragment {
     @BindView(R.id.tv_kids_name)
     TextView tv_kids_name;
 
-    private String mAvatarFilename = "";
+    private String mAvatarProfile = "";
+    private String mAvatarLocalFilePath = "";
     private String deviceName;
+    private long devId;
 
     public static WatchAddSuccessFragment newInstance() {
         Bundle args = new Bundle();
@@ -48,8 +55,10 @@ public class WatchAddSuccessFragment extends BaseFragment {
         super.onCreate(savedInstanceState);
         Bundle arg = getArguments();
         if (arg != null) {
-            mAvatarFilename = getArguments().getString(DeviceManager.BUNDLE_KEY_AVATAR, "");
+            mAvatarProfile = getArguments().getString(DeviceManager.BUNDLE_KEY_AVATAR, "");
             deviceName = getArguments().getString(DeviceManager.BUNDLE_KEY_KID_NAME, "");
+            devId = getArguments().getLong(DeviceManager.BUNDLE_KEY_KID_ID, -1);
+            mAvatarLocalFilePath = getArguments().getString(DeviceManager.BUNDLE_KEY_AVATAR_FILE, "");
         }
     }
 
@@ -62,7 +71,22 @@ public class WatchAddSuccessFragment extends BaseFragment {
 
         tv_kids_name.setText(deviceName);
 
-        GlideHelper.showCircleImageView(getContext(), mAvatarFilename, vc_photo);
+        if(!TextUtils.isEmpty(mAvatarLocalFilePath)){
+            File avatarFile = new File(mAvatarLocalFilePath);
+            GlideHelper.getBitMapOnlyCacheInMemory(getContext(),avatarFile,
+                    new AvatarSimpleTargetImageView(vc_photo));
+        }
+
+        //自己的设备
+        KidsEntityBean kidsInfo = DeviceManager.getKidsInfo(getContext(), devId);
+        if(kidsInfo != null && !TextUtils.isEmpty(kidsInfo.getProfile())){
+
+            GlideHelper.getBitMapWithWH(getContext().getApplicationContext(),
+                    UserManager.getProfileRealUri(mAvatarProfile),
+                    kidsInfo.getLastUpdate()+"",
+                    vc_photo.getWidth(),vc_photo.getHeight(),
+                    new AvatarSimpleTargetImageView(vc_photo));
+        }
         return layout;
     }
 

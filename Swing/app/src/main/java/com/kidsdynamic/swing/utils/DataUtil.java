@@ -2,8 +2,6 @@ package com.kidsdynamic.swing.utils;
 
 import com.kidsdynamic.swing.model.WatchActivity;
 
-import java.util.List;
-
 /**
  * DataUtil
  * <p>
@@ -15,11 +13,11 @@ public class DataUtil {
     /*********** Data in DashboardEmotionFragment *******/
     private WatchActivity watchActivityInEmotionFragment;
 
-    /***********Data in DashboardChartSingleFragment*******/
+    /*********** Data in DashboardChartSingleFragment *******/
     private Integer emotionInSingleChart;
     private Integer doorTypeInSingleChart;
     private Integer chartTypeInSingleChart;
-    private List<WatchActivity> watchActivitiesInSingleChart;
+    private WatchActivity todayWatchActivityInSingleChart;
 
     public Integer getEmotionInSingleChart() {
         return emotionInSingleChart;
@@ -61,12 +59,12 @@ public class DataUtil {
         this.chartTypeInSingleChart = chartTypeInSingleChart;
     }
 
-    public List<WatchActivity> getWatchActivitiesInSingleChart() {
-        return watchActivitiesInSingleChart;
+    public WatchActivity getTodayWatchActivityInSingleChart() {
+        return todayWatchActivityInSingleChart;
     }
 
-    public void setWatchActivitiesInSingleChart(List<WatchActivity> watchActivitiesInSingleChart) {
-        this.watchActivitiesInSingleChart = watchActivitiesInSingleChart;
+    public void setTodayWatchActivityInSingleChart(WatchActivity todayWatchActivityInSingleChart) {
+        this.todayWatchActivityInSingleChart = todayWatchActivityInSingleChart;
     }
 
 }

@@ -157,11 +157,11 @@ public class ProfileKidsRequestAccessFragment extends ProfileBaseFragment {
         user_name.setText(LoginManager.getUserName(watchUserInfo.mFirstName,
                 watchUserInfo.mLastName));
 
-        if(!TextUtils.isEmpty(watchUserInfo.mProfile)){
+        /*if(!TextUtils.isEmpty(watchUserInfo.mProfile)){
             GlideHelper.getCircleImageViewOnlyCacheInMemory(getContext(),
                     UserManager.getProfileRealUri(watchUserInfo.mProfile),
                     user_avatar);
-        }
+        }*/
 
         layout_user_info.setVisibility(View.VISIBLE);
 
@@ -173,9 +173,14 @@ public class ProfileKidsRequestAccessFragment extends ProfileBaseFragment {
     private void loadAvatar() {
         mUserAvatarFileName =  watchUserInfo.mProfile;
         if(!TextUtils.isEmpty(mUserAvatarFileName)){
-            GlideHelper.getCircleImageViewOnlyCacheInMemory(getContext(),
+
+            GlideHelper.getBitMapCacheOneHour(getContext(),
                     UserManager.getProfileRealUri(mUserAvatarFileName),
-                    user_avatar);
+                    new AvatarSimpleTargetImageView(user_avatar));
+
+            /*GlideHelper.getCircleImageViewOnlyCacheInMemory(getContext(),
+                    UserManager.getProfileRealUri(mUserAvatarFileName),
+                    user_avatar);*/
         }
     }
 

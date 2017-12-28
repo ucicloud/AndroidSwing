@@ -154,7 +154,7 @@ public class DashboardChartTripleFragment extends DashboardBaseFragment {
                 @Override
                 public void onBarClick(int index, float x, float y) {
                     if (0 == index) {
-                        setFragment(DashboardChartSingleFragment.newInstance(getDoor(), mCurrentChart, null), true);
+                        setFragment(DashboardChartSingleFragment.newInstance(getDoor(), mCurrentChart), true);
                     }
                 }
             };

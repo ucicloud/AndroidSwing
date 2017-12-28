@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.text.TextUtils;
 import android.util.Log;
 import android.util.LongSparseArray;
 import android.util.TypedValue;
@@ -318,9 +319,12 @@ public class ProfileShareKidsSelectFragment extends ProfileBaseFragment {
 
         if(contact instanceof WatchContact.Kid){
             WatchContact.Kid kid = (WatchContact.Kid) contact;
-            GlideHelper.getBitMap(getContext().getApplicationContext(),
-                    UserManager.getProfileRealUri(kid.mProfile),
-                    kid.mLastUpdate+"",new AvatarSimpleTarget(photo));
+
+            if(!TextUtils.isEmpty(kid.mProfile)){
+                GlideHelper.getBitMap(getContext().getApplicationContext(),
+                        UserManager.getProfileRealUri(kid.mProfile),
+                        kid.mLastUpdate+"",new AvatarSimpleTarget(photo));
+            }
         }
 
         photo.setStrokeCount(12);

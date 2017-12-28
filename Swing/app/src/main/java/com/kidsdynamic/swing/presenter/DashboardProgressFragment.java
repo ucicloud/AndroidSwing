@@ -124,7 +124,10 @@ public class DashboardProgressFragment extends DashboardBaseFragment {
         super.onCreate(savedInstanceState);
         mActivityMain = (MainFrameActivity) getActivity();
 
-        mBluetoothAdapter = ((BluetoothManager) mActivityMain.getSystemService(Context.BLUETOOTH_SERVICE)).getAdapter();
+        BluetoothManager bluetoothManager = (BluetoothManager) mActivityMain.getSystemService(Context.BLUETOOTH_SERVICE);
+        if (null != bluetoothManager) {
+            mBluetoothAdapter = bluetoothManager.getAdapter();
+        }
         if (mBluetoothAdapter == null || !mBluetoothAdapter.isEnabled()) {
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
@@ -132,7 +135,7 @@ public class DashboardProgressFragment extends DashboardBaseFragment {
         }
 
         final LocationManager manager = (LocationManager) mActivityMain.getSystemService(Context.LOCATION_SERVICE);
-        if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+        if (null != manager && !manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             Log.d("Message", "Your GPS seems to be disabled, do you want to enable it?");
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setMessage(R.string.dashboard_progress_enable_gps)
@@ -431,7 +434,7 @@ public class DashboardProgressFragment extends DashboardBaseFragment {
         }
     };
 
-    private Button.OnClickListener mSyncCompleteListener = new Button.OnClickListener(){
+    private Button.OnClickListener mSyncCompleteListener = new Button.OnClickListener() {
 
         @Override
         public void onClick(View view) {
@@ -513,7 +516,6 @@ public class DashboardProgressFragment extends DashboardBaseFragment {
                 break;
         }
     }
-
 
 
     private void searchWatch() {
@@ -618,7 +620,7 @@ public class DashboardProgressFragment extends DashboardBaseFragment {
                 Log.d("dashProgress", "onDeviceVersion version " + version);
                 //首先更新本地存储
                 DeviceManager.updateKidsFirmwareVersion(
-                        DeviceManager.getMacID(mMacAddress),version);
+                        DeviceManager.getMacID(mMacAddress), version);
                 //上传服务器
                 new DeviceManager().uploadFirmwareVersion(DeviceManager.getMacID(mMacAddress), version);
             }
@@ -640,8 +642,8 @@ public class DashboardProgressFragment extends DashboardBaseFragment {
 //        mActivityMain.mBLEMachine.Disconnect();
     }
 
-    private void bleDisconnect(){
-        if(mBluetoothService != null){
+    private void bleDisconnect() {
+        if (mBluetoothService != null) {
             mBluetoothService.closeConnect();
         }
     }

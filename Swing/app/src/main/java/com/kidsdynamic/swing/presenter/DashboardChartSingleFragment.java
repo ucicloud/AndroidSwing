@@ -17,9 +17,9 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.kidsdynamic.data.net.activity.model.RetrieveDataRep;
+import com.kidsdynamic.data.net.activity.model.RetrieveMonthlyActivityRep;
 import com.kidsdynamic.data.repository.disk.ActivityCloudDataStore;
 import com.kidsdynamic.swing.R;
-import com.kidsdynamic.swing.SwingApplication;
 import com.kidsdynamic.swing.domain.BeanConvertor;
 import com.kidsdynamic.swing.domain.DeviceManager;
 import com.kidsdynamic.swing.domain.KidActivityManager;
@@ -31,13 +31,11 @@ import com.kidsdynamic.swing.view.ViewChartBarVertical;
 import com.kidsdynamic.swing.view.ViewChartToday;
 import com.kidsdynamic.swing.view.ViewDotIndicator;
 import com.kidsdynamic.swing.view.ViewTextSelector;
-import com.yy.base.utils.ToastCommon;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -54,7 +52,6 @@ public class DashboardChartSingleFragment extends DashboardBaseFragment {
 
     public static final String DOOR_TYPE = "door_type";
     public static final String CHART_TYPE = "chart_type";
-    public static final String WATCH_ACTIVITY = "watch_activity";
 
     @BindView(R.id.dashboard_chart_root)
     View mViewRoot;
@@ -79,15 +76,15 @@ public class DashboardChartSingleFragment extends DashboardBaseFragment {
 
     private int mEmotion;
     private int mCurrentChart;
-    private long kidId;
-    private boolean isFirstLoad = true;
-    private List<WatchActivity> watchActivities;
+    private WatchActivity todayWatchActivity;
+    private List<WatchActivity> weeklyWatchActivities;
+    private List<WatchActivity> monthlyWatchActivities;
+    private List<WatchActivity> yearlyWatchActivities;
 
-    public static DashboardChartSingleFragment newInstance(int doorType, int chartType, WatchActivity wa) {
+    public static DashboardChartSingleFragment newInstance(int doorType, int chartType) {
         Bundle args = new Bundle();
         args.putInt(DOOR_TYPE, doorType);
         args.putInt(CHART_TYPE, chartType);
-        args.putSerializable(WATCH_ACTIVITY, wa);
         DashboardChartSingleFragment fragment = new DashboardChartSingleFragment();
         fragment.setArguments(args);
         return fragment;
@@ -105,7 +102,6 @@ public class DashboardChartSingleFragment extends DashboardBaseFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        isFirstLoad = true;
         view_left_action.setImageResource(R.drawable.icon_left);
         tv_title.setText(R.string.dashboard_chart_activity);
     }
@@ -124,7 +120,7 @@ public class DashboardChartSingleFragment extends DashboardBaseFragment {
 
         Integer emotion = DataUtil.getInstance().getEmotionInSingleChart();
         if (null == emotion) {
-            WatchActivity wa = null != args ? (WatchActivity) args.getSerializable(WATCH_ACTIVITY) : null;
+            WatchActivity wa = DataUtil.getInstance().getTodayWatchActivityInSingleChart();
             emotion = getEmotionWithTodayActivity(wa);
         }
 
@@ -155,14 +151,9 @@ public class DashboardChartSingleFragment extends DashboardBaseFragment {
             chartType = null != args ? args.getInt(CHART_TYPE, CHART_TODAY) : CHART_TODAY;
             showChart(chartType);
             mCurrentChart = chartType;
-            loadData();
         } else {
             showChart(chartType);
             mCurrentChart = chartType;
-            watchActivities = DataUtil.getInstance().getWatchActivitiesInSingleChart();
-            if (null == watchActivities) {
-                loadData();
-            }
         }
         View root = getView();
         if (null == root) {
@@ -189,35 +180,90 @@ public class DashboardChartSingleFragment extends DashboardBaseFragment {
         getFragmentManager().popBackStack();
     }
 
-    private void loadData() {
-        Calendar cld = Calendar.getInstance();
-        int timezoneOffset = cld.getTimeZone().getOffset(cld.getTimeInMillis());
-
-        cld.set(Calendar.HOUR_OF_DAY, 23);
-        cld.set(Calendar.MINUTE, 59);
-        cld.set(Calendar.SECOND, 59);
-        long end = cld.getTimeInMillis() + timezoneOffset;
-
-        cld.add(Calendar.MONTH, -11);
-        cld.set(Calendar.HOUR_OF_DAY, 0);
-        cld.set(Calendar.MINUTE, 0);
-        cld.set(Calendar.SECOND, 0);
-        long start = cld.getTimeInMillis() + timezoneOffset;
-
+    private void loadData(int chartType) {
+        long kidId = 0;
         KidsEntityBean kid = DeviceManager.getFocusKidsInfo(getContext());
         if (null != kid) {
             kidId = kid.getKidsId();
         }
+        if (CHART_TODAY == chartType) {
+            Calendar cld = Calendar.getInstance();
+            int timezoneOffset = cld.getTimeZone().getOffset(cld.getTimeInMillis());
 
-        new KidActivityManager().retrieveDataByTime(getContext(), kidId, start, end,
-                new IRetrieveCompleteListener(start, end, timezoneOffset));
+            cld.set(Calendar.HOUR_OF_DAY, 23);
+            cld.set(Calendar.MINUTE, 59);
+            cld.set(Calendar.SECOND, 59);
+            long end = cld.getTimeInMillis() + timezoneOffset;
+
+            cld.add(Calendar.DAY_OF_MONTH, -1);
+            cld.add(Calendar.SECOND, 1);
+            long start = cld.getTimeInMillis() + timezoneOffset;
+
+            new KidActivityManager().retrieveDataByTime(getContext(), kidId, start, end,
+                    new IRetrieveCompleteListener(chartType, kidId, start, end, timezoneOffset));
+        } else if (CHART_WEEK == chartType) {
+            Calendar cld = Calendar.getInstance();
+            int timezoneOffset = cld.getTimeZone().getOffset(cld.getTimeInMillis());
+
+            cld.set(Calendar.HOUR_OF_DAY, 23);
+            cld.set(Calendar.MINUTE, 59);
+            cld.set(Calendar.SECOND, 59);
+            long end = cld.getTimeInMillis() + timezoneOffset;
+
+            cld.add(Calendar.DAY_OF_YEAR, -6);
+            cld.set(Calendar.HOUR_OF_DAY, 0);
+            cld.set(Calendar.MINUTE, 0);
+            cld.set(Calendar.SECOND, 0);
+            long start = cld.getTimeInMillis() + timezoneOffset;
+
+            new KidActivityManager().retrieveDataByTime(getContext(), kidId, start, end,
+                    new IRetrieveCompleteListener(chartType, kidId, start, end, timezoneOffset));
+        } else if (CHART_MONTH == chartType) {
+            Calendar cld = Calendar.getInstance();
+            int timezoneOffset = cld.getTimeZone().getOffset(cld.getTimeInMillis());
+
+            cld.set(Calendar.HOUR_OF_DAY, 23);
+            cld.set(Calendar.MINUTE, 59);
+            cld.set(Calendar.SECOND, 59);
+            long end = cld.getTimeInMillis() + timezoneOffset;
+
+            cld.add(Calendar.DAY_OF_MONTH, -29);
+            cld.set(Calendar.HOUR_OF_DAY, 0);
+            cld.set(Calendar.MINUTE, 0);
+            cld.set(Calendar.SECOND, 0);
+            long start = cld.getTimeInMillis() + timezoneOffset;
+
+            new KidActivityManager().retrieveDataByTime(getContext(), kidId, start, end,
+                    new IRetrieveCompleteListener(chartType, kidId, start, end, timezoneOffset));
+        } else {
+            Calendar cld = Calendar.getInstance();
+            int timezoneOffset = cld.getTimeZone().getOffset(cld.getTimeInMillis());
+
+            cld.set(Calendar.HOUR_OF_DAY, 23);
+            cld.set(Calendar.MINUTE, 59);
+            cld.set(Calendar.SECOND, 59);
+            long end = cld.getTimeInMillis() + timezoneOffset;
+
+            cld.add(Calendar.MONTH, -11);
+            cld.set(Calendar.HOUR_OF_DAY, 0);
+            cld.set(Calendar.MINUTE, 0);
+            cld.set(Calendar.SECOND, 0);
+            long start = cld.getTimeInMillis() + timezoneOffset;
+
+            new KidActivityManager().retrieveMonthlyActivity(getContext(), kidId, start, end,
+                    new IRetrieveCompleteListener(chartType, kidId, start, end, timezoneOffset));
+        }
     }
 
     private class IRetrieveCompleteListener implements KidActivityManager.ICompleteListener {
 
+        private long kidId;
+        private int chartType;
         private long start, end, timezoneOffset;
 
-        IRetrieveCompleteListener(long start, long end, long timezoneOffset) {
+        IRetrieveCompleteListener(int chartType, long kidId, long start, long end, long timezoneOffset) {
+            this.kidId = kidId;
+            this.chartType = chartType;
             this.start = start;
             this.end = end;
             this.timezoneOffset = timezoneOffset;
@@ -226,10 +272,18 @@ public class DashboardChartSingleFragment extends DashboardBaseFragment {
         @Override
         public void onComplete(Object arg, int statusCode) {
             if (200 == statusCode && null != arg) {
-                new DataTask(DashboardChartSingleFragment.this)
-                        .execute(arg, start, end, timezoneOffset);
+                if (CHART_TODAY == chartType && arg instanceof RetrieveDataRep) {
+                    new TodayTask(DashboardChartSingleFragment.this)
+                            .execute(chartType, arg, start, end, timezoneOffset, kidId);
+                } else if ((CHART_WEEK == chartType || CHART_MONTH == chartType) && arg instanceof RetrieveDataRep) {
+                    new WeeklyAndMonthlyTask(DashboardChartSingleFragment.this)
+                            .execute(chartType, arg, start, end, timezoneOffset, kidId);
+                } else if (CHART_YEAR == chartType && arg instanceof RetrieveMonthlyActivityRep) {
+                    new YearlyTask(DashboardChartSingleFragment.this)
+                            .execute(chartType, arg, start, end, timezoneOffset, kidId);
+                }
             } else {
-                ToastCommon.makeText(SwingApplication.getAppContext(), R.string.dashboard_enqueue_fail_common);
+//                ToastCommon.makeText(SwingApplication.getAppContext(), R.string.dashboard_enqueue_fail_common);
             }
         }
 
@@ -239,31 +293,97 @@ public class DashboardChartSingleFragment extends DashboardBaseFragment {
         }
     }
 
-    private static class DataTask extends AsyncTask<Object, Integer, List<WatchActivity>> {
+    private static class TodayTask extends AsyncTask<Object, Integer, WatchActivity> {
 
         private DashboardChartSingleFragment theFragment;
 
-        DataTask(DashboardChartSingleFragment instance) {
+        TodayTask(DashboardChartSingleFragment instance) {
+            WeakReference<DashboardChartSingleFragment> wr = new WeakReference<>(instance);
+            theFragment = wr.get();
+        }
+
+        @Override
+        protected WatchActivity doInBackground(Object... params) {
+            int chartType = (int) params[0];
+            RetrieveDataRep rep = (RetrieveDataRep) params[1];
+            WatchActivity act = new WatchActivity((Long) params[5], 0);
+            List<RetrieveDataRep.ActivitiesEntity> activitiesEntities = rep.getActivities();
+
+            if (null == activitiesEntities || activitiesEntities.isEmpty()) {
+                return act;
+            }
+
+            long start = (Long) params[2];
+            long end = (Long) params[3];
+            long timezoneOffset = (Long) params[4];
+            for (RetrieveDataRep.ActivitiesEntity entity : activitiesEntities) {
+                long receiveDate = BeanConvertor.getLocalTimeStamp(entity.getReceivedDate());
+                if (receiveDate >= start && receiveDate < end) {
+                    if (entity.type.equals(ActivityCloudDataStore.Activity_type_indoor)) {
+                        act.mIndoor.mId = entity.getId();
+                        act.mIndoor.mMacId = entity.getMacId();
+                        act.mIndoor.mSteps += entity.getSteps();
+                        act.mIndoor.mDistance += entity.getDistance();
+                    } else if (entity.type.equals(ActivityCloudDataStore.Activity_type_outdoor)) {
+                        act.mOutdoor.mId = entity.getId();
+                        act.mOutdoor.mMacId = entity.getMacId();
+                        act.mOutdoor.mSteps += entity.getSteps();
+                        act.mOutdoor.mDistance += entity.getDistance();
+                    }
+                }
+            }
+
+            return act;
+        }
+
+        @Override
+        protected void onPostExecute(WatchActivity activity) {
+            super.onPostExecute(activity);
+            try {
+                theFragment.handleTodayData(activity);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void handleTodayData(WatchActivity activity) {
+        todayWatchActivity = activity;
+        setToday();
+    }
+
+    private static class WeeklyAndMonthlyTask extends AsyncTask<Object, Integer, List<WatchActivity>> {
+
+        private int chartType;
+        private DashboardChartSingleFragment theFragment;
+
+        WeeklyAndMonthlyTask(DashboardChartSingleFragment instance) {
             WeakReference<DashboardChartSingleFragment> wr = new WeakReference<>(instance);
             theFragment = wr.get();
         }
 
         @Override
         protected List<WatchActivity> doInBackground(Object... params) {
-            RetrieveDataRep rep = (RetrieveDataRep) params[0];
-            List<RetrieveDataRep.ActivitiesEntity> activitiesEntities = rep.getActivities();
-            if (null == activitiesEntities || activitiesEntities.isEmpty()) {
-                return null;
-            }
+            this.chartType = (int) params[0];
+            RetrieveDataRep rep = (RetrieveDataRep) params[1];
             List<WatchActivity> watchActivities = new ArrayList<>();
-            long start = (Long) params[1];
-            long end = (Long) params[2];
-            long timezoneOffset = (Long) params[3];
+            List<RetrieveDataRep.ActivitiesEntity> activitiesEntities = rep.getActivities();
+
+            long start = (Long) params[2];
+            long end = (Long) params[3];
+            long timezoneOffset = (Long) params[4];
             long millisInDay = 1000 * 60 * 60 * 24;
             long timestamp = start;
             while (timestamp < end) {
-                watchActivities.add(new WatchActivity(theFragment.kidId, timestamp));
+                watchActivities.add(new WatchActivity((Long) params[5], timestamp));
                 timestamp += millisInDay;
+            }
+            if (null == activitiesEntities || activitiesEntities.isEmpty()) {
+                for (WatchActivity act : watchActivities) {
+                    act.mIndoor.mTimestamp -= timezoneOffset;
+                    act.mOutdoor.mTimestamp -= timezoneOffset;
+                }
+                return watchActivities;
             }
             for (WatchActivity act : watchActivities) {
                 for (RetrieveDataRep.ActivitiesEntity entity : activitiesEntities) {
@@ -285,7 +405,7 @@ public class DashboardChartSingleFragment extends DashboardBaseFragment {
                 }
             }
 
-            Collections.reverse(watchActivities);
+//            Collections.reverse(watchActivities);
 
             for (WatchActivity act : watchActivities) {
                 act.mIndoor.mTimestamp -= timezoneOffset;
@@ -299,18 +419,101 @@ public class DashboardChartSingleFragment extends DashboardBaseFragment {
         protected void onPostExecute(List<WatchActivity> watchActivities) {
             super.onPostExecute(watchActivities);
             try {
-                theFragment.handlePostExecute(watchActivities);
+                theFragment.handleWeeklyAndMonthlyData(this.chartType, watchActivities);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
     }
 
-    private void handlePostExecute(List<WatchActivity> watchActivities) {
-        this.watchActivities = watchActivities;
-        int emotion = getEmotionWithTodayActivity(null != watchActivities ? watchActivities.get(0) : null);
-        setEmotion(emotion);
-        showChart(mCurrentChart);
+    private void handleWeeklyAndMonthlyData(int chartType, List<WatchActivity> watchActivities) {
+        if (CHART_WEEK == chartType) {
+            weeklyWatchActivities = watchActivities;
+            setWeek();
+        } else if (CHART_MONTH == chartType) {
+            monthlyWatchActivities = watchActivities;
+            setMonth();
+        }
+    }
+
+    private static class YearlyTask extends AsyncTask<Object, Integer, List<WatchActivity>> {
+
+        private DashboardChartSingleFragment theFragment;
+
+        YearlyTask(DashboardChartSingleFragment instance) {
+            WeakReference<DashboardChartSingleFragment> wr = new WeakReference<>(instance);
+            theFragment = wr.get();
+        }
+
+        @Override
+        protected List<WatchActivity> doInBackground(Object... params) {
+            int chartType = (int) params[0];
+            RetrieveMonthlyActivityRep rep = (RetrieveMonthlyActivityRep) params[1];
+            List<RetrieveMonthlyActivityRep.ActivitiesEntity> activitiesEntities = rep.getActivities();
+            long start = (Long) params[2];
+            long end = (Long) params[3];
+            long timezoneOffset = (Long) params[4];
+
+            List<WatchActivity> watchActivities = new ArrayList<>();
+            Calendar cld = Calendar.getInstance();
+            cld.setTimeInMillis(start);
+            for (int i = 0; i < 12; i++) {
+                long timestamp = cld.getTimeInMillis();
+                WatchActivity watchActivity = new WatchActivity((Long) params[5], timestamp);
+                watchActivities.add(watchActivity);
+                cld.add(Calendar.MONTH, 1);
+            }
+
+            if (null == activitiesEntities || activitiesEntities.isEmpty()) {
+                for (WatchActivity act : watchActivities) {
+                    act.mIndoor.mTimestamp -= timezoneOffset;
+                    act.mOutdoor.mTimestamp -= timezoneOffset;
+                }
+                return watchActivities;
+            }
+            for (WatchActivity act : watchActivities) {
+                long timestamp = act.mIndoor.mTimestamp;
+                cld.setTimeInMillis(timestamp);
+                int month = cld.get(Calendar.MONTH) + 1;
+                for (RetrieveMonthlyActivityRep.ActivitiesEntity entity : activitiesEntities) {
+                    if (month == entity.getMonth()) {
+                        if (entity.type.equals(ActivityCloudDataStore.Activity_type_indoor)) {
+                            act.mIndoor.mMacId = entity.getMacId();
+                            act.mIndoor.mSteps += entity.getSteps();
+                            act.mIndoor.mDistance += entity.getDistance();
+                        } else if (entity.type.equals(ActivityCloudDataStore.Activity_type_outdoor)) {
+                            act.mOutdoor.mMacId = entity.getMacId();
+                            act.mOutdoor.mSteps += entity.getSteps();
+                            act.mOutdoor.mDistance += entity.getDistance();
+                        }
+                    }
+                }
+            }
+
+//            Collections.reverse(watchActivities);
+
+            for (WatchActivity act : watchActivities) {
+                act.mIndoor.mTimestamp -= timezoneOffset;
+                act.mOutdoor.mTimestamp -= timezoneOffset;
+            }
+
+            return watchActivities;
+        }
+
+        @Override
+        protected void onPostExecute(List<WatchActivity> watchActivities) {
+            super.onPostExecute(watchActivities);
+            try {
+                theFragment.handleYearlyData(watchActivities);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void handleYearlyData(List<WatchActivity> watchActivities) {
+        yearlyWatchActivities = watchActivities;
+        setYear();
     }
 
     private ViewTextSelector.OnSelectListener mSelectorListener = new ViewTextSelector.OnSelectListener() {
@@ -349,14 +552,14 @@ public class DashboardChartSingleFragment extends DashboardBaseFragment {
         DataUtil.getInstance().setChartTypeInSingleChart(mCurrentChart);
         DataUtil.getInstance().setDoorTypeInSingleChart(getDoor());
         DataUtil.getInstance().setEmotionInSingleChart(mEmotion);
-        DataUtil.getInstance().setWatchActivitiesInSingleChart(watchActivities);
+        DataUtil.getInstance().setTodayWatchActivityInSingleChart(todayWatchActivity);
     }
 
     private void clearSavedData() {
         DataUtil.getInstance().setChartTypeInSingleChart(null);
         DataUtil.getInstance().setDoorTypeInSingleChart(null);
         DataUtil.getInstance().setEmotionInSingleChart(null);
-        DataUtil.getInstance().setWatchActivitiesInSingleChart(null);
+        DataUtil.getInstance().setTodayWatchActivityInSingleChart(null);
     }
 
     private BetterViewPager.OnPageChangeListener onPageChangeListener = new ViewPager.OnPageChangeListener() {
@@ -476,22 +679,15 @@ public class DashboardChartSingleFragment extends DashboardBaseFragment {
         if (CHART_TODAY != mCurrentChart) {
             mViewPager.setCurrentItem(CHART_TODAY, true);
         }
-        setToday();
+        if (null == todayWatchActivity) {
+            loadData(CHART_TODAY);
+        } else {
+            setToday();
+        }
     }
 
     private void setToday() {
-        WatchActivity.Act act = null;
-        if (isFirstLoad) {
-            Bundle args = getArguments();
-            WatchActivity wa = null != args ? (WatchActivity) args.getSerializable(WATCH_ACTIVITY) : null;
-            if (null != wa) {
-                act = getDoor() == INDOOR ? wa.mIndoor : wa.mOutdoor;
-            }
-            isFirstLoad = false;
-        } else {
-            act = getStepToday(getDoor());
-        }
-        mViewChartToday.setValue(act);
+        mViewChartToday.setValue(getStepToday(getDoor()));
         mViewChartToday.setGoal(WatchActivity.STEP_GOAL);
         mViewChartToday.invalidate();
     }
@@ -500,7 +696,11 @@ public class DashboardChartSingleFragment extends DashboardBaseFragment {
         if (CHART_WEEK != mCurrentChart) {
             mViewPager.setCurrentItem(CHART_WEEK, true);
         }
-        setWeek();
+        if (null == weeklyWatchActivities) {
+            loadData(CHART_WEEK);
+        } else {
+            setWeek();
+        }
     }
 
     private void setWeek() {
@@ -513,7 +713,11 @@ public class DashboardChartSingleFragment extends DashboardBaseFragment {
         if (CHART_MONTH != mCurrentChart) {
             mViewPager.setCurrentItem(CHART_MONTH, true);
         }
-        setMonth();
+        if (null == monthlyWatchActivities) {
+            loadData(CHART_MONTH);
+        } else {
+            setMonth();
+        }
     }
 
     private void setMonth() {
@@ -526,7 +730,11 @@ public class DashboardChartSingleFragment extends DashboardBaseFragment {
         if (CHART_YEAR != mCurrentChart) {
             mViewPager.setCurrentItem(CHART_YEAR, true);
         }
-        setYear();
+        if (null == yearlyWatchActivities) {
+            loadData(CHART_YEAR);
+        } else {
+            setYear();
+        }
     }
 
     private void setYear() {
@@ -536,109 +744,47 @@ public class DashboardChartSingleFragment extends DashboardBaseFragment {
     }
 
     private WatchActivity.Act getStepToday(int door) {
-        Bundle args = getArguments();
-        WatchActivity wa = null != args ? (WatchActivity) args.getSerializable(WATCH_ACTIVITY) : null;
-        if (null == wa && null != watchActivities && !watchActivities.isEmpty()) {
-            wa = watchActivities.get(0);
-        }
-        return null != wa ? (door == INDOOR ? wa.mIndoor : wa.mOutdoor) : null;
+        return null != todayWatchActivity ?
+                (door == INDOOR ? todayWatchActivity.mIndoor : todayWatchActivity.mOutdoor) : null;
     }
 
     private List<WatchActivity.Act> getStepWeek(int door) {
-        if (null == watchActivities || watchActivities.isEmpty()) {
+        if (null == weeklyWatchActivities || weeklyWatchActivities.isEmpty()) {
             return null;
-        }
-        List<WatchActivity> thisWeek = new ArrayList<>();
-        for (int i = 0; i < 7; i++) {
-            thisWeek.add(watchActivities.get(i));
         }
         List<WatchActivity.Act> rtn = new ArrayList<>();
 
-        for (WatchActivity activity : thisWeek)
+        for (WatchActivity activity : weeklyWatchActivities)
             rtn.add(new WatchActivity.Act(door == INDOOR ? activity.mIndoor : activity.mOutdoor));
-
-        Collections.reverse(rtn);
 
         return rtn;
     }
 
     private List<WatchActivity.Act> getStepMonth(int door) {
-        if (null == watchActivities || watchActivities.isEmpty()) {
+        if (null == monthlyWatchActivities || monthlyWatchActivities.isEmpty()) {
             return null;
         }
-        List<WatchActivity> thisMonth = new ArrayList<>();
-        for (int i = 0; i < 30; i++) {
-            thisMonth.add(watchActivities.get(i));
-        }
+
         List<WatchActivity.Act> rtn = new ArrayList<>();
 
-        for (WatchActivity activity : thisMonth)
+        for (WatchActivity activity : monthlyWatchActivities)
             rtn.add(new WatchActivity.Act(door == INDOOR ? activity.mIndoor : activity.mOutdoor));
 
 //        for (WatchActivity.Act act : rtn) {
 //            act.mSteps = (int) (Math.random() * mViewChartMonth.mAxisVMax);
 //        }
 
-        Collections.reverse(rtn);
-
         return rtn;
     }
 
     private List<WatchActivity.Act> getStepYear(int door) {
-        if (null == watchActivities || watchActivities.isEmpty()) {
+        if (null == yearlyWatchActivities || yearlyWatchActivities.isEmpty()) {
             return null;
-        }
-        List<WatchActivity> thisYear = new ArrayList<>();
-        Calendar cld = Calendar.getInstance();
-
-        cld.add(Calendar.MONTH, -11);
-        cld.set(Calendar.DATE, 1);
-        cld.set(Calendar.HOUR_OF_DAY, 0);
-        cld.set(Calendar.MINUTE, 0);
-        cld.set(Calendar.SECOND, 0);
-        long startTimestamp = cld.getTimeInMillis();
-
-        for (int i = 0; i < 12; i++) {
-            WatchActivity watchActivity = new WatchActivity(0, startTimestamp);
-
-            // 下一个起始时间加一个月后，再减去一秒，作为本月的结束时间
-            cld.setTimeInMillis(startTimestamp);
-            cld.add(Calendar.MONTH, 1);
-            cld.set(Calendar.DATE, 1);
-            cld.set(Calendar.HOUR_OF_DAY, 0);
-            cld.set(Calendar.MINUTE, 0);
-            cld.set(Calendar.SECOND, 0);
-            cld.add(Calendar.SECOND, -1);
-            long endTimestamp = cld.getTimeInMillis();
-
-            int days = 0;
-            for (WatchActivity src : watchActivities) {
-                boolean isInTimeRange = watchActivity.addInTimeRange(src, startTimestamp, endTimestamp);
-                if (isInTimeRange) {
-                    days += 1;
-                }
-            }
-            if (days > 0) {
-                watchActivity.mOutdoor.mSteps = watchActivity.mOutdoor.mSteps / days;
-                watchActivity.mIndoor.mSteps = watchActivity.mIndoor.mSteps / days;
-            }
-            thisYear.add(watchActivity);
-
-            // 本次起始时间加一个月，作为下一个起始时间
-            cld.setTimeInMillis(startTimestamp);
-            cld.add(Calendar.MONTH, 1);
-            cld.set(Calendar.DATE, 1);
-            cld.set(Calendar.HOUR_OF_DAY, 0);
-            cld.set(Calendar.MINUTE, 0);
-            cld.set(Calendar.SECOND, 0);
-            startTimestamp = cld.getTimeInMillis();
         }
 
         List<WatchActivity.Act> rtn = new ArrayList<>();
-        for (WatchActivity activity : thisYear)
+        for (WatchActivity activity : yearlyWatchActivities)
             rtn.add(new WatchActivity.Act(door == INDOOR ? activity.mIndoor : activity.mOutdoor));
-
-//        Collections.reverse(rtn);
 
         return rtn;
     }

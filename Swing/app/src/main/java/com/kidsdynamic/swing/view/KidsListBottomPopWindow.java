@@ -3,6 +3,7 @@ package com.kidsdynamic.swing.view;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -225,13 +226,17 @@ public class KidsListBottomPopWindow extends PopupWindow {
 
             tv_kidsName.setText(kidsEntityBean.getName());
 
-            String url =  UserManager.getProfileRealUri(kidsEntityBean.getProfile());
-            if(kidsEntityBean.getShareType() == KidsEntityBean.shareType_from_other){
-                GlideHelper.getCircleImageViewOnlyCacheInMemory(mContext,url,avatarImageView);
-            }else {
-                GlideHelper.showCircleImageViewWithSignature(mContext,url,
-                        kidsEntityBean.getLastUpdate()+"",avatarImageView);
+
+            if(!TextUtils.isEmpty(kidsEntityBean.getProfile())){
+                String url =  UserManager.getProfileRealUri(kidsEntityBean.getProfile());
+                if(kidsEntityBean.getShareType() == KidsEntityBean.shareType_from_other){
+                    GlideHelper.getCircleImageViewOnlyCacheInMemory(mContext,url,avatarImageView);
+                }else {
+                    GlideHelper.showCircleImageViewWithSignature(mContext,url,
+                            kidsEntityBean.getLastUpdate()+"",avatarImageView);
+                }
             }
+
 
             //携带数据
             viewKids.setTag(kidsEntityBean.getKidsId());

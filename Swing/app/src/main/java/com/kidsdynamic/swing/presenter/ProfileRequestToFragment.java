@@ -171,10 +171,12 @@ public class ProfileRequestToFragment extends ProfileBaseFragment {
 
         DB_User currentLoginUserInfo = LoginManager.getCurrentLoginUserInfo();
         if(currentLoginUserInfo != null){
-            GlideHelper.getBitMap(getContext(),
-                    UserManager.getProfileRealUri(currentLoginUserInfo.getProfile()),
-                    String.valueOf(currentLoginUserInfo.getLastUpdate()),
-                    new AvatarSimpleTarget(mViewUserPhoto));
+            if(!TextUtils.isEmpty(currentLoginUserInfo.getProfile())){
+                GlideHelper.getBitMap(getContext(),
+                        UserManager.getProfileRealUri(currentLoginUserInfo.getProfile()),
+                        String.valueOf(currentLoginUserInfo.getLastUpdate()),
+                        new AvatarSimpleTarget(mViewUserPhoto));
+            }
         }
 
         UserInfo requestToUser = requestTo.getRequestToUser();
