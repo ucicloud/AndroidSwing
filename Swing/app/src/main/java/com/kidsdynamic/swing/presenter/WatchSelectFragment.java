@@ -32,6 +32,7 @@ import com.kidsdynamic.data.net.user.model.UserInfo;
 import com.kidsdynamic.data.utils.LogUtil2;
 import com.kidsdynamic.swing.BaseFragment;
 import com.kidsdynamic.swing.R;
+import com.kidsdynamic.swing.SwingApplication;
 import com.kidsdynamic.swing.ble.IDeviceInitCallback;
 import com.kidsdynamic.swing.ble.IDeviceScanCallback;
 import com.kidsdynamic.swing.ble.SwingBLEService;
@@ -258,11 +259,11 @@ public class WatchSelectFragment extends BaseFragment {
                 if (null != kidsWithParent
                         && getContext() != null) {
                     //add 2017年12月27日17:09:08 新增过滤条件，当前自己的和别人分享的都不显示
-                    if(ObjectUtils.isListEmpty(allKidsNow)){
+                    if (ObjectUtils.isListEmpty(allKidsNow)) {
                         allKidsNow = DeviceManager.getAllKidsAndShared(getContext());
                     }
 
-                    if(!DeviceManager.isContain(allKidsNow,kidsWithParent)){
+                    if (!DeviceManager.isContain(allKidsNow, kidsWithParent)) {
                         //业务上用的macId需要吧address中的":"删除
                         mDeviceMap.put(watchMacId, scanResult);
                         dataAdapter.addItem(kidsWithParent);
@@ -281,8 +282,6 @@ public class WatchSelectFragment extends BaseFragment {
             }
         });
     }
-
-
 
 
     private class DataAdapter extends BaseAdapter {
@@ -408,6 +407,7 @@ public class WatchSelectFragment extends BaseFragment {
             @Override
             public void onInitFail(int reason) {
                 finishLoadingDialog();
+                ToastCommon.makeText(SwingApplication.getAppContext(), R.string.watch_init_fail);
                 LogUtil2.getUtils().d("watch init fail,reason:" + reason);
             }
 
@@ -442,6 +442,7 @@ public class WatchSelectFragment extends BaseFragment {
             @Override
             public void onInitFail(int reason) {
                 finishLoadingDialog();
+                ToastCommon.makeText(SwingApplication.getAppContext(), R.string.watch_init_fail);
                 LogUtil2.getUtils().d("watch init fail, reason:" + reason);
             }
 
