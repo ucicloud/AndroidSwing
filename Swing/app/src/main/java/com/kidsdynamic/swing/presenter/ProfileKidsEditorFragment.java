@@ -406,7 +406,7 @@ public class ProfileKidsEditorFragment extends ProfileBaseFragment {
         KidsEntityBean kidsInfo = DeviceManager.getKidsInfo(getContext(), kidId);
         if(kidsInfo != null){
             GlideHelper.getBitMapPreload(getContext(),
-                    UserManager.getProfileRealUri(kidId),
+                    UserManager.getProfileRealUri(kidsInfo.getProfile()),
                     String.valueOf(kidsInfo.getLastUpdate()));
 
             Log.w("profile", "kids edit lastUpdate: " + kidsInfo.getLastUpdate());
