@@ -137,7 +137,8 @@ public class ProfileMainFragment extends ProfileBaseFragment {
 
         registerUIReceiver();
 
-//        subscribeUI();
+        //只注册，不触发查询；触发机制在onResume
+        subscribeUI();
     }
 
     private void subscribeUI() {
@@ -179,6 +180,9 @@ public class ProfileMainFragment extends ProfileBaseFragment {
             }
         });
 
+    }
+
+    private void getSubHostListFromCloud(){
         if(!isLoadSubHost){
             subHostListModel.refreshSubHostData("");
         }
@@ -280,11 +284,15 @@ public class ProfileMainFragment extends ProfileBaseFragment {
             focusContact(BeanConvertor.getKidsForUI(focusKidsInfo), true);
         }
 
-        subscribeUI();
+        //触发查询
+        getSubHostListFromCloud();
+//        subscribeUI();
     }
 
 
     private void loadSubHostData(){
+        Log.w("Profile","loadSubHostData");
+
         if(mSubHostRequests == null){
             return;
         }
@@ -590,8 +598,7 @@ public class ProfileMainFragment extends ProfileBaseFragment {
     private void updateRequestFromTitle() {
         int count = mViewRequestFromContainer.getChildCount();
 
-        String string = String.format(Locale.getDefault(),
-                getResources().getString(R.string.profile_main_request_from), count);
+        String string = getResources().getString(R.string.profile_main_request_from);
         mViewRequestFromTitle.setText(string);
     }
 

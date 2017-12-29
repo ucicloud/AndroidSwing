@@ -66,8 +66,21 @@ public class ProfileContainerFragment extends BaseFragment {
         if(fragmentById != null
                 && fragmentById instanceof ProfileMainFragment){
 
-            Log.w("profile","profileContainer show ProfileMainFragment");
+            Log.w("profile","profileContainer onResume show ProfileMainFragment");
             fragmentById.onResume();
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        Fragment fragmentById = getFragmentManager().findFragmentById(R.id.profile_fragment_container);
+        if(fragmentById != null
+                && fragmentById instanceof ProfileMainFragment){
+
+            Log.w("profile","profileContainer onPause show ProfileMainFragment");
+            fragmentById.onPause();
         }
     }
 

@@ -463,8 +463,9 @@ public class ProfileKidsInfoFragment extends ProfileBaseFragment {
     private void updateRequestFromTitle() {
         int count = mViewRequestFromContainer.getChildCount();
 
-        String string = String.format(Locale.getDefault(),
-                getResources().getString(R.string.profile_main_request_from), count);
+        /*String string = String.format(Locale.getDefault(),
+                getResources().getString(R.string.profile_main_request_from), count);*/
+        String string = getResources().getString(R.string.profile_main_request_from);
         profile_main_request_from_title.setText(string);
     }
 

@@ -15,6 +15,7 @@ import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -443,7 +444,14 @@ public class DashboardProgressFragment extends DashboardBaseFragment {
             //modify 2017年11月29日22:49:17 only
             //同步完成后，点击exit，只是pop fragment
 //            getFragmentManager().popBackStack();
-            mActivityMain.switchToDashBoardFragmentAfterSyncComplete();
+//            mActivityMain.switchToDashBoardFragmentAfterSyncComplete();
+
+            Fragment currentFragment = mActivityMain.getCurrentFragment();
+            if (currentFragment instanceof DashboardContainerFragment) {
+                mActivityMain.switchToDashBoardFragment();
+            }else {
+                getFragmentManager().popBackStack();
+            }
         }
     };
 

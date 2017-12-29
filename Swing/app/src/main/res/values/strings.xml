@@ -144,7 +144,7 @@
     <string name="profile_main_hosting">My devices</string>
     <string name="profile_main_shared">Devices shared with Me</string>
     <string name="profile_main_request_to">Your pending request to</string>
-    <string name="profile_main_request_from">You have %d requests from</string>
+    <string name="profile_main_request_from">You have requests from</string>
 
     <!-- FragmentProfileOption -->
     <string name="profile_option_account">Account</string>

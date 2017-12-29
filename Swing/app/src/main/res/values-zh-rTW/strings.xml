@@ -144,7 +144,7 @@
     <string name="profile_main_hosting">"我的裝置"</string>
     <string name="profile_main_shared">"已分享对象"</string>
     <string name="profile_main_request_to">"等待邀請請求"</string>
-    <string name="profile_main_request_from">"你有%d個請求来自"</string>
+    <string name="profile_main_request_from">"你有請求来自"</string>
 
     <!-- FragmentProfileOption -->
     <string name="profile_option_account">"帳號"</string>

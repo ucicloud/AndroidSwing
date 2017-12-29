@@ -49,7 +49,7 @@ public class EventViewModel extends AndroidViewModel {
     }
 
     public LiveData<Boolean> getLoadState() {
-        return remoteDataSource.isLoadingSubHostList();
+        return remoteDataSource.isLoadingEvent();
     }
 
     public static class Factory extends ViewModelProvider.NewInstanceFactory{

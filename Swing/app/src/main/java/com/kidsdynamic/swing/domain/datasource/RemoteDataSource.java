@@ -42,6 +42,7 @@ public class RemoteDataSource {
     private final MutableLiveData<Boolean> mIsLoadingSubHostRequests;
 
     private HostApi hostApi;
+    private EventApi eventApi;
 
     {
         mEventList = new MutableLiveData<>();
@@ -71,6 +72,10 @@ public class RemoteDataSource {
 
     public LiveData<Boolean> isLoadingSubHostList() {
         return mIsLoadingSubHostRequests;
+    }
+
+    public LiveData<Boolean> isLoadingEvent() {
+        return mIsLoadingEvent;
     }
 
     public LiveData<SubHostRequests> getSuhHostList(String status) {
@@ -106,7 +111,7 @@ public class RemoteDataSource {
     }
 
     public LiveData<List<WatchEvent>> getEventList(){
-        final EventApi eventApi = ApiGen.getInstance(applicationContext).
+        eventApi = ApiGen.getInstance(applicationContext).
                 generateApi(EventApi.class, true);
 
         mIsLoadingEvent.setValue(true);

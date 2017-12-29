@@ -673,7 +673,7 @@ public class MainFrameActivity extends BaseFragmentActivity {
 
     }*/
 
-    private Fragment getCurrentFragment() {
+    public Fragment getCurrentFragment() {
         return fragmentHashMap.get(currentTabKey);
     }
 

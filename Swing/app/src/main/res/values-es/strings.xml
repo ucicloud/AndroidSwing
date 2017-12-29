@@ -144,7 +144,7 @@
     <string name="profile_main_hosting">Mis relojes</string>
     <string name="profile_main_shared">Reloj compartido conmigo</string>
     <string name="profile_main_request_to">Su solicitud pendiente a</string>
-    <string name="profile_main_request_from">Tiene %d peticiones de</string>
+    <string name="profile_main_request_from">Tiene peticiones de</string>
 
     <!-- FragmentProfileOption -->
     <string name="profile_option_account">Cuenta</string>

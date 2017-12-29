@@ -153,6 +153,8 @@ public class CalendarMainFragment extends CalendarBaseFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        //注册网络获取数据监听
+        subscribeUI();
 
         /*getView().setFocusableInTouchMode(true);
         getView().requestFocus();
@@ -247,42 +249,6 @@ public class CalendarMainFragment extends CalendarBaseFragment {
 
     }
 
-    private  List<TodoEntity> getTodoEntity(){
-        List<TodoEntity> todoEntityList = new ArrayList<>(4);
-
-        TodoEntity todoEntity = new TodoEntity();
-        todoEntity.setId(123);
-        todoEntity.setText("System.arraycopy(info.");
-        todoEntity.setStatus(EventUtils.TODO_STATUS_PENDING);
-        todoEntityList.add(todoEntity);
-
-        TodoEntity todoEntity1 = new TodoEntity();
-        todoEntity1.setId(234);
-        todoEntity1.setText("getTodoEntity System.arraycopy(info.");
-        todoEntity1.setStatus(EventUtils.TODO_STATUS_DONE);
-        todoEntityList.add(todoEntity1);
-
-        TodoEntity todoEntity2 = new TodoEntity();
-        todoEntity2.setId(234);
-        todoEntity2.setText("TodoEntity System.arraycopy(info.");
-        todoEntity2.setStatus(EventUtils.TODO_STATUS_PENDING);
-        todoEntityList.add(todoEntity2);
-
-        TodoEntity todoEntity3 = new TodoEntity();
-        todoEntity3.setId(2342);
-        todoEntity3.setText("TodoEntity System.arraycopy(info.");
-        todoEntity3.setStatus(EventUtils.TODO_STATUS_PENDING);
-        todoEntityList.add(todoEntity3);
-
-        TodoEntity todoEntity4 = new TodoEntity();
-        todoEntity4.setId(2343);
-        todoEntity4.setText("TodoEntity System.arraycopy(info.");
-        todoEntity4.setStatus(EventUtils.TODO_STATUS_PENDING);
-        todoEntityList.add(todoEntity4);
-
-        return todoEntityList;
-    }
-
     @Override
     public void onResume() {
         super.onResume();
@@ -295,7 +261,18 @@ public class CalendarMainFragment extends CalendarBaseFragment {
         refreshEventUI();
 
         //异步更新event--from cloud
-        subscribeUI();
+//        subscribeUI();
+        refreshEventFromCloud();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        /*if(eventViewModel != null){
+            eventViewModel.getWatchEventLiveData().removeObservers(this);
+            eventViewModel.getLoadState().removeObservers(this);
+        }*/
     }
 
     private void refreshEventUI() {
@@ -305,6 +282,8 @@ public class CalendarMainFragment extends CalendarBaseFragment {
         //从cache中读取当前userid
         currentUserId = LoginManager.getCurrentLoginUserId(getContext());
         currentKidsId = DeviceManager.getFocusKidsId();
+
+        Log.w("Calendar","currentKidsId: " + currentKidsId);
 
 //        mEventList = EventManager.getEventList(currentUserId, start, end);
         mEventList = EventManager.getEventList(currentUserId,currentKidsId,
@@ -332,6 +311,7 @@ public class CalendarMainFragment extends CalendarBaseFragment {
         eventViewModel.getWatchEventLiveData().observe(this, new Observer<List<WatchEvent>>() {
             @Override
             public void onChanged(@Nullable List<WatchEvent> watchEvents) {
+                Log.w("Calendar","subscribeUI onChanged");
                 refreshEventUI();
             }
         });
@@ -347,10 +327,18 @@ public class CalendarMainFragment extends CalendarBaseFragment {
             }
         });
 
+        //该方法值注册监听，不触发；触发时机在onResume
+      /*  if(!isLoadEvent){
+            eventViewModel.refreshEvent();
+        }*/
+
+    }
+
+    private void refreshEventFromCloud(){
+
         if(!isLoadEvent){
             eventViewModel.refreshEvent();
         }
-
     }
 
     // 更新中央coming soon的事件, 載入原則為今日即將發生的事件

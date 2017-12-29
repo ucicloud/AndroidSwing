@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -81,7 +82,26 @@ public class CalendarContainerFragment extends BaseFragment {
     public void onResume() {
         super.onResume();
 
-//        selectFragment(CalendarMainFragment.class.getName(),null,false);
+        Fragment fragmentById = getFragmentManager().findFragmentById(R.id.calender_fragment_container);
+        if(fragmentById != null
+                && fragmentById instanceof CalendarMainFragment){
+
+            Log.w("calendar","Container show CalendarMainFragment");
+            fragmentById.onResume();
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        Fragment fragmentById = getFragmentManager().findFragmentById(R.id.calender_fragment_container);
+        if(fragmentById != null
+                && fragmentById instanceof CalendarMainFragment){
+
+            Log.w("calendar","Container onPause show CalendarMainFragment");
+            fragmentById.onPause();
+        }
     }
 
     private void registerUIReceiver() {
