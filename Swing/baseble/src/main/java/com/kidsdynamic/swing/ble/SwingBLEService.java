@@ -885,7 +885,7 @@ public class SwingBLEService extends Service {
 
         SwingBLEService.this.name = scanResult.getDevice().getName();
         SwingBLEService.this.mac = scanResult.getDevice().getAddress();
-        ViseBluetooth.getInstance().connect(scanResult, false, new IConnectCallback() {
+        ViseBluetooth.getInstance().connect(scanResult, true, new IConnectCallback() {
             @Override
             public void onConnecting(BluetoothGatt gatt, int status) {
                 ViseLog.i("onConnecting");
