@@ -32,16 +32,16 @@ public class VirtualCameraActivity extends BaseFragmentActivity {
     private static final int REQUEST_CODE_CAMERA = 1;
     private static final int REQUEST_CODE_VIRTUAL_RESULT = 2;
 
-    private static final int REQUEST_STORAGE_WRITE_ACCESS_PERMISSION = 1;
+    private static final int REQUEST_PERMISSIONS_CODE = 1;
 
     private File mCurPhotoFile;
     private boolean saveState = false;
+    private boolean isCameraGranted, isReadStorageGranted, isWriteStorageGranted;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (savedInstanceState == null) {
-//            startCameraActivity();
             checkPermissions();
         } else {
             saveState = savedInstanceState.getBoolean(STATE, true);
@@ -68,7 +68,6 @@ public class VirtualCameraActivity extends BaseFragmentActivity {
             }
             finish();
         }
-
     }
 
     @Override
@@ -83,7 +82,7 @@ public class VirtualCameraActivity extends BaseFragmentActivity {
                                                  @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
-            case REQUEST_CODE_CAMERA:
+            case REQUEST_PERMISSIONS_CODE:
                 if (grantResults.length > 0) {
                     for (int i = 0; i < grantResults.length; i++) {
                         if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
@@ -97,7 +96,8 @@ public class VirtualCameraActivity extends BaseFragmentActivity {
 
     private void checkPermissions() {
         Context context = getApplicationContext();
-        String[] permissions = {Manifest.permission.CAMERA};
+        String[] permissions = {Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE};
         List<String> permissionDeniedList = new ArrayList<>();
         for (String permission : permissions) {
             int permissionCheck = ContextCompat.checkSelfPermission(context, permission);
@@ -109,26 +109,28 @@ public class VirtualCameraActivity extends BaseFragmentActivity {
         }
         if (!permissionDeniedList.isEmpty()) {
             String[] deniedPermissions = permissionDeniedList.toArray(new String[permissionDeniedList.size()]);
-            ActivityCompat.requestPermissions(this, deniedPermissions, REQUEST_CODE_CAMERA);
+            ActivityCompat.requestPermissions(this, deniedPermissions, REQUEST_PERMISSIONS_CODE);
         }
     }
 
     private void onPermissionGranted(String permission) {
         switch (permission) {
             case Manifest.permission.CAMERA:
-                startCameraActivity();
+                isCameraGranted = true;
                 break;
+            case Manifest.permission.READ_EXTERNAL_STORAGE:
+                isReadStorageGranted = true;
+                break;
+            case Manifest.permission.WRITE_EXTERNAL_STORAGE:
+                isWriteStorageGranted = true;
+                break;
+        }
+        if (isCameraGranted && isReadStorageGranted && isWriteStorageGranted) {
+            startCameraActivity();
         }
     }
 
     private void startCameraActivity() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                    REQUEST_STORAGE_WRITE_ACCESS_PERMISSION);
-            return;
-        }
         String sdStatus = Environment.getExternalStorageState();
         if (!sdStatus.equals(Environment.MEDIA_MOUNTED)) {
             return;

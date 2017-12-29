@@ -427,7 +427,7 @@
     <string name="calendar_okay">はい</string>
 
     <string name="introduction_alarm">イベントはスイングウォッチが音声でお知らせします。</string>
-    <string name="introduction_calendar_month">イベントを編集した後はスイングウォッチと同期してください。</string>
+    <string name="introduction_calendar_month">イベントを編集した後は、時計のシンクロをしてください。</string>
     <string name="introduction_todo_detail">ペンのアイコンをタップし、既存のスケジュールを編集する。</string>
     <string name="introduction_calendar_today">日付かイベントをタップし、今日のスケジュールを確認する。</string>
 
