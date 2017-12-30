@@ -45,7 +45,6 @@ import com.kidsdynamic.swing.view.ViewCircle;
 
 import java.io.File;
 import java.util.List;
-import java.util.Locale;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;

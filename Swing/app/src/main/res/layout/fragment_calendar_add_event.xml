@@ -406,7 +406,8 @@
 
                     <HorizontalScrollView
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        style="@style/horizontal_scrollview_style">
 
                         <LinearLayout
                             android:id="@+id/calendar_event_assign_container"

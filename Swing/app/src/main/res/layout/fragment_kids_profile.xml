@@ -109,7 +109,8 @@
                 <HorizontalScrollView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_gravity="center_horizontal">
+                    android:layout_gravity="center_horizontal"
+                    style="@style/horizontal_scrollview_style">
 
                     <LinearLayout
                         android:id="@+id/profile_main_shared_container"
@@ -159,7 +160,8 @@
                 <HorizontalScrollView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_gravity="center_horizontal">
+                    android:layout_gravity="center_horizontal"
+                    style="@style/horizontal_scrollview_style">
 
                     <LinearLayout
                         android:id="@+id/profile_main_request_from_container"

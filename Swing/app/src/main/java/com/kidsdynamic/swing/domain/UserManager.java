@@ -22,7 +22,10 @@ public class UserManager {
     }
 
     public static String getProfileRealUri(long id){
-        return ApiGen.BASE_PHOTO_URL + "avatar_" + id + ".jpg";
+        //modify 2017年12月30日08:05:36 only
+        //服务端修改avatar id规则，不再为用户id拼接；改为每次修改，id变成一次
+//        return ApiGen.BASE_PHOTO_URL + "avatar_" + id + ".jpg";
+        return "";
     }
 
     public static void updateProfile2DB(@NonNull UpdateProfileSuccess updateProfileSuccess){

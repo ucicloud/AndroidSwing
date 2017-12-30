@@ -284,24 +284,17 @@ public class WatchProfileFragment extends BaseFragment {
                             //更新本地缓存
                             DeviceManager.updateKidsProfile2DB(response.body().getKid());
 
-                            //挑战到下个添加成功界面
-                            Bundle bundle = new Bundle();
-                            bundle.putString(DeviceManager.BUNDLE_KEY_KID_NAME,
-                                    response.body().getKid().getName());
-                            bundle.putString(DeviceManager.BUNDLE_KEY_AVATAR,
-                                    UserManager.getProfileRealUri(response.body().getKid().getProfile()));
-                            bundle.putString(DeviceManager.BUNDLE_KEY_AVATAR_FILE,
-                                    profile.getAbsolutePath());
-                            bundle.putLong(DeviceManager.BUNDLE_KEY_KID_ID,
-                                    Long.valueOf(kidsId));
-
-                            gotoAddSuccessFragment(bundle);
-
                             //更新本地缓存
                             updateCacheKidsAvatar(response.body().getKid().getId());
 
                             //发送头像更新消息
                             sendKidsAvatarUpdate(profile,Long.valueOf(kidsId));
+
+                            getFragmentManager().popBackStack();
+
+                            //跳转到添加成功界面
+                            showAddSuccessFragment(response, profile, kidsId);
+
                         } else {
                             ToastCommon.makeText(getContext(), R.string.error_api_unknown);
                             LogUtil2.getUtils().d("uploadKidAvatar error code:" + response.code());
@@ -315,6 +308,20 @@ public class WatchProfileFragment extends BaseFragment {
                         t.printStackTrace();
                     }
                 });
+    }
+
+    private void showAddSuccessFragment(Response<UpdateKidRepEntity> response, File profile, String kidsId) {
+        Bundle bundle = new Bundle();
+        bundle.putString(DeviceManager.BUNDLE_KEY_KID_NAME,
+                response.body().getKid().getName());
+        bundle.putString(DeviceManager.BUNDLE_KEY_AVATAR,
+                response.body().getKid().getProfile());
+        bundle.putString(DeviceManager.BUNDLE_KEY_AVATAR_FILE,
+                profile.getAbsolutePath());
+        bundle.putLong(DeviceManager.BUNDLE_KEY_KID_ID,
+                Long.valueOf(kidsId));
+
+        gotoAddSuccessFragment(bundle);
     }
 
     private void updateCacheKidsAvatar(long kidId){
