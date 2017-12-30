@@ -16,17 +16,14 @@
 
 package com.bobomee.android.htttp.error_handle;
 
-import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
+
 import retrofit2.Call;
 import retrofit2.CallAdapter;
-import retrofit2.Response;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.HttpException;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import rx.Observable;
-import rx.functions.Func1;
 
 /**
  * Created on 2017/1/19.下午12:16.
@@ -41,20 +38,42 @@ public class RxErrorHandlingCallAdapterFactory extends CallAdapter.Factory {
     original = RxJavaCallAdapterFactory.create();
   }
 
+  @Override
+  public CallAdapter<?, ?> get(Type type, Annotation[] annotations, Retrofit retrofit) {
+    return null;
+  }
+
   public static CallAdapter.Factory create() {
     return new RxErrorHandlingCallAdapterFactory();
   }
 
-  @Override
+
+
+
+  /*@Override
   public CallAdapter<?> get(Type returnType, Annotation[] annotations, Retrofit retrofit) {
     return new RxCallAdapterWrapper(retrofit, original.get(returnType, annotations, retrofit));
+  }*/
+
+  private static class RxCallAdapterWrapper2<T> implements CallAdapter<Observable<T>,T>{
+
+
+    @Override
+    public Type responseType() {
+      return null;
+    }
+
+    @Override
+    public T adapt(Call<Observable<T>> call) {
+      return null;
+    }
   }
 
-  private static class RxCallAdapterWrapper implements CallAdapter<Observable<?>> {
+ /* private static class RxCallAdapterWrapper<T> implements CallAdapter<Observable<?> ,T> {
     private final Retrofit retrofit;
-    private final CallAdapter<?> wrapped;
+    private final CallAdapter<?,?> wrapped;
 
-    public RxCallAdapterWrapper(Retrofit retrofit, CallAdapter<?> wrapped) {
+    public RxCallAdapterWrapper(Retrofit retrofit, CallAdapter<T> wrapped) {
       this.retrofit = retrofit;
       this.wrapped = wrapped;
     }
@@ -64,7 +83,12 @@ public class RxErrorHandlingCallAdapterFactory extends CallAdapter.Factory {
       return wrapped.responseType();
     }
 
-    @SuppressWarnings("unchecked")
+    @Override
+    public Object adapt(Call call) {
+      return null;
+    }
+
+    *//*@SuppressWarnings("unchecked")
     @Override
     public <R> Observable<?> adapt(Call<R> call) {
       return ((Observable) wrapped.adapt(call)).onErrorResumeNext(new Func1<Throwable, Observable>() {
@@ -73,7 +97,7 @@ public class RxErrorHandlingCallAdapterFactory extends CallAdapter.Factory {
           return Observable.error(asRetrofitException(throwable));
         }
       });
-    }
+    }*//*
 
     private RetrofitException asRetrofitException(Throwable throwable) {
       // We had non-200 http error
@@ -91,5 +115,5 @@ public class RxErrorHandlingCallAdapterFactory extends CallAdapter.Factory {
 
       return RetrofitException.unexpectedError(throwable);
     }
-  }
+  }*/
 }

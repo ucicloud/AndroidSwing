@@ -8,15 +8,15 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.SimpleTarget;
-import com.bumptech.glide.signature.ObjectKey;
 import com.kidsdynamic.swing.R;
 import com.kidsdynamic.swing.SwingApplication;
-import com.yy.base.utils.TimeUtils;
 
 import java.io.File;
-import java.util.concurrent.Executors;
 
 /**
+ * 2017年12月30日11:05:33
+ * 1. 头像id每次更新都会变更，不在使用本地的lastModify字段；其他用户头像也不再使用缓存一个小时的策略；logout也只清除内存，不再清除disk
+ *
  * GlideHelper
  * <p>
  * Created by Stefan on 2017/10/28.
@@ -27,7 +27,7 @@ public class GlideHelper {
     private static RequestOptions getRequestOptions(String lastModify) {
         return RequestOptions.circleCropTransform()
                 .encodeQuality(50)
-                .signature(new ObjectKey(lastModify));
+                /*.signature(new ObjectKey(lastModify))*/;
     }
 
     public static void showCircleImageView(Context context, Object mode, ImageView imageView) {
@@ -102,7 +102,7 @@ public class GlideHelper {
             RequestOptions requestOptions = RequestOptions.circleCropTransform()
                     .encodeQuality(50)
                     .placeholder(R.drawable.ic_icon_profile_)
-                    .signature(new ObjectKey(lastModify));
+                    /*.signature(new ObjectKey(lastModify))*/;
 
             Glide.with(context.getApplicationContext()).asBitmap()
                     .load(uri)
@@ -121,7 +121,7 @@ public class GlideHelper {
                     .encodeQuality(50)
                     .placeholder(R.drawable.ic_icon_profile_)
 //                    .override(width,height)
-                    .signature(new ObjectKey(lastModify));
+                    /*.signature(new ObjectKey(lastModify))*/;
 
             Glide.with(context.getApplicationContext()).asBitmap()
                     .load(uri)
@@ -138,7 +138,7 @@ public class GlideHelper {
                     .encodeQuality(50)
                     .placeholder(R.drawable.ic_icon_profile_)
 //                    .override(width,height)
-                    .signature(new ObjectKey(TimeUtils.getTodayDateString()));
+                    /*.signature(new ObjectKey(TimeUtils.getTodayDateString()))*/;
 
             Glide.with(context.getApplicationContext()).asBitmap()
                     .load(uri)
@@ -155,7 +155,7 @@ public class GlideHelper {
                     .encodeQuality(50)
                     .placeholder(R.drawable.ic_icon_profile_)
 //                    .override(width,height)
-                    .signature(new ObjectKey(lastModify));
+                    /*.signature(new ObjectKey(lastModify))*/;
 
             Glide.with(context.getApplicationContext()).asBitmap()
                     .load(uri)
@@ -173,7 +173,7 @@ public class GlideHelper {
             RequestOptions requestOptions = RequestOptions.circleCropTransform()
                     .placeholder(R.drawable.ic_icon_profile_)
                     .override(width,height)
-                    .signature(new ObjectKey(lastModify));
+                    /*.signature(new ObjectKey(lastModify))*/;
 
             Glide.with(context.getApplicationContext()).asBitmap()
                     .load(uri)
@@ -192,7 +192,7 @@ public class GlideHelper {
                     .placeholder(R.drawable.ic_icon_profile_)
                     .encodeQuality(50)
                     .skipMemoryCache(false)/*.diskCacheStrategy(DiskCacheStrategy.NONE)*/
-                    .signature(new ObjectKey(TimeUtils.getTodayDateString()));;
+                    /*.signature(new ObjectKey(TimeUtils.getTodayDateString()))*/;;
             Glide.with(context.getApplicationContext()).asBitmap()
                     .load(uri)
                     .apply(requestOptions)
@@ -228,7 +228,7 @@ public class GlideHelper {
 //                    .override(width,height)
                     .encodeQuality(50)
                     .skipMemoryCache(false)
-                    .signature(new ObjectKey(TimeUtils.getTodayDateString()));
+                    /*.signature(new ObjectKey(TimeUtils.getTodayDateString()))*/;
             Glide.with(context.getApplicationContext()).asBitmap()
                     .load(uri)
                     .apply(requestOptions)
@@ -263,12 +263,13 @@ public class GlideHelper {
 
             Glide.get(SwingApplication.getAppContext()).clearMemory();
 
-            Executors.newSingleThreadExecutor().execute(new Runnable() {
+            //因为头像id生成规律修改为，每次更新都不同，所以不需要清除本地cache
+            /*Executors.newSingleThreadExecutor().execute(new Runnable() {
                 @Override
                 public void run() {
                     Glide.get(SwingApplication.getAppContext()).clearDiskCache();
                 }
-            });
+            });*/
 
         }catch (Exception e){
             e.printStackTrace();
@@ -287,7 +288,7 @@ public class GlideHelper {
                     .placeholder(R.drawable.ic_icon_profile_)
                     .encodeQuality(50)
                     .skipMemoryCache(false)/*.diskCacheStrategy(DiskCacheStrategy.NONE)*/
-                    .signature(new ObjectKey(TimeUtils.getTodayDateString()));
+                    /*.signature(new ObjectKey(TimeUtils.getTodayDateString()))*/;
             Glide.with(context.getApplicationContext())
                     .load(url)
                     .apply(requestOptions)
