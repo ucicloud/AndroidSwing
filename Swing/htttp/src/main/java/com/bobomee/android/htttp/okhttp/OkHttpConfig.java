@@ -4,7 +4,6 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.http.HTTP;
 
 /**
- * <br>author: wzg@xdja.com <br/>
  * date:   2018/1/3 15:02 <br/>
  */
 
