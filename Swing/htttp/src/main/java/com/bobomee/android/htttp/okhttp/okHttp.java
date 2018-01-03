@@ -25,7 +25,8 @@ public enum okHttp {
 
     okHttp() {
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+//        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        interceptor.setLevel(OkHttpConfig.getHttpLogLevel());
 
         okHttpClient = new OkHttpClient.Builder()
                 //打印日志
