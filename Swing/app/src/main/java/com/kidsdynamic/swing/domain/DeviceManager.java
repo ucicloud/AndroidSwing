@@ -84,6 +84,12 @@ public class DeviceManager {
         return null;
     }
 
+    private static void updateKidsIfNoFocusCache(){
+        DbUtil dbUtil = DbUtil.getInstance(SwingApplication.getAppContext());
+        KidsDataStore kidsDataStore = new KidsDataStore(dbUtil);
+        getKidsIfNoFocusCache(SwingApplication.getAppContext(), kidsDataStore);
+    }
+
     @Nullable
     private static DB_Kids getKidsIfNoFocusCache(Context context, KidsDataStore kidsDataStore) {
         long userId = LoginManager.getCurrentLoginUserId(context);
@@ -168,6 +174,23 @@ public class DeviceManager {
     public static long getFocusKidsId(){
         PreferencesUtil preferencesUtil = PreferencesUtil.getInstance(SwingApplication.getAppContext());
         return preferencesUtil.gPrefLongValue(key_focus_kids);
+    }
+
+    public static void checkAndUpdateFocus(long kidsId4Del){
+
+        long focusKidsId = getFocusKidsId();
+        if (focusKidsId > 0 && kidsId4Del > 0 &&
+                focusKidsId == kidsId4Del) {
+
+            try {
+                //如果删除的kids为当前focus kids
+                updateFocusKids(-1);
+                //如果当前依然有kids，则更新当前cache
+                updateKidsIfNoFocusCache();
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
     }
 
     //在数据库中新增一个kids

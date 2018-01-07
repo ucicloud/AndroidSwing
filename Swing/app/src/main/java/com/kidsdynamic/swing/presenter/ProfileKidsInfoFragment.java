@@ -2,12 +2,14 @@ package com.kidsdynamic.swing.presenter;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.LongSparseArray;
@@ -23,8 +25,10 @@ import android.widget.TextView;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.kidsdynamic.commonlib.utils.ObjectUtils;
+import com.kidsdynamic.data.net.ApiGen;
 import com.kidsdynamic.data.net.host.model.RequestAddSubHostEntity;
 import com.kidsdynamic.data.net.host.model.SubHostRequests;
+import com.kidsdynamic.data.net.kids.KidsApi;
 import com.kidsdynamic.data.net.user.model.KidInfo;
 import com.kidsdynamic.swing.BaseFragment;
 import com.kidsdynamic.swing.R;
@@ -35,6 +39,7 @@ import com.kidsdynamic.swing.domain.DeviceManager;
 import com.kidsdynamic.swing.domain.UserManager;
 import com.kidsdynamic.swing.model.KidsEntityBean;
 import com.kidsdynamic.swing.model.WatchContact;
+import com.kidsdynamic.swing.net.BaseRetrofitCallback;
 import com.kidsdynamic.swing.utils.GlideHelper;
 import com.kidsdynamic.swing.utils.ViewUtils;
 import com.kidsdynamic.swing.view.ViewCircle;
@@ -43,11 +48,12 @@ import com.yy.base.utils.ToastCommon;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import retrofit2.Call;
+import retrofit2.Response;
 
 /**
  * ProfileKidsInfoFragment
@@ -441,7 +447,68 @@ public class ProfileKidsInfoFragment extends ProfileBaseFragment {
     @OnClick(R.id.btn_remove)
     protected void onRemove(){
 //        mActivityMain.mSubHostInfoEntity.push(requestInfo);
-        selectFragment(ProfileRemoveKidsConfirmFragment.newInstance(kidsId),true);
+//        selectFragment(ProfileRemoveKidsConfirmFragment.newInstance(kidsId),true);
+
+        showConfirmDelDialog();
+    }
+
+    //add 2018年1月7日19:50:32 only
+    private void showConfirmDelDialog() {
+        new AlertDialog.Builder(getContext())
+                .setTitle(R.string.event_del)
+                .setMessage(R.string.del_my_kids_notify)
+                .setNegativeButton(R.string.profile_request_to_cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                })
+                .setPositiveButton(R.string.watch_have_yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        //调用删除kids接口重置
+                        dialogInterface.dismiss();
+
+                        delKidsFlow(kidsId);
+                    }
+                }).show();
+    }
+
+    private void delKidsFlow(final long kidsId ){
+        showLoadingDialog(R.string.signup_login_wait);
+
+        KidsApi kidsApi = ApiGen.getInstance(getContext().getApplicationContext()).
+                generateApi(KidsApi.class, true);
+        kidsApi.kidsDelete(kidsId).enqueue(new BaseRetrofitCallback<Object>() {
+            @Override
+            public void onResponse(Call<Object> call, Response<Object> response) {
+
+                int code = response.code();
+                if(code == 200){
+                    //如果删除成功，则清除本地缓存（数据库及当前设备缓存），如果当前focuskids为删除设备，则更新当前
+                    DeviceManager.delKidsInDB(kidsId);
+                    //focus 更新
+                    DeviceManager.checkAndUpdateFocus(kidsId);
+
+                    //然后关闭当前界面
+                    onTopLeftBtnClick();
+                }else {
+                    ToastCommon.makeText(getContext(),R.string.normal_err,code);
+                }
+
+                finishLoadingDialog();
+
+                super.onResponse(call, response);
+            }
+
+            @Override
+            public void onFailure(Call<Object> call, Throwable t) {
+                finishLoadingDialog();
+                ToastCommon.makeText(getContext(), R.string.cloud_api_call_net_error);
+
+                super.onFailure(call, t);
+            }
+        });
     }
 
     private class AvatarSimpleTarget extends SimpleTarget<Bitmap>{

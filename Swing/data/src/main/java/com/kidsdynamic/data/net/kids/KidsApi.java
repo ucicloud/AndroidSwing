@@ -41,7 +41,7 @@ public interface KidsApi {
 //    400	Bad request. Missing some parameters
 //    500	Internal error. Please send me the error. I will fix i
     @DELETE("v1/kids/delete")
-    Call<Object> kidsDelete(@Query("kidId") int kidId);
+    Call<Object> kidsDelete(@Query("kidId") long kidId);
 
     //Retrieve kids belong to the signed in user
     @GET("v1/kids/list")

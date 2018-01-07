@@ -482,5 +482,6 @@
     <string name="uploading">アップロード</string>
     <string name="you_on_this_account_now">あなたはこのアカウントでログインしています</string>
     <string name="calendar_hide_this_reminder">リマインダーで通知しない</string>
+    <string name="del_my_kids_notify">削除してしまうと資料は全部なくなります，本当に削除しますか？</string>
 
 </resources>

@@ -286,6 +286,8 @@ public class ProfileRemoveKidsConfirmFragment extends ProfileBaseFragment {
 
         //删除本地数据
         DeviceManager.delKidsInDB(kidsId);
+        //focus 更新
+        DeviceManager.checkAndUpdateFocus(kidsId);
 
         //remove 成功后，需要通知上个界面关闭
         mActivityMain.mSignStack.push(ProfileManager.sign_remove_ok);

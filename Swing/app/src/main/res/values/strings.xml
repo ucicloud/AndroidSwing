@@ -505,6 +505,7 @@
     <string name="share_no_select_kids">Please select one watch</string>
     <string name="enter_password">Please enter new password</string>
     <string name="password_not_same">Password does not match the confirm password.</string>
+    <string name="del_my_kids_notify">Once remove all data are deleted. Are you sure?</string>
 
     <!--new string 20171215 2rd-->
 

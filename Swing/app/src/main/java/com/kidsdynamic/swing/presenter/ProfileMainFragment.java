@@ -251,6 +251,8 @@ public class ProfileMainFragment extends ProfileBaseFragment {
                 }else {
                     //如果本地数据库中有watch数据，但是subhostlist中没有，那么可能本地数据有误，删除数据缓存
                     DeviceManager.delKidsInDB(device.mId);
+                    //focus 更新
+                    DeviceManager.checkAndUpdateFocus(device.mId);
                 }
             }else {
                 //如果尚未获取到最新的subHostList，则以数据库数据为准
