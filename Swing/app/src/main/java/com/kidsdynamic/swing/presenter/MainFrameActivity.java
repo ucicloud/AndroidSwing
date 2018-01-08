@@ -101,6 +101,7 @@ public class MainFrameActivity extends BaseFragmentActivity {
     public final static String UI_Update_Action = "MainFrame_UI_action";
     public final static String Tag_Key = "tag_key";
     public final static int Tag_Avatar_update = 1;
+    public final static int Tag_focus_kids_update = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -171,6 +172,7 @@ public class MainFrameActivity extends BaseFragmentActivity {
     protected void onResume() {
         super.onResume();
 
+        Log.w("main","onResume");
         loadFocusKidsAvatar();
     }
 
@@ -297,6 +299,8 @@ public class MainFrameActivity extends BaseFragmentActivity {
                     }
                 }
 
+                loadFocusKidsAvatar();
+            }else if(update_type == Tag_focus_kids_update){
                 loadFocusKidsAvatar();
             }
 

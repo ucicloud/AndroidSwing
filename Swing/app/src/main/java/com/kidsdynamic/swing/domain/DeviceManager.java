@@ -187,6 +187,9 @@ public class DeviceManager {
                 updateFocusKids(-1);
                 //如果当前依然有kids，则更新当前cache
                 updateKidsIfNoFocusCache();
+
+                //通知focusKids更新
+                sendBroadcastUpdateFocusKids();
             }catch (Exception e){
                 e.printStackTrace();
             }
@@ -579,6 +582,12 @@ public class DeviceManager {
     public  static void sendBroadcastUpdateAvatar() {
         Intent intent = new Intent(MainFrameActivity.UI_Update_Action);
         intent.putExtra(MainFrameActivity.Tag_Key,MainFrameActivity.Tag_Avatar_update);
+        SwingApplication.localBroadcastManager.sendBroadcast(intent);
+    }
+
+    public  static void sendBroadcastUpdateFocusKids() {
+        Intent intent = new Intent(MainFrameActivity.UI_Update_Action);
+        intent.putExtra(MainFrameActivity.Tag_Key,MainFrameActivity.Tag_focus_kids_update);
         SwingApplication.localBroadcastManager.sendBroadcast(intent);
     }
 }
