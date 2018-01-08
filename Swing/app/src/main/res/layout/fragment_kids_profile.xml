@@ -189,8 +189,8 @@
                 android:id="@+id/btn_remove"
                 style="@style/btn_main_profile"
                 android:layout_width="match_parent"
-                android:text="@string/profile_kid_remove"
-                android:visibility="gone"/>
+                android:text="@string/my_kids_del"
+                android:visibility="visible"/>
 
 
         </LinearLayout>

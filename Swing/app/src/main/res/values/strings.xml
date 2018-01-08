@@ -474,6 +474,7 @@
     <string name="event_del">Delete</string>
     <string name="calendar_day_word" />
     <string name="calendar_todo_del">Delete</string>
+    <string name="my_kids_del">Delete</string>
 
     <string name="is_sharing_with">is sharing with</string>
 

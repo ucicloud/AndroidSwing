@@ -473,6 +473,7 @@
     <string name="event_del">Удалить</string>
     <string name="calendar_day_word" />
     <string name="calendar_todo_del">Удалить</string>
+    <string name="my_kids_del">Удалить</string>
 
     <string name="is_sharing_with">поделиться с</string>
 
