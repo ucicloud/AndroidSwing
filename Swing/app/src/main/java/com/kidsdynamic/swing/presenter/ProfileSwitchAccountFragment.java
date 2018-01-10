@@ -27,6 +27,7 @@ import com.kidsdynamic.swing.model.KidsEntityBean;
 import com.kidsdynamic.swing.model.WatchContact;
 import com.kidsdynamic.swing.utils.GlideHelper;
 import com.kidsdynamic.swing.view.ViewCircle;
+import com.yy.base.utils.ToastCommon;
 
 import java.util.List;
 
@@ -95,6 +96,12 @@ public class ProfileSwitchAccountFragment extends ProfileBaseFragment {
 
 
         KidsEntityBean focusKidsInfo = DeviceManager.getFocusKidsInfo(getContext());
+
+        if(focusKidsInfo == null){
+            ToastCommon.makeText(getContext(),R.string.have_no_device);
+            getFragmentManager().popBackStack();
+            return;
+        }
 
         if (focusKidsInfo != null) {
             mViewName.setText(focusKidsInfo.getName());

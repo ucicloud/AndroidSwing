@@ -22,6 +22,7 @@ import com.kidsdynamic.swing.model.KidsEntityBean;
 import com.kidsdynamic.swing.model.WatchContact;
 import com.kidsdynamic.swing.net.BaseRetrofitCallback;
 import com.kidsdynamic.swing.utils.ViewUtils;
+import com.yy.base.utils.ToastCommon;
 
 import java.util.HashMap;
 import java.util.Locale;
@@ -125,10 +126,14 @@ public class ProfileOptionFragment extends ProfileBaseFragment {
 
     @OnClick(R.id.profile_option_watch_share)
     protected void onYourWatchShareWithOther() {
+        long focusKidsId = DeviceManager.getFocusKidsId();
+        if(focusKidsId == -1){
+            ToastCommon.makeText(getContext(),R.string.have_no_device);
+            return;
+        }
 
         mActivityMain.mSubHostList.push(requestInfo);
 
-        long focusKidsId = DeviceManager.getFocusKidsId();
         selectFragment(ProfileKidsInfoFragment.newInstance(focusKidsId),true);
     }
 
@@ -195,6 +200,11 @@ public class ProfileOptionFragment extends ProfileBaseFragment {
     @OnClick(R.id.profile_option_profile)
     public void editFocusKidsProfile(){
         KidsEntityBean focusKidsInfo = DeviceManager.getFocusKidsInfo(getContext());
+
+        if(focusKidsInfo == null){
+            ToastCommon.makeText(getContext(),R.string.have_no_device);
+            return;
+        }
 
         //跳转到编辑kids 信息界面
         WatchContact.Kid watchKidsInfo =
