@@ -58,7 +58,7 @@
                 android:src="@mipmap/battery_photo"
                 app:strokeBegin="100"
                 app:strokeColorActive="@color/color_orange_main"
-                app:strokeColorNormal="@color/color_gray_light"
+                app:strokeColorNormal="@color/color_white_snow"
                 app:strokeCount="100"
                 app:strokeEnd="-1"
                 app:strokeWidth="10dp" />

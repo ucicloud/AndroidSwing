@@ -83,9 +83,9 @@ public class FragmentDevice extends BaseFragment {
         tv_title.setText(title);
 
         //todo test battery show
-        if(battery <= 0){
+       /* if(battery <= 0){
             setCapacity(60);
-        }
+        }*/
 
         /*if (mActivityMain.mOperator.mFocusBatteryName.equals("")) {
             mHandler.postDelayed(mRunnable, 1000);
