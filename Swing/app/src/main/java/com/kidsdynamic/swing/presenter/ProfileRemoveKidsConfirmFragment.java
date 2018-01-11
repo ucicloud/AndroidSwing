@@ -259,6 +259,8 @@ public class ProfileRemoveKidsConfirmFragment extends ProfileBaseFragment {
         btn_cancel.setVisibility(View.INVISIBLE);
         tv_note.setText(R.string.profile_kids_after_remove_tip);
 
+        //进行本地数据更新
+        updateLocalDataByDel();
 
         kidsHandler = new KidsHandler(this);
         Message message = Message.obtain();
@@ -282,8 +284,7 @@ public class ProfileRemoveKidsConfirmFragment extends ProfileBaseFragment {
         }
     }
 
-    public void exit(){
-
+    public void updateLocalDataByDel(){
         //删除本地数据
         DeviceManager.delKidsInDB(kidsId);
         //focus 更新
@@ -291,6 +292,10 @@ public class ProfileRemoveKidsConfirmFragment extends ProfileBaseFragment {
 
         //remove 成功后，需要通知上个界面关闭
         mActivityMain.mSignStack.push(ProfileManager.sign_remove_ok);
+    }
+
+    public void exit(){
+
         getFragmentManager().popBackStack();
     }
 

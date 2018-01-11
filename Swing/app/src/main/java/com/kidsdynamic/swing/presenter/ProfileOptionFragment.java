@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.kidsdynamic.data.net.ApiGen;
+import com.kidsdynamic.data.net.host.model.RequestAddSubHostEntity;
 import com.kidsdynamic.data.net.host.model.SubHostRequests;
 import com.kidsdynamic.data.net.user.UserApiNeedToken;
 import com.kidsdynamic.swing.BuildConfig;
@@ -126,15 +127,43 @@ public class ProfileOptionFragment extends ProfileBaseFragment {
 
     @OnClick(R.id.profile_option_watch_share)
     protected void onYourWatchShareWithOther() {
-        long focusKidsId = DeviceManager.getFocusKidsId();
+
+        KidsEntityBean focusKidsInfo = DeviceManager.getFocusKidsInfo(getContext());
+        long focusKidsId = focusKidsInfo.getKidsId();
         if(focusKidsId == -1){
             ToastCommon.makeText(getContext(),R.string.have_no_device);
             return;
         }
 
-        mActivityMain.mSubHostList.push(requestInfo);
+        //判断focus设备类型，如果是自己的设备跳转到profileKidsEditorFragment，
+        // 如果是共享的，跳转到ProfileKidsFromSharedInfoFragment
+        if(focusKidsInfo.getShareType() == DeviceManager.kidsType_other_kids){
+            //如果是别人共享给自己的
+            if(requestInfo != null){
+                RequestAddSubHostEntity sharedKidsSubHostEntity = DeviceManager.getSharedKidsSubHostEntity(requestInfo, focusKidsInfo.getKidsId());
+                if(sharedKidsSubHostEntity != null){
+                    mActivityMain.mSubHostInfoEntity.push(sharedKidsSubHostEntity);
 
-        selectFragment(ProfileKidsInfoFragment.newInstance(focusKidsId),true);
+                    selectFragment(ProfileKidsFromSharedInfoFragment.newInstance(focusKidsInfo.getKidsId()),true);
+                }else {
+                    ToastCommon.showToast(getContext(),"subhost null");
+                }
+            }else {
+                //如果尚未获取到最新的subHostList，则以数据库数据为准
+                RequestAddSubHostEntity sharedKidsSubHostEntity = new RequestAddSubHostEntity();
+                sharedKidsSubHostEntity.setId(focusKidsInfo.getSubHostId());
+
+                mActivityMain.mSubHostInfoEntity.push(sharedKidsSubHostEntity);
+                selectFragment(ProfileKidsFromSharedInfoFragment.newInstance(focusKidsInfo.getKidsId()),true);
+            }
+
+        }else {
+            //自己设备
+            mActivityMain.mSubHostList.push(requestInfo);
+
+            selectFragment(ProfileKidsInfoFragment.newInstance(focusKidsId),true);
+        }
+
     }
 
     @OnClick(R.id.profile_option_switch_watch_account)
@@ -199,6 +228,7 @@ public class ProfileOptionFragment extends ProfileBaseFragment {
 
     @OnClick(R.id.profile_option_profile)
     public void editFocusKidsProfile(){
+        //modify 2018年1月11日14:24:27 only 当前focus的设备可能是别人共享的，
         KidsEntityBean focusKidsInfo = DeviceManager.getFocusKidsInfo(getContext());
 
         if(focusKidsInfo == null){
@@ -206,13 +236,42 @@ public class ProfileOptionFragment extends ProfileBaseFragment {
             return;
         }
 
-        //跳转到编辑kids 信息界面
-        WatchContact.Kid watchKidsInfo =
-                BeanConvertor.getKidsForUI(focusKidsInfo);
 
-        mActivityMain.mWatchContactStack.push(watchKidsInfo);
+        //判断focus设备类型，如果是自己的设备跳转到profileKidsEditorFragment，
+        // 如果是共享的，应该提醒用户无权限编辑
+        if(focusKidsInfo.getShareType() == DeviceManager.kidsType_other_kids){
+            //如果是别人共享给自己的
 
-        selectFragment(ProfileKidsEditorFragment.class.getName(),null,true);
+            ToastCommon.makeText(getContext(),R.string.no_primary_edit);
+            /*if(requestInfo != null){
+                RequestAddSubHostEntity sharedKidsSubHostEntity = DeviceManager.getSharedKidsSubHostEntity(requestInfo, focusKidsInfo.getKidsId());
+                if(sharedKidsSubHostEntity != null){
+                    mActivityMain.mSubHostInfoEntity.push(sharedKidsSubHostEntity);
+
+                    selectFragment(ProfileKidsFromSharedInfoFragment.newInstance(focusKidsInfo.getKidsId()),true);
+                }else {
+                    ToastCommon.showToast(getContext(),"subhost null");
+                }
+            }else {
+                //如果尚未获取到最新的subHostList，则以数据库数据为准
+                RequestAddSubHostEntity sharedKidsSubHostEntity = new RequestAddSubHostEntity();
+                sharedKidsSubHostEntity.setId(focusKidsInfo.getSubHostId());
+
+                mActivityMain.mSubHostInfoEntity.push(sharedKidsSubHostEntity);
+                selectFragment(ProfileKidsFromSharedInfoFragment.newInstance(focusKidsInfo.getKidsId()),true);
+            }*/
+
+        }else {
+            //自己的设备
+            //跳转到编辑kids 信息界面
+            WatchContact.Kid watchKidsInfo =
+                    BeanConvertor.getKidsForUI(focusKidsInfo);
+
+            mActivityMain.mWatchContactStack.push(watchKidsInfo);
+
+            selectFragment(ProfileKidsEditorFragment.class.getName(),null,true);
+        }
+
     }
 
     //二期修改为启动界面，输入新密码

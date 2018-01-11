@@ -97,11 +97,11 @@ public class ProfileSwitchAccountFragment extends ProfileBaseFragment {
 
         KidsEntityBean focusKidsInfo = DeviceManager.getFocusKidsInfo(getContext());
 
-        if(focusKidsInfo == null){
+       /* if(focusKidsInfo == null){
             ToastCommon.makeText(getContext(),R.string.have_no_device);
             getFragmentManager().popBackStack();
             return;
-        }
+        }*/
 
         if (focusKidsInfo != null) {
             mViewName.setText(focusKidsInfo.getName());
@@ -132,9 +132,12 @@ public class ProfileSwitchAccountFragment extends ProfileBaseFragment {
 
         updateRequestFromTitle();
 
-        //当前focus的kids
-        focusContact(BeanConvertor.getKidsForUI(focusKidsInfo),
-                true);
+        //如果当前不为空则现在选中状态
+        if(focusKidsInfo != null){
+            //当前focus的kids
+            focusContact(BeanConvertor.getKidsForUI(focusKidsInfo),
+                    true);
+        }
     }
 
     private void loadSubHostData(){
@@ -147,13 +150,38 @@ public class ProfileSwitchAccountFragment extends ProfileBaseFragment {
         mViewSharedContainer.removeAllViews();
 
         if(!ObjectUtils.isListEmpty(requestTo)){
-            for (RequestAddSubHostEntity requestToEntity : requestTo) {
+
+            //modify 2018年1月11日14:17:29 only
+            List<WatchContact.Kid> kidsForUI = DeviceManager.getKidsForUI_sharedKids(getContext());
+            for (WatchContact.Kid device : kidsForUI){
+
+                if(requestInfo != null){
+
+                    RequestAddSubHostEntity sharedKidsSubHostEntity = DeviceManager.getSharedKidsSubHostEntity(requestInfo, device.mId);
+                    if(sharedKidsSubHostEntity != null){
+                        addContact(mViewSharedContainer,sharedKidsSubHostEntity, device, mContactListener);
+                    }else {
+                        //如果本地数据库中有watch数据，但是subhostlist中没有，那么可能本地数据有误，删除数据缓存
+                        DeviceManager.delKidsInDB(device.mId);
+                        //focus 更新
+                        DeviceManager.checkAndUpdateFocus(device.mId);
+                    }
+                }else {
+                    //如果尚未获取到最新的subHostList，则以数据库数据为准
+                    RequestAddSubHostEntity sharedKidsSubHostEntity = new RequestAddSubHostEntity();
+                    sharedKidsSubHostEntity.setId(device.subHostId);
+                    addContact(mViewSharedContainer,sharedKidsSubHostEntity, device, mContactListener);
+                }
+
+            }
+
+            /*for (RequestAddSubHostEntity requestToEntity : requestTo) {
                 if (requestToEntity.getStatus().equals(WatchContact.User.STATUS_ACCEPTED)) {
                     addContact(mViewSharedContainer,requestToEntity,
                             BeanConvertor.getWatchContact(requestToEntity.getRequestToUser()),
                             mContactListener);
                 }
-            }
+            }*/
         }
 
 
@@ -186,12 +214,6 @@ public class ProfileSwitchAccountFragment extends ProfileBaseFragment {
         }
     }
 
-   /* @Override
-    public ViewFragmentConfig getConfig() {
-        return new ViewFragmentConfig(
-                getResources().getString(R.string.title_profile), true, true, false,
-                ActivityMain.RESOURCE_IGNORE, R.mipmap.icon_edit, R.mipmap.icon_settings);
-    }*/
 
    @OnClick(R.id.main_toolbar_action1)
     public void onToolbarAction1() {
@@ -235,10 +257,11 @@ public class ProfileSwitchAccountFragment extends ProfileBaseFragment {
 
             if (viewContainer == mViewDeviceContainer) {
                 focusContact(contact, false);
-//                showKidsProfile(contact);
+                confirmSwitchFocusDev(contact);
 
             } else if (viewContainer == mViewSharedContainer) {
                 focusContact(contact, false);
+                confirmSwitchFocusDev(contact);
 
             } /* else if (viewContainer == mViewRequestFromContainer) {
                 mActivityMain.mContactStack.push(contact);
@@ -263,7 +286,7 @@ public class ProfileSwitchAccountFragment extends ProfileBaseFragment {
     private void addContact(LinearLayout layout,RequestAddSubHostEntity requestAddSubHostEntity,
                             WatchContact contact, View.OnClickListener listener) {
 
-        layout.removeAllViews();
+//        layout.removeAllViews();
 
         ViewCircle photo = new ViewCircle(mActivityMain);
         photo.setBitmap(contact.mPhoto);
@@ -282,6 +305,7 @@ public class ProfileSwitchAccountFragment extends ProfileBaseFragment {
         photo.setStrokeType(ViewCircle.STROKE_TYPE_ARC);
         photo.setStrokeColorActive(ContextCompat.getColor(mActivityMain, R.color.color_orange_main));
         photo.setStrokeColorNormal(ContextCompat.getColor(mActivityMain, R.color.color_white));
+        photo.setStrokeWidth(4.0f);
 
         photo.setTag(R.id.profile_main_photo,contact);
         photo.setTag(R.id.profile_main_request_to_container,requestAddSubHostEntity);
@@ -321,7 +345,7 @@ public class ProfileSwitchAccountFragment extends ProfileBaseFragment {
         for (int idx = 0; idx < count; idx++) {
             ViewCircle viewCircle = (ViewCircle) mViewDeviceContainer.getChildAt(idx);
             WatchContact.Kid kid1 = (WatchContact.Kid) contact;
-            WatchContact.Kid kid2 = (WatchContact.Kid) viewCircle.getTag();
+            WatchContact.Kid kid2 = (WatchContact.Kid) viewCircle.getTag(R.id.profile_main_photo);
 
             boolean focus = kid1 != null && kid2 != null && kid1.mId == kid2.mId && kid1.mUserId == kid2.mUserId;
             viewCircle.setActive(focus);
@@ -331,14 +355,9 @@ public class ProfileSwitchAccountFragment extends ProfileBaseFragment {
         for (int idx = 0; idx < count; idx++) {
             ViewCircle viewCircle = (ViewCircle) mViewSharedContainer.getChildAt(idx);
             WatchContact.Kid kid1 = (WatchContact.Kid) contact;
-            WatchContact.Kid kid2 = (WatchContact.Kid) viewCircle.getTag();
+            WatchContact.Kid kid2 = (WatchContact.Kid) viewCircle.getTag(R.id.profile_main_photo);
             boolean focus = (kid1 != null && kid2 != null && kid1.mId == kid2.mId && kid1.mUserId == kid2.mUserId);
             viewCircle.setActive(focus);
-        }
-
-        //设置focus kids； 获取头像，
-        if (contact instanceof WatchContact.Kid) {
-            DeviceManager.updateFocusKids(((WatchContact.Kid) contact).mId);
         }
 
         /*if (!onCreate){
@@ -354,5 +373,38 @@ public class ProfileSwitchAccountFragment extends ProfileBaseFragment {
         String string = String.format(Locale.getDefault(),
                 getResources().getString(R.string.profile_main_request_from), count);
         mViewRequestFromTitle.setText(string);*/
+    }
+
+    //更新focus dev
+    private void confirmSwitchFocusDev(WatchContact contact){
+
+        //设置focus kids； 获取头像，
+        if (contact instanceof WatchContact.Kid) {
+
+            WatchContact.Kid currentFocusKids = (WatchContact.Kid) contact;
+
+            DeviceManager.updateFocusKids(currentFocusKids.mId);
+
+            //更新当前界面的focus信息
+            mViewName.setText(currentFocusKids.mName);
+            mViewKidsId.setText(currentFocusKids.mId+"");
+            if (!TextUtils.isEmpty(currentFocusKids.mProfile)) {
+                GlideHelper.getBitMap(getContext(),
+                        UserManager.getProfileRealUri(currentFocusKids.mProfile),
+                        "",
+                        new AvatarSimpleTarget(mViewPhoto));
+            }
+
+            updateTabAvatar();
+        }
+    }
+
+    private void updateTabAvatar() {
+        WatchContact watchContact = new WatchContact();
+        watchContact.mPhoto = mViewPhoto.getBitmap();
+        watchContact.mLabel = "editProfile";
+
+        mActivityMain.mWatchContactStack.push(watchContact);
+        DeviceManager.sendBroadcastUpdateAvatar();
     }
 }

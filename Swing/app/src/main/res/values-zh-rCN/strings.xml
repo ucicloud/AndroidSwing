@@ -484,5 +484,6 @@
     <string name="you_on_this_account_now">您已在此账号</string>
     <string name="calendar_hide_this_reminder">永久不显示提醒</string>
     <string name="del_my_kids_notify">一旦删除账号全部资料将会一并删除，确定吗？</string>
+    <string name="no_primary_edit">只有主要账户有编辑权限</string>
 
 </resources>

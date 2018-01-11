@@ -195,6 +195,8 @@ public class MainFrameActivity extends BaseFragmentActivity {
                     view_tab_profile);*/
             }
 
+        }else{
+            view_tab_profile.setImageResource(R.drawable.ic_icon_profile_);
         }
     }
 

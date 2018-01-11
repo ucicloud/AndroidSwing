@@ -163,6 +163,17 @@ public class ProfileMainFragment extends ProfileBaseFragment {
                 //更新数据库
                 DeviceManager.saveKidsData4Shared(mSubHostRequests.getRequestTo());
 
+                //更新shared dev界面
+                delAllContact(mViewSharedContainer);
+                loadSharedDev();
+
+                //当前focus的kids
+                KidsEntityBean focusKidsInfo = DeviceManager.getFocusKidsInfo(getContext());
+                if(focusKidsInfo != null){
+                    focusContact(BeanConvertor.getKidsForUI(focusKidsInfo), true);
+                    DeviceManager.sendBroadcastUpdateFocusKids();
+                }
+
                 loadSubHostData();
                 updateRequestFromTitle();
             }
@@ -240,28 +251,7 @@ public class ProfileMainFragment extends ProfileBaseFragment {
         }
 
         // 載入所有其它用戶與當前用戶分享的手錶
-        List<WatchContact.Kid> kidsForUI = DeviceManager.getKidsForUI_sharedKids(getContext());
-        for (WatchContact.Kid device : kidsForUI){
-
-            if(mSubHostRequests != null){
-
-                RequestAddSubHostEntity sharedKidsSubHostEntity = DeviceManager.getSharedKidsSubHostEntity(mSubHostRequests, device.mId);
-                if(sharedKidsSubHostEntity != null){
-                    addContact(mViewSharedContainer,sharedKidsSubHostEntity, device, mContactListener);
-                }else {
-                    //如果本地数据库中有watch数据，但是subhostlist中没有，那么可能本地数据有误，删除数据缓存
-                    DeviceManager.delKidsInDB(device.mId);
-                    //focus 更新
-                    DeviceManager.checkAndUpdateFocus(device.mId);
-                }
-            }else {
-                //如果尚未获取到最新的subHostList，则以数据库数据为准
-                RequestAddSubHostEntity sharedKidsSubHostEntity = new RequestAddSubHostEntity();
-                sharedKidsSubHostEntity.setId(device.subHostId);
-                addContact(mViewSharedContainer,sharedKidsSubHostEntity, device, mContactListener);
-            }
-
-        }
+        loadSharedDev();
 
         // 載入用戶發出需求的用戶
         /* for (WatchContact user : mActivityMain.mOperator.getRequestToList()) {
@@ -288,6 +278,31 @@ public class ProfileMainFragment extends ProfileBaseFragment {
         //触发查询
         getSubHostListFromCloud();
 //        subscribeUI();
+    }
+
+    private void loadSharedDev() {
+        List<WatchContact.Kid> kidsForUI = DeviceManager.getKidsForUI_sharedKids(getContext());
+        for (WatchContact.Kid device : kidsForUI){
+
+            if(mSubHostRequests != null){
+
+                RequestAddSubHostEntity sharedKidsSubHostEntity = DeviceManager.getSharedKidsSubHostEntity(mSubHostRequests, device.mId);
+                if(sharedKidsSubHostEntity != null){
+                    addContact(mViewSharedContainer,sharedKidsSubHostEntity, device, mContactListener);
+                }else {
+                    //如果本地数据库中有watch数据，但是subhostlist中没有，那么可能本地数据有误，删除数据缓存
+                    DeviceManager.delKidsInDB(device.mId);
+                    //focus 更新
+                    DeviceManager.checkAndUpdateFocus(device.mId);
+                }
+            }else {
+                //如果尚未获取到最新的subHostList，则以数据库数据为准
+                RequestAddSubHostEntity sharedKidsSubHostEntity = new RequestAddSubHostEntity();
+                sharedKidsSubHostEntity.setId(device.subHostId);
+                addContact(mViewSharedContainer,sharedKidsSubHostEntity, device, mContactListener);
+            }
+
+        }
     }
 
 

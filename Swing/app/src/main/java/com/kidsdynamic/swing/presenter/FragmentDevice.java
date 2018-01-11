@@ -143,7 +143,12 @@ public class FragmentDevice extends BaseFragment {
     private void setCapacity(int percent) {
         String string = String.format(Locale.getDefault(), "%d%%", percent);
         mViewCapacity.setText(string);
-        mViewProgress.setStrokeBeginEnd(0, percent);
+
+        if(percent == 0){
+            mViewProgress.setStrokeBeginEnd(-1, -1);
+        }else {
+            mViewProgress.setStrokeBeginEnd(0, percent);
+        }
     }
 
     /*private Runnable mRunnable = new Runnable() {
