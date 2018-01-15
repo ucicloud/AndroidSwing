@@ -1,10 +1,15 @@
 package com.kidsdynamic.swing.presenter;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +22,7 @@ import com.kidsdynamic.data.net.host.model.SubHostRequests;
 import com.kidsdynamic.data.net.user.UserApiNeedToken;
 import com.kidsdynamic.swing.BuildConfig;
 import com.kidsdynamic.swing.R;
+import com.kidsdynamic.swing.SwingApplication;
 import com.kidsdynamic.swing.domain.BeanConvertor;
 import com.kidsdynamic.swing.domain.DeviceManager;
 import com.kidsdynamic.swing.model.KidsEntityBean;
@@ -66,6 +72,10 @@ public class ProfileOptionFragment extends ProfileBaseFragment {
     TextView tv_about;
     @BindView(R.id.tv_language)
     TextView tv_language;
+    @BindView(R.id.tv_watch_update)
+    TextView tv_watch_update;
+    @BindView(R.id.tv_watch_update_red_point)
+    TextView tv_watch_update_red_point;
     @BindView(R.id.tv_contact_us)
     TextView tv_contact_us;
     @BindView(R.id.tv_privacy)
@@ -92,12 +102,24 @@ public class ProfileOptionFragment extends ProfileBaseFragment {
         return mView;
     }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if (DeviceManager.isFirmwareNeedUpdate()) {
+            tv_watch_update_red_point.setVisibility(View.VISIBLE);
+        } else {
+            tv_watch_update_red_point.setVisibility(View.INVISIBLE);
+        }
+        registerUIReceiver();
+    }
+
     private void initView() {
         tv_version.setText(String.format("%s %s", BuildConfig.VERSION_NAME, BuildConfig.BUILD_TYPE));
 
-        ViewUtils.setTextViewBoldTypeFace(getContext(),tv_edit_profile,tv_change_psw,
-                tv_edit_kids,tv_manager_access,tv_switch_account,tv_logout,tv_about,
-                tv_language,tv_contact_us,tv_privacy,tv_user_guide,tv_version,tv_label_version);
+        ViewUtils.setTextViewBoldTypeFace(getContext(), tv_edit_profile, tv_change_psw,
+                tv_edit_kids, tv_manager_access, tv_switch_account, tv_logout, tv_about,
+                tv_language, tv_watch_update, tv_watch_update_red_point, tv_contact_us, tv_privacy,
+                tv_user_guide, tv_version, tv_label_version);
     }
 
     private void initTitleBar() {
@@ -129,39 +151,42 @@ public class ProfileOptionFragment extends ProfileBaseFragment {
     protected void onYourWatchShareWithOther() {
 
         KidsEntityBean focusKidsInfo = DeviceManager.getFocusKidsInfo(getContext());
+        if (null == focusKidsInfo) {
+            return;
+        }
         long focusKidsId = focusKidsInfo.getKidsId();
-        if(focusKidsId == -1){
-            ToastCommon.makeText(getContext(),R.string.have_no_device);
+        if (focusKidsId == -1) {
+            ToastCommon.makeText(getContext(), R.string.have_no_device);
             return;
         }
 
         //判断focus设备类型，如果是自己的设备跳转到profileKidsEditorFragment，
         // 如果是共享的，跳转到ProfileKidsFromSharedInfoFragment
-        if(focusKidsInfo.getShareType() == DeviceManager.kidsType_other_kids){
+        if (focusKidsInfo.getShareType() == DeviceManager.kidsType_other_kids) {
             //如果是别人共享给自己的
-            if(requestInfo != null){
+            if (requestInfo != null) {
                 RequestAddSubHostEntity sharedKidsSubHostEntity = DeviceManager.getSharedKidsSubHostEntity(requestInfo, focusKidsInfo.getKidsId());
-                if(sharedKidsSubHostEntity != null){
+                if (sharedKidsSubHostEntity != null) {
                     mActivityMain.mSubHostInfoEntity.push(sharedKidsSubHostEntity);
 
-                    selectFragment(ProfileKidsFromSharedInfoFragment.newInstance(focusKidsInfo.getKidsId()),true);
-                }else {
-                    ToastCommon.showToast(getContext(),"subhost null");
+                    selectFragment(ProfileKidsFromSharedInfoFragment.newInstance(focusKidsInfo.getKidsId()), true);
+                } else {
+                    ToastCommon.showToast(getContext(), "subhost null");
                 }
-            }else {
+            } else {
                 //如果尚未获取到最新的subHostList，则以数据库数据为准
                 RequestAddSubHostEntity sharedKidsSubHostEntity = new RequestAddSubHostEntity();
                 sharedKidsSubHostEntity.setId(focusKidsInfo.getSubHostId());
 
                 mActivityMain.mSubHostInfoEntity.push(sharedKidsSubHostEntity);
-                selectFragment(ProfileKidsFromSharedInfoFragment.newInstance(focusKidsInfo.getKidsId()),true);
+                selectFragment(ProfileKidsFromSharedInfoFragment.newInstance(focusKidsInfo.getKidsId()), true);
             }
 
-        }else {
+        } else {
             //自己设备
             mActivityMain.mSubHostList.push(requestInfo);
 
-            selectFragment(ProfileKidsInfoFragment.newInstance(focusKidsId),true);
+            selectFragment(ProfileKidsInfoFragment.newInstance(focusKidsId), true);
         }
 
     }
@@ -169,7 +194,7 @@ public class ProfileOptionFragment extends ProfileBaseFragment {
     @OnClick(R.id.profile_option_switch_watch_account)
     protected void onSwitchAccount() {
         mActivityMain.mSubHostList.push(requestInfo);
-        selectFragment(ProfileSwitchAccountFragment.class.getName(),null,true);
+        selectFragment(ProfileSwitchAccountFragment.class.getName(), null, true);
     }
 
     @OnClick(R.id.profile_option_logout)
@@ -178,13 +203,22 @@ public class ProfileOptionFragment extends ProfileBaseFragment {
         selectFragment(LogoutConfirmFragment.class.getName(), null, true);
     }
 
+    @OnClick(R.id.profile_option_watch_update)
+    protected void watchUpdate() {
+        String firmwareMacId = DeviceManager.getFirmwareMacId();
+        if (TextUtils.isEmpty(firmwareMacId)) {
+            return;
+        }
+        new DeviceManager().checkFirmwareUpdate(firmwareMacId, true);
+    }
+
     @OnClick(R.id.profile_option_contact)
     protected void contactUs() {
 
         // force to KD's customer webpage
         String url = "http://www.imaginarium.info/";
 
-        String language =  Locale.getDefault().getLanguage();
+        String language = Locale.getDefault().getLanguage();
         switch (language) {
             case "zh":
             case "es":
@@ -222,27 +256,27 @@ public class ProfileOptionFragment extends ProfileBaseFragment {
     }
 
     @OnClick(R.id.profile_edit)
-    public void editUserProfile(){
-        selectFragment(ProfileEditorFragment.class.getName(), null,true);
+    public void editUserProfile() {
+        selectFragment(ProfileEditorFragment.class.getName(), null, true);
     }
 
     @OnClick(R.id.profile_option_profile)
-    public void editFocusKidsProfile(){
+    public void editFocusKidsProfile() {
         //modify 2018年1月11日14:24:27 only 当前focus的设备可能是别人共享的，
         KidsEntityBean focusKidsInfo = DeviceManager.getFocusKidsInfo(getContext());
 
-        if(focusKidsInfo == null){
-            ToastCommon.makeText(getContext(),R.string.have_no_device);
+        if (focusKidsInfo == null) {
+            ToastCommon.makeText(getContext(), R.string.have_no_device);
             return;
         }
 
 
         //判断focus设备类型，如果是自己的设备跳转到profileKidsEditorFragment，
         // 如果是共享的，应该提醒用户无权限编辑
-        if(focusKidsInfo.getShareType() == DeviceManager.kidsType_other_kids){
+        if (focusKidsInfo.getShareType() == DeviceManager.kidsType_other_kids) {
             //如果是别人共享给自己的
 
-            ToastCommon.makeText(getContext(),R.string.no_primary_edit);
+            ToastCommon.makeText(getContext(), R.string.no_primary_edit);
             /*if(requestInfo != null){
                 RequestAddSubHostEntity sharedKidsSubHostEntity = DeviceManager.getSharedKidsSubHostEntity(requestInfo, focusKidsInfo.getKidsId());
                 if(sharedKidsSubHostEntity != null){
@@ -261,7 +295,7 @@ public class ProfileOptionFragment extends ProfileBaseFragment {
                 selectFragment(ProfileKidsFromSharedInfoFragment.newInstance(focusKidsInfo.getKidsId()),true);
             }*/
 
-        }else {
+        } else {
             //自己的设备
             //跳转到编辑kids 信息界面
             WatchContact.Kid watchKidsInfo =
@@ -269,7 +303,7 @@ public class ProfileOptionFragment extends ProfileBaseFragment {
 
             mActivityMain.mWatchContactStack.push(watchKidsInfo);
 
-            selectFragment(ProfileKidsEditorFragment.class.getName(),null,true);
+            selectFragment(ProfileKidsEditorFragment.class.getName(), null, true);
         }
 
     }
@@ -278,7 +312,7 @@ public class ProfileOptionFragment extends ProfileBaseFragment {
     @OnClick(R.id.profile_option_change_password)
     public void resetPsw() {
 
-        selectFragment(ProfileResetPswFragment.class.getName(),null,true);
+        selectFragment(ProfileResetPswFragment.class.getName(), null, true);
 
         /*DB_User currentLoginUserInfo = LoginManager.getCurrentLoginUserInfo();
         String email = "";
@@ -346,6 +380,41 @@ public class ProfileOptionFragment extends ProfileBaseFragment {
                 Toast.makeText(getContext(), R.string.net_err, Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private BroadcastReceiver UIChangeReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.w("UIChangeReceiver", "change broadcast");
+
+            if (intent == null) {
+                return;
+            }
+
+            int update_type = intent.getIntExtra(MainFrameActivity.Tag_Key, -1);
+            if (update_type == MainFrameActivity.TAG_FIRMwARE_UPDATE) {
+                if (intent.hasExtra(MainFrameActivity.TAG_UPDATE)) {
+                    tv_watch_update_red_point.setVisibility(View.VISIBLE);
+                } else {
+                    tv_watch_update_red_point.setVisibility(View.INVISIBLE);
+                }
+            }
+        }
+    };
+
+    private void registerUIReceiver() {
+        if (SwingApplication.localBroadcastManager != null) {
+            IntentFilter intentFilter = new IntentFilter(MainFrameActivity.UI_Update_Action);
+            SwingApplication.localBroadcastManager.registerReceiver(UIChangeReceiver,
+                    intentFilter);
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        SwingApplication.localBroadcastManager.unregisterReceiver(UIChangeReceiver);
     }
 
 }

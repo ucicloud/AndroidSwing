@@ -123,7 +123,7 @@ public class WatchRequestFragment extends BaseFragment {
             startActivity(new Intent(activity, MainFrameActivity.class));
         } else if (activity instanceof MainFrameActivity) {
             MainFrameActivity mainFrameActivity = (MainFrameActivity) activity;
-            mainFrameActivity.setFragment(DashboardEmotionFragment.newInstance(), true);
+            mainFrameActivity.switchToDashBoardFragment();
         }
     }
 

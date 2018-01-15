@@ -93,8 +93,8 @@ public class DashboardMainFragment extends DashboardBaseFragment {
         View layout = inflater.inflate(R.layout.fragment_dashboard_main, container, false);
         ButterKnife.bind(this, layout);
 
-        ViewUtils.setBtnTypeFace(getContext(),btn_sync_yes,btn_sync_no,btn_sync_add);
-        ViewUtils.setTextViewBoldTypeFace(getContext(), tv_kids_name,tv_textview_main);
+        ViewUtils.setBtnTypeFace(getContext(), btn_sync_yes, btn_sync_no, btn_sync_add);
+        ViewUtils.setTextViewBoldTypeFace(getContext(), tv_kids_name, tv_textview_main);
         return layout;
     }
 
@@ -123,17 +123,17 @@ public class DashboardMainFragment extends DashboardBaseFragment {
 
             //modify 2017年12月26日19:22:28 only
             File avatarFile = cacheAvatarMap.get(focusWatchInfo.getKidsId());
-            if(avatarFile != null){
+            if (avatarFile != null) {
                 //如果有缓存
-                GlideHelper.getBitMapOnlyCacheInMemory(getContext(),avatarFile,
+                GlideHelper.getBitMapOnlyCacheInMemory(getContext(), avatarFile,
                         new AvatarSimpleTarget(vc_photo));
             }
 
-            if(!TextUtils.isEmpty(focusWatchInfo.getProfile())){
+            if (!TextUtils.isEmpty(focusWatchInfo.getProfile())) {
                 GlideHelper.getBitMapWithWH(getContext(),
                         profileRealUri,
                         String.valueOf(focusWatchInfo.getLastUpdate()),
-                        vc_photo.getWidth(),vc_photo.getHeight(),
+                        vc_photo.getWidth(), vc_photo.getHeight(),
                         new AvatarSimpleTarget(vc_photo));
             }
 
@@ -165,7 +165,7 @@ public class DashboardMainFragment extends DashboardBaseFragment {
 
     @OnClick(R.id.watch_sync_yes)
     public void yes() {
-        setFragment(DashboardProgressFragment.newInstance(), true);
+        setFragment(DashboardProgressFragment.newInstance(DashboardProgressFragment.TO_SYNC_DATA), true);
     }
 
     @OnClick(R.id.watch_sync_no)
@@ -178,7 +178,7 @@ public class DashboardMainFragment extends DashboardBaseFragment {
 
     @OnClick(R.id.watch_sync_add)
     public void add() {
-        setFragment(WatchSearchFragment.newInstance(),true);
+        setFragment(WatchSearchFragment.newInstance(), true);
     }
 
 
@@ -210,9 +210,9 @@ public class DashboardMainFragment extends DashboardBaseFragment {
                 String avatarFilePath = intent.getStringExtra(ConfigManager.Tag_Avatar_File_Uri_Key);
 
                 Log.w("UIChangeReceiver", "avatar: " + avatarFilePath);
-                if(updateKidsId != -1 && !TextUtils.isEmpty(avatarFilePath)){
+                if (updateKidsId != -1 && !TextUtils.isEmpty(avatarFilePath)) {
 
-                    cacheAvatarMap.put(updateKidsId,new File(avatarFilePath));
+                    cacheAvatarMap.put(updateKidsId, new File(avatarFilePath));
                 }
 
 //                loadFocusKidsAvatar();

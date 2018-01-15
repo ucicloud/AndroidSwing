@@ -1,8 +1,10 @@
 package com.kidsdynamic.commonlib.utils;
 
 import android.os.Environment;
+import android.text.TextUtils;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -13,7 +15,7 @@ import java.util.Locale;
  */
 public class FileUtil {
 
-    private static final String APP_FOLDER_NAME = "Swing Watch";
+    private static final String APP_FOLDER_NAME = "swing";
 
     private static final String APP_IMAGE_FOLDER_NAME = "image";
     private static final String APP_IMAGE_FOLDER_PATH = APP_FOLDER_NAME
@@ -108,6 +110,34 @@ public class FileUtil {
      */
     public static File getAppDataFile(String fileName) {
         return getDiskFile(APP_DATA_FOLDER_PATH, fileName);
+    }
+
+    /**
+     * 获取文件输入流
+     *
+     * @param filePath String
+     * @return FileInputStream
+     */
+    public static FileInputStream getFileInputStream(String filePath) {
+        if (TextUtils.isEmpty(filePath)) {
+            return null;
+        }
+        FileInputStream fileInputStream = null;
+        try {
+            fileInputStream = new FileInputStream(filePath);
+            return fileInputStream;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (null != fileInputStream) {
+                try {
+                    fileInputStream.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return null;
     }
 
 }

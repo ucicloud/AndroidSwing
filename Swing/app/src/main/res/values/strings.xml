@@ -508,6 +508,7 @@
     <string name="password_not_same">Password does not match the confirm password.</string>
     <string name="del_my_kids_notify">Once remove all data are deleted. Are you sure?</string>
     <string name="no_primary_edit">Only primary account has permission to edit</string>
+    <string name="swing_watch_update">Swing watch update</string>
 
     <!--new string 20171215 2rd-->
 
@@ -519,6 +520,7 @@
     <string name="down_arrow" translatable="false">\u2193</string>
     <string name="up_arrow" translatable="false">\u2191</string>
     <string name="right_arrow" translatable="false">\u2192</string>
+    <string name="one" translatable="false">1</string>
 
     <!-- Language: Warning DO NOT translate below -->
     <string name="language_zh_tw" translatable="false">"繁體中文"</string>

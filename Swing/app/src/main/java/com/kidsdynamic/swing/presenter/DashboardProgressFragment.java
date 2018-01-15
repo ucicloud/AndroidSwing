@@ -18,6 +18,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -26,6 +27,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.kidsdynamic.commonlib.utils.FileUtil;
 import com.kidsdynamic.data.net.ApiGen;
 import com.kidsdynamic.data.net.user.UserApiNeedToken;
 import com.kidsdynamic.data.net.user.model.UserProfileRep;
@@ -47,6 +49,7 @@ import com.kidsdynamic.swing.view.ViewCircle;
 import com.vise.baseble.model.BluetoothLeDevice;
 import com.yy.base.utils.LogUtil;
 
+import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -104,7 +107,6 @@ public class DashboardProgressFragment extends DashboardBaseFragment {
     private BluetoothAdapter mBluetoothAdapter;
 
     private int REQUEST_ENABLE_BT = 1;
-    private boolean devicesEnabled = true;
 
     private SwingBLEService mBluetoothService;
     private int mBindBlePurpose = -1;
@@ -113,8 +115,13 @@ public class DashboardProgressFragment extends DashboardBaseFragment {
     //绑定蓝牙service目的--同步数据
     private final int bindBlePurpose_sync_data = 2;
 
-    public static DashboardProgressFragment newInstance() {
+    public final static String TODO = "todo";
+    public final static int TO_SYNC_DATA = 1;
+    public final static int TO_FIRMWARE_UPGRADE = 2;
+
+    public static DashboardProgressFragment newInstance(int todo) {
         Bundle args = new Bundle();
+        args.putInt(TODO, todo);
         DashboardProgressFragment fragment = new DashboardProgressFragment();
         fragment.setArguments(args);
         return fragment;
@@ -132,7 +139,6 @@ public class DashboardProgressFragment extends DashboardBaseFragment {
         if (mBluetoothAdapter == null || !mBluetoothAdapter.isEnabled()) {
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
-            devicesEnabled = false;
         }
 
         final LocationManager manager = (LocationManager) mActivityMain.getSystemService(Context.LOCATION_SERVICE);
@@ -153,11 +159,7 @@ public class DashboardProgressFragment extends DashboardBaseFragment {
                     });
             final AlertDialog alert = builder.create();
             alert.show();
-
-            devicesEnabled = false;
         }
-
-
     }
 
     @Override
@@ -172,12 +174,10 @@ public class DashboardProgressFragment extends DashboardBaseFragment {
         return mViewMain;
     }
 
-
     private void initTitleBar() {
         tv_title.setTextColor(getResources().getColor(R.color.colorAccent));
         tv_title.setText(R.string.title_sync);
         view_left_action.setImageResource(R.drawable.icon_left);
-
     }
 
     @Override
@@ -449,7 +449,7 @@ public class DashboardProgressFragment extends DashboardBaseFragment {
             Fragment currentFragment = mActivityMain.getCurrentFragment();
             if (currentFragment instanceof DashboardContainerFragment) {
                 mActivityMain.switchToDashBoardFragment();
-            }else {
+            } else {
                 getFragmentManager().popBackStack();
             }
         }
@@ -570,7 +570,17 @@ public class DashboardProgressFragment extends DashboardBaseFragment {
         if (mBluetoothService == null) {
             bindService(bindBlePurpose_sync_data);
         } else {
-            syncData2Watch();
+            Bundle args = getArguments();
+            if (null == args) {
+                syncData2Watch();
+            } else {
+                int todo = args.getInt(TODO);
+                if (TO_FIRMWARE_UPGRADE == todo) {
+                    scanAndUpgrade();
+                } else {
+                    syncData2Watch();
+                }
+            }
         }
     }
 
@@ -626,9 +636,9 @@ public class DashboardProgressFragment extends DashboardBaseFragment {
             @Override
             public void onDeviceVersion(String version) {
                 Log.d("dashProgress", "onDeviceVersion version " + version);
+                DeviceManager.setFirmwareMacId(DeviceManager.getMacID(mMacAddress));
                 //首先更新本地存储
-                DeviceManager.updateKidsFirmwareVersion(
-                        DeviceManager.getMacID(mMacAddress), version);
+                DeviceManager.updateKidsFirmwareVersion(DeviceManager.getMacID(mMacAddress), version);
                 //上传服务器
                 new DeviceManager().uploadFirmwareVersion(DeviceManager.getMacID(mMacAddress), version);
             }
@@ -645,6 +655,70 @@ public class DashboardProgressFragment extends DashboardBaseFragment {
         });
     }
 
+    private void scanAndUpgrade() {
+        String firmwareAFilePath = DeviceManager.getFirmwareAFilePath();
+        String firmwareBFilePath = DeviceManager.getFirmwareBFilePath();
+        if (TextUtils.isEmpty(firmwareAFilePath) || TextUtils.isEmpty(firmwareBFilePath)) {
+            return;
+        }
+        FileInputStream fisA = FileUtil.getFileInputStream(firmwareAFilePath);
+        FileInputStream fisB = FileUtil.getFileInputStream(firmwareBFilePath);
+        if (null == fisA || null == fisB) {
+            return;
+        }
+        mBluetoothService.closeConnect();
+        mBluetoothService.scanAndUpgrade(mMacAddress, fisA, fisB, new IDeviceSyncCallback() {
+            @Override
+            public void onSyncComplete() {
+                LogUtil.getUtils().d("sync data complete: ok");
+                mViewLabel.setText(getResources().getString(R.string.uploading));
+                new RawActivityManager().uploadRawActivity(mDevice.getMacId(),
+                        mUpdateRawActivityListener);
+                DeviceManager.setFirmwareNeedUpdate(false);
+            }
+
+            @Override
+            public void onSyncFail(int reason) {
+                LogUtil.getUtils().d("sync data complete: fail, reason: " + reason);
+                //sync fail后，需要修改标志位
+                mSyncState = SYNC_STATE_FAIL;
+            }
+
+            @Override
+            public void onSyncing(String tip) {
+
+            }
+
+            @Override
+            public void onSyncActivity(ActivityModel activity) {
+                Log.d("dashProgress", "activity " + activity);
+
+                //首先把这些数据保存到数据库；然后同步完成，向服务器获取上传数据
+                RawActivityManager.saveRawActivity(activity);
+            }
+
+            @Override
+            public void onDeviceBattery(int battery) {
+                Log.d("dashProgress", "onDeviceBattery battery " + battery);
+                DeviceManager.saveBindWatchBattery(mDevice.getMacId(), battery);
+            }
+
+            @Override
+            public void onDeviceVersion(String version) {
+
+            }
+
+            @Override
+            public boolean onDeviceNeedUpdate(String version) {
+                return true;
+            }
+
+            @Override
+            public void onDeviceUpdating(float percent, String timeRemain) {
+
+            }
+        });
+    }
 
     private void bleSyncCancel() {
 //        mActivityMain.mBLEMachine.Disconnect();
@@ -943,7 +1017,17 @@ public class DashboardProgressFragment extends DashboardBaseFragment {
             if (mBindBlePurpose == bindBlePurpose_search_device) {//搜索设备
                 searchWatch();
             } else if (mBindBlePurpose == bindBlePurpose_sync_data) {//同步数据
-                syncData2Watch();
+                Bundle args = getArguments();
+                if (null == args) {
+                    syncData2Watch();
+                } else {
+                    int todo = args.getInt(TODO);
+                    if (TO_FIRMWARE_UPGRADE == todo) {
+                        scanAndUpgrade();
+                    } else {
+                        syncData2Watch();
+                    }
+                }
             }
 
         }

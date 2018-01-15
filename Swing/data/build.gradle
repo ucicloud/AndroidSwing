@@ -21,15 +21,17 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             buildConfigField "String", "API_BASE_URL", releaseApiBaseUrl
             buildConfigField "String", "PHOTO_BASE_URL", releasePhotoBaseUrl
+            buildConfigField "String", "FIRMWARE_FILE_URL", firmwareFileBaseUrl
         }
 
-        debug{
+        debug {
             buildConfigField "String", "API_BASE_URL", devApiBaseUrl
             buildConfigField "String", "PHOTO_BASE_URL", devPhotoBaseUrl
+            buildConfigField "String", "FIRMWARE_FILE_URL", firmwareFileBaseUrl
         }
     }
 
-    lintOptions{
+    lintOptions {
         abortOnError false
     }
 

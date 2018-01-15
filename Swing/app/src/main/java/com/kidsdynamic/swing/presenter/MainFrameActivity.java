@@ -20,6 +20,7 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
@@ -71,6 +72,7 @@ public class MainFrameActivity extends BaseFragmentActivity {
     private View view_tab_calendar;
     private View view_tab_dashboard;
     private AvatarImageView view_tab_profile;
+    private TextView tv_tab_profile_red_point;
 
     protected View view_info;
     protected FrameLayout view_container;
@@ -100,8 +102,11 @@ public class MainFrameActivity extends BaseFragmentActivity {
 
     public final static String UI_Update_Action = "MainFrame_UI_action";
     public final static String Tag_Key = "tag_key";
+    public final static String TAG_UPDATE = "tag_update";
     public final static int Tag_Avatar_update = 1;
     public final static int Tag_focus_kids_update = 2;
+    public final static int TAG_FIRMwARE_UPDATE = 3;
+    public static final int TAG_DASHBOARD_FIRMWARE_UPGRADE = 4;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,7 +116,7 @@ public class MainFrameActivity extends BaseFragmentActivity {
 
         initValue();
 
-        //初始化4个fragemnt：
+        //初始化4个fragment：
         //主界面中底部按钮，关联到fragment的切换加载
 
         //底部按钮，首先初始化，设置icon和text
@@ -148,6 +153,7 @@ public class MainFrameActivity extends BaseFragmentActivity {
             @Override
             public void onResponse(Call<Object> call, Response<Object> response) {
                 super.onResponse(call, response);
+                LogUtil2.getUtils().d("updateAndroidRegistrationId");
             }
 
             @Override
@@ -172,7 +178,7 @@ public class MainFrameActivity extends BaseFragmentActivity {
     protected void onResume() {
         super.onResume();
 
-        Log.w("main","onResume");
+        Log.w("main", "onResume");
         loadFocusKidsAvatar();
     }
 
@@ -181,12 +187,12 @@ public class MainFrameActivity extends BaseFragmentActivity {
         if (focusWatchInfo != null) {
             String profileRealUri = UserManager.getProfileRealUri(focusWatchInfo.getProfile());
 
-            if(!TextUtils.isEmpty(focusWatchInfo.getProfile())){
+            if (!TextUtils.isEmpty(focusWatchInfo.getProfile())) {
                 //如果非空
                 GlideHelper.getBitMapWithWH(this,
                         profileRealUri,
                         String.valueOf(focusWatchInfo.getLastUpdate()),
-                        view_tab_profile.getWidth(),view_tab_profile.getHeight(),
+                        view_tab_profile.getWidth(), view_tab_profile.getHeight(),
                         new AvatarSimpleTarget(view_tab_profile));
 
             /*GlideHelper.showCircleImageViewWithSignatureWH(
@@ -195,7 +201,7 @@ public class MainFrameActivity extends BaseFragmentActivity {
                     view_tab_profile);*/
             }
 
-        }else{
+        } else {
             view_tab_profile.setImageResource(R.drawable.ic_icon_profile_);
         }
     }
@@ -204,13 +210,13 @@ public class MainFrameActivity extends BaseFragmentActivity {
 
         ImageView viewCircle;
 
-        public AvatarSimpleTarget(ImageView viewCircle){
+        public AvatarSimpleTarget(ImageView viewCircle) {
             this.viewCircle = viewCircle;
         }
 
         @Override
         public void onResourceReady(Bitmap bitmap, Transition<? super Bitmap> transition) {
-            if(viewCircle != null && !isDestroyed()){
+            if (viewCircle != null && !isDestroyed()) {
                 viewCircle.setImageBitmap(bitmap);
             }
         }
@@ -292,7 +298,7 @@ public class MainFrameActivity extends BaseFragmentActivity {
                     WatchContact watchContact = mWatchContactStack.pop();
                     if (watchContact != null && watchContact.mPhoto != null) {
 
-                        if(watchContact instanceof WatchContact.Kid){
+                        if (watchContact instanceof WatchContact.Kid) {
                             long focusKidsId = DeviceManager.getFocusKidsId();
                             if (((WatchContact.Kid) watchContact).mId == focusKidsId) {
                                 view_tab_profile.setBitmap(watchContact.mPhoto);
@@ -302,8 +308,17 @@ public class MainFrameActivity extends BaseFragmentActivity {
                 }
 
                 loadFocusKidsAvatar();
-            }else if(update_type == Tag_focus_kids_update){
+            } else if (update_type == Tag_focus_kids_update) {
                 loadFocusKidsAvatar();
+            } else if (update_type == TAG_FIRMwARE_UPDATE) {
+                if (intent.hasExtra(TAG_UPDATE)) {
+                    tv_tab_profile_red_point.setVisibility(View.VISIBLE);
+                } else {
+                    tv_tab_profile_red_point.setVisibility(View.INVISIBLE);
+                }
+            } else if (update_type == TAG_DASHBOARD_FIRMWARE_UPGRADE) {
+                switchToDashBoardFragment();
+                setFragment(DashboardProgressFragment.newInstance(DashboardProgressFragment.TO_FIRMWARE_UPGRADE), true);
             }
 
         }
@@ -360,6 +375,9 @@ public class MainFrameActivity extends BaseFragmentActivity {
                 return true;
             }
         });
+
+        tv_tab_profile_red_point = (TextView) findViewById(R.id.tv_main_console_profile_red_point);
+        com.kidsdynamic.swing.utils.ViewUtils.setTextViewBoldTypeFace(this, tv_tab_profile_red_point);
     }
 
     private void initTabView() {
@@ -698,11 +716,11 @@ public class MainFrameActivity extends BaseFragmentActivity {
         selectTabItem(clickedItemIndex);
     }
 
-    public void switchToDashBoardFragmentAfterSyncComplete(){
+    public void switchToDashBoardFragmentAfterSyncComplete() {
         Fragment currentFragment = getCurrentFragment();
         if (currentFragment instanceof DashboardContainerFragment) {
             switchToDashBoardFragment();
-        }else {
+        } else {
             getFragmentManager().popBackStack();
         }
     }

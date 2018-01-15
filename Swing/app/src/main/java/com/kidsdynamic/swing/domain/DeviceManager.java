@@ -8,12 +8,15 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.kidsdynamic.commonlib.utils.FileUtil;
 import com.kidsdynamic.commonlib.utils.ObjectUtils;
+import com.kidsdynamic.data.BuildConfig;
 import com.kidsdynamic.data.dao.DB_EventKids;
 import com.kidsdynamic.data.dao.DB_Kids;
 import com.kidsdynamic.data.net.ApiGen;
 import com.kidsdynamic.data.net.firmware.FirmwareApi;
 import com.kidsdynamic.data.net.firmware.model.CurrentFirmwareVersion;
+import com.kidsdynamic.data.net.firmware.model.FirmwareVersionEntity;
 import com.kidsdynamic.data.net.host.model.RequestAddSubHostEntity;
 import com.kidsdynamic.data.net.host.model.SubHostRequests;
 import com.kidsdynamic.data.net.kids.model.KidsWithParent;
@@ -27,9 +30,15 @@ import com.kidsdynamic.swing.model.KidsEntityBean;
 import com.kidsdynamic.swing.model.WatchContact;
 import com.kidsdynamic.swing.presenter.MainFrameActivity;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -37,10 +46,13 @@ import retrofit2.Response;
 import static com.kidsdynamic.swing.domain.BeanConvertor.getUTCTimeStamp;
 
 /**
+ * DeviceManager
+ * <p>
  * Created by Administrator on 2017/10/27.
  */
 
 public class DeviceManager {
+
     public final static String BUNDLE_KEY_AVATAR = "AVATAR";
     public final static String BUNDLE_KEY_AVATAR_FILE = "AVATAR_FILE";
     public final static String BUNDLE_KEY_KID_NAME = "KID_NAME";
@@ -56,19 +68,22 @@ public class DeviceManager {
     public final static int kidsType_my_kids_shared = 1;
     public final static int kidsType_other_kids = 2;
 
+    private static boolean firmwareNeedUpdate = false;
+    private static String firmwareMacId = null;
+    private static String firmwareAFilePath, firmwareBFilePath;
 
-    public static DB_Kids getFocusWatchInfo(Context context){
+    public static DB_Kids getFocusWatchInfo(Context context) {
 
         long focusKidsId = getFocusKidsId();
 
         DbUtil dbUtil = DbUtil.getInstance(context.getApplicationContext());
         KidsDataStore kidsDataStore = new KidsDataStore(dbUtil);
-        if(focusKidsId > 0){
+        if (focusKidsId > 0) {
             //如果focusId 有缓存，但是数据库无数据，则删除缓存文件中保持；这种情况有可能是因为
             //focusId为共享设备，但其他用户删除了共享
             DB_Kids kidsInfo = kidsDataStore.getKidsInfo(focusKidsId);
 
-            if(kidsInfo == null){
+            if (kidsInfo == null) {
                 //删除focus kids id
                 DeviceManager.updateFocusKids(-1);
 
@@ -76,7 +91,7 @@ public class DeviceManager {
             }
 
             return kidsInfo;
-        }else {
+        } else {
             DB_Kids kidsInfoByParentId = getKidsIfNoFocusCache(context, kidsDataStore);
             if (kidsInfoByParentId != null) return kidsInfoByParentId;
         }
@@ -84,7 +99,7 @@ public class DeviceManager {
         return null;
     }
 
-    private static void updateKidsIfNoFocusCache(){
+    private static void updateKidsIfNoFocusCache() {
         DbUtil dbUtil = DbUtil.getInstance(SwingApplication.getAppContext());
         KidsDataStore kidsDataStore = new KidsDataStore(dbUtil);
         getKidsIfNoFocusCache(SwingApplication.getAppContext(), kidsDataStore);
@@ -94,7 +109,7 @@ public class DeviceManager {
     private static DB_Kids getKidsIfNoFocusCache(Context context, KidsDataStore kidsDataStore) {
         long userId = LoginManager.getCurrentLoginUserId(context);
         List<DB_Kids> kidsInfoByParentId = kidsDataStore.getKidsInfoByParentId(userId);
-        if(!ObjectUtils.isListEmpty(kidsInfoByParentId)){
+        if (!ObjectUtils.isListEmpty(kidsInfoByParentId)) {
 
             //如果当前没有缓存focuskids，那边把查询到第一个设置为当前focus
             updateFocusKids(kidsInfoByParentId.get(0).getKidsId());
@@ -104,7 +119,7 @@ public class DeviceManager {
 
         //如果当前用户没有自己的设备，则查询下共享设备
         List<DB_Kids> allKidsByShared_dbKids = getAllKidsByShared_DBKids(context);
-        if(!ObjectUtils.isListEmpty(allKidsByShared_dbKids)){
+        if (!ObjectUtils.isListEmpty(allKidsByShared_dbKids)) {
 
             //如果当前没有缓存focuskids，那边把查询到第一个设置为当前focus
             updateFocusKids(allKidsByShared_dbKids.get(0).getKidsId());
@@ -115,7 +130,7 @@ public class DeviceManager {
         return null;
     }
 
-    public static KidsEntityBean getFocusKidsInfo(Context context){
+    public static KidsEntityBean getFocusKidsInfo(Context context) {
         DB_Kids focusWatchInfo = getFocusWatchInfo(context);
 
         return null != focusWatchInfo ? BeanConvertor.convert(focusWatchInfo) : null;
@@ -132,7 +147,7 @@ public class DeviceManager {
     }
 
     public static String getMacAddress(String macId) {
-        if(TextUtils.isEmpty(macId)){
+        if (TextUtils.isEmpty(macId)) {
             return "00:00:00:00:00:00";
         }
 
@@ -146,8 +161,8 @@ public class DeviceManager {
         );
     }
 
-    public static boolean saveBindWatchBattery(String watchMacAddress, int battery){
-        if(TextUtils.isEmpty(watchMacAddress) || battery <= 0){
+    public static boolean saveBindWatchBattery(String watchMacAddress, int battery) {
+        if (TextUtils.isEmpty(watchMacAddress) || battery <= 0) {
             return false;
         }
 
@@ -157,8 +172,8 @@ public class DeviceManager {
         return preferencesUtil.setPreferenceIntValue(macID, battery);
     }
 
-    public static int getCacheWatchBattery(String watchMacId){
-        if(TextUtils.isEmpty(watchMacId)){
+    public static int getCacheWatchBattery(String watchMacId) {
+        if (TextUtils.isEmpty(watchMacId)) {
             return -1;
         }
         PreferencesUtil preferencesUtil = PreferencesUtil.getInstance(SwingApplication.getAppContext());
@@ -166,17 +181,17 @@ public class DeviceManager {
 
     }
 
-    public static boolean updateFocusKids(long kids){
+    public static boolean updateFocusKids(long kids) {
         PreferencesUtil preferencesUtil = PreferencesUtil.getInstance(SwingApplication.getAppContext());
         return preferencesUtil.setPreferenceLongValue(key_focus_kids, kids);
     }
 
-    public static long getFocusKidsId(){
+    public static long getFocusKidsId() {
         PreferencesUtil preferencesUtil = PreferencesUtil.getInstance(SwingApplication.getAppContext());
         return preferencesUtil.gPrefLongValue(key_focus_kids);
     }
 
-    public static void checkAndUpdateFocus(long kidsId4Del){
+    public static void checkAndUpdateFocus(long kidsId4Del) {
 
         long focusKidsId = getFocusKidsId();
         if (focusKidsId > 0 && kidsId4Del > 0 &&
@@ -190,14 +205,14 @@ public class DeviceManager {
 
                 //通知focusKids更新
                 sendBroadcastUpdateFocusKids();
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
     }
 
     //在数据库中新增一个kids
-    public boolean saveKidsData(@NonNull Context context, KidsWithParent kidsWithParent){
+    public boolean saveKidsData(@NonNull Context context, KidsWithParent kidsWithParent) {
         //首先清除；然后保存
         DbUtil dbUtil = DbUtil.getInstance(context.getApplicationContext());
 
@@ -212,24 +227,24 @@ public class DeviceManager {
     }
 
     //在本地数据库中，保存
-    public static boolean saveKidsData4Shared(List<RequestAddSubHostEntity> requestTo){
+    public static boolean saveKidsData4Shared(List<RequestAddSubHostEntity> requestTo) {
 
         //获取到所有状态为 accepted的数据
-        if(ObjectUtils.isListEmpty(requestTo)){
+        if (ObjectUtils.isListEmpty(requestTo)) {
             return true;
         }
 
         List<DB_Kids> dbKidsList_shared = new ArrayList<>();
 
         for (RequestAddSubHostEntity requestToEntity : requestTo) {
-            if(requestToEntity.getStatus().equals(WatchContact.User.STATUS_ACCEPTED)){
+            if (requestToEntity.getStatus().equals(WatchContact.User.STATUS_ACCEPTED)) {
                 List<KidInfo> kids = requestToEntity.getKids();
 
                 List<DB_Kids> dbKidsForShared = getDBKidsForShared(requestToEntity.getId(),
                         requestToEntity.getRequestToUser().getId(),
                         kids);
 
-                if(!ObjectUtils.isListEmpty(dbKidsForShared)){
+                if (!ObjectUtils.isListEmpty(dbKidsForShared)) {
                     dbKidsList_shared.addAll(dbKidsForShared);
                 }
             }
@@ -237,7 +252,7 @@ public class DeviceManager {
         }
 
         //如果有别人分享给自己的watch，则先清除本地的分享给自己的watch，然后保持此次的数据
-        if(!ObjectUtils.isListEmpty(dbKidsList_shared)){
+        if (!ObjectUtils.isListEmpty(dbKidsList_shared)) {
             //先清除本地缓存的
             DbUtil dbUtil = DbUtil.getInstance(SwingApplication.getAppContext());
             KidsDataStore kidsDataStore = new KidsDataStore(dbUtil);
@@ -250,14 +265,14 @@ public class DeviceManager {
 
     }
 
-    public static void delKidsInDB(long kidsId){
+    public static void delKidsInDB(long kidsId) {
         DbUtil dbUtil = DbUtil.getInstance(SwingApplication.getAppContext());
 
         KidsDataStore kidsDataStore = new KidsDataStore(dbUtil);
         kidsDataStore.delKidsInfo(kidsId);
     }
 
-    private static List<DB_Kids> getDBKidsForShared(long suhHostId, long parentId, List<KidInfo> kidInfos){
+    private static List<DB_Kids> getDBKidsForShared(long suhHostId, long parentId, List<KidInfo> kidInfos) {
         List<DB_Kids> db_kidsList = new ArrayList<>(kidInfos.size());
 
         for (KidInfo kidInfo : kidInfos) {
@@ -274,7 +289,7 @@ public class DeviceManager {
             db_kids.setFirmwareVersion("");
 
             db_kids.setBattery(-1);
-            db_kids.setSubHostId((long)suhHostId);
+            db_kids.setSubHostId((long) suhHostId);
             db_kids.setShareType(kidsType_other_kids);//别人分享给自己的watch
 
             db_kidsList.add(db_kids);
@@ -284,12 +299,12 @@ public class DeviceManager {
 
     }
 
-    public static boolean isContain(List<KidsEntityBean> kidsEntityBeans, KidsWithParent kidsWithParent){
+    public static boolean isContain(List<KidsEntityBean> kidsEntityBeans, KidsWithParent kidsWithParent) {
         boolean isContain = false;
 
-        if(!ObjectUtils.isListEmpty(kidsEntityBeans) && kidsWithParent != null){
+        if (!ObjectUtils.isListEmpty(kidsEntityBeans) && kidsWithParent != null) {
             for (KidsEntityBean kidsEntityBean : kidsEntityBeans) {
-                if(kidsEntityBean.getKidsId() == kidsWithParent.getId()){
+                if (kidsEntityBean.getKidsId() == kidsWithParent.getId()) {
                     isContain = true;
                     break;
                 }
@@ -299,31 +314,31 @@ public class DeviceManager {
         return isContain;
     }
 
-    public static List<KidsEntityBean>  getAllKidsAndShared(Context context){
+    public static List<KidsEntityBean> getAllKidsAndShared(Context context) {
 
         List<KidsEntityBean> allKidsByUserId =
-                getAllKidsByUserId(context,  LoginManager.getCurrentLoginUserId(context));
+                getAllKidsByUserId(context, LoginManager.getCurrentLoginUserId(context));
 
         //其他用户共享的kids
         List<KidsEntityBean> allKidsByShared = getAllKidsByShared(context);
-        if(!ObjectUtils.isListEmpty(allKidsByShared)){
+        if (!ObjectUtils.isListEmpty(allKidsByShared)) {
             allKidsByUserId.addAll(allKidsByShared);
         }
 
         return allKidsByUserId;
     }
 
-    public static List<KidsEntityBean>  getAllKidsByUserId(Context context, long parentId){
+    public static List<KidsEntityBean> getAllKidsByUserId(Context context, long parentId) {
         DbUtil dbUtil = DbUtil.getInstance(context.getApplicationContext());
 
         KidsDataStore kidsDataStore = new KidsDataStore(dbUtil);
         List<DB_Kids> dbKids = kidsDataStore.getKidsInfoByParentId(parentId);
 
         List<KidsEntityBean> kidsEntityBeanList = new ArrayList<>();
-        if(ObjectUtils.isListEmpty(dbKids)){
+        if (ObjectUtils.isListEmpty(dbKids)) {
             return kidsEntityBeanList;
-        }else {
-            for (DB_Kids dbKidBean :dbKids) {
+        } else {
+            for (DB_Kids dbKidBean : dbKids) {
                 kidsEntityBeanList.add(BeanConvertor.convert(dbKidBean));
             }
         }
@@ -332,13 +347,13 @@ public class DeviceManager {
     }
 
     //获取他人分享给自己的watch list
-    public static List<DB_Kids>  getAllKidsByShared_DBKids(Context context){
+    public static List<DB_Kids> getAllKidsByShared_DBKids(Context context) {
         DbUtil dbUtil = DbUtil.getInstance(context.getApplicationContext());
 
         KidsDataStore kidsDataStore = new KidsDataStore(dbUtil);
         List<DB_Kids> dbKids = kidsDataStore.getKidsInfoByShared(kidsType_other_kids);
 
-        if(!ObjectUtils.isListEmpty(dbKids)){
+        if (!ObjectUtils.isListEmpty(dbKids)) {
             return dbKids;
         }
 
@@ -347,17 +362,17 @@ public class DeviceManager {
     }
 
     //获取他人分享给自己的watch list
-    public static List<KidsEntityBean>  getAllKidsByShared(Context context){
+    public static List<KidsEntityBean> getAllKidsByShared(Context context) {
         DbUtil dbUtil = DbUtil.getInstance(context.getApplicationContext());
 
         KidsDataStore kidsDataStore = new KidsDataStore(dbUtil);
         List<DB_Kids> dbKids = kidsDataStore.getKidsInfoByShared(kidsType_other_kids);
 
         List<KidsEntityBean> kidsEntityBeanList = new ArrayList<>();
-        if(ObjectUtils.isListEmpty(dbKids)){
+        if (ObjectUtils.isListEmpty(dbKids)) {
             return kidsEntityBeanList;
-        }else {
-            for (DB_Kids dbKidBean :dbKids) {
+        } else {
+            for (DB_Kids dbKidBean : dbKids) {
                 kidsEntityBeanList.add(BeanConvertor.convert(dbKidBean));
             }
         }
@@ -366,45 +381,45 @@ public class DeviceManager {
     }
 
 
-    public static KidsEntityBean  getKidsInfo(Context context, long kidId){
+    public static KidsEntityBean getKidsInfo(Context context, long kidId) {
         DbUtil dbUtil = DbUtil.getInstance(context.getApplicationContext());
 
         KidsDataStore kidsDataStore = new KidsDataStore(dbUtil);
         DB_Kids dbKids = kidsDataStore.getKidsInfo(kidId);
 
-        if(dbKids != null){
+        if (dbKids != null) {
             return BeanConvertor.convert(dbKids);
         }
 
         return null;
     }
 
-    public static KidsEntityBean getKidsByIdInCache(List<KidsEntityBean> kidsEntityBeans, long kidsId){
-        if(!ObjectUtils.isListEmpty(kidsEntityBeans)){
+    public static KidsEntityBean getKidsByIdInCache(List<KidsEntityBean> kidsEntityBeans, long kidsId) {
+        if (!ObjectUtils.isListEmpty(kidsEntityBeans)) {
             for (KidsEntityBean kidsEntityBean :
                     kidsEntityBeans) {
-             if(kidsId == kidsEntityBean.getKidsId()){
-                 return kidsEntityBean;
-             }
+                if (kidsId == kidsEntityBean.getKidsId()) {
+                    return kidsEntityBean;
+                }
             }
         }
 
         return null;
     }
 
-    public static List<WatchContact.Kid> getKidsByIdInCache(List<KidsEntityBean> kidsEntityBeans, List<Long> kidsIdList){
+    public static List<WatchContact.Kid> getKidsByIdInCache(List<KidsEntityBean> kidsEntityBeans, List<Long> kidsIdList) {
         List<WatchContact.Kid> kidsForUI = new ArrayList<>(5);
-        if(!ObjectUtils.isListEmpty(kidsEntityBeans)){
+        if (!ObjectUtils.isListEmpty(kidsEntityBeans)) {
             for (KidsEntityBean kidsEntityBean :
                     kidsEntityBeans) {
-             if(kidsIdList.contains(kidsEntityBean.getKidsId())){
+                if (kidsIdList.contains(kidsEntityBean.getKidsId())) {
 
-                 WatchContact.Kid kidsForUIRaw = BeanConvertor.getKidsForUI(kidsEntityBean);
-                 kidsForUIRaw.mBound = true;
-                 kidsForUIRaw.mLabel = kidsForUIRaw.mName;
+                    WatchContact.Kid kidsForUIRaw = BeanConvertor.getKidsForUI(kidsEntityBean);
+                    kidsForUIRaw.mBound = true;
+                    kidsForUIRaw.mLabel = kidsForUIRaw.mName;
 
-                 kidsForUI.add(kidsForUIRaw);
-             }
+                    kidsForUI.add(kidsForUIRaw);
+                }
             }
         }
 
@@ -413,11 +428,11 @@ public class DeviceManager {
 
 
     //界面显示需要的kids信息list
-    public static List<WatchContact.Kid> getKidsForUI(Context context, long parentId){
+    public static List<WatchContact.Kid> getKidsForUI(Context context, long parentId) {
         List<KidsEntityBean> kidsByUserId = getAllKidsByUserId(context, parentId);
 
         List<WatchContact.Kid> kidsForUI = new ArrayList<>();
-        if(!ObjectUtils.isListEmpty(kidsByUserId)){
+        if (!ObjectUtils.isListEmpty(kidsByUserId)) {
             for (KidsEntityBean kidsEntityBean :
                     kidsByUserId) {
                 WatchContact.Kid kidsForUIRaw = BeanConvertor.getKidsForUI(kidsEntityBean);
@@ -431,12 +446,13 @@ public class DeviceManager {
         return kidsForUI;
 
     }
+
     //界面显示需要的kids信息list
-    public static List<WatchContact.Kid> getKidsForUI_sharedKids(Context context){
+    public static List<WatchContact.Kid> getKidsForUI_sharedKids(Context context) {
         List<KidsEntityBean> kidsByUserId = getAllKidsByShared(context);
 
         List<WatchContact.Kid> kidsForUI = new ArrayList<>();
-        if(!ObjectUtils.isListEmpty(kidsByUserId)){
+        if (!ObjectUtils.isListEmpty(kidsByUserId)) {
             for (KidsEntityBean kidsEntityBean :
                     kidsByUserId) {
                 WatchContact.Kid kidsForUIRaw = BeanConvertor.getKidsForUI(kidsEntityBean);
@@ -452,7 +468,7 @@ public class DeviceManager {
     }
 
     //因为kids的info会在两张表中保存（DB_Kids，DB_eventKids）,需要都更新
-    public static void updateKidsProfile2DB(@NonNull KidsWithParent kidsWithParent){
+    public static void updateKidsProfile2DB(@NonNull KidsWithParent kidsWithParent) {
         DbUtil dbUtil = DbUtil.getInstance(SwingApplication.getAppContext());
         KidsDataStore kidsDataStore = new KidsDataStore(dbUtil);
 
@@ -460,9 +476,9 @@ public class DeviceManager {
 
         long updateTime = System.currentTimeMillis();
 
-        if(dbKids != null){
+        if (dbKids != null) {
             kidsDataStore.update(
-                    BeanConvertor.updateDBKids(dbKids, kidsWithParent,updateTime));
+                    BeanConvertor.updateDBKids(dbKids, kidsWithParent, updateTime));
         }
 
 
@@ -470,34 +486,34 @@ public class DeviceManager {
         EventKidsStore eventKidsStore = new EventKidsStore(dbUtil);
         List<DB_EventKids> dbEventKids = eventKidsStore.getDBEventKids(kidsWithParent.getId());
 
-        if(!ObjectUtils.isListEmpty(dbEventKids)){
+        if (!ObjectUtils.isListEmpty(dbEventKids)) {
             eventKidsStore.updateList(
-                    BeanConvertor.updateEventKidsList(dbEventKids, kidsWithParent,updateTime));
+                    BeanConvertor.updateEventKidsList(dbEventKids, kidsWithParent, updateTime));
         }
 
     }
 
-    public static void updateKidsFirmwareVersion(String macId, String fireWareVersion){
+    public static void updateKidsFirmwareVersion(String macId, String fireWareVersion) {
 
-        if(TextUtils.isEmpty(macId)
-                || TextUtils.isEmpty(fireWareVersion)){
+        if (TextUtils.isEmpty(macId)
+                || TextUtils.isEmpty(fireWareVersion)) {
             return;
         }
 
         DbUtil dbUtil = DbUtil.getInstance(SwingApplication.getAppContext());
         KidsDataStore kidsDataStore = new KidsDataStore(dbUtil);
-        kidsDataStore.updateFirmwareVersion(macId,fireWareVersion);
+        kidsDataStore.updateFirmwareVersion(macId, fireWareVersion);
 
         //更新eventKids表
         EventKidsStore eventKidsStore = new EventKidsStore(dbUtil);
-        eventKidsStore.updateFirmwareVersion(macId,fireWareVersion);
+        eventKidsStore.updateFirmwareVersion(macId, fireWareVersion);
     }
 
-    public static void updateEventKidsFirmwareVersion(String macId, String fireWareVersion){
+    public static void updateEventKidsFirmwareVersion(String macId, String fireWareVersion) {
         DbUtil dbUtil = DbUtil.getInstance(SwingApplication.getAppContext());
 
         EventKidsStore eventKidsStore = new EventKidsStore(dbUtil);
-        eventKidsStore.updateFirmwareVersion(macId,fireWareVersion);
+        eventKidsStore.updateFirmwareVersion(macId, fireWareVersion);
     }
 
     public void uploadFirmwareVersion(final String macId, final String version) {
@@ -510,38 +526,165 @@ public class DeviceManager {
 
         firmwareApi.sendFirmwareVersion(currentFirmwareVersion).enqueue(new Callback<Object>() {
             @Override
-            public void onResponse(Call<Object> call, Response<Object> response) {
-                Log.w("uploadFirmwareVersion","sendFirmwareVersion ok");
+            public void onResponse(@NonNull Call<Object> call, @NonNull Response<Object> response) {
+                Log.w("uploadFirmwareVersion", "sendFirmwareVersion onResponse");
+                int code = response.code();
+                if (200 == code) {
+                    checkFirmwareUpdate(macId, false);
+                }
             }
 
             @Override
-            public void onFailure(Call<Object> call, Throwable t) {
-                Log.w("uploadFirmwareVersion","sendFirmwareVersion fail");
+            public void onFailure(@NonNull Call<Object> call, @NonNull Throwable t) {
+                Log.w("uploadFirmwareVersion", "sendFirmwareVersion fail");
             }
         });
     }
 
-    public static void clearSubHostRequestsInCache(){
-        PreferencesUtil preferencesUtil = PreferencesUtil.getInstance(SwingApplication.getAppContext());
-        preferencesUtil.setPreferenceStringValue(key_SubHostRequests,"");
+    public void checkFirmwareUpdate(final String macId, final boolean needDownloadFirmwareFile) {
+        FirmwareApi firmwareApi = ApiGen.getInstance(SwingApplication.getAppContext()).
+                generateApi(FirmwareApi.class, true);
+
+        firmwareApi.currentVersion(macId).enqueue(new Callback<FirmwareVersionEntity>() {
+            @Override
+            public void onResponse(@NonNull Call<FirmwareVersionEntity> call,
+                                   @NonNull Response<FirmwareVersionEntity> response) {
+                Log.w("checkFirmwareUpdate", "currentVersion onResponse");
+                int code = response.code();
+                setFirmwareNeedUpdate(200 == code);
+                sendBroadcastFirmwareUpdate(200 == code);
+                if (!needDownloadFirmwareFile) {
+                    return;
+                }
+                FirmwareVersionEntity entity = response.body();
+                if (null == entity) {
+                    return;
+                }
+                String version = entity.getVersion();
+                String fileAUrl = entity.getFileAUrl();
+                String fileAName = String.format("%sA.hex", version);
+                String fileADownloadUrl = BuildConfig.FIRMWARE_FILE_URL + fileAUrl;
+                final String fileBUrl = entity.getFileBUrl();
+                final String fileBName = String.format("%sB.hex", version);
+                final String fileBDownloadUrl = BuildConfig.FIRMWARE_FILE_URL + fileBUrl;
+                downloadFirmwareFile(fileADownloadUrl, fileAName, new ICompleteListener() {
+                    @Override
+                    public void onSuccess(String filePath) {
+                        setFirmwareAFilePath(filePath);
+                        downloadFirmwareFile(fileBDownloadUrl, fileBName, new ICompleteListener() {
+                            @Override
+                            public void onSuccess(String filePath) {
+                                setFirmwareBFilePath(filePath);
+                                sendBroadcastDashboardFirmwareUpgrade();
+                            }
+                        });
+                    }
+                });
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<FirmwareVersionEntity> call, @NonNull Throwable t) {
+                Log.w("checkFirmwareUpdate", "currentVersion fail");
+            }
+        });
     }
 
-    public static void updateSubHostRequestsInCache(SubHostRequests subHostRequests){
-        if(subHostRequests != null){
+    public static void downloadFirmwareFile(final String url, final String fileName, final ICompleteListener listener) {
+        new Thread() {
+            @Override
+            public void run() {
+                super.run();
+                FirmwareApi firmwareApi = ApiGen.getInstance(SwingApplication.getAppContext()).
+                        generateApi(FirmwareApi.class, true);
+
+                try {
+                    Response<ResponseBody> response = firmwareApi.downloadFileWithUrl(url).execute();
+                    if (response.isSuccessful()) {
+                        String filePath = writeResponseBodyToDisk(response.body(), fileName);
+                        if (null != listener && !TextUtils.isEmpty(filePath)) {
+                            listener.onSuccess(filePath);
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }.start();
+    }
+
+    public interface ICompleteListener {
+        void onSuccess(String filePath);
+    }
+
+    /**
+     * 写入
+     *
+     * @param body ResponseBody
+     * @return String filePath
+     */
+    private static String writeResponseBodyToDisk(ResponseBody body, String fileName) {
+        try {
+            File file = FileUtil.getAppDataFile(fileName);
+            if (file.exists()) {
+                file.deleteOnExit();
+            }
+            File dir = file.getParentFile();
+            if (!dir.exists() && !dir.mkdirs()) {
+                return null;
+            }
+            if (!file.createNewFile()) {
+                return null;
+            }
+            InputStream inputStream = null;
+            OutputStream outputStream = null;
+            try {
+                byte[] fileReader = new byte[1024];
+
+                inputStream = body.byteStream();
+                outputStream = new FileOutputStream(file);
+
+                while (true) {
+                    int read = inputStream.read(fileReader);
+                    if (read == -1) {
+                        break;
+                    }
+                    outputStream.write(fileReader, 0, read);
+                }
+                outputStream.flush();
+                return file.getAbsolutePath();
+            } catch (IOException e) {
+                return null;
+            } finally {
+                if (inputStream != null) {
+                    inputStream.close();
+                }
+            }
+        } catch (IOException e) {
+            return null;
+        }
+    }
+
+    public static void clearSubHostRequestsInCache() {
+        PreferencesUtil preferencesUtil = PreferencesUtil.getInstance(SwingApplication.getAppContext());
+        preferencesUtil.setPreferenceStringValue(key_SubHostRequests, "");
+    }
+
+    public static void updateSubHostRequestsInCache(SubHostRequests subHostRequests) {
+        if (subHostRequests != null) {
             Gson gson = new Gson();
             String jsonStr = gson.toJson(subHostRequests);
 
             PreferencesUtil preferencesUtil = PreferencesUtil.getInstance(SwingApplication.getAppContext());
-            preferencesUtil.setPreferenceStringValue(key_SubHostRequests,jsonStr);
+            preferencesUtil.setPreferenceStringValue(key_SubHostRequests, jsonStr);
         }
 
     }
 
-    public static SubHostRequests getSubHostRequestsInCache(){
+    public static SubHostRequests getSubHostRequestsInCache() {
         PreferencesUtil preferencesUtil = PreferencesUtil.getInstance(SwingApplication.getAppContext());
 
         String subHostListStr = preferencesUtil.gPrefStringValue(key_SubHostRequests);
-        if(TextUtils.isEmpty(subHostListStr)){
+        if (TextUtils.isEmpty(subHostListStr)) {
             return null;
         }
 
@@ -549,15 +692,15 @@ public class DeviceManager {
         return gson.fromJson(subHostListStr, SubHostRequests.class);
     }
 
-    public static RequestAddSubHostEntity getSharedKidsSubHostEntity(SubHostRequests mSubHostRequests, long kidsId){
-        if(mSubHostRequests != null){
+    public static RequestAddSubHostEntity getSharedKidsSubHostEntity(SubHostRequests mSubHostRequests, long kidsId) {
+        if (mSubHostRequests != null) {
             List<RequestAddSubHostEntity> requestTo = mSubHostRequests.getRequestTo();
 
-            if(!ObjectUtils.isListEmpty(requestTo)){
+            if (!ObjectUtils.isListEmpty(requestTo)) {
                 for (RequestAddSubHostEntity requestToEntity : requestTo) {
-                    if(requestToEntity.getStatus().equals(WatchContact.User.STATUS_ACCEPTED)
-                            && !ObjectUtils.isListEmpty(requestToEntity.getKids())){
-                        if(isContainKidsId(requestToEntity.getKids(),kidsId)){
+                    if (requestToEntity.getStatus().equals(WatchContact.User.STATUS_ACCEPTED)
+                            && !ObjectUtils.isListEmpty(requestToEntity.getKids())) {
+                        if (isContainKidsId(requestToEntity.getKids(), kidsId)) {
                             return requestToEntity;
                         }
                     }
@@ -568,10 +711,10 @@ public class DeviceManager {
         return null;
     }
 
-    private static boolean isContainKidsId(List<KidInfo> kidInfoList, long kidsId){
+    private static boolean isContainKidsId(List<KidInfo> kidInfoList, long kidsId) {
         for (KidInfo kidInfo :
                 kidInfoList) {
-            if(kidInfo.getId() == kidsId){
+            if (kidInfo.getId() == kidsId) {
                 return true;
             }
         }
@@ -579,15 +722,63 @@ public class DeviceManager {
         return false;
     }
 
-    public  static void sendBroadcastUpdateAvatar() {
+    public static void sendBroadcastUpdateAvatar() {
         Intent intent = new Intent(MainFrameActivity.UI_Update_Action);
-        intent.putExtra(MainFrameActivity.Tag_Key,MainFrameActivity.Tag_Avatar_update);
+        intent.putExtra(MainFrameActivity.Tag_Key, MainFrameActivity.Tag_Avatar_update);
         SwingApplication.localBroadcastManager.sendBroadcast(intent);
     }
 
-    public  static void sendBroadcastUpdateFocusKids() {
+    public static void sendBroadcastUpdateFocusKids() {
         Intent intent = new Intent(MainFrameActivity.UI_Update_Action);
-        intent.putExtra(MainFrameActivity.Tag_Key,MainFrameActivity.Tag_focus_kids_update);
+        intent.putExtra(MainFrameActivity.Tag_Key, MainFrameActivity.Tag_focus_kids_update);
         SwingApplication.localBroadcastManager.sendBroadcast(intent);
     }
+
+    public static void sendBroadcastFirmwareUpdate(boolean hasUpdate) {
+        Intent intent = new Intent(MainFrameActivity.UI_Update_Action);
+        intent.putExtra(MainFrameActivity.Tag_Key, MainFrameActivity.TAG_FIRMwARE_UPDATE);
+        if (hasUpdate) {
+            intent.putExtra(MainFrameActivity.TAG_UPDATE, true);
+        }
+        SwingApplication.localBroadcastManager.sendBroadcast(intent);
+    }
+
+    public static void sendBroadcastDashboardFirmwareUpgrade() {
+        Intent intent = new Intent(MainFrameActivity.UI_Update_Action);
+        intent.putExtra(MainFrameActivity.Tag_Key, MainFrameActivity.TAG_DASHBOARD_FIRMWARE_UPGRADE);
+        SwingApplication.localBroadcastManager.sendBroadcast(intent);
+    }
+
+    public static boolean isFirmwareNeedUpdate() {
+        return firmwareNeedUpdate;
+    }
+
+    public static void setFirmwareNeedUpdate(boolean firmwareNeedUpdate) {
+        DeviceManager.firmwareNeedUpdate = firmwareNeedUpdate;
+    }
+
+    public static String getFirmwareMacId() {
+        return firmwareMacId;
+    }
+
+    public static void setFirmwareMacId(String firmwareMacId) {
+        DeviceManager.firmwareMacId = firmwareMacId;
+    }
+
+    public static String getFirmwareAFilePath() {
+        return firmwareAFilePath;
+    }
+
+    public static void setFirmwareAFilePath(String firmwareAFilePath) {
+        DeviceManager.firmwareAFilePath = firmwareAFilePath;
+    }
+
+    public static String getFirmwareBFilePath() {
+        return firmwareBFilePath;
+    }
+
+    public static void setFirmwareBFilePath(String firmwareBFilePath) {
+        DeviceManager.firmwareBFilePath = firmwareBFilePath;
+    }
+
 }

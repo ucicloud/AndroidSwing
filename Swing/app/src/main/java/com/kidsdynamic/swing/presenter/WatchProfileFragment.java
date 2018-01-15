@@ -181,7 +181,7 @@ public class WatchProfileFragment extends BaseFragment {
      * @param watchMacId String
      * @param kidsName   String
      */
-    public void addKids(String watchMacId, final String firmwareVersion, final File profile, final String kidsName) {
+    public void addKids(final String watchMacId, final String firmwareVersion, final File profile, final String kidsName) {
         showLoadingDialog(R.string.watch_profile_wait);
         KidsApi kidsApi = ApiGen
                 .getInstance(getContext().getApplicationContext())
@@ -211,10 +211,12 @@ public class WatchProfileFragment extends BaseFragment {
                     //add 2017年11月7日13:45:21 only_app save kids info to db
                     new DeviceManager().saveKidsData(getContext(), kidsWithParent);
 
+                    DeviceManager.setFirmwareMacId(watchMacId);
+
                     //更新firmwareVersion
-                    DeviceManager.updateEventKidsFirmwareVersion(kidsWithParent.getMacId(),firmwareVersion);
+                    DeviceManager.updateEventKidsFirmwareVersion(kidsWithParent.getMacId(), firmwareVersion);
                     //上报服务器
-                    new DeviceManager().uploadFirmwareVersion(kidsWithParent.getMacId(),firmwareVersion);
+                    new DeviceManager().uploadFirmwareVersion(kidsWithParent.getMacId(), firmwareVersion);
 
                     if (profile != null) {
                         uploadAvatar(profile, String.valueOf(kidId));
@@ -288,7 +290,7 @@ public class WatchProfileFragment extends BaseFragment {
                             updateCacheKidsAvatar(response.body().getKid().getId());
 
                             //发送头像更新消息
-                            sendKidsAvatarUpdate(profile,Long.valueOf(kidsId));
+                            sendKidsAvatarUpdate(profile, Long.valueOf(kidsId));
 
                             getFragmentManager().popBackStack();
 
@@ -324,9 +326,9 @@ public class WatchProfileFragment extends BaseFragment {
         gotoAddSuccessFragment(bundle);
     }
 
-    private void updateCacheKidsAvatar(long kidId){
+    private void updateCacheKidsAvatar(long kidId) {
         KidsEntityBean kidsInfo = DeviceManager.getKidsInfo(getContext(), kidId);
-        if(kidsInfo != null){
+        if (kidsInfo != null) {
             GlideHelper.getBitMapPreload(getContext(),
                     UserManager.getProfileRealUri(kidsInfo.getProfile()),
                     String.valueOf(kidsInfo.getLastUpdate()));
@@ -338,17 +340,17 @@ public class WatchProfileFragment extends BaseFragment {
 
     private void sendKidsAvatarUpdate(File avatarFile, long kidsId) {
 
-        if(avatarFile == null){
+        if (avatarFile == null) {
             return;
         }
 
         Intent intent = new Intent(ConfigManager.Avatar_Update_Action);
-        intent.putExtra(ConfigManager.Tag_Key,ConfigManager.Tag_Update_Type_Kids_Avatar);
-        intent.putExtra(ConfigManager.Tag_KidsId_Key,kidsId);
+        intent.putExtra(ConfigManager.Tag_Key, ConfigManager.Tag_Update_Type_Kids_Avatar);
+        intent.putExtra(ConfigManager.Tag_KidsId_Key, kidsId);
 
         /*Uri uriForFile = FileProvider.getUriForFile(getContext().getApplicationContext(),
                 getContext().getPackageName(), avatarFile);*/
-        intent.putExtra(ConfigManager.Tag_Avatar_File_Uri_Key,avatarFile.getAbsolutePath());
+        intent.putExtra(ConfigManager.Tag_Avatar_File_Uri_Key, avatarFile.getAbsolutePath());
 
         SwingApplication.localBroadcastManager.sendBroadcast(intent);
     }

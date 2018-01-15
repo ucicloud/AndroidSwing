@@ -485,5 +485,6 @@
     <string name="calendar_hide_this_reminder">Ocultar recordatorio</string>
     <string name="del_my_kids_notify">Una vez eliminados todos los datos se eliminan. ¿Estás seguro?</string>
     <string name="no_primary_edit">Solo la cuenta principal tiene permiso para editar</string>
+    <string name="swing_watch_update">Swing watch actualizar</string>
 
 </resources>

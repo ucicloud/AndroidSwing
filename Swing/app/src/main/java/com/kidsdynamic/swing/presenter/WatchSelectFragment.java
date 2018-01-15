@@ -420,6 +420,9 @@ public class WatchSelectFragment extends BaseFragment {
             public void onDeviceVersion(String version) {
                 LogUtil2.getUtils().d("onDeviceVersion version " + version);
                 nowFirmwareVersion = version;
+                DeviceManager.setFirmwareMacId(macId);
+                //上报服务器
+                new DeviceManager().uploadFirmwareVersion(macId, version);
             }
         });
 
@@ -463,6 +466,9 @@ public class WatchSelectFragment extends BaseFragment {
             @Override
             public void onDeviceVersion(String version) {
                 LogUtil2.getUtils().d("onDeviceVersion version " + version);
+                DeviceManager.setFirmwareMacId(macId);
+                //上报服务器
+                new DeviceManager().uploadFirmwareVersion(macId, version);
             }
         });
     }
