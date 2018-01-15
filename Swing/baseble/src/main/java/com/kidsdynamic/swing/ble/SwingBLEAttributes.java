@@ -49,6 +49,8 @@ public class SwingBLEAttributes {
     public static final int MSG_UPGRADE_DOWNING_IMAGE_NO_RESPONSE = 18;
     public static final int MSG_UPGRADE_DONE_IMAGE = 19;
 
+    public static final int MSG_COMMON_RECONNET = 20;
+
     public static final int BLE_INIT_ACTION = 1;
     public static final int BLE_SYNC_ACTION = 2;
     public static final int BLE_UPGRADE_ACTION = 3;
