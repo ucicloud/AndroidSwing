@@ -233,8 +233,8 @@ public class WatchSelectFragment extends BaseFragment {
                 generateApi(KidsApi.class, true);
 
         //业务上的macId不包含":"
-//        final String watchMacId = DeviceManager.getMacID(scanResult.getAddress());
-        final String watchMacId = "1215465122799";//测试用
+        final String watchMacId = DeviceManager.getMacID(scanResult.getAddress());
+//        final String watchMacId = "1215465122799";//测试用
         kidsApi.whoRegisteredMacID(watchMacId).enqueue(new BaseRetrofitCallback<WhoRegisterMacIDResp>() {
             @Override
             public void onResponse(Call<WhoRegisterMacIDResp> call, Response<WhoRegisterMacIDResp> response) {
