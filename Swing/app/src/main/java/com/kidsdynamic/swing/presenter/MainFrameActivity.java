@@ -658,8 +658,10 @@ public class MainFrameActivity extends BaseFragmentActivity {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
 
         //首先暂停，并隐藏当前fragment
-        getCurrentFragment().onPause();
-        fragmentTransaction.hide(getCurrentFragment());
+        Fragment currentFragment = getCurrentFragment();
+        currentFragment.onPause();
+        clearFragmentStack(currentFragment);
+        fragmentTransaction.hide(currentFragment);
 
         //如果将要显示的fragment已经add，则resume，show
         if (fragment.isAdded()) {
@@ -688,6 +690,20 @@ public class MainFrameActivity extends BaseFragmentActivity {
             }
 
 
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void clearFragmentStack(Fragment fragment) {
+        try {
+            if (null == fragment || !fragment.isAdded()) {
+                return;
+            }
+            FragmentManager fragmentManager = fragment.getChildFragmentManager();
+            if (fragmentManager.getBackStackEntryCount() > 0) {
+                fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
