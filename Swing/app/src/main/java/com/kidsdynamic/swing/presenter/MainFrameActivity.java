@@ -660,7 +660,9 @@ public class MainFrameActivity extends BaseFragmentActivity {
         //首先暂停，并隐藏当前fragment
         Fragment currentFragment = getCurrentFragment();
         currentFragment.onPause();
-        clearFragmentStack(currentFragment);
+        if (currentFragment instanceof DashboardMainFragment) {
+            clearFragmentStack(currentFragment);
+        }
         fragmentTransaction.hide(currentFragment);
 
         //如果将要显示的fragment已经add，则resume，show
