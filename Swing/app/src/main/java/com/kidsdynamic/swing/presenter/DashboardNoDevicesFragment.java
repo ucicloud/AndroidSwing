@@ -62,8 +62,9 @@ public class DashboardNoDevicesFragment extends DashboardBaseFragment {
     @OnClick(R.id.dashboard_add_device)
     public void gotoSearchFragment() {
         FragmentActivity activity = getActivity();
-        activity.getSupportFragmentManager().popBackStack();
-        setFragment(WatchSearchFragment.newInstance(),true);
+        if (activity instanceof MainFrameActivity) {
+            ((MainFrameActivity) activity).setFragment(WatchSearchFragment.newInstance(), true);
+        }
     }
 
     @OnClick(R.id.dashboard_no_devices_goto)

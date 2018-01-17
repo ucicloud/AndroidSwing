@@ -660,9 +660,6 @@ public class MainFrameActivity extends BaseFragmentActivity {
         //首先暂停，并隐藏当前fragment
         Fragment currentFragment = getCurrentFragment();
         currentFragment.onPause();
-        if (currentFragment instanceof DashboardContainerFragment) {
-            clearFragmentStack(currentFragment);
-        }
         fragmentTransaction.hide(currentFragment);
 
         //如果将要显示的fragment已经add，则resume，show
@@ -692,20 +689,6 @@ public class MainFrameActivity extends BaseFragmentActivity {
             }
 
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void clearFragmentStack(Fragment fragment) {
-        try {
-            if (null == fragment || !fragment.isAdded()) {
-                return;
-            }
-            FragmentManager fragmentManager = fragment.getChildFragmentManager();
-            if (fragmentManager.getBackStackEntryCount() > 0) {
-                fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-            }
         } catch (Exception e) {
             e.printStackTrace();
         }

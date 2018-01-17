@@ -31,6 +31,7 @@ android {
 
             buildConfigField "String", "API_BASE_URL", releaseApiBaseUrl
             buildConfigField "String", "PHOTO_BASE_URL", releasePhotoBaseUrl
+            buildConfigField "String", "FIRMWARE_FILE_URL", releaseFirmwareFileBaseUrl
 
             signingConfig signingConfigs.release
         }
@@ -38,6 +39,7 @@ android {
         debug {
             buildConfigField "String", "API_BASE_URL", devApiBaseUrl
             buildConfigField "String", "PHOTO_BASE_URL", devPhotoBaseUrl
+            buildConfigField "String", "FIRMWARE_FILE_URL", devFirmwareFileBaseUrl
 
             signingConfig signingConfigs.debug
         }

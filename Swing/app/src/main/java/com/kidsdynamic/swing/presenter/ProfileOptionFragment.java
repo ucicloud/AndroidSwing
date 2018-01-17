@@ -1,13 +1,18 @@
 package com.kidsdynamic.swing.presenter;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -31,7 +36,9 @@ import com.kidsdynamic.swing.net.BaseRetrofitCallback;
 import com.kidsdynamic.swing.utils.ViewUtils;
 import com.yy.base.utils.ToastCommon;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 
 import butterknife.BindView;
@@ -84,6 +91,9 @@ public class ProfileOptionFragment extends ProfileBaseFragment {
     TextView tv_user_guide;
     @BindView(R.id.tv_version)
     TextView tv_label_version;
+
+    private static final int REQUEST_PERMISSIONS_CODE = 1;
+    private boolean isReadStorageGranted, isWriteStorageGranted;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -205,11 +215,7 @@ public class ProfileOptionFragment extends ProfileBaseFragment {
 
     @OnClick(R.id.profile_option_watch_update)
     protected void watchUpdate() {
-        String firmwareMacId = DeviceManager.getFirmwareMacId();
-        if (TextUtils.isEmpty(firmwareMacId)) {
-            return;
-        }
-        new DeviceManager().checkFirmwareUpdate(firmwareMacId, true);
+        checkPermissions();
     }
 
     @OnClick(R.id.profile_option_contact)
@@ -415,6 +421,64 @@ public class ProfileOptionFragment extends ProfileBaseFragment {
         super.onDestroy();
 
         SwingApplication.localBroadcastManager.unregisterReceiver(UIChangeReceiver);
+    }
+
+    @Override
+    public final void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                                 @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case REQUEST_PERMISSIONS_CODE:
+                if (grantResults.length > 0) {
+                    for (int i = 0; i < grantResults.length; i++) {
+                        if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
+                            onPermissionGranted(permissions[i]);
+                        }
+                    }
+                }
+                break;
+        }
+    }
+
+    private void checkPermissions() {
+        Activity activity = getActivity();
+        String[] permissions = {Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        List<String> permissionDeniedList = new ArrayList<>();
+        for (String permission : permissions) {
+            int permissionCheck = ContextCompat.checkSelfPermission(activity, permission);
+            if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
+                onPermissionGranted(permission);
+            } else {
+                permissionDeniedList.add(permission);
+            }
+        }
+        if (!permissionDeniedList.isEmpty()) {
+            String[] deniedPermissions = permissionDeniedList.toArray(new String[permissionDeniedList.size()]);
+            ActivityCompat.requestPermissions(activity, deniedPermissions, REQUEST_PERMISSIONS_CODE);
+        }
+    }
+
+    private void onPermissionGranted(String permission) {
+        switch (permission) {
+            case Manifest.permission.READ_EXTERNAL_STORAGE:
+                isReadStorageGranted = true;
+                break;
+            case Manifest.permission.WRITE_EXTERNAL_STORAGE:
+                isWriteStorageGranted = true;
+                break;
+        }
+        if (isReadStorageGranted && isWriteStorageGranted) {
+            checkWatchUpdate();
+        }
+    }
+
+    private void checkWatchUpdate() {
+        String firmwareMacId = DeviceManager.getFirmwareMacId();
+        if (TextUtils.isEmpty(firmwareMacId)) {
+            return;
+        }
+        new DeviceManager().checkFirmwareUpdate(firmwareMacId, true);
     }
 
 }
