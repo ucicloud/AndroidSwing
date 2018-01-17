@@ -665,6 +665,13 @@ public class MainFrameActivity extends BaseFragmentActivity {
         }
         fragmentTransaction.hide(currentFragment);
 
+        if(fragment instanceof DashboardContainerFragment){
+            ((DashboardContainerFragment) fragment).setUIStateInit();
+        }
+
+
+        clearFragmentStack();
+
         //如果将要显示的fragment已经add，则resume，show
         if (fragment.isAdded()) {
             fragment.onResume();
@@ -677,7 +684,7 @@ public class MainFrameActivity extends BaseFragmentActivity {
 
         //add 2017年10月29日16:35:44 weizg
         //切换界面前，弹出所以栈中历史fragment
-        clearFragmentStack();
+//        clearFragmentStack();
 
         fragmentTransaction.commit();
 
@@ -726,6 +733,8 @@ public class MainFrameActivity extends BaseFragmentActivity {
         Fragment fragment = fragmentHashMap.get(R.id.main_console_dashboard);
         if (fragment instanceof DashboardContainerFragment) {
             ((DashboardContainerFragment) fragment).setType_goto(DashboardContainerFragment.type_goto_activityFragment);
+
+            ((DashboardContainerFragment) fragment).setUIStateInit();
         }
 
         switchShowFragment(R.id.main_console_dashboard);
