@@ -190,7 +190,10 @@ public class DashboardContainerFragment extends BaseFragment {
                     .addToBackStack(null);
         }
 
-        fragmentTransaction.commit();
+        //解决“java.lang.IllegalStateException: Can not perform this action after onSaveInstanceState”
+        //问题
+//        fragmentTransaction.commit();
+        fragmentTransaction.commitAllowingStateLoss();
         currentFragment = fragment;
     }
 
@@ -201,7 +204,10 @@ public class DashboardContainerFragment extends BaseFragment {
         if (isAddBackStack) {
             fragmentTransaction.addToBackStack(null);
         }
-        fragmentTransaction.commit();
+        //解决“java.lang.IllegalStateException: Can not perform this action after onSaveInstanceState”
+        //问题
+//        fragmentTransaction.commit();
+        fragmentTransaction.commitAllowingStateLoss();
         currentFragment = fragment;
     }
 
