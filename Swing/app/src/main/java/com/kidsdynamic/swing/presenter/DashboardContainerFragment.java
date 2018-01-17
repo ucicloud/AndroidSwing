@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +31,15 @@ public class DashboardContainerFragment extends BaseFragment {
     private String type_goto = "-1";
     private Fragment currentFragment;
     public static final String type_goto_activityFragment = "1";
+
+    private String ui_state_no = "123";
+    private String ui_state_have = "456";
+    private String ui_state = ui_state_no;
+
+    public void setUIStateInit(){
+        ui_state = ui_state_no;
+    }
+
 
 
     /*@BindView(R.id.main_toolbar_title)
@@ -63,6 +73,13 @@ public class DashboardContainerFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
+        Fragment fragmentById = getFragmentManager().findFragmentById(R.id.dashboard_fragment_container);
+        Log.w("dash",">>>>>>>currentFragment: " + fragmentById);
+
+
+        if(ui_state.equals(ui_state_have)){
+            return;
+        }
 
         //modify 2017年11月12日11:01:44 only_app
         //如果当前还未绑定kids，则进入到无设备界面；注意情况：绑定了设备，但未设置focus device
@@ -79,11 +96,19 @@ public class DashboardContainerFragment extends BaseFragment {
 
             // modify 2017年12月13日 Stefan
             // 进入到无设备界面后，会执行到WatchProfileFragment界面，需要return
-            if (null != currentFragment && currentFragment instanceof WatchProfileFragment) {
+            /*if (null != currentFragment && currentFragment instanceof WatchProfileFragment) {
                 return;
-            }
+            }*/
+
+            Log.w("dash",">>>>>>>allKidsByUserId: ");
+
             selectFragment(DashboardNoDevicesFragment.class.getName(), null, false);
+            ui_state = ui_state_have;
         } else {
+
+            ui_state = ui_state_have;
+
+            Log.w("dash",">>>>>>>ui_state_have: ");
 
             //modify 2017年12月5日19:31:19 only
             //r如果指定跳转到activity界面
@@ -95,12 +120,15 @@ public class DashboardContainerFragment extends BaseFragment {
 
                 type_goto = "-1";
             } else {
-                if (null != currentFragment && currentFragment instanceof DashboardMainFragment) {
+                /*if (null != currentFragment && (currentFragment instanceof DashboardMainFragment)) {
                     return;
-                }
+                }*/
                 selectFragment(DashboardMainFragment.class.getName(), null, false);
             }
         }
+
+        Fragment fragmentById2 = getFragmentManager().findFragmentById(R.id.dashboard_fragment_container);
+        Log.w("dash",">>>>>>>end currentFragment: " + fragmentById2);
     }
 
     public String getType_goto() {
