@@ -665,11 +665,16 @@ public class MainFrameActivity extends BaseFragmentActivity {
         }
         fragmentTransaction.hide(currentFragment);
 
+        //add 2018年1月17日14:49:41 only
+        //如果是DashboardContainerFragment，则设置界面的初始化状态
         if(fragment instanceof DashboardContainerFragment){
             ((DashboardContainerFragment) fragment).setUIStateInit();
         }
 
 
+        //del 2018年1月17日14:55:26 only clear业务提前到onresume之前执行
+        //add 2018年1月17日14:48:00 only
+        //因为dashboard界面的切换流程在onResume执行，所以先与onResume执行clear
         clearFragmentStack();
 
         //如果将要显示的fragment已经add，则resume，show
