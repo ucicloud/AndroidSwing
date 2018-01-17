@@ -73,10 +73,8 @@ public class DashboardContainerFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        Fragment fragmentById = getFragmentManager().findFragmentById(R.id.dashboard_fragment_container);
-        Log.w("dash",">>>>>>>currentFragment: " + fragmentById);
 
-
+        //如果是非初始状态，则不执行后面的界面切换
         if(ui_state.equals(ui_state_have)){
             return;
         }
@@ -146,22 +144,6 @@ public class DashboardContainerFragment extends BaseFragment {
         }*/
     }
 
-    /*private BroadcastReceiver UIChangeReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            int update_type = intent.getIntExtra(UI_Update_Action_Type, -1);
-
-           *//* if(UI_Action_Change_Event_detail == update_type){
-                //进入当日日程详情，切换右上角按钮功能
-                view_right_action.setImageResource(R.drawable.icon_pen);
-                view_right_action.setTag(R.drawable.icon_pen);
-            }else if(UI_Action_Change_Event_Add == update_type){
-                view_right_action.setImageResource(R.drawable.icon_add);
-                view_right_action.setTag(R.drawable.icon_add);
-            }*//*
-        }
-    };*/
-
     private void initTitleBar() {
         /*tv_title.setTextColor(getResources().getColor(R.color.colorAccent));
         tv_title.setText(R.string.title_calendar);
@@ -208,7 +190,10 @@ public class DashboardContainerFragment extends BaseFragment {
                     .addToBackStack(null);
         }
 
-        fragmentTransaction.commit();
+        //解决“java.lang.IllegalStateException: Can not perform this action after onSaveInstanceState”
+        //问题
+//        fragmentTransaction.commit();
+        fragmentTransaction.commitAllowingStateLoss();
         currentFragment = fragment;
     }
 
@@ -219,7 +204,10 @@ public class DashboardContainerFragment extends BaseFragment {
         if (isAddBackStack) {
             fragmentTransaction.addToBackStack(null);
         }
-        fragmentTransaction.commit();
+        //解决“java.lang.IllegalStateException: Can not perform this action after onSaveInstanceState”
+        //问题
+//        fragmentTransaction.commit();
+        fragmentTransaction.commitAllowingStateLoss();
         currentFragment = fragment;
     }
 

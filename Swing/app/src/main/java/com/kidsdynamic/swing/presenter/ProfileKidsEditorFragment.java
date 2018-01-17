@@ -315,6 +315,10 @@ public class ProfileKidsEditorFragment extends ProfileBaseFragment {
 
     private void updateUserAvatar(final long kidsId) {
 
+        if(avatarFile == null){
+            return;
+        }
+
         Map<String, RequestBody> paramMap = new HashMap<>();
         PartUtils.putRequestBodyMap(paramMap,AvatarApi.param_kidId,String.valueOf(kidsId));
 
