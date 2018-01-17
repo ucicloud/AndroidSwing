@@ -10,6 +10,7 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.kidsdynamic.commonlib.utils.FileUtil;
 import com.kidsdynamic.commonlib.utils.ObjectUtils;
+import com.kidsdynamic.swing.BaseFragment;
 import com.kidsdynamic.swing.BuildConfig;
 import com.kidsdynamic.data.dao.DB_EventKids;
 import com.kidsdynamic.data.dao.DB_Kids;
@@ -25,6 +26,7 @@ import com.kidsdynamic.data.persistent.DbUtil;
 import com.kidsdynamic.data.persistent.PreferencesUtil;
 import com.kidsdynamic.data.repository.disk.EventKidsStore;
 import com.kidsdynamic.data.repository.disk.KidsDataStore;
+import com.kidsdynamic.swing.R;
 import com.kidsdynamic.swing.SwingApplication;
 import com.kidsdynamic.swing.model.KidsEntityBean;
 import com.kidsdynamic.swing.model.WatchContact;
@@ -530,7 +532,7 @@ public class DeviceManager {
                 Log.w("uploadFirmwareVersion", "sendFirmwareVersion onResponse");
                 int code = response.code();
                 if (200 == code) {
-                    checkFirmwareUpdate(macId, false);
+                    checkFirmwareUpdate(macId, null, false);
                 }
             }
 
@@ -541,7 +543,10 @@ public class DeviceManager {
         });
     }
 
-    public void checkFirmwareUpdate(final String macId, final boolean needDownloadFirmwareFile) {
+    public void checkFirmwareUpdate(final String macId, final BaseFragment fragment, final boolean needDownloadFirmwareFile) {
+        if (null != fragment) {
+            fragment.showLoadingDialog(R.string.signup_login_wait);
+        }
         FirmwareApi firmwareApi = ApiGen.getInstance(SwingApplication.getAppContext()).
                 generateApi(FirmwareApi.class, true);
 
@@ -550,6 +555,9 @@ public class DeviceManager {
             public void onResponse(@NonNull Call<FirmwareVersionEntity> call,
                                    @NonNull Response<FirmwareVersionEntity> response) {
                 Log.w("checkFirmwareUpdate", "currentVersion onResponse");
+                if (null != fragment) {
+                    fragment.finishLoadingDialog();
+                }
                 int code = response.code();
                 setFirmwareNeedUpdate(200 == code);
                 sendBroadcastFirmwareUpdate(200 == code);
@@ -585,6 +593,9 @@ public class DeviceManager {
             @Override
             public void onFailure(@NonNull Call<FirmwareVersionEntity> call, @NonNull Throwable t) {
                 Log.w("checkFirmwareUpdate", "currentVersion fail");
+                if (null != fragment) {
+                    fragment.finishLoadingDialog();
+                }
             }
         });
     }
@@ -625,8 +636,8 @@ public class DeviceManager {
     private static String writeResponseBodyToDisk(ResponseBody body, String fileName) {
         try {
             File file = FileUtil.getAppDataFile(fileName);
-            if (file.exists()) {
-                file.deleteOnExit();
+            if (file.exists() && !file.delete()) {
+                return null;
             }
             File dir = file.getParentFile();
             if (!dir.exists() && !dir.mkdirs()) {
