@@ -118,7 +118,7 @@ public class DashboardContainerFragment extends BaseFragment {
 
                 type_goto = "-1";
             } else {
-                /*if (null != currentFragment && !(currentFragment instanceof DashboardMainFragment)) {
+                /*if (null != currentFragment && (currentFragment instanceof DashboardMainFragment)) {
                     return;
                 }*/
                 selectFragment(DashboardMainFragment.class.getName(), null, false);

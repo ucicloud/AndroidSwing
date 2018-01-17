@@ -10,7 +10,7 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.kidsdynamic.commonlib.utils.FileUtil;
 import com.kidsdynamic.commonlib.utils.ObjectUtils;
-import com.kidsdynamic.data.BuildConfig;
+import com.kidsdynamic.swing.BuildConfig;
 import com.kidsdynamic.data.dao.DB_EventKids;
 import com.kidsdynamic.data.dao.DB_Kids;
 import com.kidsdynamic.data.net.ApiGen;
