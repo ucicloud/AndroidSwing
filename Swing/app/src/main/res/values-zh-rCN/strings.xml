@@ -344,6 +344,7 @@
     <string name="event_alarm_time_to_go_home">回家喽</string>
 
     <!-- Events Repeat -->
+    <string name="event_repeat_weekday">工作日</string>
     <string name="event_repeat_monthly">"每月"</string>
     <string name="event_repeat_weekly">"每周"</string>
     <string name="event_repeat_daily">"每日"</string>

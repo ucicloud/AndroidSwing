@@ -19,6 +19,7 @@ public class WatchEvent implements Serializable {
     public final static String REPEAT_DAILY = "DAILY";
     public final static String REPEAT_WEEKLY = "WEEKLY";
     public final static String REPEAT_MONTHLY = "MONTHLY";
+    public final static String REPEAT_WEEKDAY = "WEEKDAY";//add 2018年1月22日15:54:21
 
     public long mId;
     public long mUserId;

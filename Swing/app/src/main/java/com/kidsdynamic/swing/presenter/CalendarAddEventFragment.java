@@ -306,6 +306,10 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
             case WatchEvent.REPEAT_NEVER:
                 mViewRepeat.setText(getResources().getString(R.string.event_repeat_never));
                 break;
+
+            case WatchEvent.REPEAT_WEEKDAY://工作日重复；add 2018年1月22日16:13:42
+                mViewRepeat.setText(getResources().getString(R.string.event_repeat_weekday));
+                break;
         }
     }
 

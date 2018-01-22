@@ -41,6 +41,7 @@ public class EventManager {
         eventOptionMap.put(WatchEvent.REPEAT_DAILY, R.string.event_repeat_daily);
         eventOptionMap.put(WatchEvent.REPEAT_WEEKLY, R.string.event_repeat_weekly);
         eventOptionMap.put(WatchEvent.REPEAT_MONTHLY, R.string.event_repeat_monthly);
+        eventOptionMap.put(WatchEvent.REPEAT_WEEKDAY, R.string.event_repeat_weekday);
     }
 
     public void saveEventForLogin(@NonNull Context context, @NonNull List<EventWithTodo> eventWithTodoList){
@@ -139,10 +140,14 @@ public class EventManager {
         List<WatchEvent> dailyResult = getEventRepeat(eventDao,userId,kidsId,startTimeStamp, endTimeStamp, "DAILY");
         List<WatchEvent> weeklyResult = getEventRepeat(eventDao,userId,kidsId,startTimeStamp, endTimeStamp, "WEEKLY");
         List<WatchEvent> monthlyResult = getEventRepeat(eventDao,userId,kidsId,startTimeStamp, endTimeStamp, "MONTHLY");
+        //add 2018年1月22日16:16:35 only
+        //工作日重复
+        List<WatchEvent> weekDayResult = getEventRepeat(eventDao,userId,kidsId,startTimeStamp, endTimeStamp, WatchEvent.REPEAT_WEEKDAY);
 
         result.addAll(dailyResult);
         result.addAll(weeklyResult);
         result.addAll(monthlyResult);
+        result.addAll(weekDayResult);
 
         //反序？ 符合UI要求
         Collections.sort(result, new Comparator<WatchEvent>() {
@@ -338,6 +343,26 @@ public class EventManager {
                             day2 = alertDate.get(Calendar.DAY_OF_MONTH);
                         }
                         break;
+                    case WatchEvent.REPEAT_WEEKDAY://工作日 add 2018年1月22日16:27:03
+                        alertDate.add(Calendar.DATE, 1);
+                        startDate.add(Calendar.DATE, 1);
+                        endDate.add(Calendar.DATE, 1);
+
+                        int alertDateWeekDay = alertDate.get(Calendar.DAY_OF_WEEK);
+                        int startDateWeekDay = startDate.get(Calendar.DAY_OF_WEEK);
+                        int endDateWeekDay = endDate.get(Calendar.DAY_OF_WEEK);
+
+                        if(isSaturday(alertDateWeekDay,startDateWeekDay,endDateWeekDay)){
+                            alertDate.add(Calendar.DATE, 2);
+                            startDate.add(Calendar.DATE, 2);
+                            endDate.add(Calendar.DATE, 2);
+                        }else if(isSunday(alertDateWeekDay,startDateWeekDay,endDateWeekDay)){
+                            alertDate.add(Calendar.DATE, 1);
+                            startDate.add(Calendar.DATE, 1);
+                            endDate.add(Calendar.DATE, 1);
+                        }
+
+                        break;
                 }
                 event.mAlertTimeStamp = alertDate.getTimeInMillis();
                 event.mStartDate = startDate.getTimeInMillis();
@@ -349,6 +374,17 @@ public class EventManager {
         return result;
 
     }
+
+    private static boolean isSunday(int alertDateWeekDay, int startDateWeekDay, int endDateWeekDay) {
+        return alertDateWeekDay == Calendar.SUNDAY || startDateWeekDay == Calendar.SUNDAY
+                || endDateWeekDay == Calendar.SUNDAY;
+    }
+
+    private static boolean isSaturday(int alertDateWeekDay, int startDateWeekDay, int endDateWeekDay) {
+        return alertDateWeekDay == Calendar.SATURDAY || startDateWeekDay == Calendar.SATURDAY
+                || endDateWeekDay == Calendar.SATURDAY;
+    }
+
 
     public static void updateTodoItemStatus(WatchTodo watchTodo){
         if(watchTodo == null){

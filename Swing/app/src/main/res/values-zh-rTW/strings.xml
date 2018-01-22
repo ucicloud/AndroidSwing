@@ -32,7 +32,7 @@
     <string name="calendar_event_start">"開始時間"</string>
     <string name="calendar_event_end">"結束時間"</string>
     <string name="calendar_event_color">"顏色標籤"</string>
-    <string name="calendar_event_repeat">"重覆"</string>
+    <string name="calendar_event_repeat">"重複"</string>
     <string name="calendar_event_description">"詳細描述"</string>
     <string name="calendar_event_todo_list">"待辦事項列表"</string>
     <string name="calendar_event_save">"存檔"</string>
@@ -344,6 +344,7 @@
     <string name="event_alarm_time_to_go_home">回家囉</string>
 
     <!-- Events Repeat -->
+    <string name="event_repeat_weekday">平日</string>
     <string name="event_repeat_monthly">"每月"</string>
     <string name="event_repeat_weekly">"每周"</string>
     <string name="event_repeat_daily">"每日"</string>

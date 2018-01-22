@@ -96,6 +96,7 @@ public class EventRepeatOptionFragment extends CalendarBaseFragment {
         options.add(WatchEvent.REPEAT_NEVER);
         options.add(WatchEvent.REPEAT_DAILY);
         options.add(WatchEvent.REPEAT_WEEKLY);
+        options.add(WatchEvent.REPEAT_WEEKDAY);
 //        options.add(WatchEvent.REPEAT_MONTHLY);
 
         return options;
