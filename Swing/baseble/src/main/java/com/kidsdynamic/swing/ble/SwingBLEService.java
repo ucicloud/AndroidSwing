@@ -273,7 +273,9 @@ public class SwingBLEService extends Service {
                     //float secondsPerBlock = OAD_TRANSMIT_INTERVAL / OAD_ONCE_NUMBER;
                     //float secondsLeft = (float)(self.nBlocks - self.iBlocks) * secondsPerBlock;
                     if (syncCallback != null) {
-                        syncCallback.onDeviceUpdating(((float)iBlocks / (float)nBlocks), null);
+                        double secondsPerBlock = 0.03;
+                        double secondsLeft = (double)(nBlocks - iBlocks) * secondsPerBlock;
+                        syncCallback.onDeviceUpdating(((float) iBlocks / (float)nBlocks), String.format("%d:%02d",(int)(secondsLeft / 60),(int)secondsLeft - (int)(secondsLeft / 60) * 60));
                     }
 
                     SwingBLEService.this.write(SwingBLEAttributes.OAD_SERVICE_UUID, SwingBLEAttributes.OAD_IMAGE_BLOCK_REQUEST_UUID, requestData, new ICharacteristicCallback(){

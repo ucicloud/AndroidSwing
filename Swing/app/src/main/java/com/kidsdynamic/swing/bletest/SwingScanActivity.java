@@ -522,7 +522,7 @@ public class SwingScanActivity extends AppCompatActivity implements View.OnClick
 
                     @Override
                     public void onDeviceUpdating(float percent, String timeRemain) {
-                        progressDialog.setMessage("%" + percent * 100);
+                        progressDialog.setMessage(timeRemain +" %" + percent * 100);
                     }
                 });
 
