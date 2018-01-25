@@ -204,7 +204,9 @@ public class FirmwareUpgradeActivity extends BaseFragmentActivity {
             if (mSyncState == SYNC_STATE_SUCCESS) {
                 viewUpdating();
                 bleDisconnect();
-            } else if (mSyncTimeout == 0 || mSyncState == SYNC_STATE_FAIL) {
+            } else if (
+//                    mSyncTimeout == 0 ||
+                    mSyncState == SYNC_STATE_FAIL) {
                 viewNotFound(R.string.dashboard_progress_sync_fail);
                 bleSyncCancel();
             }
