@@ -202,7 +202,7 @@ public class FirmwareUpgradeActivity extends BaseFragmentActivity {
 //            mSyncTimeout--;
 
             if (mSyncState == SYNC_STATE_SUCCESS) {
-                viewUpdating();
+                viewCompleted();
                 bleDisconnect();
             } else if (
 //                    mSyncTimeout == 0 ||
@@ -351,9 +351,17 @@ public class FirmwareUpgradeActivity extends BaseFragmentActivity {
             @Override
             public void onSyncComplete() {
                 LogUtil.getUtils().d("sync data complete: ok");
+
+                DeviceManager.clearParamsForFirmwareUpgrade();
+                DeviceManager.sendBroadcastFirmwareUpdate(false);
+
+                viewSyncing();
                 mViewLabel.setText(getResources().getString(R.string.uploading));
                 new RawActivityManager().uploadRawActivity(mMacId, mUpdateRawActivityListener);
                 DeviceManager.setFirmwareNeedUpdate(false);
+
+
+
             }
 
             @Override
@@ -405,11 +413,6 @@ public class FirmwareUpgradeActivity extends BaseFragmentActivity {
 
                 mViewProgress.stopProgress();
                 mViewProgress.setStrokeBeginEnd(0, (int) (percent * 100));
-                if (Math.abs(1 - percent) < 0.000001) {
-                    DeviceManager.clearParamsForFirmwareUpgrade();
-                    DeviceManager.sendBroadcastFirmwareUpdate(false);
-                    viewCompleted();
-                }
             }
         });
     }
@@ -485,6 +488,8 @@ public class FirmwareUpgradeActivity extends BaseFragmentActivity {
         mViewLabel.setCompoundDrawablesWithIntrinsicBounds(
                 0, 0, 0, R.drawable.monster_yellow);
 
+        mViewHint.setText("");
+        mViewHint.setVisibility(View.INVISIBLE);
         mViewButton.setText(R.string.dashboard_progress_dashboard);
         mViewButton.setVisibility(View.VISIBLE);
         mViewButton.setOnClickListener(mSyncCompleteListener);
