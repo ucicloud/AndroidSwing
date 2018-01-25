@@ -128,14 +128,6 @@ public class FileUtil {
             return fileInputStream;
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            if (null != fileInputStream) {
-                try {
-                    fileInputStream.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
         }
         return null;
     }
