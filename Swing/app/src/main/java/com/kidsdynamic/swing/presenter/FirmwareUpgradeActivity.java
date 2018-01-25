@@ -361,6 +361,8 @@ public class FirmwareUpgradeActivity extends BaseFragmentActivity {
                 LogUtil.getUtils().d("sync data complete: fail, reason: " + reason);
                 //sync fail后，需要修改标志位
                 mSyncState = SYNC_STATE_FAIL;
+                viewNotFound(R.string.dashboard_progress_sync_fail);
+                bleSyncCancel();
             }
 
             @Override
