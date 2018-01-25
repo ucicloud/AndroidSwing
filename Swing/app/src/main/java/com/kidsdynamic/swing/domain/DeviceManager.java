@@ -557,11 +557,11 @@ public class DeviceManager {
             public void onResponse(@NonNull Call<FirmwareVersionEntity> call,
                                    @NonNull Response<FirmwareVersionEntity> response) {
                 Log.w("checkFirmwareUpdate", "currentVersion onResponse");
-                if (null != fragment) {
-                    fragment.finishLoadingDialog();
-                }
                 int code = response.code();
                 if (code != 200) {
+                    if (null != fragment) {
+                        fragment.finishLoadingDialog();
+                    }
                     return;
                 }
                 FirmwareVersionEntity entity = response.body();
@@ -571,6 +571,9 @@ public class DeviceManager {
                     return;
                 }
                 if (null == entity) {
+                    if (null != fragment) {
+                        fragment.finishLoadingDialog();
+                    }
                     return;
                 }
                 String version = entity.getVersion();
@@ -589,8 +592,25 @@ public class DeviceManager {
                             public void onSuccess(String filePath) {
                                 setFirmwareBFilePath(filePath);
                                 sendBroadcastFirmwareUpgrade();
+                                if (null != fragment) {
+                                    fragment.finishLoadingDialog();
+                                }
+                            }
+
+                            @Override
+                            public void onFail() {
+                                if (null != fragment) {
+                                    fragment.finishLoadingDialog();
+                                }
                             }
                         });
+                    }
+
+                    @Override
+                    public void onFail() {
+                        if (null != fragment) {
+                            fragment.finishLoadingDialog();
+                        }
                     }
                 });
             }
@@ -630,6 +650,8 @@ public class DeviceManager {
 
     public interface ICompleteListener {
         void onSuccess(String filePath);
+
+        void onFail();
     }
 
     /**
