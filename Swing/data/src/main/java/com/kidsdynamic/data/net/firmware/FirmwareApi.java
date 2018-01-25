@@ -28,7 +28,7 @@ public interface FirmwareApi {
     //   400	Bad request. The token is invalid or mac id is not present
     //   500	Internal error. Please send me the error. I will fix it
     @GET("v1/fw/currentVersion")
-    Call<FirmwareVersionEntity> currentVersion(@Query("macId") String macId, @Query("firmwareVersion") String firmwareVersion);
+    Call<FirmwareVersionEntity> currentVersion(@Query("macId") String macId, @Query("fwVersion") String firmwareVersion);
 
 
     //==========================
