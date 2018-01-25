@@ -199,7 +199,7 @@ public class FirmwareUpgradeActivity extends BaseFragmentActivity {
     private ViewCircle.OnProgressListener mSyncProgressListener = new ViewCircle.OnProgressListener() {
         @Override
         public void onProgress(ViewCircle view, int begin, int end) {
-            mSyncTimeout--;
+//            mSyncTimeout--;
 
             if (mSyncState == SYNC_STATE_SUCCESS) {
                 viewUpdating();
@@ -399,6 +399,7 @@ public class FirmwareUpgradeActivity extends BaseFragmentActivity {
                 sb.append(timeRemain);
                 mViewLabel.setText(sb);
 
+                mViewProgress.stopProgress();
                 mViewProgress.setStrokeBeginEnd(0, (int) (percent * 100));
                 if (Math.abs(1 - percent) < 0.000001) {
                     DeviceManager.clearParamsForFirmwareUpgrade();
@@ -426,6 +427,9 @@ public class FirmwareUpgradeActivity extends BaseFragmentActivity {
         mViewLabel.setGravity(Gravity.CENTER);
         mViewLabel.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
 
+        mViewHint.setText("");
+        mViewHint.setVisibility(View.INVISIBLE);
+
         mViewButton.setVisibility(View.INVISIBLE);
         mViewButton.setOnClickListener(null);
 
@@ -450,6 +454,8 @@ public class FirmwareUpgradeActivity extends BaseFragmentActivity {
     private void viewSyncing() {
         mViewLabel.setText(R.string.dashboard_progress_syncing);
 
+        mViewHint.setText(R.string.have_watch_close_by);
+        mViewHint.setVisibility(View.VISIBLE);
         mViewButton.setVisibility(View.INVISIBLE);
         mViewButton.setOnClickListener(null);
 
