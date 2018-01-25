@@ -9,6 +9,7 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 import retrofit2.http.Streaming;
 import retrofit2.http.Url;
 
@@ -26,8 +27,8 @@ public interface FirmwareApi {
     //   200	Retrieve successfully
     //   400	Bad request. The token is invalid or mac id is not present
     //   500	Internal error. Please send me the error. I will fix it
-    @GET("v1/fw/currentVersion/{macId}")
-    Call<FirmwareVersionEntity> currentVersion(@Path("macId") String macId);
+    @GET("v1/fw/currentVersion")
+    Call<FirmwareVersionEntity> currentVersion(@Query("macId") String macId, @Query("firmwareVersion") String firmwareVersion);
 
 
     //==========================

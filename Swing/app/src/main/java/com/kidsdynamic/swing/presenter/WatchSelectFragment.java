@@ -229,6 +229,10 @@ public class WatchSelectFragment extends BaseFragment {
             return;
         }
 
+        Context context = getContext();
+        if (null == context) {
+            return;
+        }
         KidsApi kidsApi = ApiGen.getInstance(getContext().getApplicationContext()).
                 generateApi(KidsApi.class, true);
 
@@ -421,6 +425,7 @@ public class WatchSelectFragment extends BaseFragment {
                 LogUtil2.getUtils().d("onDeviceVersion version " + version);
                 nowFirmwareVersion = version;
                 DeviceManager.setFirmwareMacId(macId);
+                DeviceManager.setFirmwareVersion(version);
                 //上报服务器
                 new DeviceManager().uploadFirmwareVersion(macId, version);
             }
@@ -467,6 +472,7 @@ public class WatchSelectFragment extends BaseFragment {
             public void onDeviceVersion(String version) {
                 LogUtil2.getUtils().d("onDeviceVersion version " + version);
                 DeviceManager.setFirmwareMacId(macId);
+                DeviceManager.setFirmwareVersion(version);
                 //上报服务器
                 new DeviceManager().uploadFirmwareVersion(macId, version);
             }

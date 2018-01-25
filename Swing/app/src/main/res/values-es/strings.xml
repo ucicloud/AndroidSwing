@@ -487,5 +487,8 @@
     <string name="del_my_kids_notify">Una vez eliminados todos los datos se eliminan. ¿Estás seguro?</string>
     <string name="no_primary_edit">Solo la cuenta principal tiene permiso para editar</string>
     <string name="swing_watch_update">Swing watch actualizar</string>
+    <string name="updating_your_watch">Actualizando tu\nreloj</string>
+    <string name="have_watch_close_by">Por favor, ten tu reloj cerca</string>
+    <string name="update_completed">¡Actualización completada!</string>
 
 </resources>

@@ -212,6 +212,7 @@ public class WatchProfileFragment extends BaseFragment {
                     new DeviceManager().saveKidsData(getContext(), kidsWithParent);
 
                     DeviceManager.setFirmwareMacId(watchMacId);
+                    DeviceManager.setFirmwareVersion(firmwareVersion);
 
                     //更新firmwareVersion
                     DeviceManager.updateEventKidsFirmwareVersion(kidsWithParent.getMacId(), firmwareVersion);

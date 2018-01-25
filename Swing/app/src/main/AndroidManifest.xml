@@ -23,8 +23,8 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:supportsRtl="true"
         android:largeHeap="true"
+        android:supportsRtl="true"
         android:theme="@style/AppThemeViewlib">
 
         <!--设置支持全面屏（分辨率大于16:9，屏占比大于80%）-->
@@ -34,54 +34,58 @@
             android:name=".presenter.SignupActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan|stateHidden">
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
-    </activity>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
-    <activity
-        android:name=".presenter.MainFrameActivity"
-        android:launchMode="singleTask"
-        android:screenOrientation="portrait"
-        android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name=".presenter.MainFrameActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
 
-    <activity
-        android:name=".presenter.VirtualCameraActivity"
-        android:screenOrientation="portrait"
-        android:theme="@style/ThemeTranslucent" />
+        <activity
+            android:name=".presenter.FirmwareUpgradeActivity"
+            android:screenOrientation="portrait" />
 
-    <activity
-        android:name=".presenter.VirtualResultActivity"
-        android:screenOrientation="portrait" />
+        <activity
+            android:name=".presenter.VirtualCameraActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/ThemeTranslucent" />
 
-    <activity
-        android:name=".presenter.VirtualAlbumActivity"
-        android:screenOrientation="portrait"
-        android:theme="@style/ThemeTranslucent" />
+        <activity
+            android:name=".presenter.VirtualResultActivity"
+            android:screenOrientation="portrait" />
 
-    <meta-data
-        android:name="com.google.firebase.messaging.default_notification_icon"
-        android:resource="@mipmap/notification_icon" />
+        <activity
+            android:name=".presenter.VirtualAlbumActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/ThemeTranslucent" />
 
-    <service
-        android:name=".fcm.SwingMessageService"
-        android:exported="false">
-        <intent-filter>
-            <action android:name="com.google.firebase.MESSAGING_EVENT" />
-        </intent-filter>
-    </service>
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@mipmap/notification_icon" />
 
-    <service
-        android:name=".fcm.SwingFirebaseIDService"
-        android:exported="false">
-        <intent-filter>
-            <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
-        </intent-filter>
-    </service>
+        <service
+            android:name=".fcm.SwingMessageService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
 
-    <!-- The below is for testing -->
+        <service
+            android:name=".fcm.SwingFirebaseIDService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
+
+        <!-- The below is for testing -->
         <activity android:name=".MainActivity">
             <!--<intent-filter>
                 <action android:name="android.intent.action.MAIN" />

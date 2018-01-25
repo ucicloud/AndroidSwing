@@ -487,5 +487,8 @@
     <string name="del_my_kids_notify">一旦刪除帳號全部資料將會一併刪除，確定嗎？</string>
     <string name="no_primary_edit">只有主要帳戶有編輯權限</string>
     <string name="swing_watch_update">Swing watch 更新</string>
+    <string name="updating_your_watch">您的手錶\n正在更新中</string>
+    <string name="have_watch_close_by">請把手錶靠近手機</string>
+    <string name="update_completed">更新成功！</string>
 
 </resources>

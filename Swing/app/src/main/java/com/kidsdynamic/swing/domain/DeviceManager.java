@@ -72,6 +72,7 @@ public class DeviceManager {
 
     private static boolean firmwareNeedUpdate = false;
     private static String firmwareMacId = null;
+    private static String firmwareVersion = null;
     private static String firmwareAFilePath, firmwareBFilePath;
 
     public static DB_Kids getFocusWatchInfo(Context context) {
@@ -532,7 +533,7 @@ public class DeviceManager {
                 Log.w("uploadFirmwareVersion", "sendFirmwareVersion onResponse");
                 int code = response.code();
                 if (200 == code) {
-                    checkFirmwareUpdate(macId, null, false);
+                    checkFirmwareUpdate(macId, version, null, false);
                 }
             }
 
@@ -543,14 +544,15 @@ public class DeviceManager {
         });
     }
 
-    public void checkFirmwareUpdate(final String macId, final BaseFragment fragment, final boolean needDownloadFirmwareFile) {
+    public void checkFirmwareUpdate(final String macId, final String version, final BaseFragment fragment,
+                                    final boolean needDownloadFirmwareFile) {
         if (null != fragment) {
             fragment.showLoadingDialog(R.string.signup_login_wait);
         }
         FirmwareApi firmwareApi = ApiGen.getInstance(SwingApplication.getAppContext()).
                 generateApi(FirmwareApi.class, true);
 
-        firmwareApi.currentVersion(macId).enqueue(new Callback<FirmwareVersionEntity>() {
+        firmwareApi.currentVersion(macId, version).enqueue(new Callback<FirmwareVersionEntity>() {
             @Override
             public void onResponse(@NonNull Call<FirmwareVersionEntity> call,
                                    @NonNull Response<FirmwareVersionEntity> response) {
@@ -559,12 +561,15 @@ public class DeviceManager {
                     fragment.finishLoadingDialog();
                 }
                 int code = response.code();
-                setFirmwareNeedUpdate(200 == code);
-                sendBroadcastFirmwareUpdate(200 == code);
-                if (!needDownloadFirmwareFile) {
+                if (code != 200) {
                     return;
                 }
                 FirmwareVersionEntity entity = response.body();
+                setFirmwareNeedUpdate(null != entity);
+                sendBroadcastFirmwareUpdate(null != entity);
+                if (!needDownloadFirmwareFile) {
+                    return;
+                }
                 if (null == entity) {
                     return;
                 }
@@ -583,7 +588,7 @@ public class DeviceManager {
                             @Override
                             public void onSuccess(String filePath) {
                                 setFirmwareBFilePath(filePath);
-                                sendBroadcastDashboardFirmwareUpgrade();
+                                sendBroadcastFirmwareUpgrade();
                             }
                         });
                     }
@@ -754,9 +759,9 @@ public class DeviceManager {
         SwingApplication.localBroadcastManager.sendBroadcast(intent);
     }
 
-    public static void sendBroadcastDashboardFirmwareUpgrade() {
+    public static void sendBroadcastFirmwareUpgrade() {
         Intent intent = new Intent(MainFrameActivity.UI_Update_Action);
-        intent.putExtra(MainFrameActivity.Tag_Key, MainFrameActivity.TAG_DASHBOARD_FIRMWARE_UPGRADE);
+        intent.putExtra(MainFrameActivity.Tag_Key, MainFrameActivity.TAG_FIRMWARE_UPGRADE);
         SwingApplication.localBroadcastManager.sendBroadcast(intent);
     }
 
@@ -776,6 +781,14 @@ public class DeviceManager {
         DeviceManager.firmwareMacId = firmwareMacId;
     }
 
+    public static String getFirmwareVersion() {
+        return firmwareVersion;
+    }
+
+    public static void setFirmwareVersion(String firmwareVersion) {
+        DeviceManager.firmwareVersion = firmwareVersion;
+    }
+
     public static String getFirmwareAFilePath() {
         return firmwareAFilePath;
     }
@@ -790,6 +803,14 @@ public class DeviceManager {
 
     public static void setFirmwareBFilePath(String firmwareBFilePath) {
         DeviceManager.firmwareBFilePath = firmwareBFilePath;
+    }
+
+    public static void clearParamsForFirmwareUpgrade() {
+        firmwareNeedUpdate = false;
+        firmwareMacId = "";
+        firmwareVersion = "";
+        firmwareAFilePath = "";
+        firmwareBFilePath = "";
     }
 
 }

@@ -487,5 +487,8 @@
     <string name="del_my_kids_notify">После удаления все данные будут удалены. Ты уверен?</string>
     <string name="no_primary_edit">Только первичная учетная запись имеет разрешение на редактирование</string>
     <string name="swing_watch_update">Swing watch oбновить</string>
+    <string name="updating_your_watch">Идет обновление\nчасов</string>
+    <string name="have_watch_close_by">Часы должны находиться поблизости</string>
+    <string name="update_completed">Обновление завершено!</string>
 
 </resources>

@@ -106,7 +106,7 @@ public class MainFrameActivity extends BaseFragmentActivity {
     public final static int Tag_Avatar_update = 1;
     public final static int Tag_focus_kids_update = 2;
     public final static int TAG_FIRMwARE_UPDATE = 3;
-    public static final int TAG_DASHBOARD_FIRMWARE_UPGRADE = 4;
+    public static final int TAG_FIRMWARE_UPGRADE = 4;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -316,9 +316,10 @@ public class MainFrameActivity extends BaseFragmentActivity {
                 } else {
                     tv_tab_profile_red_point.setVisibility(View.INVISIBLE);
                 }
-            } else if (update_type == TAG_DASHBOARD_FIRMWARE_UPGRADE) {
-                switchToDashBoardFragment();
-                setFragment(DashboardProgressFragment.newInstance(DashboardProgressFragment.TO_FIRMWARE_UPGRADE), true);
+            } else if (update_type == TAG_FIRMWARE_UPGRADE) {
+                Intent itt = new Intent();
+                itt.setClass(MainFrameActivity.this, FirmwareUpgradeActivity.class);
+                startActivity(itt);
             }
 
         }
@@ -664,7 +665,7 @@ public class MainFrameActivity extends BaseFragmentActivity {
 
         //add 2018年1月17日14:49:41 only
         //如果是DashboardContainerFragment，则设置界面的初始化状态
-        if(fragment instanceof DashboardContainerFragment){
+        if (fragment instanceof DashboardContainerFragment) {
             ((DashboardContainerFragment) fragment).setUIStateInit();
         }
 
