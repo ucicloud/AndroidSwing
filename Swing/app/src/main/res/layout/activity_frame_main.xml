@@ -83,7 +83,7 @@
             android:background="@null">
 
             <FrameLayout
-                android:layout_width="52dp"
+                android:layout_width="50dp"
                 android:layout_height="match_parent"
                 android:layout_centerInParent="true"
                 android:background="@null">
