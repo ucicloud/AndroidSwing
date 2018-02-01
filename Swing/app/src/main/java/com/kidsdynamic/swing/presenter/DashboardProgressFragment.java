@@ -623,7 +623,7 @@ public class DashboardProgressFragment extends DashboardBaseFragment {
                 //首先更新本地存储
                 DeviceManager.updateKidsFirmwareVersion(DeviceManager.getMacID(mMacAddress), version);
                 //上传服务器
-                new DeviceManager().uploadFirmwareVersion(DeviceManager.getMacID(mMacAddress), version);
+                new DeviceManager().uploadFirmwareVersion(getContext(), DeviceManager.getMacID(mMacAddress), version);
             }
 
             @Override

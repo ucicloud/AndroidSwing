@@ -215,7 +215,8 @@ public class ProfileOptionFragment extends ProfileBaseFragment {
 
     @OnClick(R.id.profile_option_watch_update)
     protected void watchUpdate() {
-        checkPermissions();
+        checkWatchUpdate();
+//        checkPermissions();
 //        Intent intent = new Intent();
 //        Activity activity = getActivity();
 //        intent.setClass(activity, FirmwareUpgradeActivity.class);
@@ -483,7 +484,7 @@ public class ProfileOptionFragment extends ProfileBaseFragment {
         if (TextUtils.isEmpty(firmwareMacId) || TextUtils.isEmpty(firmwareVersion)) {
             return;
         }
-        new DeviceManager().checkFirmwareUpdate(firmwareMacId, firmwareVersion, this, true);
+        new DeviceManager().checkFirmwareUpdate(getContext(), firmwareMacId, firmwareVersion, this, true);
     }
 
 }

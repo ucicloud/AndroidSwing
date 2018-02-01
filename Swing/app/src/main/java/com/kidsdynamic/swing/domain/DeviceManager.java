@@ -519,7 +519,7 @@ public class DeviceManager {
         eventKidsStore.updateFirmwareVersion(macId, fireWareVersion);
     }
 
-    public void uploadFirmwareVersion(final String macId, final String version) {
+    public void uploadFirmwareVersion(final Context context, final String macId, final String version) {
         FirmwareApi firmwareApi = ApiGen.getInstance(SwingApplication.getAppContext()).
                 generateApi(FirmwareApi.class, true);
 
@@ -533,7 +533,7 @@ public class DeviceManager {
                 Log.w("uploadFirmwareVersion", "sendFirmwareVersion onResponse");
                 int code = response.code();
                 if (200 == code) {
-                    checkFirmwareUpdate(macId, version, null, false);
+                    checkFirmwareUpdate(context, macId, version, null, false);
                 }
             }
 
@@ -544,8 +544,8 @@ public class DeviceManager {
         });
     }
 
-    public void checkFirmwareUpdate(final String macId, final String version, final BaseFragment fragment,
-                                    final boolean needDownloadFirmwareFile) {
+    public void checkFirmwareUpdate(final Context context, final String macId, final String version,
+                                    final BaseFragment fragment, final boolean needDownloadFirmwareFile) {
         if (null != fragment) {
             fragment.showLoadingDialog(R.string.signup_login_wait);
         }
@@ -583,11 +583,11 @@ public class DeviceManager {
                 final String fileBUrl = entity.getFileBUrl();
                 final String fileBName = String.format("%sB.hex", version);
                 final String fileBDownloadUrl = BuildConfig.FIRMWARE_FILE_URL + fileBUrl;
-                downloadFirmwareFile(fileADownloadUrl, fileAName, new ICompleteListener() {
+                downloadFirmwareFile(context, fileADownloadUrl, fileAName, new ICompleteListener() {
                     @Override
                     public void onSuccess(String filePath) {
                         setFirmwareAFilePath(filePath);
-                        downloadFirmwareFile(fileBDownloadUrl, fileBName, new ICompleteListener() {
+                        downloadFirmwareFile(context, fileBDownloadUrl, fileBName, new ICompleteListener() {
                             @Override
                             public void onSuccess(String filePath) {
                                 setFirmwareBFilePath(filePath);
@@ -625,7 +625,8 @@ public class DeviceManager {
         });
     }
 
-    public static void downloadFirmwareFile(final String url, final String fileName, final ICompleteListener listener) {
+    public static void downloadFirmwareFile(final Context context, final String url, final String fileName,
+                                            final ICompleteListener listener) {
         new Thread() {
             @Override
             public void run() {
@@ -636,7 +637,7 @@ public class DeviceManager {
                 try {
                     Response<ResponseBody> response = firmwareApi.downloadFileWithUrl(url).execute();
                     if (response.isSuccessful()) {
-                        String filePath = writeResponseBodyToDisk(response.body(), fileName);
+                        String filePath = writeResponseBodyToDisk(context, response.body(), fileName);
                         if (null != listener && !TextUtils.isEmpty(filePath)) {
                             listener.onSuccess(filePath);
                         }
@@ -660,19 +661,24 @@ public class DeviceManager {
      * @param body ResponseBody
      * @return String filePath
      */
-    private static String writeResponseBodyToDisk(ResponseBody body, String fileName) {
+    private static String writeResponseBodyToDisk(Context context, ResponseBody body, String fileName) {
         try {
-            File file = FileUtil.getAppDataFile(fileName);
-            if (file.exists() && !file.delete()) {
+//            File file = FileUtil.getAppDataFile(fileName);
+//            if (file.exists() && !file.delete()) {
+//                return null;
+//            }
+//            File dir = file.getParentFile();
+//            if (!dir.exists() && !dir.mkdirs()) {
+//                return null;
+//            }
+//            if (!file.createNewFile()) {
+//                return null;
+//            }
+            if (null == context) {
                 return null;
             }
-            File dir = file.getParentFile();
-            if (!dir.exists() && !dir.mkdirs()) {
-                return null;
-            }
-            if (!file.createNewFile()) {
-                return null;
-            }
+            File dir = context.getFilesDir();
+            File file = new File(dir + File.separator + fileName);
             InputStream inputStream = null;
             OutputStream outputStream = null;
             try {

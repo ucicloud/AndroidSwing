@@ -427,7 +427,7 @@ public class WatchSelectFragment extends BaseFragment {
                 DeviceManager.setFirmwareMacId(macId);
                 DeviceManager.setFirmwareVersion(version);
                 //上报服务器
-                new DeviceManager().uploadFirmwareVersion(macId, version);
+                new DeviceManager().uploadFirmwareVersion(getContext(), macId, version);
             }
         });
 
@@ -474,7 +474,7 @@ public class WatchSelectFragment extends BaseFragment {
                 DeviceManager.setFirmwareMacId(macId);
                 DeviceManager.setFirmwareVersion(version);
                 //上报服务器
-                new DeviceManager().uploadFirmwareVersion(macId, version);
+                new DeviceManager().uploadFirmwareVersion(getContext(), macId, version);
             }
         });
     }

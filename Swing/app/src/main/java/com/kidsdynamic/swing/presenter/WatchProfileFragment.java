@@ -217,7 +217,7 @@ public class WatchProfileFragment extends BaseFragment {
                     //更新firmwareVersion
                     DeviceManager.updateEventKidsFirmwareVersion(kidsWithParent.getMacId(), firmwareVersion);
                     //上报服务器
-                    new DeviceManager().uploadFirmwareVersion(kidsWithParent.getMacId(), firmwareVersion);
+                    new DeviceManager().uploadFirmwareVersion(getContext(), kidsWithParent.getMacId(), firmwareVersion);
 
                     if (profile != null) {
                         uploadAvatar(profile, String.valueOf(kidId));
