@@ -29,4 +29,18 @@
         android:adjustViewBounds="true"
         android:contentDescription="@null"
         android:cropToPadding="false" />
+
+    <TextView
+        android:id="@+id/main_toolbar_red_point"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="@dimen/base_6"
+        android:layout_marginTop="@dimen/base_6"
+        android:background="@drawable/circle_bg_red"
+        android:gravity="center"
+        android:text="@string/one"
+        android:textColor="@color/color_white"
+        android:textSize="@dimen/body1_12"
+        android:visibility="invisible" />
 </RelativeLayout>

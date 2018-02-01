@@ -88,7 +88,7 @@
                 android:layout_centerInParent="true"
                 android:background="@drawable/control_button_profile"
                 android:padding="@dimen/base_1"
-                android:src="@drawable/ic_icon_profile_"
+                android:src="@drawable/ic_icon_profile_head"
                 android:visibility="visible" />
 
             <TextView

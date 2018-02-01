@@ -489,6 +489,6 @@
     <string name="swing_watch_update">Swing watch アップデート</string>
     <string name="updating_your_watch">貴方の時計を\n更新中です</string>
     <string name="have_watch_close_by">貴方の時計を携帯電話の近くに寄せてください</string>
-    <string name="update_completed">アップデートに成功しました</string>
+    <string name="update_completed">アップデートに\n成功しました</string>
 
 </resources>

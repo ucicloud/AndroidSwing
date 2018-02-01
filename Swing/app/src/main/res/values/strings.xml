@@ -490,7 +490,7 @@
     <string name="swing_watch_update">Swing watch update</string>
     <string name="updating_your_watch">Updating Your\nWatch!</string>
     <string name="have_watch_close_by">Please Have Your Watch Close By</string>
-    <string name="update_completed">Update Completed!</string>
+    <string name="update_completed">Update\nCompleted!</string>
 
     <!-- Not translated yet -->
     <string name="net_err">Net Error</string>

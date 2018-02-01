@@ -489,6 +489,6 @@
     <string name="swing_watch_update">Swing watch oбновить</string>
     <string name="updating_your_watch">Идет обновление\nчасов</string>
     <string name="have_watch_close_by">Часы должны находиться поблизости</string>
-    <string name="update_completed">Обновление завершено!</string>
+    <string name="update_completed">Обновление\nзавершено!</string>
 
 </resources>

@@ -24,6 +24,8 @@ public class ProfileBaseFragment extends BaseFragment {
     protected ImageView view_left_action;
     @BindView(R.id.main_toolbar_action2)
     protected ImageView view_right_action;
+    @BindView(R.id.main_toolbar_red_point)
+    protected  TextView tv_red_point;
 
 
     public void selectFragment(String className, Bundle args, boolean isAddToBackStack) {

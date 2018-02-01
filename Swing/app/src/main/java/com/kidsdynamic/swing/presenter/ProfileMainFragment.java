@@ -126,6 +126,12 @@ public class ProfileMainFragment extends ProfileBaseFragment {
         view_left_action.setImageResource(R.drawable.icon_edit);
 
         view_right_action.setImageResource(R.drawable.icon_settings);
+        com.kidsdynamic.swing.utils.ViewUtils.setTextViewBoldTypeFace(getContext(), tv_red_point);
+        if (DeviceManager.isFirmwareNeedUpdate()) {
+            tv_red_point.setVisibility(View.VISIBLE);
+        } else {
+            tv_red_point.setVisibility(View.INVISIBLE);
+        }
     }
 
     @Override
@@ -623,6 +629,9 @@ public class ProfileMainFragment extends ProfileBaseFragment {
             IntentFilter intentFilter = new IntentFilter(ConfigManager.Avatar_Update_Action);
             SwingApplication.localBroadcastManager.registerReceiver(UIChangeReceiver,
                     intentFilter);
+            IntentFilter intentFilter1 = new IntentFilter(MainFrameActivity.UI_Update_Action);
+            SwingApplication.localBroadcastManager.registerReceiver(UIChangeReceiver1,
+                    intentFilter1);
         }
     }
 
@@ -657,10 +666,34 @@ public class ProfileMainFragment extends ProfileBaseFragment {
         }
     };
 
+    /**
+     * 固件更新提示广播接收
+     */
+    private BroadcastReceiver UIChangeReceiver1 = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.w("UIChangeReceiver1", "change broadcast");
+
+            if (intent == null) {
+                return;
+            }
+
+            int update_type = intent.getIntExtra(MainFrameActivity.Tag_Key, -1);
+            if (update_type == MainFrameActivity.TAG_FIRMwARE_UPDATE) {
+                if (intent.hasExtra(MainFrameActivity.TAG_UPDATE)) {
+                    tv_red_point.setVisibility(View.VISIBLE);
+                } else {
+                    tv_red_point.setVisibility(View.INVISIBLE);
+                }
+            }
+        }
+    };
+
     @Override
     public void onDestroy() {
         super.onDestroy();
 
         SwingApplication.localBroadcastManager.unregisterReceiver(UIChangeReceiver);
+        SwingApplication.localBroadcastManager.unregisterReceiver(UIChangeReceiver1);
     }
 }

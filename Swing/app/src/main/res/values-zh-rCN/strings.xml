@@ -489,6 +489,6 @@
     <string name="swing_watch_update">Swing watch 更新</string>
     <string name="updating_your_watch">您的手表\n正在更新中</string>
     <string name="have_watch_close_by">请把手表靠近手机</string>
-    <string name="update_completed">更新成功！</string>
+    <string name="update_completed">更新\n成功！</string>
 
 </resources>
