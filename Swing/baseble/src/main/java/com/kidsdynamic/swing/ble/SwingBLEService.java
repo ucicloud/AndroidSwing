@@ -28,7 +28,7 @@ import com.vise.baseble.exception.BleException;
 import com.vise.baseble.model.BluetoothLeDevice;
 import com.vise.log.ViseLog;
 
-import java.io.FileInputStream;
+import java.io.InputStream;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -57,9 +57,9 @@ public class SwingBLEService extends Service {
         public int activityCount;
 
         public String version;
-        public FileInputStream currentFileVer;
-        public FileInputStream fileVerA;
-        public FileInputStream fileVerB;
+        public InputStream currentFileVer;
+        public InputStream fileVerA;
+        public InputStream fileVerB;
 
         public byte[] requestData = new byte[2 + SwingBLEAttributes.OAD_BLOCK_SIZE];
         public int nBlocks;
@@ -1268,7 +1268,7 @@ private void syncReconnect(final BluetoothLeDevice bluetoothLeDevice, final bool
                 .startScan(callback);
     }
 
-    public void scanAndUpgrade(final String mac, FileInputStream fileVerA, FileInputStream fileVerB, IDeviceSyncCallback callback2) {
+    public void scanAndUpgrade(final String mac, InputStream fileVerA, InputStream fileVerB, IDeviceSyncCallback callback2) {
 //        if (!ViseBluetooth.getInstance().getBluetoothAdapter().isEnabled()) {
 //            ViseBluetooth.getInstance().getBluetoothAdapter().enable();
 //        }
