@@ -31,6 +31,7 @@ import com.kidsdynamic.swing.SwingApplication;
 import com.kidsdynamic.swing.model.KidsEntityBean;
 import com.kidsdynamic.swing.model.WatchContact;
 import com.kidsdynamic.swing.presenter.MainFrameActivity;
+import com.yy.base.utils.ToastCommon;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -598,18 +599,22 @@ public class DeviceManager {
                             }
 
                             @Override
-                            public void onFail() {
+                            public void onFail(String errorMsg) {
+                                Log.e("Download Firmware File", errorMsg);
                                 if (null != fragment) {
                                     fragment.finishLoadingDialog();
+                                    ToastCommon.makeText(fragment.getContext(), R.string.cloud_api_call_net_error);
                                 }
                             }
                         });
                     }
 
                     @Override
-                    public void onFail() {
+                    public void onFail(String errorMsg) {
+                        Log.e("Download Firmware File", errorMsg);
                         if (null != fragment) {
                             fragment.finishLoadingDialog();
+                            ToastCommon.makeText(fragment.getContext(), R.string.cloud_api_call_net_error);
                         }
                     }
                 });
@@ -620,6 +625,7 @@ public class DeviceManager {
                 Log.w("checkFirmwareUpdate", "currentVersion fail");
                 if (null != fragment) {
                     fragment.finishLoadingDialog();
+                    ToastCommon.makeText(fragment.getContext(), R.string.cloud_api_call_net_error);
                 }
             }
         });
@@ -638,12 +644,20 @@ public class DeviceManager {
                     Response<ResponseBody> response = firmwareApi.downloadFileWithUrl(url).execute();
                     if (response.isSuccessful()) {
                         String filePath = writeResponseBodyToDisk(context, response.body(), fileName);
-                        if (null != listener && !TextUtils.isEmpty(filePath)) {
+                        if (null == listener) {
+                            return;
+                        }
+                        if (!TextUtils.isEmpty(filePath)) {
                             listener.onSuccess(filePath);
+                        } else {
+                            listener.onFail("File path is empty");
                         }
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
+                    if (null != listener) {
+                        listener.onFail("Catch exception when downloading");
+                    }
                 }
             }
         }.start();
@@ -652,7 +666,7 @@ public class DeviceManager {
     public interface ICompleteListener {
         void onSuccess(String filePath);
 
-        void onFail();
+        void onFail(String errorMsg);
     }
 
     /**
