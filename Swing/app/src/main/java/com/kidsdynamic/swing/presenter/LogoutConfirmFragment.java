@@ -10,19 +10,26 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.kidsdynamic.data.dao.DB_User;
+import com.kidsdynamic.data.net.ApiGen;
+import com.kidsdynamic.data.net.user.UserApiNeedToken;
+import com.kidsdynamic.data.utils.LogUtil2;
 import com.kidsdynamic.swing.R;
 import com.kidsdynamic.swing.domain.LoginManager;
 import com.kidsdynamic.swing.domain.RawActivityManager;
 import com.kidsdynamic.swing.domain.UserManager;
+import com.kidsdynamic.swing.net.BaseRetrofitCallback;
 import com.kidsdynamic.swing.utils.ConfigUtil;
 import com.kidsdynamic.swing.utils.GlideHelper;
 import com.kidsdynamic.swing.utils.ViewUtils;
 import com.kidsdynamic.swing.view.ViewCircle;
 import com.yy.base.ActivityController;
+import com.yy.base.utils.ToastCommon;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import retrofit2.Call;
+import retrofit2.Response;
 
 /**
  * LogoutConfirmFragment
@@ -99,7 +106,42 @@ public class LogoutConfirmFragment extends ProfileBaseFragment {
         }
     };*/
 
+    //add 2018年2月4日17:14:50 weizg
     @OnClick(R.id.btn_confirm_logout)
+    public void logoutOnline(){
+        showLoadingDialog(R.string.activity_main_wait);
+
+        final UserApiNeedToken userApiNeedToken =
+                ApiGen.getInstance(getActivity().getApplicationContext()).
+                generateApi(UserApiNeedToken.class, true);
+
+        userApiNeedToken.userLogout().enqueue(new BaseRetrofitCallback<Object>() {
+            @Override
+            public void onResponse(Call<Object> call, Response<Object> response) {
+
+                finishLoadingDialog();
+
+                if (response.code() == 200) {
+                    logout();
+                }else {
+                    ToastCommon.makeText(getContext(),R.string.normal_err, response.code());
+                    LogUtil2.getUtils().d("onResponse not 200");
+                }
+
+                super.onResponse(call, response);
+            }
+
+            @Override
+            public void onFailure(Call<Object> call, Throwable t) {
+                super.onFailure(call, t);
+
+                ToastCommon.makeText(getContext(),R.string.normal_err, 1);
+                finishLoadingDialog();
+            }
+        });
+    }
+
+
     protected void logout(){
         //show dialog to confirm
         //del token and
