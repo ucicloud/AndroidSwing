@@ -1325,9 +1325,11 @@ private void syncReconnect(final BluetoothLeDevice bluetoothLeDevice, final bool
 
                                         if (Build.VERSION.SDK_INT >= 21) {
                                             //升级时禁用高优先级连接，否则将导致升级失败
-//                                            if (gatt.requestConnectionPriority(BluetoothGatt.CONNECTION_PRIORITY_HIGH)) {
-//                                                ViseLog.i("enable CONNECTION_PRIORITY_HIGH");
-//                                            }
+                                            if (android.os.Build.MODEL.contains("FS8002")) {
+                                                if (gatt.requestConnectionPriority(BluetoothGatt.CONNECTION_PRIORITY_HIGH)) {
+                                                    ViseLog.i("FS8002 enable CONNECTION_PRIORITY_HIGH");
+                                                }
+                                            }
                                         }
 
 
