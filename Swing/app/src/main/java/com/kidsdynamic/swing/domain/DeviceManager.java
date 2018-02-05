@@ -566,12 +566,12 @@ public class DeviceManager {
                     return;
                 }
                 FirmwareVersionEntity entity = response.body();
-                setFirmwareNeedUpdate(null != entity);
-                sendBroadcastFirmwareUpdate(null != entity);
+                setFirmwareNeedUpdate(null != entity && entity.getVersion() != null);
+                sendBroadcastFirmwareUpdate(null != entity && entity.getVersion() != null);
                 if (!needDownloadFirmwareFile) {
                     return;
                 }
-                if (null == entity) {
+                if (null == entity || entity.getVersion() == null) {
                     if (null != fragment) {
                         fragment.finishLoadingDialog();
                     }
@@ -651,6 +651,11 @@ public class DeviceManager {
                             listener.onSuccess(filePath);
                         } else {
                             listener.onFail("File path is empty");
+                        }
+                    }
+                    else {
+                        if (null == listener) {
+                            listener.onFail("download fail");
                         }
                     }
                 } catch (Exception e) {
