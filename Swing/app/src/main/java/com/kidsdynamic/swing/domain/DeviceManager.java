@@ -689,11 +689,6 @@ public class DeviceManager {
                         }
                         listener.onFail("Response path is not successful");
                     }
-                    else {
-                        if (null == listener) {
-                            listener.onFail("download fail");
-                        }
-                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                     if (null != listener) {
