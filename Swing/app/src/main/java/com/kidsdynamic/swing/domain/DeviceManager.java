@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -520,7 +521,7 @@ public class DeviceManager {
         eventKidsStore.updateFirmwareVersion(macId, fireWareVersion);
     }
 
-    public void uploadFirmwareVersion(final Context context, final String macId, final String version) {
+    public void uploadFirmwareVersion(final String macId, final String version) {
         FirmwareApi firmwareApi = ApiGen.getInstance(SwingApplication.getAppContext()).
                 generateApi(FirmwareApi.class, true);
 
@@ -562,6 +563,7 @@ public class DeviceManager {
                 if (code != 200) {
                     if (null != fragment) {
                         fragment.finishLoadingDialog();
+                        ToastCommon.makeText(fragment.getContext(), R.string.error_api_user_is_token_valid_403);
                     }
                     return;
                 }
@@ -569,6 +571,9 @@ public class DeviceManager {
                 setFirmwareNeedUpdate(null != entity && entity.getVersion() != null);
                 sendBroadcastFirmwareUpdate(null != entity && entity.getVersion() != null);
                 if (!needDownloadFirmwareFile) {
+                    if (null != fragment) {
+                        fragment.finishLoadingDialog();
+                    }
                     return;
                 }
                 if (null == entity || entity.getVersion() == null) {
@@ -579,6 +584,12 @@ public class DeviceManager {
                 }
                 String version = entity.getVersion();
                 String fileAUrl = entity.getFileAUrl();
+                if (TextUtils.isEmpty(fileAUrl)) {
+                    if (null != fragment) {
+                        fragment.finishLoadingDialog();
+                    }
+                    return;
+                }
                 String fileAName = String.format("%sA.hex", version);
                 String fileADownloadUrl = BuildConfig.FIRMWARE_FILE_URL + fileAUrl;
                 final String fileBUrl = entity.getFileBUrl();
@@ -612,10 +623,20 @@ public class DeviceManager {
                     @Override
                     public void onFail(String errorMsg) {
                         Log.e("Download Firmware File", errorMsg);
-                        if (null != fragment) {
-                            fragment.finishLoadingDialog();
-                            ToastCommon.makeText(fragment.getContext(), R.string.cloud_api_call_net_error);
+                        if (null == fragment) {
+                            return;
                         }
+                        FragmentActivity activity = fragment.getActivity();
+                        if (null == activity) {
+                            return;
+                        }
+                        activity.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                fragment.finishLoadingDialog();
+                                ToastCommon.makeText(fragment.getContext(), R.string.cloud_api_call_net_error);
+                            }
+                        });
                     }
                 });
             }
@@ -623,10 +644,20 @@ public class DeviceManager {
             @Override
             public void onFailure(@NonNull Call<FirmwareVersionEntity> call, @NonNull Throwable t) {
                 Log.w("checkFirmwareUpdate", "currentVersion fail");
-                if (null != fragment) {
-                    fragment.finishLoadingDialog();
-                    ToastCommon.makeText(fragment.getContext(), R.string.cloud_api_call_net_error);
+                if (null == fragment) {
+                    return;
                 }
+                FragmentActivity activity = fragment.getActivity();
+                if (null == activity) {
+                    return;
+                }
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        fragment.finishLoadingDialog();
+                        ToastCommon.makeText(fragment.getContext(), R.string.cloud_api_call_net_error);
+                    }
+                });
             }
         });
     }
@@ -642,7 +673,7 @@ public class DeviceManager {
 
                 try {
                     Response<ResponseBody> response = firmwareApi.downloadFileWithUrl(url).execute();
-                    if (response.isSuccessful()) {
+                    if (null != response && response.isSuccessful()) {
                         String filePath = writeResponseBodyToDisk(context, response.body(), fileName);
                         if (null == listener) {
                             return;
@@ -652,6 +683,11 @@ public class DeviceManager {
                         } else {
                             listener.onFail("File path is empty");
                         }
+                    } else {
+                        if (null == listener) {
+                            return;
+                        }
+                        listener.onFail("Response path is not successful");
                     }
                     else {
                         if (null == listener) {
