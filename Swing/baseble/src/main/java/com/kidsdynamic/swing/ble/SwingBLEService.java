@@ -890,6 +890,7 @@ public class SwingBLEService extends Service {
 //        if (!ViseBluetooth.getInstance().getBluetoothAdapter().isEnabled()) {
 //            ViseBluetooth.getInstance().getBluetoothAdapter().enable();
 //        }
+        closeConnect();
         action = SwingBLEAttributes.BLE_INIT_ACTION;
         handlerState = 0;
         reconnectTimes = 5;
@@ -1143,7 +1144,7 @@ private void syncReconnect(final BluetoothLeDevice bluetoothLeDevice, final bool
 //        if (!ViseBluetooth.getInstance().getBluetoothAdapter().isEnabled()) {
 //            ViseBluetooth.getInstance().getBluetoothAdapter().enable();
 //        }
-
+        closeConnect();
         resetInfo();
         action = SwingBLEAttributes.BLE_SYNC_ACTION;
         syncCallback = callback2;
@@ -1272,7 +1273,7 @@ private void syncReconnect(final BluetoothLeDevice bluetoothLeDevice, final bool
 //        if (!ViseBluetooth.getInstance().getBluetoothAdapter().isEnabled()) {
 //            ViseBluetooth.getInstance().getBluetoothAdapter().enable();
 //        }
-
+        closeConnect();
         resetInfo();
         action = SwingBLEAttributes.BLE_UPGRADE_ACTION;
         syncCallback = callback2;
