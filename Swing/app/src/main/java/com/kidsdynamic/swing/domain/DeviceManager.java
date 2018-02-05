@@ -534,7 +534,7 @@ public class DeviceManager {
                 Log.w("uploadFirmwareVersion", "sendFirmwareVersion onResponse");
                 int code = response.code();
                 if (200 == code) {
-                    checkFirmwareUpdate(context, macId, version, null, false);
+                    checkFirmwareUpdate(macId, version, null, false);
                 }
             }
 
@@ -545,7 +545,7 @@ public class DeviceManager {
         });
     }
 
-    public void checkFirmwareUpdate(final Context context, final String macId, final String version,
+    public void checkFirmwareUpdate(final String macId, final String version,
                                     final BaseFragment fragment, final boolean needDownloadFirmwareFile) {
         if (null != fragment) {
             fragment.showLoadingDialog(R.string.signup_login_wait);
@@ -584,11 +584,11 @@ public class DeviceManager {
                 final String fileBUrl = entity.getFileBUrl();
                 final String fileBName = String.format("%sB.hex", version);
                 final String fileBDownloadUrl = BuildConfig.FIRMWARE_FILE_URL + fileBUrl;
-                downloadFirmwareFile(context, fileADownloadUrl, fileAName, new ICompleteListener() {
+                downloadFirmwareFile(SwingApplication.getAppContext(), fileADownloadUrl, fileAName, new ICompleteListener() {
                     @Override
                     public void onSuccess(String filePath) {
                         setFirmwareAFilePath(filePath);
-                        downloadFirmwareFile(context, fileBDownloadUrl, fileBName, new ICompleteListener() {
+                        downloadFirmwareFile(SwingApplication.getAppContext(), fileBDownloadUrl, fileBName, new ICompleteListener() {
                             @Override
                             public void onSuccess(String filePath) {
                                 setFirmwareBFilePath(filePath);
@@ -638,7 +638,7 @@ public class DeviceManager {
             public void run() {
                 super.run();
                 FirmwareApi firmwareApi = ApiGen.getInstance(SwingApplication.getAppContext()).
-                        generateApi(FirmwareApi.class, true);
+                        generateApi4DownloadFile(FirmwareApi.class);
 
                 try {
                     Response<ResponseBody> response = firmwareApi.downloadFileWithUrl(url).execute();

@@ -484,7 +484,7 @@ public class ProfileOptionFragment extends ProfileBaseFragment {
         if (TextUtils.isEmpty(firmwareMacId) || TextUtils.isEmpty(firmwareVersion)) {
             return;
         }
-        new DeviceManager().checkFirmwareUpdate(getContext(), firmwareMacId, firmwareVersion, this, true);
+        new DeviceManager().checkFirmwareUpdate(firmwareMacId, firmwareVersion, this, true);
     }
 
 }

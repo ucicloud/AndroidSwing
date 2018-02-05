@@ -12,6 +12,7 @@ import com.kidsdynamic.data.persistent.PreferencesUtil;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
 
@@ -60,6 +61,34 @@ public class ApiGen {
                 .create(service);
     }
 
+    public <T> T generateApi4DownloadFile(Class<T> service) {
+        return Retrofit2Client.INSTANCE.getRetrofitBuilder()
+                .client(getOkHttpClientForDownload(true))
+                .baseUrl(BASE_URL).build()
+                .create(service);
+    }
+
+    private OkHttpClient getOkHttpClientForDownload(boolean isNeedToken) {
+        OkHttpClient okHttpClient = okHttp.INSTANCE.getOkHttpClient();
+
+        if (isNeedToken) {
+            PreferencesUtil preferencesUtil = PreferencesUtil.getInstance(context);
+            String authToken = preferencesUtil.gPrefStringValue(Config.KEY_TOKEN_LABEL);
+            Map<String, String> headMap = new HashMap<>(1);
+            headMap.put(Config.HEADER_LABEL, authToken);
+
+            //新增header添加拦截器
+            return okHttpClient
+                    .newBuilder()
+                    .connectTimeout(15, TimeUnit.SECONDS)
+                    .readTimeout(15, TimeUnit.SECONDS)
+                    .writeTimeout(15, TimeUnit.SECONDS)
+                    .addInterceptor(new HeaderInterceptor(headMap))
+                    .build();
+        }
+
+        return okHttpClient;
+    }
 
     private OkHttpClient getOkHttpClient(boolean isNeedToken){
         OkHttpClient okHttpClient = okHttp.INSTANCE.getOkHttpClient();
