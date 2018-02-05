@@ -481,6 +481,8 @@ public class ProfileOptionFragment extends ProfileBaseFragment {
     private void checkWatchUpdate() {
         String firmwareMacId = DeviceManager.getFirmwareMacId();
         String firmwareVersion = DeviceManager.getFirmwareVersion();
+//        firmwareMacId = "6064058630BA";
+//        firmwareVersion = "KDV0109-CN";
         if (TextUtils.isEmpty(firmwareMacId) || TextUtils.isEmpty(firmwareVersion)) {
             return;
         }
