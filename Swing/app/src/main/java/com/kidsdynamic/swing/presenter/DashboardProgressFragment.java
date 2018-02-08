@@ -520,6 +520,12 @@ public class DashboardProgressFragment extends DashboardBaseFragment {
 
     private void searchWatch() {
         mBluetoothService.closeConnect();
+        //maple add by 20180208
+        mSearchWatchResult = mBluetoothService.searchConnectedDevice(mMacAddress);
+        if (mSearchWatchResult != null) {
+            return;
+        }
+
         //一直扫描，直到该界面被压栈或是被关闭
         mBluetoothService.scanDevice(0, new IDeviceScanCallback() {
             @Override

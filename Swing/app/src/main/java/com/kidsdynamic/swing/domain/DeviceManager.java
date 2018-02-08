@@ -561,10 +561,17 @@ public class DeviceManager {
                 Log.w("checkFirmwareUpdate", "currentVersion onResponse");
                 int code = response.code();
                 if (code != 200) {
-                    if (null != fragment) {
-                        fragment.finishLoadingDialog();
-                        ToastCommon.makeText(fragment.getContext(), R.string.error_api_user_is_token_valid_403);
+                    FragmentActivity activity = fragment.getActivity();
+                    if (null == activity) {
+                        return;
                     }
+                    activity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            fragment.finishLoadingDialog();
+                            ToastCommon.makeText(fragment.getContext(), R.string.error_api_user_is_token_valid_403);
+                        }
+                    });
                     return;
                 }
                 FirmwareVersionEntity entity = response.body();
@@ -612,10 +619,17 @@ public class DeviceManager {
                             @Override
                             public void onFail(String errorMsg) {
                                 Log.e("Download Firmware File", errorMsg);
-                                if (null != fragment) {
-                                    fragment.finishLoadingDialog();
-                                    ToastCommon.makeText(fragment.getContext(), R.string.cloud_api_call_net_error);
+                                FragmentActivity activity = fragment.getActivity();
+                                if (null == activity) {
+                                    return;
                                 }
+                                activity.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        fragment.finishLoadingDialog();
+                                        ToastCommon.makeText(fragment.getContext(), R.string.cloud_api_call_net_error);
+                                    }
+                                });
                             }
                         });
                     }

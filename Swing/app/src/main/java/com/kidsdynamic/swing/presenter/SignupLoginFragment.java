@@ -101,8 +101,8 @@ public class SignupLoginFragment extends BaseFragment {
         super.onActivityCreated(savedInstanceState);
 
         if (BuildConfig.DEBUG) {
-            et_email.setText("123@qq.com");
-            et_password.setText("123456");
+            et_email.setText("lwz2@swing.com");
+            et_password.setText("111111");
         }
 /*
         et_email.setText("lwz3@swing.com");

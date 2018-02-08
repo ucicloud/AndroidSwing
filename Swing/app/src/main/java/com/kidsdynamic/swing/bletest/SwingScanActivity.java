@@ -139,7 +139,7 @@ public class SwingScanActivity extends AppCompatActivity implements View.OnClick
                 if (mBluetoothService != null) {
                     mBluetoothService.cancelScan();
 
-                    progressDialog.setMessage("初始化设备中");
+                    progressDialog.setMessage("Initializing device");
                     progressDialog.show();
                     img_loading.clearAnimation();
                     btn_start.setEnabled(true);
@@ -152,13 +152,13 @@ public class SwingScanActivity extends AppCompatActivity implements View.OnClick
                             Log.d(TAG, "onInitComplete mac " + mac);
                             progressDialog.dismiss();
                             sync_view.setText(address);
-                            Toast.makeText(SwingScanActivity.this, "初始化成功", Toast.LENGTH_LONG).show();
+                            Toast.makeText(SwingScanActivity.this, "Init success.", Toast.LENGTH_LONG).show();
                         }
 
                         @Override
                         public void onInitFail(int reason) {
                             progressDialog.dismiss();
-                            Toast.makeText(SwingScanActivity.this, "初始化失败", Toast.LENGTH_LONG).show();
+                            Toast.makeText(SwingScanActivity.this, "Init failed.", Toast.LENGTH_LONG).show();
                         }
 
                         @Override
@@ -385,26 +385,26 @@ public class SwingScanActivity extends AppCompatActivity implements View.OnClick
                 String mac = sync_view.getText().toString();
                 if (mac == null || mac.length() == 0)
                 {
-                    Toast.makeText(SwingScanActivity.this, "请先扫描并初始化设备", Toast.LENGTH_LONG).show();
+                    Toast.makeText(SwingScanActivity.this, "Please scan and initialize device", Toast.LENGTH_LONG).show();
                     return;
                 }
 
                 List<EventModel> list = genEvents();
 
                 mBluetoothService.closeConnect();
-                progressDialog.setMessage("同步设备中");
+                progressDialog.setMessage("Syncing");
                 progressDialog.show();
                 mBluetoothService.scanAndSync2(mac, list, new IDeviceSyncCallback() {
                     @Override
                     public void onSyncComplete() {
                         progressDialog.dismiss();
-                        Toast.makeText(SwingScanActivity.this, "同步成功", Toast.LENGTH_LONG).show();
+                        Toast.makeText(SwingScanActivity.this, "Sync success.", Toast.LENGTH_LONG).show();
                     }
 
                     @Override
                     public void onSyncFail(int reason) {
                         progressDialog.dismiss();
-                        Toast.makeText(SwingScanActivity.this, "同步失败", Toast.LENGTH_LONG).show();
+                        Toast.makeText(SwingScanActivity.this, "Sync failed.", Toast.LENGTH_LONG).show();
                     }
 
                     @Override
