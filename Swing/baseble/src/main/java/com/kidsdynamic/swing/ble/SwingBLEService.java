@@ -956,7 +956,7 @@ public class SwingBLEService extends Service {
                         if (handlerState == 0 && --reconnectTimes >= 0)
                         {
                             ViseLog.i("reconnect " + reconnectTimes);
-                            syncReconnect(true);
+                            syncReconnect(null, true);
                         }
                         else {
                             onBleFailure("onConnectFailure");
@@ -1063,7 +1063,7 @@ public class SwingBLEService extends Service {
         });
     }
 */
-private void syncReconnect2(final BluetoothLeDevice bluetoothLeDevice, final boolean priorityHigh) {
+private void syncReconnect2(final BluetoothDevice bluetoothDevice, final boolean priorityHigh) {
         final IConnectCallback connectCallback = new IConnectCallback() {
             @Override
             public void onConnecting(BluetoothGatt gatt, int status) {
@@ -1123,7 +1123,7 @@ private void syncReconnect2(final BluetoothLeDevice bluetoothLeDevice, final boo
                         if (handlerState == 0 && --reconnectTimes >= 0)
                         {
                             ViseLog.i("reconnect " + reconnectTimes);
-                            syncReconnect(priorityHigh);
+                            syncReconnect(bluetoothDevice, priorityHigh);
                         }
                         else {
                             onBleFailure("onConnectFailure");
@@ -1143,11 +1143,11 @@ private void syncReconnect2(final BluetoothLeDevice bluetoothLeDevice, final boo
             }
         };
 
-        ViseBluetooth.getInstance().connect(bluetoothLeDevice, true, connectCallback);
+        ViseBluetooth.getInstance().connect(bluetoothDevice, true, connectCallback);
 
     }
 
-    private void syncReconnect(final boolean priorityHigh) {
+    private void syncReconnect(final BluetoothDevice bluetoothDevice, final boolean priorityHigh) {
         if (periodScanCallback != null) {
             ViseBluetooth.getInstance().stopScan(periodScanCallback);
             periodScanCallback = null;
@@ -1237,7 +1237,7 @@ private void syncReconnect2(final BluetoothLeDevice bluetoothLeDevice, final boo
                                                 if (handlerState == 0 && --reconnectTimes >= 0)
                                                 {
                                                     ViseLog.i("reconnect " + reconnectTimes);
-                                                    syncReconnect(true);
+                                                    syncReconnect(bluetoothDevice, true);
                                                 }
                                                 else {
                                                     onBleFailure("onConnectFailure");
@@ -1266,7 +1266,7 @@ private void syncReconnect2(final BluetoothLeDevice bluetoothLeDevice, final boo
             }
         };
 
-        ViseBluetooth.getInstance().setScanTimeout(5000)
+        ViseBluetooth.getInstance().setScanTimeout(8000)
                 .startScan(callback);
 
     }
@@ -1315,7 +1315,6 @@ private void syncReconnect2(final BluetoothLeDevice bluetoothLeDevice, final boo
                 runOnMainThread(new Runnable() {
                     @Override
                     public void run() {
-                        searchConnectedDevice(mac);//TEST
                         read(SwingBLEAttributes.BATTERY_SERVICE, SwingBLEAttributes.BATTERY_LEVEL, new ICharacteristicCallback(){
                             @Override
                             public void onSuccess(BluetoothGattCharacteristic characteristic) {
@@ -1349,7 +1348,7 @@ private void syncReconnect2(final BluetoothLeDevice bluetoothLeDevice, final boo
                         if (handlerState == 0 && --reconnectTimes >= 0)
                         {
                             ViseLog.i("reconnect " + reconnectTimes);
-                            syncReconnect(true);
+                            syncReconnect(null, true);
                         }
                         else {
                             onBleFailure("onConnectFailure");
@@ -1491,7 +1490,7 @@ private void syncReconnect2(final BluetoothLeDevice bluetoothLeDevice, final boo
                         if (handlerState == 0 && --reconnectTimes >= 0)
                         {
                             ViseLog.i("reconnect " + reconnectTimes);
-                            syncReconnect(false);
+                            syncReconnect(null ,false);
                         }
                         else {
                             onBleFailure("onConnectFailure");
