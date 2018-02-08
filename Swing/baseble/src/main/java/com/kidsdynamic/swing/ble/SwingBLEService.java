@@ -10,6 +10,9 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattService;
+import android.bluetooth.BluetoothManager;
+import android.bluetooth.BluetoothProfile;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.Build;
@@ -1312,7 +1315,7 @@ private void syncReconnect2(final BluetoothLeDevice bluetoothLeDevice, final boo
                 runOnMainThread(new Runnable() {
                     @Override
                     public void run() {
-                        //searchConnectedDevice(mac);//TEST
+                        searchConnectedDevice(mac);//TEST
                         read(SwingBLEAttributes.BATTERY_SERVICE, SwingBLEAttributes.BATTERY_LEVEL, new ICharacteristicCallback(){
                             @Override
                             public void onSuccess(BluetoothGattCharacteristic characteristic) {
@@ -1579,6 +1582,21 @@ private void syncReconnect2(final BluetoothLeDevice bluetoothLeDevice, final boo
     }
 
     public BluetoothLeDevice searchConnectedDevice(String mac) {
+        BluetoothManager bluetoothManager = (BluetoothManager) getApplicationContext().getSystemService(Context.BLUETOOTH_SERVICE);
+        List<BluetoothDevice> devices = bluetoothManager.getConnectedDevices(BluetoothProfile.GATT);
+        for(BluetoothDevice device : devices) {
+            if(device.getType() == BluetoothDevice.DEVICE_TYPE_LE) {
+                if (device.getAddress().equals(mac)) {
+                    ViseLog.i("OYE connected:" + device.getName());
+                    return new BluetoothLeDevice(device, 99, new byte[]{}, System
+                            .currentTimeMillis());
+                }
+            }
+        }
+        return null;
+    }
+
+    public BluetoothLeDevice searchConnectedDevice2(String mac) {
         BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
         Class<BluetoothAdapter> bluetoothAdapterClass = BluetoothAdapter.class;//得到BluetoothAdapter的Class对象
         try {//得到连接状态的方法
