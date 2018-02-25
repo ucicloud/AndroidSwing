@@ -44,6 +44,7 @@ import com.vise.log.ViseLog;
 import com.vise.log.inner.LogcatTree;
 
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -454,30 +455,34 @@ public class SwingScanActivity extends AppCompatActivity implements View.OnClick
 
 //                oye = !oye;
                 String name = null;
-                FileInputStream fileA = null;
-                FileInputStream fileB = null;
-                if (oye)
-                {
-                    try {
-                        name = "A_20171010.bin";
-                        fileA = new FileInputStream("/sdcard/A_20171010.bin");
-                        fileB = new FileInputStream("/sdcard/B_20171010.bin");
-                    } catch (Exception e) {
-                        Toast.makeText(SwingScanActivity.this, "固件不存在", Toast.LENGTH_LONG).show();
-                        return;
-                    }
-                }
-                else {
-                    try {
-                        name = "KDV0009-A_A_111017.bin";
-                        fileA = new FileInputStream("/sdcard/KDV0009-A_A_111017.bin");
-                        fileB = new FileInputStream("/sdcard/KDV0009-A_B_111017.bin");
-                    } catch (Exception e) {
-                        Toast.makeText(SwingScanActivity.this, "固件不存在", Toast.LENGTH_LONG).show();
-                        return;
-                    }
-                }
-                
+                InputStream fileA = null;
+                InputStream fileB = null;
+//                if (oye)
+//                {
+//                    try {
+//                        name = "A_20171010.bin";
+//                        fileA = new FileInputStream("/sdcard/A_20171010.bin");
+//                        fileB = new FileInputStream("/sdcard/B_20171010.bin");
+//                    } catch (Exception e) {
+//                        Toast.makeText(SwingScanActivity.this, "固件不存在", Toast.LENGTH_LONG).show();
+//                        return;
+//                    }
+//                }
+//                else {
+//                    try {
+//                        name = "KDV0009-A_A_111017.bin";
+//                        fileA = new FileInputStream("/sdcard/KDV0009-A_A_111017.bin");
+//                        fileB = new FileInputStream("/sdcard/KDV0009-A_B_111017.bin");
+//                    } catch (Exception e) {
+//                        Toast.makeText(SwingScanActivity.this, "固件不存在", Toast.LENGTH_LONG).show();
+//                        return;
+//                    }
+//                }
+
+                fileA = SwingScanActivity.this.getResources().openRawResource(R.raw.kdv0009_a_111017);
+                fileB = SwingScanActivity.this.getResources().openRawResource(R.raw.kdv0009_b_111017);
+
+
                 mBluetoothService.closeConnect();
                 progressDialog.setMessage("升级设备中" + name);
                 progressDialog.show();

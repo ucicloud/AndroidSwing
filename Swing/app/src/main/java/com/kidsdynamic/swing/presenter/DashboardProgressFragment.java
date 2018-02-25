@@ -47,6 +47,7 @@ import com.kidsdynamic.swing.view.ViewCircle;
 import com.vise.baseble.model.BluetoothLeDevice;
 import com.yy.base.utils.LogUtil;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -576,7 +577,13 @@ public class DashboardProgressFragment extends DashboardBaseFragment {
 //        List<EventModel> list = genEvents();
 
         mBluetoothService.closeConnect();
-        mBluetoothService.scanAndSync2(mMacAddress, mVoiceAlertList, new IDeviceSyncCallback() {
+        InputStream fileA = DashboardProgressFragment.this.getResources().openRawResource(R.raw.kdv0009_a_111017);
+        InputStream fileB = DashboardProgressFragment.this.getResources().openRawResource(R.raw.kdv0009_b_111017);
+
+
+        mBluetoothService.scanAndUpgrade(mMacAddress, fileA, fileB, new IDeviceSyncCallback() {
+
+//        mBluetoothService.scanAndSync2(mMacAddress, mVoiceAlertList, new IDeviceSyncCallback() {
             @Override
             public void onSyncComplete() {
                 LogUtil.getUtils().d("sync data complete: ok");
@@ -634,7 +641,7 @@ public class DashboardProgressFragment extends DashboardBaseFragment {
 
             @Override
             public boolean onDeviceNeedUpdate(String version) {
-                return false;
+                return true;
             }
 
             @Override
@@ -921,15 +928,15 @@ public class DashboardProgressFragment extends DashboardBaseFragment {
     private void bindService(int bindPurpose) {
         mBindBlePurpose = bindPurpose;
 
-        Context context = getContext();
-        Intent bindIntent = new Intent(context, SwingBLEService.class);
-        context.bindService(bindIntent, mFhrSCon, Context.BIND_AUTO_CREATE);
+//        Context context = getContext();
+        Intent bindIntent = new Intent(mActivityMain, SwingBLEService.class);
+        mActivityMain.bindService(bindIntent, mFhrSCon, Context.BIND_AUTO_CREATE);
     }
 
     //解绑定蓝牙服务
     private void unbindService() {
-        Context context = getContext();
-        context.unbindService(mFhrSCon);
+//        Context context = getContext();
+        mActivityMain.unbindService(mFhrSCon);
     }
 
     //蓝牙服务连接成功后，回调接口

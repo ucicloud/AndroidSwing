@@ -28,6 +28,7 @@ import com.kidsdynamic.data.net.user.UserApiNeedToken;
 import com.kidsdynamic.swing.BuildConfig;
 import com.kidsdynamic.swing.R;
 import com.kidsdynamic.swing.SwingApplication;
+import com.kidsdynamic.swing.bletest.SwingScanActivity;
 import com.kidsdynamic.swing.domain.BeanConvertor;
 import com.kidsdynamic.swing.domain.DeviceManager;
 import com.kidsdynamic.swing.model.KidsEntityBean;
@@ -227,6 +228,7 @@ public class ProfileOptionFragment extends ProfileBaseFragment {
     protected void contactUs() {
 
         // force to KD's customer webpage
+        /*
         String url = "http://www.imaginarium.info/";
 
         String language = Locale.getDefault().getLanguage();
@@ -241,6 +243,8 @@ public class ProfileOptionFragment extends ProfileBaseFragment {
         Intent i = new Intent(Intent.ACTION_VIEW);
         i.setData(Uri.parse(url));
         startActivity(i);
+        */
+        startActivity(new Intent(getContext(), SwingScanActivity.class));
     }
 
     @OnClick(R.id.profile_option_manual)

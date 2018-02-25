@@ -21,20 +21,19 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
 
-import com.vise.baseble.common.BleExceptionCode;
-import com.vise.baseble.utils.HexUtil;
 import com.vise.baseble.ViseBluetooth;
 import com.vise.baseble.callback.IConnectCallback;
 import com.vise.baseble.callback.data.ICharacteristicCallback;
 import com.vise.baseble.callback.data.IRssiCallback;
-import com.vise.baseble.callback.scan.PeriodScanOnceCallback;
 import com.vise.baseble.callback.scan.PeriodScanCallback;
+import com.vise.baseble.callback.scan.PeriodScanOnceCallback;
+import com.vise.baseble.common.BleExceptionCode;
 import com.vise.baseble.exception.BleException;
 import com.vise.baseble.model.BluetoothLeDevice;
+import com.vise.baseble.utils.HexUtil;
 import com.vise.log.ViseLog;
 
 import java.io.InputStream;
-import java.lang.reflect.Array;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -43,15 +42,15 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class SwingBLEService extends Service {
-
-    public BluetoothBinder mBinder = new BluetoothBinder();
+public class SwingBLEClient {
 
     private int action = SwingBLEAttributes.BLE_INIT_ACTION;
     private int handlerState;
     public int reconnectTimes;
     private IDeviceInitCallback initCallback = null;
     private IDeviceSyncCallback syncCallback = null;
+
+    private Context context;
 
     private class SyncModel {
         public List<EventModel> eventList = null;
@@ -100,10 +99,10 @@ public class SwingBLEService extends Service {
 
         public void writeOADNotify() {
             //监听OAD_IMAGE_NOTIFY_UUID反馈数据
-            boolean success = SwingBLEService.this.notify(SwingBLEAttributes.OAD_SERVICE_UUID, SwingBLEAttributes.OAD_IMAGE_NOTIFY_UUID, new ICharacteristicCallback() {
+            boolean success = SwingBLEClient.this.notify(SwingBLEAttributes.OAD_SERVICE_UUID, SwingBLEAttributes.OAD_IMAGE_NOTIFY_UUID, new ICharacteristicCallback() {
                 @Override
                 public void onSuccess(BluetoothGattCharacteristic characteristic) {
-                    SwingBLEService.this.stopNotify(SwingBLEAttributes.OAD_SERVICE_UUID, SwingBLEAttributes.OAD_IMAGE_NOTIFY_UUID);
+                    SwingBLEClient.this.stopNotify(SwingBLEAttributes.OAD_SERVICE_UUID, SwingBLEAttributes.OAD_IMAGE_NOTIFY_UUID);
                     ViseLog.i("current bin ver : " + HexUtil.encodeHexStr(characteristic.getValue()));
 
                     if (handlerState == SwingBLEAttributes.MSG_UPGRADE_CHECK_IMAGE_A) {
@@ -154,7 +153,7 @@ public class SwingBLEService extends Service {
                 case SwingBLEAttributes.MSG_UPGRADE_CHECK_IMAGE_A:
                 {
                     //发送0x00检查当前固件是否是Image A，如果不回应则1.5s后发0x01检查当前固件是否是Image B
-                    SwingBLEService.this.write(SwingBLEAttributes.OAD_SERVICE_UUID, SwingBLEAttributes.OAD_IMAGE_NOTIFY_UUID, "00", new ICharacteristicCallback(){
+                    SwingBLEClient.this.write(SwingBLEAttributes.OAD_SERVICE_UUID, SwingBLEAttributes.OAD_IMAGE_NOTIFY_UUID, "00", new ICharacteristicCallback(){
                         @Override
                         public void onFailure(BleException exception) {
                             ViseLog.i("OAD_IMAGE_NOTIFY_UUID onFailure:" + exception);
@@ -174,7 +173,7 @@ public class SwingBLEService extends Service {
                 case SwingBLEAttributes.MSG_UPGRADE_CHECK_IMAGE_B:
                 {
                     //发0x01检查当前固件是否是Image B
-                    SwingBLEService.this.write(SwingBLEAttributes.OAD_SERVICE_UUID, SwingBLEAttributes.OAD_IMAGE_NOTIFY_UUID, "01", new ICharacteristicCallback(){
+                    SwingBLEClient.this.write(SwingBLEAttributes.OAD_SERVICE_UUID, SwingBLEAttributes.OAD_IMAGE_NOTIFY_UUID, "01", new ICharacteristicCallback(){
                         @Override
                         public void onFailure(BleException exception) {
                             ViseLog.i("OAD_IMAGE_NOTIFY_UUID onFailure:" + exception);
@@ -193,7 +192,7 @@ public class SwingBLEService extends Service {
                     break;
                 case SwingBLEAttributes.MSG_UPGRADE_CHECK_IMAGE_TIMEOUT:
                 {
-                    SwingBLEService.this.stopNotify(SwingBLEAttributes.OAD_SERVICE_UUID, SwingBLEAttributes.OAD_IMAGE_NOTIFY_UUID);
+                    SwingBLEClient.this.stopNotify(SwingBLEAttributes.OAD_SERVICE_UUID, SwingBLEAttributes.OAD_IMAGE_NOTIFY_UUID);
                     ViseLog.i("MSG_UPGRADE_CHECK_IMAGE_TIMEOUT");
                     onBleFailure("MSG_UPGRADE_CHECK_IMAGE_TIMEOUT Error");
                 }
@@ -234,7 +233,7 @@ public class SwingBLEService extends Service {
                         iBlocks = 0;
                         iBytes = 0;
 
-                        SwingBLEService.this.write(SwingBLEAttributes.OAD_SERVICE_UUID, SwingBLEAttributes.OAD_IMAGE_NOTIFY_UUID, data, new ICharacteristicCallback(){
+                        SwingBLEClient.this.write(SwingBLEAttributes.OAD_SERVICE_UUID, SwingBLEAttributes.OAD_IMAGE_NOTIFY_UUID, data, new ICharacteristicCallback(){
                             @Override
                             public void onFailure(BleException exception) {
                                 ViseLog.i("OAD_IMAGE_NOTIFY_UUID onFailure:" + exception);
@@ -284,7 +283,7 @@ public class SwingBLEService extends Service {
                         syncCallback.onDeviceUpdating(((float) iBlocks / (float)nBlocks), String.format("%d:%02d",(int)(secondsLeft / 60),(int)secondsLeft - (int)(secondsLeft / 60) * 60));
                     }
 
-                    SwingBLEService.this.write(SwingBLEAttributes.OAD_SERVICE_UUID, SwingBLEAttributes.OAD_IMAGE_BLOCK_REQUEST_UUID, requestData, new ICharacteristicCallback(){
+                    SwingBLEClient.this.write(SwingBLEAttributes.OAD_SERVICE_UUID, SwingBLEAttributes.OAD_IMAGE_BLOCK_REQUEST_UUID, requestData, new ICharacteristicCallback(){
                         @Override
                         public void onFailure(BleException exception) {
                             ViseLog.i("OAD_IMAGE_BLOCK_REQUEST_UUID onFailure:" + exception);
@@ -802,37 +801,19 @@ public class SwingBLEService extends Service {
     private BluetoothGatt gatt;
     private BluetoothGattService service;
 
-    @Override
-    public void onCreate() {
+    public SwingBLEClient(Context context) {
+        this.context = context;
         //蓝牙信息初始化，全局唯一，必须在应用初始化时调用
-        ViseBluetooth.getInstance().init(getApplicationContext());
+        ViseBluetooth.getInstance().init(context);
 
         ViseBluetooth.getInstance().setConnectTimeout(10000);
         ViseBluetooth.getInstance().setOperateTimeout(10000);
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void clear() {
+        ViseBluetooth.getInstance().clear();
         initCallback = null;
         syncCallback = null;
-    }
-
-    @Override
-    public IBinder onBind(Intent intent) {
-        return mBinder;
-    }
-
-    @Override
-    public boolean onUnbind(Intent intent) {
-        ViseBluetooth.getInstance().clear();
-        return super.onUnbind(intent);
-    }
-
-    public class BluetoothBinder extends Binder {
-        public SwingBLEService getService() {
-            return SwingBLEService.this;
-        }
     }
 
     private PeriodScanCallback periodScanCallback = null;
@@ -903,8 +884,8 @@ public class SwingBLEService extends Service {
         reconnectTimes = 5;
         initCallback = callback;
 
-        SwingBLEService.this.name = scanResult.getDevice().getName();
-        SwingBLEService.this.mac = scanResult.getDevice().getAddress();
+        SwingBLEClient.this.name = scanResult.getDevice().getName();
+        SwingBLEClient.this.mac = scanResult.getDevice().getAddress();
         ViseBluetooth.getInstance().connect(scanResult, true, new IConnectCallback() {
             @Override
             public void onConnecting(BluetoothGatt gatt, int status) {
@@ -918,7 +899,7 @@ public class SwingBLEService extends Service {
 
             @Override
             public void onServicesDiscovered(BluetoothGatt gatt, int status) {
-                SwingBLEService.this.gatt = gatt;
+                SwingBLEClient.this.gatt = gatt;
                 runOnMainThread(new Runnable() {
                     @Override
                     public void run() {
@@ -991,9 +972,9 @@ private void syncReconnect2(final BluetoothDevice bluetoothDevice, final boolean
 
             @Override
             public void onServicesDiscovered(BluetoothGatt gatt, int status) {
-                SwingBLEService.this.name = gatt.getDevice().getName();
-                SwingBLEService.this.mac = gatt.getDevice().getAddress();
-                SwingBLEService.this.gatt = gatt;
+                SwingBLEClient.this.name = gatt.getDevice().getName();
+                SwingBLEClient.this.mac = gatt.getDevice().getAddress();
+                SwingBLEClient.this.gatt = gatt;
 
                 if (Build.VERSION.SDK_INT >= 21 && priorityHigh) {
                     if (gatt.requestConnectionPriority(BluetoothGatt.CONNECTION_PRIORITY_HIGH)) {
@@ -1108,7 +1089,7 @@ private void syncReconnect2(final BluetoothDevice bluetoothDevice, final boolean
                                                     ViseLog.i("enable CONNECTION_PRIORITY_HIGH");
                                                 }
                                             }
-                                            else if (android.os.Build.MODEL.contains("FS8002") || android.os.Build.MODEL.contains("F3115")) {
+                                            else if (Build.MODEL.contains("FS8002") || Build.MODEL.contains("F3115")) {
                                                 if (gatt.requestConnectionPriority(BluetoothGatt.CONNECTION_PRIORITY_HIGH)) {
                                                     ViseLog.i("FS8002 F3115 enable CONNECTION_PRIORITY_HIGH");
                                                 }
@@ -1216,9 +1197,9 @@ private void syncReconnect2(final BluetoothDevice bluetoothDevice, final boolean
 
             @Override
             public void onServicesDiscovered(BluetoothGatt gatt, int status) {
-                SwingBLEService.this.name = gatt.getDevice().getName();
-                SwingBLEService.this.mac = gatt.getDevice().getAddress();
-                SwingBLEService.this.gatt = gatt;
+                SwingBLEClient.this.name = gatt.getDevice().getName();
+                SwingBLEClient.this.mac = gatt.getDevice().getAddress();
+                SwingBLEClient.this.gatt = gatt;
 
                 if (Build.VERSION.SDK_INT >= 21) {
                     if (gatt.requestConnectionPriority(BluetoothGatt.CONNECTION_PRIORITY_HIGH)) {
@@ -1354,13 +1335,13 @@ private void syncReconnect2(final BluetoothDevice bluetoothDevice, final boolean
 
             @Override
             public void onServicesDiscovered(BluetoothGatt gatt, int status) {
-                SwingBLEService.this.name = gatt.getDevice().getName();
-                SwingBLEService.this.mac = gatt.getDevice().getAddress();
-                SwingBLEService.this.gatt = gatt;
+                SwingBLEClient.this.name = gatt.getDevice().getName();
+                SwingBLEClient.this.mac = gatt.getDevice().getAddress();
+                SwingBLEClient.this.gatt = gatt;
 
                 if (Build.VERSION.SDK_INT >= 21) {
                     //升级时禁用高优先级连接，否则将导致升级失败
-                    if (android.os.Build.MODEL.contains("FS8002") || android.os.Build.MODEL.contains("F3115")) {
+                    if (Build.MODEL.contains("FS8002") || Build.MODEL.contains("F3115")) {
                         if (gatt.requestConnectionPriority(BluetoothGatt.CONNECTION_PRIORITY_HIGH)) {
                             ViseLog.i("FS8002 F3115 enable CONNECTION_PRIORITY_HIGH");
                         }
@@ -1495,7 +1476,7 @@ private void syncReconnect2(final BluetoothDevice bluetoothDevice, final boolean
     }
 
     public BluetoothLeDevice searchConnectedDevice(String mac) {
-        BluetoothManager bluetoothManager = (BluetoothManager) getApplicationContext().getSystemService(Context.BLUETOOTH_SERVICE);
+        BluetoothManager bluetoothManager = (BluetoothManager) this.context.getSystemService(Context.BLUETOOTH_SERVICE);
         List<BluetoothDevice> devices = bluetoothManager.getConnectedDevices(BluetoothProfile.GATT);
         for(BluetoothDevice device : devices) {
             if(device.getType() == BluetoothDevice.DEVICE_TYPE_LE) {
