@@ -48,8 +48,8 @@ public class SwingApplication extends Application {
         }
         else {
             //Debug时打印蓝牙
-            ViseLog.getLogConfig().configAllowLog(true);//配置日志信息
-            ViseLog.plant(new LogcatTree());//添加Logcat打印信息
+//            ViseLog.getLogConfig().configAllowLog(true);//配置日志信息
+//            ViseLog.plant(new LogcatTree());//添加Logcat打印信息
         }
 
 

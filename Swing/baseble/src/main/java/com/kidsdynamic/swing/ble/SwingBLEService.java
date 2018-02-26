@@ -807,7 +807,7 @@ public class SwingBLEService extends Service {
         //蓝牙信息初始化，全局唯一，必须在应用初始化时调用
         ViseBluetooth.getInstance().init(getApplicationContext());
 
-        ViseBluetooth.getInstance().setConnectTimeout(30000);
+        ViseBluetooth.getInstance().setConnectTimeout(15000);
         ViseBluetooth.getInstance().setOperateTimeout(10000);
     }
 
@@ -1194,9 +1194,9 @@ private void syncReconnect2(final BluetoothDevice bluetoothDevice, final boolean
                                                     ViseLog.i("enable CONNECTION_PRIORITY_HIGH");
                                                 }
                                             }
-                                            else if (android.os.Build.MODEL.contains("FS8002")) {
+                                            else if (android.os.Build.MODEL.contains("FS8002") || android.os.Build.MODEL.contains("F3115")) {
                                                 if (gatt.requestConnectionPriority(BluetoothGatt.CONNECTION_PRIORITY_HIGH)) {
-                                                    ViseLog.i("FS8002 enable CONNECTION_PRIORITY_HIGH");
+                                                    ViseLog.i("FS8002 F3115 enable CONNECTION_PRIORITY_HIGH");
                                                 }
                                             }
                                         }
@@ -1237,7 +1237,7 @@ private void syncReconnect2(final BluetoothDevice bluetoothDevice, final boolean
                                                 if (handlerState == 0 && --reconnectTimes >= 0)
                                                 {
                                                     ViseLog.i("reconnect " + reconnectTimes);
-                                                    syncReconnect(bluetoothDevice, true);
+                                                    syncReconnect(bluetoothDevice, priorityHigh);
                                                 }
                                                 else {
                                                     onBleFailure("onConnectFailure");
@@ -1446,9 +1446,9 @@ private void syncReconnect2(final BluetoothDevice bluetoothDevice, final boolean
 
                 if (Build.VERSION.SDK_INT >= 21) {
                     //升级时禁用高优先级连接，否则将导致升级失败
-                    if (android.os.Build.MODEL.contains("FS8002")) {
+                    if (android.os.Build.MODEL.contains("FS8002") || android.os.Build.MODEL.contains("F3115")) {
                         if (gatt.requestConnectionPriority(BluetoothGatt.CONNECTION_PRIORITY_HIGH)) {
-                            ViseLog.i("FS8002 enable CONNECTION_PRIORITY_HIGH");
+                            ViseLog.i("FS8002 F3115 enable CONNECTION_PRIORITY_HIGH");
                         }
                     }
                 }
@@ -1536,7 +1536,7 @@ private void syncReconnect2(final BluetoothDevice bluetoothDevice, final boolean
                             String address = bluetoothLeDevice.getDevice().getAddress();
                             if (address != null && address.equals(mac)) {
                                 setScan(false).removeHandlerMsg().scan();
-                                ViseBluetooth.getInstance().connect(bluetoothLeDevice, false, connectCallback);
+                                ViseBluetooth.getInstance().connect(bluetoothLeDevice, true, connectCallback);
                             }
                         }
                     }
@@ -1553,10 +1553,18 @@ private void syncReconnect2(final BluetoothDevice bluetoothDevice, final boolean
     }
 
     public boolean write(String uuid_service, String uuid_write, String hex, ICharacteristicCallback callback) {
-        return ViseBluetooth.getInstance().withUUIDString(uuid_service, uuid_write, null).writeCharacteristic(HexUtil.hexStringToBytes(hex), callback);
+        return write(uuid_service, uuid_write, HexUtil.hexStringToBytes(hex), callback);
     }
 
     public boolean write(String uuid_service, String uuid_write, byte[] data, ICharacteristicCallback callback) {
+        if (android.os.Build.MODEL.contains("F3115")) {
+            //Sony F3115 OTA升级过程中需要进行延时
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
         return ViseBluetooth.getInstance().withUUIDString(uuid_service, uuid_write, null).writeCharacteristic(data, callback);
     }
 
