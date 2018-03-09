@@ -561,6 +561,9 @@ public class DeviceManager {
                 Log.w("checkFirmwareUpdate", "currentVersion onResponse");
                 int code = response.code();
                 if (code != 200) {
+                    if (null == fragment) {
+                        return;
+                    }
                     FragmentActivity activity = fragment.getActivity();
                     if (null == activity) {
                         return;
@@ -619,6 +622,9 @@ public class DeviceManager {
                             @Override
                             public void onFail(String errorMsg) {
                                 Log.e("Download Firmware File", errorMsg);
+                                if (null == fragment) {
+                                    return;
+                                }
                                 FragmentActivity activity = fragment.getActivity();
                                 if (null == activity) {
                                     return;
