@@ -9,6 +9,7 @@ import android.content.res.Configuration;
 import android.support.v4.content.LocalBroadcastManager;
 
 import com.kidsdynamic.data.net.ApiGen;
+import com.kidsdynamic.data.net.CrashUploader;
 import com.kidsdynamic.swing.domain.LoginManager;
 import com.vise.log.ViseLog;
 import com.vise.log.inner.LogcatTree;
@@ -39,6 +40,7 @@ public class SwingApplication extends Application {
         ApiGen.BASE_URL = BuildConfig.API_BASE_URL;
         ApiGen.BASE_PHOTO_URL = BuildConfig.PHOTO_BASE_URL;
 
+        CrashUploader.uploadCrashLog(getApplicationContext());
         //非debug，则开启全局捕获异常
         if (!BuildConfig.DEBUG) {
             //全局异常捕获
@@ -46,11 +48,11 @@ public class SwingApplication extends Application {
             crashHandler.setEnable(true);
             crashHandler.init(getApplicationContext());
         }
-        else {
+//        else {
             //Debug时打印蓝牙
 //            ViseLog.getLogConfig().configAllowLog(true);//配置日志信息
 //            ViseLog.plant(new LogcatTree());//添加Logcat打印信息
-        }
+//        }
 
 
         IntentFilter intentFilter = new IntentFilter();
