@@ -491,4 +491,6 @@
     <string name="have_watch_close_by">Por favor, ten tu reloj cerca</string>
     <string name="update_completed">¡Actualización\ncompletada!</string>
 
+    <string name="app_safe_warning_msg">App Safe Warning Message</string>
+
 </resources>

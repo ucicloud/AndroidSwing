@@ -491,4 +491,6 @@
     <string name="have_watch_close_by">请把手表靠近手机</string>
     <string name="update_completed">更新\n成功！</string>
 
+    <string name="app_safe_warning_msg">App Safe Warning Message</string>
+
 </resources>

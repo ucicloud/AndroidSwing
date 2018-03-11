@@ -1,6 +1,7 @@
 package com.kidsdynamic.data.net.user;
 
 import com.kidsdynamic.data.net.user.model.AndroidRegistrationId;
+import com.kidsdynamic.data.net.user.model.MyCountryCodeRep;
 import com.kidsdynamic.data.net.user.model.UpdatePasswordRequest;
 import com.kidsdynamic.data.net.user.model.UserInfo;
 import com.kidsdynamic.data.net.user.model.UserProfileRep;
@@ -74,4 +75,11 @@ public interface UserApiNeedToken {
     //   500 Internal error. Please send me the error. I will fix it
     @POST("v1/user/logout")
     Call<Object> userLogout();
+
+
+    //   200 send  successfully
+    //   400 Bad request. The token is invalid
+    //   500 Internal error. Please send me the error. I will fix it
+    @POST("v1/user/myCountryCode")
+    Call<MyCountryCodeRep> myCountryCode();
 }

@@ -47,6 +47,7 @@ import com.kidsdynamic.swing.net.BaseRetrofitCallback;
 import com.kidsdynamic.swing.utils.ConfigUtil;
 import com.kidsdynamic.swing.utils.GlideHelper;
 import com.kidsdynamic.swing.view.KidsListBottomPopWindow;
+import com.kidsdynamic.swing.view.SafeWarnDialog;
 import com.kidsdynamic.swing.view.ViewIntroductionAlarmList;
 import com.kidsdynamic.swing.view.ViewIntroductionCalendarToday;
 import com.kidsdynamic.swing.view.ViewIntroductionSync;
@@ -138,6 +139,9 @@ public class MainFrameActivity extends BaseFragmentActivity {
         String refreshedToken = FirebaseInstanceId.getInstance().getToken();
         sendRegistrationToServer(refreshedToken);
         LogUtil2.getUtils().d("FireBase InstanceId->" + refreshedToken);
+
+        //test todo
+//        AppSafeWarnMsgDialog();
     }
 
     private void sendRegistrationToServer(String token) {
@@ -761,6 +765,21 @@ public class MainFrameActivity extends BaseFragmentActivity {
         } else if (currentFragment instanceof ProfileContainerFragment) {
             ((ProfileContainerFragment) currentFragment).selectFragment(className, args, isAddToBackStack);
         }
+    }
+
+//    add 2018年3月10日23:29:04 only 日本IP时，首次需要显示一个警告对话框
+    public void AppSafeWarnMsgDialog(){
+
+       /* Boolean isSafeWarnDialogFirstTime = PreferencesUtil.getInstance(this).
+                gPrefBooleanValue(ConfigUtil.safe_warn_dialog_first_time, true);
+        if(!isSafeWarnDialogFirstTime){
+            return;
+        }*/
+
+        SafeWarnDialog safeWarnDialog = new SafeWarnDialog(this);
+        safeWarnDialog.showLoading();
+        safeWarnDialog.setCanceledOnTouchOutside(false);
+        safeWarnDialog.setCancelable(false);
     }
 
 }

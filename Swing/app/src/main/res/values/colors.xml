@@ -72,4 +72,8 @@
     <color name="profile_label_color">#5EC7E2</color>
 
     <color name="chart_goal">#EE1E23</color>
+
+    <color name="color_warn_msg_title">#FF873F</color>
+    <!--<color name="color_warn_msg">#605E5E</color>-->
+    <color name="color_warn_msg">#9F9E9E</color>
 </resources>

@@ -27,6 +27,8 @@ public class ConfigUtil {
 	public static final String todo_detail_first_time = "todo_detail";
 	public static final String isHideReminderAfterAddEvent = "is_hide_reminder";
 
+	public static final String safe_warn_dialog_first_time = "safe_warn_dialog_list";
+
 
 	/**
 	 * 是否登录成功；

@@ -491,4 +491,6 @@
     <string name="have_watch_close_by">Часы должны находиться поблизости</string>
     <string name="update_completed">Обновление\nзавершено!</string>
 
+    <string name="app_safe_warning_msg">App Safe Warning Message</string>
+
 </resources>

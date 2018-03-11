@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FCFCFC">
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/base_15"
+        android:layout_marginBottom="@dimen/base_15"
+        android:layout_centerHorizontal="true"
+        android:textSize="@dimen/base_21"
+        android:textColor="@color/color_warn_msg_title"
+        android:text="@string/safe_warn_msg_title"/>
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_below="@id/tv_title"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingStart="@dimen/base_5"
+            android:paddingEnd="@dimen/base_5"
+            android:paddingBottom="@dimen/base_15">
+
+            <TextView
+                android:id="@+id/tv_warn_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/color_warn_msg"
+                android:textSize="@dimen/base_15"
+                android:text="@string/app_safe_warning_msg"/>
+
+            <Button
+                android:id="@+id/btn_confirm_safe_warn"
+                style="@style/button_main"
+                android:layout_width="match_parent"
+                android:layout_marginTop="10dp"
+                android:text="@string/safe_warn_msg_btn"
+                android:layout_marginLeft="@dimen/base_56"
+                android:layout_marginRight="@dimen/base_56"/>
+        </LinearLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+
+</RelativeLayout>
