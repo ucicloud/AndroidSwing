@@ -140,8 +140,9 @@ public class MainFrameActivity extends BaseFragmentActivity {
         sendRegistrationToServer(refreshedToken);
         LogUtil2.getUtils().d("FireBase InstanceId->" + refreshedToken);
 
-        //test todo
-//        AppSafeWarnMsgDialog();
+        //add 2018年3月11日22:14:16 only
+        //如果是首次并且登录IP为japan，则显示安全信息提示框
+        AppSafeWarnMsgDialog();
     }
 
     private void sendRegistrationToServer(String token) {
@@ -770,16 +771,23 @@ public class MainFrameActivity extends BaseFragmentActivity {
 //    add 2018年3月10日23:29:04 only 日本IP时，首次需要显示一个警告对话框
     public void AppSafeWarnMsgDialog(){
 
-       /* Boolean isSafeWarnDialogFirstTime = PreferencesUtil.getInstance(this).
+        Boolean isSafeWarnDialogFirstTime = PreferencesUtil.getInstance(this).
                 gPrefBooleanValue(ConfigUtil.safe_warn_dialog_first_time, true);
-        if(!isSafeWarnDialogFirstTime){
-            return;
-        }*/
 
-        SafeWarnDialog safeWarnDialog = new SafeWarnDialog(this);
-        safeWarnDialog.showLoading();
-        safeWarnDialog.setCanceledOnTouchOutside(false);
-        safeWarnDialog.setCancelable(false);
+        String loginUserLocalCode = new LoginManager().getLoginUserLocalCode();
+
+        Log.w("MainFragment", "loginUserLocalCode: " + loginUserLocalCode);
+
+        //如果是首次，并且code为Japan则显示
+        if(isSafeWarnDialogFirstTime
+                && ConfigUtil.IP_JAPAN_CODE.equals(loginUserLocalCode)){
+
+            SafeWarnDialog safeWarnDialog = new SafeWarnDialog(this);
+            safeWarnDialog.showLoading();
+            safeWarnDialog.setCanceledOnTouchOutside(false);
+            safeWarnDialog.setCancelable(false);
+        }
+
     }
 
 }

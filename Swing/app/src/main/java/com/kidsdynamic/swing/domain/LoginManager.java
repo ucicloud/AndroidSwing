@@ -7,6 +7,7 @@ import android.text.TextUtils;
 
 import com.kidsdynamic.data.dao.DB_User;
 import com.kidsdynamic.data.net.Config;
+import com.kidsdynamic.data.net.user.model.MyCountryCodeRep;
 import com.kidsdynamic.data.net.user.model.UserProfileRep;
 import com.kidsdynamic.data.persistent.DbUtil;
 import com.kidsdynamic.data.persistent.PreferencesUtil;
@@ -116,6 +117,10 @@ public class LoginManager {
 
         //删除缓存的subhostlist信息
         DeviceManager.clearSubHostRequestsInCache();
+
+        //删除登录者IP所在区域code
+        PreferencesUtil.getInstance(SwingApplication.getAppContext()).
+                setPreferenceStringValue(ConfigUtil.login_user_local_code, "");
     }
 
 
@@ -133,5 +138,14 @@ public class LoginManager {
         }catch (Exception e){
             e.printStackTrace();
         }
+    }
+
+    public void cacheLoginUserLocal(MyCountryCodeRep myCountryCodeRep){
+        PreferencesUtil.getInstance(SwingApplication.getAppContext()).
+                setPreferenceStringValue(ConfigUtil.login_user_local_code, myCountryCodeRep.getCountryCode());
+    }
+
+    public String getLoginUserLocalCode(){
+        return PreferencesUtil.getInstance(SwingApplication.getAppContext()).gPrefStringValue(ConfigUtil.login_user_local_code);
     }
 }

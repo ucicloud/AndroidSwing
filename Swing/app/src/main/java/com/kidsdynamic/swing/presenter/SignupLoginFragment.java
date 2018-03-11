@@ -26,6 +26,7 @@ import com.kidsdynamic.data.net.user.UserApiNeedToken;
 import com.kidsdynamic.data.net.user.UserApiNoNeedToken;
 import com.kidsdynamic.data.net.user.model.LoginEntity;
 import com.kidsdynamic.data.net.user.model.LoginSuccessRep;
+import com.kidsdynamic.data.net.user.model.MyCountryCodeRep;
 import com.kidsdynamic.data.net.user.model.UserProfileRep;
 import com.kidsdynamic.data.utils.LogUtil2;
 import com.kidsdynamic.swing.BaseFragment;
@@ -333,8 +334,12 @@ public class SignupLoginFragment extends BaseFragment {
                     Log.w("login", " sync data ok, show next UI");
                     new EventManager().saveEventForLogin(getContext(), response.body());
 
-                    finishLoadingDialog();
-                    loginFlowOK(userEntity);
+                    //del 2018年3月11日22:47:37 only
+                    //新增获取登录者IP code流程
+                    getUserIPLocal(userEntity);
+
+                    /*finishLoadingDialog();
+                    loginFlowOK(userEntity);*/
                 } else {
                     LogUtil2.getUtils().d("login error, code: " + response.code());
 
@@ -353,6 +358,32 @@ public class SignupLoginFragment extends BaseFragment {
 
                 finishLoadingDialog();
                 showErrInfo(R.string.signup_profile_login_failed);
+            }
+        });
+    }
+
+    //add 2018年3月11日21:53:42 only 新增获取登录者IP所在区域接口，为了进入到主界面后的安全信息对话框提示做准备
+    //该接口不论调用成功失败，不影响登录流程执行
+    private void getUserIPLocal(final UserProfileRep.UserEntity userEntity){
+        final UserApiNeedToken userApiNeedToken = ApiGen.getInstance(getActivity().getApplicationContext()).
+                generateApi(UserApiNeedToken.class, true);
+        userApiNeedToken.myCountryCode().enqueue(new Callback<MyCountryCodeRep>() {
+            @Override
+            public void onResponse(Call<MyCountryCodeRep> call, Response<MyCountryCodeRep> response) {
+                if (response.code() == 200) {
+                    //如果查询成功，则再本地缓存查询到结果
+                    new LoginManager().cacheLoginUserLocal(response.body());
+                }
+
+                finishLoadingDialog();
+                loginFlowOK(userEntity);
+            }
+
+            @Override
+            public void onFailure(Call<MyCountryCodeRep> call, Throwable t) {
+
+                finishLoadingDialog();
+                loginFlowOK(userEntity);
             }
         });
     }

@@ -539,8 +539,8 @@
     <!--<string name="language_zh_cn" translatable="false">"简体中文"</string>-->
 
 
-    <string name="safe_warn_msg_title">Safe Warn</string>
-    <string name="safe_warn_msg_btn">OK</string>
+    <string name="safe_warn_msg_title">安全性の通知</string>
+    <string name="safe_warn_msg_btn">このメッセージを読みました</string>
     <!--<string name="app_safe_warning_msg">App Safe Warning Message</string>-->
     <string name="app_safe_warning_msg">親愛なる顧客の皆様\n\n
 

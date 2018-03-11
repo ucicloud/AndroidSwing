@@ -28,6 +28,10 @@ public class ConfigUtil {
 	public static final String isHideReminderAfterAddEvent = "is_hide_reminder";
 
 	public static final String safe_warn_dialog_first_time = "safe_warn_dialog_list";
+	public static final String login_user_local_code = "user_local_code";
+
+	public static final String IP_JAPAN_CODE = "JP";
+
 
 
 	/**
@@ -79,6 +83,10 @@ public class ConfigUtil {
 
 		PreferencesUtil.getInstance(SwingApplication.getAppContext()).
 				setPreferenceBooleanValue(ConfigUtil.todo_detail_first_time,true);
+
+		//安全提示框已经显示，初始化到默认状态
+		PreferencesUtil.getInstance(SwingApplication.getAppContext()).
+				setPreferenceBooleanValue(ConfigUtil.safe_warn_dialog_first_time,true);
 
 		//默认同步后显示提示框
 		PreferencesUtil.getInstance(SwingApplication.getAppContext()).

@@ -12,7 +12,7 @@ import com.orhanobut.logger.Logger;
 public class LogUtil2 {
 	private final static boolean logFlag = true;
 
-	public final static String tag = "SecureCloudService";
+	public final static String tag = "LogUtil2";
 	private final static int logLevel = Log.VERBOSE;
 	private String mClassName;
 
