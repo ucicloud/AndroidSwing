@@ -80,6 +80,6 @@ public interface UserApiNeedToken {
     //   200 send  successfully
     //   400 Bad request. The token is invalid
     //   500 Internal error. Please send me the error. I will fix it
-    @POST("v1/user/myCountryCode")
+    @GET("v1/user/myCountryCode")
     Call<MyCountryCodeRep> myCountryCode();
 }
