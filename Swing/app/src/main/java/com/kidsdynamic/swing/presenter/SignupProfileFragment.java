@@ -24,6 +24,7 @@ import com.kidsdynamic.data.net.user.UserApiNeedToken;
 import com.kidsdynamic.data.net.user.UserApiNoNeedToken;
 import com.kidsdynamic.data.net.user.model.LoginEntity;
 import com.kidsdynamic.data.net.user.model.LoginSuccessRep;
+import com.kidsdynamic.data.net.user.model.MyCountryCodeRep;
 import com.kidsdynamic.data.net.user.model.RegisterEntity;
 import com.kidsdynamic.data.net.user.model.RegisterFailResponse;
 import com.kidsdynamic.data.net.user.model.UpdateProfileSuccess;
@@ -47,6 +48,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import okhttp3.MultipartBody;
 import retrofit2.Call;
+import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
@@ -314,10 +316,14 @@ public class SignupProfileFragment extends BaseFragment {
                     //记录状态
                     new LoginManager().cacheLoginOK(getContext(), response.body().getUser());
 
-                    finishLoadingDialog();
+                    //add 2018年3月13日10:31:54 only
+                    //获取登录者IP所在区域code
+                    getUserIPLocal();
+
+                   /* finishLoadingDialog();
 
                     SignupActivity signupActivity = (SignupActivity) getActivity();
-                    signupActivity.setFragment(WatchHaveFragment.newInstance(), false);
+                    signupActivity.setFragment(WatchHaveFragment.newInstance(), false);*/
 
                 } else {
                     finishLoadingDialog();
@@ -337,6 +343,38 @@ public class SignupProfileFragment extends BaseFragment {
                 finishLoadingDialog();
 
                 gotoLoginFragment();
+            }
+        });
+    }
+
+    //add 注册-登录成功，获取用户信息成功后处理流程
+    public void loginFlowOK(){
+        finishLoadingDialog();
+
+        SignupActivity signupActivity = (SignupActivity) getActivity();
+        signupActivity.setFragment(WatchHaveFragment.newInstance(), false);
+    }
+
+    //add 2018年3月13日10:30:24 only 新增获取登录者IP所在区域接口，为了进入到主界面后的安全信息对话框提示做准备
+    //该接口不论调用成功失败，不影响登录流程执行
+    private void getUserIPLocal(){
+        final UserApiNeedToken userApiNeedToken = ApiGen.getInstance(getActivity().getApplicationContext()).
+                generateApi(UserApiNeedToken.class, true);
+        userApiNeedToken.myCountryCode().enqueue(new Callback<MyCountryCodeRep>() {
+            @Override
+            public void onResponse(Call<MyCountryCodeRep> call, Response<MyCountryCodeRep> response) {
+                if (response.code() == 200) {
+                    //如果查询成功，则再本地缓存查询到结果
+                    new LoginManager().cacheLoginUserLocal(response.body());
+                }
+
+                loginFlowOK();
+            }
+
+            @Override
+            public void onFailure(Call<MyCountryCodeRep> call, Throwable t) {
+
+                loginFlowOK();
             }
         });
     }
