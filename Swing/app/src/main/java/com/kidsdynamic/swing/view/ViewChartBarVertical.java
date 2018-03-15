@@ -8,12 +8,10 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PathEffect;
 import android.graphics.Rect;
-import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 
-import com.kidsdynamic.swing.R;
 import com.kidsdynamic.swing.model.WatchActivity;
 import com.kidsdynamic.swing.utils.SwingFontsCache;
 
@@ -79,6 +77,24 @@ public class ViewChartBarVertical extends ViewChart {
         if (null != list) {
             mValue.addAll(list);
         }
+    }
+
+    private List<WatchActivity.Act> getTestData(){
+        int size = 7;
+        List<WatchActivity.Act> testdatas = new ArrayList<>(size);
+
+        for (int i = 0; i < size; i++) {
+            WatchActivity.Act indoor = new WatchActivity.Act();
+            indoor.mId =  123;
+            indoor.mKidId = "234";
+            indoor.mMacId = "12455";
+            indoor.mDistance = 12345;
+            indoor.mSteps = 1456;
+
+            testdatas.add(indoor);
+        }
+
+        return testdatas;
     }
 
     public void setGoal(float goal) {
@@ -247,6 +263,14 @@ public class ViewChartBarVertical extends ViewChart {
         mPaint.getTextBounds(text, 0, text.length(), textRect);
         mPaint.setColor(mChartTextColor);
 
+        //计算当前字体所占大小，如果大于空间宽度，则减小字体
+        while (Math.abs(textRect.width()) > Math.abs(rect.width()-6)){
+            mChartTextSize  -= 1;
+
+            mPaint.setTextSize(mChartTextSize + 1);
+            mPaint.getTextBounds(text, 0, text.length(), textRect);
+        }
+
         int textPadding = 5;
         textX = barRect.left + (barRect.width() - textRect.width()) / 2;
         if ((barRect.height() - (textPadding * 2)) > textRect.height())
@@ -364,7 +388,8 @@ public class ViewChartBarVertical extends ViewChart {
         mPaint.getTextBounds(text, 0, text.length(), textRect);
 
         Path dashLine = new Path();
-        int lineEndX = rectV.right - textRect.width() - 36 - 20;
+//        int lineEndX = rectV.right - textRect.width() - 36 - 20;
+        int lineEndX = rectV.right - textRect.width() - 36 - 28;
         dashLine.moveTo(posX, posY);
         dashLine.lineTo(lineEndX, posY);
 
@@ -372,10 +397,10 @@ public class ViewChartBarVertical extends ViewChart {
 
         Path polygon = new Path();
         polygon.moveTo(lineEndX, posY);
-        polygon.lineTo(lineEndX + 20, posY - textRect.height() * 2);
-        polygon.lineTo(rectV.right + 36, posY - textRect.height() * 2);
-        polygon.lineTo(rectV.right + 36, posY + textRect.height() * 3 / 2);
-        polygon.lineTo(lineEndX + 20, posY + textRect.height() * 3 / 2);
+        polygon.lineTo(lineEndX + 20, posY - textRect.height() * 2-5);
+        polygon.lineTo(rectV.right + 36, posY - textRect.height() * 2-5);
+        polygon.lineTo(rectV.right + 36, posY + textRect.height() * 3 / 2 + 3);
+        polygon.lineTo(lineEndX + 20, posY + textRect.height() * 3 / 2 + 3);
         polygon.lineTo(lineEndX, posY);
 
         mPaint.reset();
@@ -388,8 +413,8 @@ public class ViewChartBarVertical extends ViewChart {
         mPaint.setTypeface(SwingFontsCache.getBoldType(getContext()));
         mPaint.setTextSize(mChartTextSize + 1);
         mPaint.setColor(Color.WHITE);
-        int textX = lineEndX + 32;
-        int textY = posY + textRect.height() / 2;
+        int textX = lineEndX + 30;
+        int textY = posY + textRect.height() / 2 + 2;
 
         canvas.drawText(text, textX, textY, mPaint);
     }
