@@ -1,6 +1,7 @@
 package com.kidsdynamic.data.net.user;
 
 
+import com.kidsdynamic.data.net.user.model.IsEmailRegisteredResp;
 import com.kidsdynamic.data.net.user.model.LoginEntity;
 import com.kidsdynamic.data.net.user.model.LoginSuccessRep;
 import com.kidsdynamic.data.net.user.model.RegisterEntity;
@@ -36,11 +37,12 @@ public interface UserApiNoNeedToken {
     @POST("v1/user/register")
     Call<RegisterFailResponse> registerUser(@Body RegisterEntity registerEntity);
 
+    //modify 2018年3月21日13:59:10 接口返回类型修改为IsEmailRegisteredResp
     //200 The email is able to register ;
     //409 Conflict. The email is already registered
     //curl -X GET "http://localhost:8111/v1/user/isEmailAvailableToRegister?email=jack083001@gmail.com"
     @GET("v1/user/isEmailAvailableToRegister")
-    Call<Object> checkEmailAvailableToRegister(@Query("email") String email);
+    Call<IsEmailRegisteredResp> checkEmailAvailableToRegister(@Query("email") String email);
 
 
    /*

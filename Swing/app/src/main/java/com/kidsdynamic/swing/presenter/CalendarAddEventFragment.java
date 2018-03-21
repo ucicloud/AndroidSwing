@@ -942,6 +942,13 @@ public class CalendarAddEventFragment extends CalendarBaseFragment {
                     getFragmentManager().popBackStack();
 //                    showSyncDialog();
                     showSyncNotify();
+                }else {
+                    try{
+                        //add 2018年3月21日14:35:28 only
+                        ToastCommon.makeText(getContext(),R.string.save_todo_done_statue_err,response.code());
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
                 }
 
                 finishLoadingDialog();

@@ -24,6 +24,7 @@ import com.kidsdynamic.data.net.kids.model.KidsWithParent;
 import com.kidsdynamic.data.net.kids.model.WhoRegisterMacIDResp;
 import com.kidsdynamic.data.net.user.UserApiNeedToken;
 import com.kidsdynamic.data.net.user.UserApiNoNeedToken;
+import com.kidsdynamic.data.net.user.model.IsEmailRegisteredResp;
 import com.kidsdynamic.data.net.user.model.LoginEntity;
 import com.kidsdynamic.data.net.user.model.LoginSuccessRep;
 import com.kidsdynamic.data.net.user.model.RegisterEntity;
@@ -179,9 +180,9 @@ public class MainActivity extends Activity {
         final UserApiNoNeedToken userApi = ApiGen.getInstance(this.getApplicationContext()).
                 generateApi(UserApiNoNeedToken.class,false);
 
-        userApi.checkEmailAvailableToRegister(email).enqueue(new Callback<Object>() {
+        userApi.checkEmailAvailableToRegister(email).enqueue(new Callback<IsEmailRegisteredResp>() {
             @Override
-            public void onResponse(Call<Object> call, Response<Object> response) {
+            public void onResponse(Call<IsEmailRegisteredResp> call, Response<IsEmailRegisteredResp> response) {
                 LogUtil2.getUtils().d("check mail onResponse code: " + response.code());
 
                 if (response.code() == 200) {
@@ -195,7 +196,7 @@ public class MainActivity extends Activity {
             }
 
             @Override
-            public void onFailure(Call<Object> call, Throwable t) {
+            public void onFailure(Call<IsEmailRegisteredResp> call, Throwable t) {
                 //dismiss waiting dialog,show error; terminate exe
                 t.printStackTrace();
                 LogUtil2.getUtils().d("check mail fail, " );

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +25,7 @@ import com.kidsdynamic.data.net.host.HostApi;
 import com.kidsdynamic.data.net.host.model.SubHostRequests;
 import com.kidsdynamic.data.net.user.UserApiNeedToken;
 import com.kidsdynamic.data.net.user.UserApiNoNeedToken;
+import com.kidsdynamic.data.net.user.model.IsEmailRegisteredResp;
 import com.kidsdynamic.data.net.user.model.LoginEntity;
 import com.kidsdynamic.data.net.user.model.LoginSuccessRep;
 import com.kidsdynamic.data.net.user.model.MyCountryCodeRep;
@@ -40,6 +42,7 @@ import com.kidsdynamic.swing.net.BaseRetrofitCallback;
 import com.kidsdynamic.swing.utils.SwingFontsCache;
 import com.kidsdynamic.swing.utils.ViewUtils;
 import com.yy.base.utils.Functions;
+import com.yy.base.utils.ToastCommon;
 
 import java.util.HashMap;
 import java.util.List;
@@ -161,9 +164,9 @@ public class SignupLoginFragment extends BaseFragment {
         final UserApiNoNeedToken userApi = ApiGen.getInstance(getActivity().getApplicationContext()).
                 generateApi(UserApiNoNeedToken.class, false);
 
-        userApi.checkEmailAvailableToRegister(email).enqueue(new BaseRetrofitCallback<Object>() {
+        userApi.checkEmailAvailableToRegister(email).enqueue(new BaseRetrofitCallback<IsEmailRegisteredResp>() {
             @Override
-            public void onResponse(Call<Object> call, Response<Object> response) {
+            public void onResponse(Call<IsEmailRegisteredResp> call, Response<IsEmailRegisteredResp> response) {
                 LogUtil2.getUtils().d("check mail onResponse ");
 
                 if (response.code() == 200) {
@@ -171,16 +174,27 @@ public class SignupLoginFragment extends BaseFragment {
                     //邮箱未注册，则展示注册界面
                     showRegisterUI(email, psw);
 
+                    //add 2018年3月21日13:59:47 only
+                    showServiceRepMsg(response);
+
                 } else if (response.code() == 409) {
                     //邮箱已经注册，则执行登录流程
                     loginByEmail(userApi, loginEntity);
+                }else if(response.code() == 500){
+                    showServiceRepMsg(response);
+
+                    SignupLoginFragment.this.finishLoadingDialog();
+                }else {
+
+                    showServiceRepMsg(response);
+                    SignupLoginFragment.this.finishLoadingDialog();
                 }
 
                 super.onResponse(call, response);
             }
 
             @Override
-            public void onFailure(Call<Object> call, Throwable t) {
+            public void onFailure(Call<IsEmailRegisteredResp> call, Throwable t) {
                 super.onFailure(call, t);
 
                 //dismiss waiting dialog,show error; terminate exe
@@ -193,6 +207,14 @@ public class SignupLoginFragment extends BaseFragment {
             }
         });
 
+    }
+
+    private void showServiceRepMsg(Response<IsEmailRegisteredResp> response) {
+        IsEmailRegisteredResp isEmailRegisteredResp = response.body();
+        if(isEmailRegisteredResp != null
+                && !TextUtils.isEmpty(isEmailRegisteredResp.getMessage())){
+            ToastCommon.showToast(getContext(),isEmailRegisteredResp.getMessage());
+        }
     }
 
     private void showRegisterUI(String email, String pwd) {
