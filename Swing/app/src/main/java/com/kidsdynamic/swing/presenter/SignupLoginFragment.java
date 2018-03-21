@@ -213,7 +213,16 @@ public class SignupLoginFragment extends BaseFragment {
         IsEmailRegisteredResp isEmailRegisteredResp = response.body();
         if(isEmailRegisteredResp != null
                 && !TextUtils.isEmpty(isEmailRegisteredResp.getMessage())){
-            ToastCommon.showToast(getContext(),isEmailRegisteredResp.getMessage());
+//            ToastCommon.showToast(getContext(),isEmailRegisteredResp.getMessage());
+            new AlertDialog.Builder(getContext())
+                    .setTitle("")
+                    .setMessage(isEmailRegisteredResp.getMessage())
+                    .setNegativeButton(R.string.profile_request_to_cancel, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.dismiss();
+                        }
+                    }).show();
         }
     }
 
