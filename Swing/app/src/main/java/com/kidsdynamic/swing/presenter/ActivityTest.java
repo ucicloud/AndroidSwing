@@ -24,6 +24,7 @@ public class ActivityTest extends BaseFragmentActivity {
         ButterKnife.bind(this);
 
         initFragment();
+
     }
 
     private void initFragment() {
